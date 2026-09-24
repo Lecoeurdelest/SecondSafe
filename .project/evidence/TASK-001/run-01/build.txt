@@ -1,0 +1,2 @@
+$ find . -name "*.js" -not -path "./node_modules/*" | xargs -n1 node --check
+checked 90 files, failures listed above (none if empty)

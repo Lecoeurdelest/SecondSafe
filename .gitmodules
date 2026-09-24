@@ -1,0 +1,3 @@
+[submodule "tools/plan-driven-development"]
+	path = tools/plan-driven-development
+	url = https://github.com/Lecoeurdelest/plan-driven-development.git

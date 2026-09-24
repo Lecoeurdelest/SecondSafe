@@ -1,0 +1,6 @@
+$ grep -rnE "child_process|execSync|netstat|taskkill" backend/src backend/*.js
+grep exit=1 (1 = no match)
+$ grep -rnE "admin123456|password123|admin@reflow.com" (excluding node_modules, .git, submodule, evidence)
+grep exit=1 (1 = no match)
+$ variables read by backend code vs backend/.env.example (comm -3; empty = identical)
+(end of comm output)

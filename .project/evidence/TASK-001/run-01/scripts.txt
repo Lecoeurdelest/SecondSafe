@@ -1,0 +1,15 @@
+$ env -u MONGODB_URI -u ADMIN_EMAIL -u ADMIN_PASSWORD node create-admin.js
+Missing environment variables: MONGODB_URI, ADMIN_EMAIL, ADMIN_PASSWORD
+exit=1
+$ MONGODB_URI=mongodb://127.0.0.1:1/x ADMIN_EMAIL=a@example.com ADMIN_PASSWORD=weakpass node create-admin.js
+ADMIN_PASSWORD must have at least 8 characters with upper case, lower case, digit and special character.
+exit=1
+$ env -u MONGODB_URI node create-indexes.js
+Error creating indexes: Missing environment variable: MONGODB_URI
+exit=1
+$ env -u MONGODB_URI -u JWT_SECRET node -e "require(./src/config/env)"
+Missing required environment variables: MONGODB_URI, JWT_SECRET
+exit=1
+$ MONGODB_URI=mongodb://127.0.0.1:1/x JWT_SECRET=x PORT=5077 node src/server.js  +  curl http://localhost:5077/api/health
+{"success":true,"service":"secondsafe-backend"} (HTTP 200)
+SecondSafe backend listening on port 5077

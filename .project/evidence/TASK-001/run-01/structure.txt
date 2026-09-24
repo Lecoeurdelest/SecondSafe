@@ -1,0 +1,80 @@
+$ files that must not be carried
+absent  backend/src/services/auto-release.service.js
+absent  backend/src/modules/payments/payment.controller.js
+absent  backend/src/modules/payments/payment.service.js
+absent  frontend
+$ grep -n "process.exit" backend/src/seeds/*.js  (only inside require.main blocks)
+backend/src/seeds/categories.seed.js:93:    .then(() => process.exit(0))
+backend/src/seeds/categories.seed.js:96:      process.exit(1);
+backend/src/seeds/products.seed.js:903:    .then(() => process.exit(0))
+backend/src/seeds/products.seed.js:906:      process.exit(1);
+$ diff baseline module file set (minus payment wrappers) vs skeleton
+identical file set
+$ non-model module files (stubs): line counts
+src/modules/auth/auth.controller.js              1 lines
+src/modules/auth/auth.route.js                   5 lines
+src/modules/auth/auth.service.js                 1 lines
+src/modules/chat/chat.controller.js              1 lines
+src/modules/chat/chat.route.js                   5 lines
+src/modules/chat/chat.service.js                 1 lines
+src/modules/chat/chat.socket.js                  1 lines
+src/modules/delivery/delivery.controller.js      1 lines
+src/modules/delivery/delivery.route.js           5 lines
+src/modules/delivery/delivery.service.js         1 lines
+src/modules/moderator/moderator.controller.js    1 lines
+src/modules/moderator/moderator.route.js         5 lines
+src/modules/moderator/moderator.service.js       1 lines
+src/modules/notifications/notification.controller.js 1 lines
+src/modules/notifications/notification.route.js  5 lines
+src/modules/notifications/notification.service.js 1 lines
+src/modules/orders/order.controller.js           1 lines
+src/modules/orders/order.route.js                5 lines
+src/modules/orders/order.service.js              1 lines
+src/modules/payments/escrow.service.js           1 lines
+src/modules/payments/payment.route.js            5 lines
+src/modules/payments/sepay.controller.js         1 lines
+src/modules/payments/sepay.route.js              5 lines
+src/modules/payments/sepay.service.js            1 lines
+src/modules/payments/vnpay.controller.js         1 lines
+src/modules/payments/vnpay.service.js            1 lines
+src/modules/payments/wallet.controller.js        1 lines
+src/modules/payments/wallet.route.js             5 lines
+src/modules/payments/wallet.service.js           1 lines
+src/modules/products/category.route.js           5 lines
+src/modules/products/product.controller.js       1 lines
+src/modules/products/product.route.js            5 lines
+src/modules/products/product.service.js          1 lines
+src/modules/products/upload.route.js             5 lines
+src/modules/reports/report.controller.js         1 lines
+src/modules/reports/report.route.js              5 lines
+src/modules/reports/report.service.js            1 lines
+src/modules/reports/review.controller.js         1 lines
+src/modules/reports/review.route.js              5 lines
+src/modules/reports/review.service.js            1 lines
+src/modules/users/favorite.controller.js         1 lines
+src/modules/users/favorite.route.js              5 lines
+src/modules/users/user.controller.js             1 lines
+src/modules/users/user.route.js                  5 lines
+src/modules/users/user.service.js                1 lines
+$ cmp against baseline for preserved files
+identical src/modules/chat/conversation.model.js
+identical src/modules/chat/message.model.js
+identical src/modules/delivery/delivery.model.js
+identical src/modules/notifications/notification.model.js
+identical src/modules/orders/order.model.js
+identical src/modules/orders/purchase-request.model.js
+identical src/modules/payments/escrow-hold.model.js
+identical src/modules/payments/transaction.model.js
+identical src/modules/payments/wallet.model.js
+identical src/modules/products/category.model.js
+identical src/modules/products/product.model.js
+identical src/modules/reports/dispute.model.js
+identical src/modules/reports/report.model.js
+identical src/modules/reports/review.model.js
+identical src/modules/users/favorite.model.js
+identical src/modules/users/user.model.js
+identical src/config/db.js
+identical src/config/env.js
+identical src/common/utils/chat-crypto.util.js
+identical migrate-data-consistency.js
+identical verify-seed-data.js

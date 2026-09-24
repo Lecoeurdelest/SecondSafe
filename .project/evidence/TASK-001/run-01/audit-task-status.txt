@@ -1,0 +1,9 @@
+$ python3 tools/plan-driven-development/scripts/check_project.py audit-task-status docs/task/README.md
+{
+  "status": "valid",
+  "errors": [],
+  "warnings": []
+}
+markers: {'[x]': 1, '[]': 45, '[!]': 6}
+checked tasks: 52
+exit=0

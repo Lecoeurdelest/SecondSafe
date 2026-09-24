@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-001",
+  "spec_hash": "295800cee95e007448011a17d3feb1a50d9b2153e6b27ed08b0da44c03a007b6",
+  "source_hash": "1d2f868613a8b48375c5f55b7de7dd797932236db382ddaac0608db8be5eb93b",
+  "completion_policy": "manual (scaffold task; no domain-logic confidence claim)",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-SYS-06-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "jest: \"Seed data\" suite, 2 tests passed",
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/jest.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-SYS-06-2",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "create-admin and create-indexes exit 1 on missing config; weak password refused; no password printed",
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/scripts.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-SEC-02-4",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "create-admin rejects \"weakpass\" with exit 1",
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/scripts.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-SEC-08-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "no baseline credentials in the tree; every process.env variable documented; env.js exits 1 without MONGODB_URI/JWT_SECRET",
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/static-scan.txt"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/scripts.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-REL-05-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "jest: \"uniqueness invariants are declared\" passed",
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/jest.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-PERF-02-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "schemas declare the baseline indexes; listed per model in data-model.md",
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/jest.txt",
+            "docs/technical/data-model.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-COMP-02-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "no child_process/netstat/taskkill in runtime code",
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/static-scan.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-MNT-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "module file set identical to baseline minus payment wrappers; 45 non-model files are 1-line or 5-line stubs",
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/structure.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-MNT-01-2",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "GET /api/health 200 in jest and in a live boot",
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/jest.txt",
+            ".project/evidence/TASK-001/run-01/scripts.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-MNT-02-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "auto-release service, payment wrappers and frontend absent; seeds exit only in require.main blocks",
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/structure.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-MNT-04-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "README setup steps, .env.example coverage and documentation map checked manually",
+      "checks": [
+        {
+          "method": "document_check",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/static-scan.txt",
+            "README.md",
+            "backend/.env.example",
+            "docs/README.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-MNT-05-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "No calibrated evaluator applies to scaffold criteria.",
+      "analysis_complete": true,
+      "summary": "validate and audit-preservation valid; render --check clean; task-status audit valid",
+      "checks": [
+        {
+          "method": "document_check",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-001/run-01/pdd-checks.txt",
+            ".project/evidence/TASK-001/run-01/audit-task-status.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}
