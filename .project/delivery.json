@@ -10,7 +10,8 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/3"
     },
     "TASK-003": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/4"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/4",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/76"
     },
     "TASK-004": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/5"

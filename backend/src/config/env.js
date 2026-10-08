@@ -1,5 +1,6 @@
 const logger = require('../common/utils/logger.util');
 require('dotenv').config();
+const business = require('./business');
 
 const config = {
   mongodb: {
@@ -7,7 +8,7 @@ const config = {
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    expiresIn: '7d',
+    expiresIn: business.jwtTtlSeconds,
   },
   chat: {
     // Uu tien khoa rieng cho chat; fallback JWT_SECRET de khong vo moi truong cu.

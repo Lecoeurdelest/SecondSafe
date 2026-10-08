@@ -1,0 +1,13 @@
+Command: cd backend && npm test
+
+> secondsafe-backend@0.1.0 test
+> jest --runInBand
+
+
+Test Suites: 3 passed, 3 total
+Tests:       43 passed, 43 total
+Snapshots:   0 total
+Time:        0.483 s, estimated 1 s
+Ran all test suites.
+
+exit_code=0
