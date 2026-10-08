@@ -45,7 +45,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-05-1` | Login, code requests, code verification and password recovery are rate limited (default 5 per minute per IP and email) and return 429 when exceeded. | behavioral test | [TASK-008](../task/TASK-008.md) `[]` |
+| `AC-NFR-SEC-05-1` | Login, code requests, code verification and password recovery are rate limited (default 5 per minute per IP and email) and return 429 when exceeded. | behavioral test | [TASK-008](../task/TASK-008.md) `[!]` |
 | `AC-NFR-SEC-05-2` | A one-time code is invalidated after 5 wrong attempts. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |
 
 ### NFR-SEC-06 — Payment webhook security

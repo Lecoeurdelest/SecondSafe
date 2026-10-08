@@ -1,0 +1,1 @@
+TASK-008 adds frozen authRateLimit defaults: five requests per 60000ms. Existing configuration values, OTP attempts and JWT lifetime paths remain unchanged. All 107 backend tests pass, including explicit rate-default assertions. This is configuration revalidation; no calibrated domain-confidence claim.

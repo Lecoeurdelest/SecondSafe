@@ -17,3 +17,5 @@ Existing orders code still contains baseline constants and must consume this con
 Changed files: `backend/src/config/business.js`, `backend/src/config/env.js`, `backend/.env.example`, `backend/tests/business-config.test.js`, execution/delivery records, evidence and generated views. No dependency was added.
 
 Revalidation during TASK-007: added fixed `otpMaxAttempts=5`. All 84 backend tests pass, prior configuration values are unchanged, and the JWT flow is unaffected. Evidence: `.project/evidence/TASK-004/run-02/`.
+
+Revalidation during TASK-008: added frozen `authRateLimit` defaults (5 requests/60000 ms). All 107 backend tests pass and previous settings are unchanged. Evidence: `.project/evidence/TASK-004/run-03/`.
