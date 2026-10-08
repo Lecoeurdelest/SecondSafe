@@ -17,7 +17,7 @@ function requestKeys(req, scope) {
 }
 
 function createAuthRateLimit({ scope, store = defaultStore, now = Date.now, limit = business.authRateLimit.requests, windowMs = business.authRateLimit.windowMs } = {}) {
-  if (!/^[a-z][a-z0-9-]{0,39}$/.test(scope)) throw new TypeError('A valid rate-limit scope is required');
+  if (typeof scope !== 'string' || !/^[a-z][a-z0-9-]{0,39}$/.test(scope)) throw new TypeError('A valid rate-limit scope is required');
   if (!Number.isSafeInteger(limit) || limit <= 0) throw new TypeError('Rate limit must be positive');
   if (!Number.isSafeInteger(windowMs) || windowMs <= 0) throw new TypeError('Rate-limit window must be positive');
 

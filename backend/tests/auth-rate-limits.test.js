@@ -16,6 +16,14 @@ function fixture(options = {}) {
   return app;
 }
 
+test('rejects missing scopes and invalid limits before handling requests', () => {
+  expect(() => createAuthRateLimit()).toThrow('scope');
+  expect(() => createAuthRateLimit({ scope: null })).toThrow('scope');
+  expect(() => createAuthRateLimit({ scope: 'login', limit: 0 })).toThrow('positive');
+  expect(() => createAuthRateLimit({ scope: 'login', windowMs: -1 })).toThrow('positive');
+  expect(() => createMemoryCounterStore({ maxEntries: 0 })).toThrow('positive');
+});
+
 test('default five requests succeed; sixth is 429 with Retry-After', async () => {
   expect(business.authRateLimit).toEqual({ requests: 5, windowMs: 60000 });
   const app = fixture();
