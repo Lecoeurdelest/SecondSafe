@@ -1,0 +1,8 @@
+Command: node -e <clock-reproduction.js>
+{"case":"custom clock with default store","expected":true,"actual":false}
+Expected values to be strictly equal:
+
+false !== true
+
+
+exit_code=1

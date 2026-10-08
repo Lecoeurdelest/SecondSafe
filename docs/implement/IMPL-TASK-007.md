@@ -21,7 +21,7 @@ Replaced the baseline plaintext code map and `Math.random` with crypto-generated
 - AC-NFR-REL-04-1: code-store interface and default adapter verified; rate counters remain TASK-008 and the shared adapter remains D-108.
 - AC-NFR-INT-01-1: SMTP deadlines and mapped errors observed.
 
-84 backend tests pass. Original outputs, AST inventory, flow review, analyzer lockfile and complexity results are in `.project/evidence/TASK-007/run-02/`; run-01 is retained. The automatic gate remains inconclusive without calibration, with null confidence; the task stays verifying. No dependent task is advanced.
+86 backend tests pass. Original outputs, AST inventory, flow review, analyzer lockfile and complexity results are in `.project/evidence/TASK-007/run-03/`; run-01 is retained. The automatic gate remains inconclusive without calibration, with null confidence; the task stays verifying. No dependent task is advanced.
 
 ## Deviations and known gaps
 
@@ -34,3 +34,5 @@ INV-03 and INV-04 are untouched. INV-06 remains the responsibility of authentica
 ## Files changed
 
 Email/code/store utilities, the fixed OTP-attempt business setting, SMTP environment example, backend dependency manifest/lockfile, email/code tests, runtime architecture note, execution/evidence records and generated views.
+
+Revalidation: fixed a reproduced clock mismatch when using the default store with a custom clock, and rejected non-string purpose values before regex coercion. Run-03 preserves the failed and successful reproductions; all earlier evidence remains available.

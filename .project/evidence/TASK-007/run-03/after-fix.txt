@@ -1,0 +1,4 @@
+Command: node -e <clock-reproduction.js>
+{"case":"custom clock with default store","expected":true,"actual":true}
+
+exit_code=0

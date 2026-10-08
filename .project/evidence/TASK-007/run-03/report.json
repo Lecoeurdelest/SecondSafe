@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-007",
+  "spec_hash": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
+  "source_hash": "f4fc5371fdfb1ae39993219caefebd93ebac5b02c9269ec0a7e53e25d64d86c4",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "Bounded AST inventory supports manual review; it is not a complete formal verifier",
+    "No applicable calibrated evaluator exists"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NOTI-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/jest.txt"
+          ]
+        },
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/ast-flow.json",
+            ".project/evidence/TASK-007/run-03/complexity.txt",
+            ".project/evidence/TASK-007/run-03/flow-review.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-SEC-05-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/jest.txt"
+          ]
+        },
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/ast-flow.json",
+            ".project/evidence/TASK-007/run-03/complexity.txt",
+            ".project/evidence/TASK-007/run-03/flow-review.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-REL-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/jest.txt"
+          ]
+        },
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/ast-flow.json",
+            ".project/evidence/TASK-007/run-03/complexity.txt",
+            ".project/evidence/TASK-007/run-03/flow-review.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-INT-01-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/jest.txt"
+          ]
+        },
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-007/run-03/ast-flow.json",
+            ".project/evidence/TASK-007/run-03/complexity.txt",
+            ".project/evidence/TASK-007/run-03/flow-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@ const invalid = () => ({ valid: false, message: 'Mã xác thực không hợp l�
 const digest = value => crypto.createHash('sha256').update(value).digest();
 
 function codeKey(subject, purpose) {
-  if (typeof subject !== 'string' || !subject.trim() || !/^[a-z][a-z0-9-]{0,39}$/.test(purpose)) {
+  if (typeof subject !== 'string' || !subject.trim() || typeof purpose !== 'string' || !/^[a-z][a-z0-9-]{0,39}$/.test(purpose)) {
     throw Object.assign(new Error('Thông tin xác thực không hợp lệ'), { statusCode: 400 });
   }
   return `code:${purpose}:${digest(subject.trim().toLowerCase()).toString('hex')}`;
@@ -17,7 +17,7 @@ function matchesCode(record, code) {
   return crypto.timingSafeEqual(digest(`${record.salt}:${code}`), Buffer.from(record.hash, 'hex'));
 }
 
-function createCodeManager({ store = createMemoryStore(), now = Date.now } = {}) {
+function createCodeManager({ now = Date.now, store = createMemoryStore({ now }) } = {}) {
   async function issue(subject, { purpose = 'register', payload = null, ttlMs = business.otpTtlMs, token = false } = {}) {
     const key = codeKey(subject, purpose);
     if (!Number.isSafeInteger(ttlMs) || ttlMs <= 0) throw new TypeError('Code lifetime must be a positive integer');

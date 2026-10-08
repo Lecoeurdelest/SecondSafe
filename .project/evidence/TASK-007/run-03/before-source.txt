@@ -1,0 +1,3 @@
+Pre-fix commit: 764399d7bc44fa0bd679604c6cb9ae038867a1af
+backend/src/common/utils/otp.manager.js sha256: 78cd7b3656fe5603924953ca737f0a565943881e3c0cac16fee90b064eff2de1
+The initial failing reproduction ran against this clean source snapshot. The reproduction file is executed via node -e with repository root as cwd.
