@@ -1,0 +1,14 @@
+Command: npm test
+
+> secondsafe-backend@0.1.0 test
+> jest --runInBand
+
+{"timestamp":"2026-10-08T23:14:31.139Z","level":"error","message":"HTTP request failed","context":[{"status":503,"method":"POST","path":"/send","error":"Error"}]}
+
+Test Suites: 5 passed, 5 total
+Tests:       86 passed, 86 total
+Snapshots:   0 total
+Time:        0.639 s, estimated 1 s
+Ran all test suites.
+
+exit_code=0

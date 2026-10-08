@@ -30,6 +30,17 @@ describe('one-time codes', () => {
     expect(await manager.consume('a@example.com', code)).toMatchObject({ valid: false });
   });
 
+  test('custom clock is shared by the default store when no adapter is injected', async () => {
+    const customClock = createCodeManager({ now: () => 1000 });
+    const code = await customClock.issue('clock@example.com');
+    expect(await customClock.consume('clock@example.com', code)).toMatchObject({ valid: true });
+  });
+
+  test('non-string purpose cannot be silently coerced into a namespace', async () => {
+    await expect(manager.issue('a@example.com', { purpose: null })).rejects.toHaveProperty('statusCode', 400);
+    await expect(manager.consume('a@example.com', '123456', { purpose: {} })).rejects.toHaveProperty('statusCode', 400);
+  });
+
   test('four wrong attempts preserve code, the fifth invalidates it', async () => {
     expect(business.otpMaxAttempts).toBe(5);
     const code = await manager.issue('a@example.com');
