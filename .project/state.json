@@ -151,10 +151,21 @@
           "date": "2026-10-09",
           "execution": "done",
           "note": "Manual configuration/data-operations completion on concrete tests; no calibrated domain confidence claim"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "needs_revalidation",
+          "note": "Fixed OTP attempt limit added by TASK-007; original evidence retained"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Manual configuration revalidation: previous settings unchanged and 84 backend tests pass"
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-004/run-01/report.json"
+        ".project/evidence/TASK-004/run-01/report.json",
+        ".project/evidence/TASK-004/run-02/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-004.md",
       "criteria": {
@@ -195,10 +206,36 @@
       "history": []
     },
     "TASK-007": {
-      "execution": "ready",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Dependencies complete; ready to implement and verify",
-      "history": []
+      "detail": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "detail": "Implementing bounded SMTP delivery and an atomic one-time-code store interface"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-007/run-02/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-007.md",
+      "criteria": {
+        "AC-NOTI-04-1": "inconclusive",
+        "AC-NFR-SEC-05-2": "inconclusive",
+        "AC-NFR-REL-04-1": "inconclusive",
+        "AC-NFR-INT-01-1": "inconclusive"
+      }
     },
     "TASK-008": {
       "execution": "ready",

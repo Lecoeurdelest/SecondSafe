@@ -46,7 +46,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-NFR-SEC-05-1` | Login, code requests, code verification and password recovery are rate limited (default 5 per minute per IP and email) and return 429 when exceeded. | behavioral test | [TASK-008](../task/TASK-008.md) `[]` |
-| `AC-NFR-SEC-05-2` | A one-time code is invalidated after 5 wrong attempts. | behavioral test | [TASK-007](../task/TASK-007.md) `[]` |
+| `AC-NFR-SEC-05-2` | A one-time code is invalidated after 5 wrong attempts. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |
 
 ### NFR-SEC-06 — Payment webhook security
 
@@ -149,7 +149,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-REL-04-1` | One-time codes and rate-limit counters use a store interface with an in-memory adapter by default and a shared adapter chosen by D-108. | behavioral test | [TASK-007](../task/TASK-007.md) `[]` |
+| `AC-NFR-REL-04-1` | One-time codes and rate-limit counters use a store interface with an in-memory adapter by default and a shared adapter chosen by D-108. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |
 | `AC-NFR-REL-04-2` | Socket presence uses the same store interface. | behavioral test | [TASK-023](../task/TASK-023.md) `[]` |
 
 ### NFR-REL-05 — Database constraints
@@ -239,7 +239,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-INT-01-1` | SMTP calls have timeouts and mapped errors. | behavioral test | [TASK-007](../task/TASK-007.md) `[]` |
+| `AC-NFR-INT-01-1` | SMTP calls have timeouts and mapped errors. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |
 | `AC-NFR-INT-01-2` | Payment gateway calls have timeouts and mapped errors. | behavioral test | [TASK-026](../task/TASK-026.md) `[]` |
 
 ### NFR-MNT-01 — Modular structure

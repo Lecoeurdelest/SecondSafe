@@ -1,0 +1,5 @@
+1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31  project.yaml
+08afcfb2da01a769f18b428d90e2095dfeae335877dc9d85ff8eec63508faf9d  backend/src/config/business.js
+53803a96d77bafdf6d71e7e3af2aa66a6869a39e591d1162ec33ebd956c7a2ef  backend/tests/business-config.test.js
+61971ae62053ff2bacd90cc8ff519fa6284a5d5ca8b346f7f9f4b218e5370b73  backend/tests/email-otp.test.js
+9f0fd93b9afe1c600dd1399979fa4809455bc8be4f6f1699cc056c8cb1b13dab  backend/package-lock.json

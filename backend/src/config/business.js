@@ -19,6 +19,7 @@ function loadBusinessConfig(env = process.env) {
     topUp,
     withdrawalMin: setting(env, 'WITHDRAWAL_MIN_AMOUNT', 50000),
     otpTtlMs: setting(env, 'OTP_TTL_MS', 5 * 60 * 1000),
+    otpMaxAttempts: 5,
     paymentWindowMs: setting(env, 'PAYMENT_WINDOW_MS', 3 * 60 * 1000),
     shippingWindowMs: setting(env, 'SHIPPING_WINDOW_MS', 24 * 60 * 60 * 1000),
     autoCompletionWindowMs: setting(env, 'AUTO_COMPLETION_WINDOW_MS', 5 * 24 * 60 * 60 * 1000),

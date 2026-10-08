@@ -41,4 +41,4 @@ Baseline: `email.util.js`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NOTI-04-1` | Registration, two-factor and recovery emails are sent through the configured SMTP account; delivery failures return 5xx without exposing SMTP details. | behavioral test | [TASK-007](../task/TASK-007.md) `[]` |
+| `AC-NOTI-04-1` | Registration, two-factor and recovery emails are sent through the configured SMTP account; delivery failures return 5xx without exposing SMTP details. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |

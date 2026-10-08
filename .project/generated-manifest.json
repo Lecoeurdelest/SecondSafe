@@ -3,8 +3,8 @@
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
     "project.yaml": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
-    ".project/state.json": "f28e92960bda21604b5cfde7511b476652122a7442312c1fcdb32b149e907b11",
-    ".project/delivery.json": "077cdd629e6688fad10bd0ce2b6f3b70c099897f6c18ec55d8db465f7a2efba1",
+    ".project/state.json": "e21a869816c247f345a1e67f698dc651df9208b6b75b8498574203b02c89ddfd",
+    ".project/delivery.json": "3fe816598514c452b6f89779c3922cc6fde46642a65bfec3ff59d914cb5b8ce5",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
     "backend/src/modules/delivery/delivery.model.js": "90056fcdd26eb2d4eb7b76cda3796abb641d53d5ab1e4ae33b1fd12445e1301d",
@@ -73,7 +73,7 @@
     },
     "docs/requirements/FR-NOTI.md": {
       "ownership": "generated",
-      "sha256": "96ab847879acc3cbb8dc3a5a6c49aa66b8094ccd2339a18865cc10f51097b8ed"
+      "sha256": "fedffe998e3fbcd0e5692c9cd287b62a98266bae028128ad3dfad257f4bd7afb"
     },
     "docs/requirements/FR-MOD.md": {
       "ownership": "generated",
@@ -93,7 +93,7 @@
     },
     "docs/requirements/NFR.md": {
       "ownership": "generated",
-      "sha256": "2c073e616fdae0cfd7e402120984fad0f529fd723cc1232ff260fa51f538146c"
+      "sha256": "57c21cc4a0c82e0ab37be55bfe0ceb3ce8373e64a44d66b76304c9040531f9bd"
     },
     "docs/requirements/README.md": {
       "ownership": "generated",
@@ -101,7 +101,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "bc07cc3293d015f193ef268e381e12b4c121d6cdec51532c04938efe8bcd624b"
+      "sha256": "b6a09a7ca2e822d181f52c6c59a66b176ba5892eafee59c672fe203cb4858214"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -129,7 +129,7 @@
     },
     "docs/task/TASK-007.md": {
       "ownership": "generated",
-      "sha256": "d9fab74b1c028394da1ed11d307cdd0ba4dc5e7506e7aa5e3cc35219b129acef"
+      "sha256": "d7b52f32db2ba7b831f660d8f15c4707ad82eeb0e5c7bc7dc8981eaafc7da2a4"
     },
     "docs/task/TASK-008.md": {
       "ownership": "generated",
@@ -407,7 +407,7 @@
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "3d8e6552646eb587e51b1ce6ce67314194549b04757904c6f7d7c90e427ab655"
+      "sha256": "357050150b2fc58382c8c5e8648f67a7cd0307e19b58d38e952fac2d36915b8c"
     }
   }
 }
