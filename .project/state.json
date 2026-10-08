@@ -80,7 +80,7 @@
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-002/run-01/report.json"
+        ".project/evidence/TASK-002/run-02/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-002.md",
       "criteria": {
