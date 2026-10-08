@@ -12,6 +12,9 @@ logs/
 coverage/
 frontend/build/
 
+# Keep dependency-heavy audit listings local; commit compact summaries instead.
+/.project/evidence/**/preservation.txt
+
 # Runtime uploads (keep folder structure only)
 backend/uploads/**
 !backend/uploads/**/
