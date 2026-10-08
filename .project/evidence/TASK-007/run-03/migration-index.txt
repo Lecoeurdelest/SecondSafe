@@ -1,0 +1,4 @@
+Command: python3 tools/pdd/check-migration.py
+PASS: 73 unique tasks; 52 existing backend tasks preserved; 21 migration/web/integration tasks indexed
+
+exit_code=0
