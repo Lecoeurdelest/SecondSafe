@@ -2,8 +2,8 @@
   "generator": "tools/pdd/render.py",
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
-    "project.yaml": "5cf724c2ead2dd4efa44142adeb169dc833fb279de1a20db58776ec31a44fc0a",
-    ".project/state.json": "37300e4681521daf3e4e24fcee4dc345fe6d3a015a28120f88116b67787d830c",
+    "project.yaml": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
+    ".project/state.json": "f79edb6825fef8858d24d21513489b5c99d509a93603d839b30f892967091813",
     ".project/delivery.json": "f422a48401ae182f4e974999a5954b7577866394b5e82d1f3c676c55399d9931",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
@@ -101,7 +101,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "3371cf87d2916a7c4edae4663c04bb6d0db20a91e0c71327639339853afdb1ed"
+      "sha256": "f6b0923494595908cf1e8b42947ef3492c2c6d37631f2ce1647d2de8de6f48de"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
