@@ -10,6 +10,7 @@ node_modules/
 logs/
 *.log
 coverage/
+frontend/build/
 
 # Runtime uploads (keep folder structure only)
 backend/uploads/**

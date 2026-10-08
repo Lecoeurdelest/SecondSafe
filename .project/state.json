@@ -516,16 +516,38 @@
       }
     },
     "TASK-054": {
-      "execution": "ready",
+      "execution": "done",
       "relevance": "current",
-      "detail": "Dependencies complete; ready to implement and verify",
+      "detail": "React shell installs from lockfile; 9 FE and 43 BE tests pass; production build and manual 360/1920 px checks pass",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Migrate only foundational WDP assets and dependencies; feature screens remain assigned to later tasks"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Clean npm ci, nine UI/client tests, production build and browser observations recorded"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Manual frontend scaffold completion; no pending feature/domain acceptance claimed"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-054/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-054.md",
+      "criteria": {
+        "AC-WEB-01-1": "pass"
+      }
     },
     "TASK-055": {
       "execution": "todo",

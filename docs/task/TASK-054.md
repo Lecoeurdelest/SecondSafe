@@ -1,7 +1,7 @@
 ---
 id: TASK-054
 title: Web runtime, API client and application shell
-execution_status: ready
+execution_status: done
 relevance: current
 depends_on: [TASK-053]
 supersedes: []
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `ready` — Dependencies complete; ready to implement and verify
+**Current state:** `done` — React shell installs from lockfile; 9 FE and 43 BE tests pass; production build and manual 360/1920 px checks pass
 
 ## Traceability
 
@@ -75,7 +75,7 @@ Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and
 
 ## Acceptance criteria and verification
 
-- [ ] `AC-WEB-01-1` (FR-WEB-01) — The React app installs from a lockfile, builds and renders a Vietnamese shell; API and socket origins come from documented environment variables and errors have visible states. Verify with: behavioral test, manual review; `cd frontend && npm test -- --watchAll=false --runInBand`, `cd frontend && npm run build`.
+- [x] `AC-WEB-01-1` (FR-WEB-01) — The React app installs from a lockfile, builds and renders a Vietnamese shell; API and socket origins come from documented environment variables and errors have visible states. Verify with: behavioral test, manual review; `cd frontend && npm test -- --watchAll=false --runInBand`, `cd frontend && npm run build`.
 
 ## Required evidence
 

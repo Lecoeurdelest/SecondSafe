@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-054",
+  "spec_hash": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
+  "source_hash": "c96afc8403530fbffc74d1da440d13f4ca66e491deaa5dce2097ba145e6f7788",
+  "completion_policy": "manual frontend scaffold completion on install/build/test and browser observations",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-WEB-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Frontend scaffold evidence; no domain behavior accepted",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-054/run-01/jest.txt",
+            ".project/evidence/TASK-054/run-01/install.txt",
+            ".project/evidence/TASK-054/run-01/build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-054/run-01/browser-observation.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

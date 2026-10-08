@@ -25,6 +25,17 @@ npm run dev                   # http://localhost:5000/api/health
 
 Other scripts: `npm run seed:verify`, `npm run db:indexes`, `npm run db:migrate`. MongoDB transactions, used by the money flows, need a replica set.
 
+The web foundation is available under `frontend/`:
+
+```bash
+cd frontend
+cp .env.example .env
+npm ci
+npm start
+```
+
+See [frontend/README.md](frontend/README.md) for environment variables and checks. Feature screens migrate through TASK-055 to TASK-072; the foundational shell is not the completed marketplace.
+
 ## How work is controlled
 
 | What | Where |

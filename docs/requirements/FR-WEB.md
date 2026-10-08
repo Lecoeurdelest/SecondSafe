@@ -8,7 +8,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-01-1` | The React app installs from a lockfile, builds and renders a Vietnamese shell; API and socket origins come from documented environment variables and errors have visible states. | behavioral test, manual review | [TASK-054](../task/TASK-054.md) `[]` |
+| `AC-WEB-01-1` | The React app installs from a lockfile, builds and renders a Vietnamese shell; API and socket origins come from documented environment variables and errors have visible states. | behavioral test, manual review | [TASK-054](../task/TASK-054.md) `[x]` |
 
 ### FR-WEB-02 — Web authentication, session and route guards
 
