@@ -1,5 +1,7 @@
 # Documentation map
 
+Full-stack migration: [WDP inventory and task mapping](technical/migration-wdp.md), [Gitflow delivery](technical/gitflow.md), and [frontend migration](../frontend/README.md). D-009 restores frontend scope while preserving the original backend task IDs and evidence.
+
 | Layer | Location | Authority |
 |---|---|---|
 | Intent | [../plan.md](../plan.md) | authored |

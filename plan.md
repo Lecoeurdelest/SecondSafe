@@ -3,12 +3,12 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 1/52 tasks done (1 done, 6 blocked, 3 ready, 42 todo). 133 active requirements, 208 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 1/73 tasks done (1 done, 6 blocked, 1 needs_revalidation, 4 ready, 61 todo). 156 active requirements, 231 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
 
-Rebuild the backend of the WDP marketplace (baseline `Trungnc273/WDP@1cea2b7`, product name ReFlow) as **SecondSafe**. The rebuild starts from the accepted database layer and fixes the defects found during the requirement review before the business logic is written.
+Migrate the frontend and rebuild the backend of the WDP marketplace (baseline `Trungnc273/WDP@1cea2b7`, product name ReFlow) as **SecondSafe**. The rebuild starts from the accepted database layer and fixes the defects found during the requirement review before the business logic is written.
 
 Success means:
 
@@ -18,9 +18,9 @@ Success means:
 
 ## 2. Scope
 
-**In scope:** REST API under `/api`, Socket.IO real-time channel, scheduled jobs, MongoDB data layer, seed and maintenance scripts, automated tests, technical documentation.
+**In scope (D-009):** React web frontend, REST API under `/api`, Socket.IO real-time channel, scheduled jobs, MongoDB data layer, seed and maintenance scripts, automated tests, technical documentation.
 
-**Out of scope (D-002):** the web frontend, mobile apps, infrastructure provisioning, carrier integrations and automated bank transfers.
+**Out of scope (D-009 supersedes D-002):** mobile apps, infrastructure provisioning, carrier integrations and automated bank transfers.
 
 **Starting point (D-003, D-004):** all Mongoose schemas, database configuration, seeds and data scripts are carried from the baseline. Every route, controller, service, middleware and utility file exists as an empty stub, except the chat encryption helper required by the data migration script.
 
@@ -91,7 +91,7 @@ Jobs cancel unpaid orders, refund unshipped orders, complete delivered orders an
 
 ## 5. Quality requirements
 
-Security (NFR-SEC-01 … NFR-SEC-12), data protection (NFR-DATA-01), reliability (NFR-REL-01 … NFR-REL-06), performance (NFR-PERF-01 … NFR-PERF-05), usability of the API (NFR-USA-01, NFR-USA-03), portability (NFR-COMP-02), integrations (NFR-INT-01), maintainability (NFR-MNT-01 … NFR-MNT-05), observability (NFR-OBS-01) and business-rule configuration (NFR-BIZ-01, NFR-BIZ-02). NFR-USA-02 and NFR-COMP-01 concern the frontend and are deferred under D-002.
+Security (NFR-SEC-01 … NFR-SEC-12), data protection (NFR-DATA-01), reliability (NFR-REL-01 … NFR-REL-06), performance (NFR-PERF-01 … NFR-PERF-05), usability of the API (NFR-USA-01, NFR-USA-03), portability (NFR-COMP-02), integrations (NFR-INT-01), maintainability (NFR-MNT-01 … NFR-MNT-05), observability (NFR-OBS-01) and business-rule configuration (NFR-BIZ-01, NFR-BIZ-02). NFR-USA-02 and NFR-COMP-01 were deferred in the original backend scaffold; frontend accessibility and responsive compatibility are restored through D-009 and FR-WEB tasks.
 
 ## 6. Global invariants
 
@@ -161,6 +161,18 @@ Proposed. Tasks that depend on an open decision stay blocked until the decision 
 
 ## 11. Non-goals
 
-- Reusing baseline business logic verbatim.
-- Shipping a frontend from this repository.
+- Importing baseline defects without review against the accepted criteria.
+- Production deployment without a separate release request.
 - Automatic bank payouts, carrier APIs, recommendation features.
+
+## 12. Migration amendment (2026-10-09)
+
+The user requests migration of WDP into SecondSafe through small frontend and backend tasks, documented in the repository and tracked with a separate PR per task under Gitflow. The existing backend task IDs, acceptance criteria, schemas and evidence history remain authoritative. D-009 supersedes the earlier backend-only scope D-002. D-004 describes the historical scaffold; D-010 permits adapting source implementations while preserving all current behavioral requirements and fixing the reviewed defects.
+
+TASK-053 establishes the migration inventory and delivery conventions. TASK-054 through TASK-072 migrate the React client in bounded feature slices. TASK-073 verifies the complete integration. Each task includes its source paths, dependencies, exclusions and observable criteria. The five-hour splitting guideline applies; full-stack integration is explicitly a broader final gate. Source and destination are pinned in `docs/technical/migration-wdp.md`.
+
+`main` remains stable, `develop` is the integration base, and `codex/feature/task-NNN-<description>` holds each task. Independent PRs target `develop`; dependent work may use a clearly documented stacked PR until its prerequisite is merged, then retarget to `develop`. PR creation is authorized. PRs remain open for review unless the user separately authorizes merging. Release and hotfix branches follow `docs/technical/gitflow.md`.
+
+Every new commit author, committer and PR author is Lecoeurdelest, with no co-author or generated attribution. Pre-existing history, including PR #1 by another contributor, is preserved. GitHub issue/PR mappings live in `.project/delivery.json` and are rendered in the task index. A feature copied from WDP is not complete until its current criteria are evidenced. Provider-dependent payment, SMTP and Google checks require sandbox configuration; missing evidence remains visible.
+
+The initial destination inspection finds an app-start regression: the merged orders routes call authentication and seller guards that are still stubs. TASK-001 is marked `needs_revalidation` with historical evidence retained. TASK-003 restores fail-closed HTTP startup while TASK-005/TASK-006 supply the guards. The repair must never expose orders without authentication.

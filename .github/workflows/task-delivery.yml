@@ -1,0 +1,21 @@
+name: Task delivery
+on:
+  pull_request:
+    branches:
+      - develop
+      - 'codex/feature/**'
+permissions:
+  contents: read
+jobs:
+  authorship:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify PR and new commit authors
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: python3 tools/pdd/check-authorship.py --base "$PR_BASE" --head "$PR_HEAD" --pr-author "$PR_AUTHOR"

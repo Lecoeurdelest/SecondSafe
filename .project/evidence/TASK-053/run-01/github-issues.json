@@ -1,0 +1,805 @@
+[
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 74,
+    "title": "TASK-073: Full-stack migration integration and release checks",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/74"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 73,
+    "title": "TASK-072: Web admin disputes, withdrawals and revenue",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/73"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 72,
+    "title": "TASK-071: Web admin order, review and report queues",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/72"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 71,
+    "title": "TASK-070: Web admin shell, dashboard and user management",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/71"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 70,
+    "title": "TASK-069: Web moderator disputes and withdrawals",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/70"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 69,
+    "title": "TASK-068: Web moderator report, order and review queues",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/69"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 68,
+    "title": "TASK-067: Web moderator shell, dashboard and profile",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/68"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 67,
+    "title": "TASK-066: Web violation reports and disputes",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/67"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 66,
+    "title": "TASK-065: Web seller reviews and ratings",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/66"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 65,
+    "title": "TASK-064: Web wallet, top-up and withdrawal",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/65"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 64,
+    "title": "TASK-063: Web order lists, payment and fulfilment",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/64"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 63,
+    "title": "TASK-062: Web purchase requests and checkout",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/63"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 62,
+    "title": "TASK-061: Web conversations, images and price offers",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/62"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 61,
+    "title": "TASK-060: Web notification inbox",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/61"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 60,
+    "title": "TASK-059: Web listing detail and favorites",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/60"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 59,
+    "title": "TASK-058: Web seller listing creation and management",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/59"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 58,
+    "title": "TASK-057: Web home, catalog search and filters",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/58"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 57,
+    "title": "TASK-056: Web profile, password and public seller pages",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/57"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 56,
+    "title": "TASK-055: Web authentication, session and route guards",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/56"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 55,
+    "title": "TASK-054: Web runtime, API client and application shell",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/55"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 54,
+    "title": "TASK-053: Migration inventory, FE task decomposition and Gitflow delivery",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/54"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 53,
+    "title": "TASK-052: Performance baseline",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/53"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 52,
+    "title": "TASK-051: API documentation",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/52"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 51,
+    "title": "TASK-050: Audit logging",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/51"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 50,
+    "title": "TASK-049: Authorization, privacy and coverage gates",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/50"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 49,
+    "title": "TASK-048: Listing pre-publication moderation",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/49"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 48,
+    "title": "TASK-047: Listing expiry job",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/48"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 47,
+    "title": "TASK-046: Order lifecycle jobs",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/47"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 46,
+    "title": "TASK-045: Admin restrictions, moderator lock and dashboard",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/46"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 45,
+    "title": "TASK-044: Admin user management",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/45"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 44,
+    "title": "TASK-043: Partial refunds in disputes",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/44"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 43,
+    "title": "TASK-042: Dispute resolution",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/43"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 42,
+    "title": "TASK-041: Order and review moderation",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/42"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 41,
+    "title": "TASK-040: Report moderation and sanctions",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/41"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 40,
+    "title": "TASK-039: Moderator dashboard and revenue report",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/40"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 39,
+    "title": "TASK-038: Disputes for buyers and sellers",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/39"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 38,
+    "title": "TASK-037: Violation reports",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/38"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 37,
+    "title": "TASK-036: Reviews and rating statistics",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/37"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 36,
+    "title": "TASK-035: Delivery tracking",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/36"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 35,
+    "title": "TASK-034: Order queries",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/35"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 34,
+    "title": "TASK-033: Order fulfilment and cancellation",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/34"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 33,
+    "title": "TASK-032: Order confirmation and payment",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/33"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 32,
+    "title": "TASK-031: Price offers in chat",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/32"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 31,
+    "title": "TASK-030: Purchase requests and quick buy",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/31"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 30,
+    "title": "TASK-029: Withdrawal approval",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/30"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 29,
+    "title": "TASK-028: Withdrawal requests",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/29"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 28,
+    "title": "TASK-027: VNPay top-up",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/28"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 27,
+    "title": "TASK-026: SePay top-up and payment notifications",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/27"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 26,
+    "title": "TASK-025: Escrow service",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/26"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 25,
+    "title": "TASK-024: Wallet ledger",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/25"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 24,
+    "title": "TASK-023: Realtime gateway",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/24"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 23,
+    "title": "TASK-022: Conversations and messages",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/23"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 22,
+    "title": "TASK-021: Favorites",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/22"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 21,
+    "title": "TASK-020: Browse, search and filter",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/21"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 20,
+    "title": "TASK-019: Listing detail and seller listings",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/20"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 19,
+    "title": "TASK-018: Listing management",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/19"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 18,
+    "title": "TASK-017: Categories API",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/18"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 17,
+    "title": "TASK-016: Profiles and public profile",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/17"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 16,
+    "title": "TASK-015: Optional two-factor login",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/16"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 15,
+    "title": "TASK-014: Password change and recovery",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/15"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 14,
+    "title": "TASK-013: Google sign-in",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/14"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 13,
+    "title": "TASK-012: Login and logout",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/13"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 12,
+    "title": "TASK-011: Registration with email verification",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/12"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 11,
+    "title": "TASK-010: Notifications",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/11"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 10,
+    "title": "TASK-009: Media upload pipeline",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/10"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 9,
+    "title": "TASK-008: Rate limiting for authentication endpoints",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/9"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 8,
+    "title": "TASK-007: Email delivery and one-time code store",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/8"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 7,
+    "title": "TASK-006: Account suspension and selling-restriction service",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/7"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 6,
+    "title": "TASK-005: JWT authentication middleware and role guards",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/6"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 5,
+    "title": "TASK-004: Business configuration module",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/5"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 4,
+    "title": "TASK-003: HTTP foundation",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/4"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 3,
+    "title": "TASK-002: Verify database scripts against MongoDB",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/3"
+  },
+  {
+    "author": {
+      "id": "U_kgDOBvD29g",
+      "is_bot": false,
+      "login": "Lecoeurdelest",
+      "name": ""
+    },
+    "number": 2,
+    "title": "TASK-001: Scaffold the backend database layer and control framework",
+    "url": "https://github.com/Lecoeurdelest/SecondSafe/issues/2"
+  }
+]
