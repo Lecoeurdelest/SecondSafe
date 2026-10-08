@@ -1,0 +1,12 @@
+
+> secondsafe-backend@0.1.0 test
+> jest --runInBand
+
+
+Test Suites: 4 passed, 4 total
+Tests:       62 passed, 62 total
+Snapshots:   0 total
+Time:        0.581 s, estimated 1 s
+Ran all test suites.
+
+exit_code=0

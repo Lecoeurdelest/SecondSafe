@@ -163,10 +163,30 @@
       }
     },
     "TASK-005": {
-      "execution": "ready",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Dependencies complete; ready to implement and verify",
-      "history": []
+      "detail": "62 backend tests and 12 real-MongoDB HTTP assertions pass; calibrated automatic gate is inconclusive; acceptance policy/review pending",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Adapt WDP JWT/middleware contracts with current database role checks and explicit HS256 validation"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Concrete behavioral/AST evidence passes; missing calibrated confidence prevents automatic completion and dependent advancement"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-005/run-02/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-005.md",
+      "criteria": {
+        "AC-AUTH-09-1": "inconclusive",
+        "AC-AUTH-09-2": "inconclusive",
+        "AC-NFR-SEC-03-1": "inconclusive"
+      }
     },
     "TASK-006": {
       "execution": "todo",

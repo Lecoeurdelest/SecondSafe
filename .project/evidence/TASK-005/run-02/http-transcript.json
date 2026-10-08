@@ -1,0 +1,110 @@
+[
+  {
+    "role": "user",
+    "route": "/protected",
+    "expected": 200,
+    "actual": 200,
+    "body": {
+      "userId": "6ac81e93adebb6e5d15357cd",
+      "email": "user@example.test",
+      "fullName": "Disposable Account",
+      "role": "user",
+      "isSellingRestricted": false,
+      "sellingRestrictedUntil": null
+    }
+  },
+  {
+    "role": "user",
+    "route": "/moderator",
+    "expected": 403,
+    "actual": 403,
+    "body": {
+      "success": false,
+      "message": "Bạn không có quyền truy cập chức năng này"
+    }
+  },
+  {
+    "role": "user",
+    "route": "/admin",
+    "expected": 403,
+    "actual": 403,
+    "body": {
+      "success": false,
+      "message": "Bạn không có quyền truy cập chức năng này"
+    }
+  },
+  {
+    "role": "moderator",
+    "route": "/protected",
+    "expected": 200,
+    "actual": 200,
+    "body": {
+      "userId": "6ac81e93adebb6e5d15357d0",
+      "email": "moderator@example.test",
+      "fullName": "Disposable Account",
+      "role": "moderator",
+      "isSellingRestricted": false,
+      "sellingRestrictedUntil": null
+    }
+  },
+  {
+    "role": "moderator",
+    "route": "/moderator",
+    "expected": 204,
+    "actual": 204,
+    "body": {}
+  },
+  {
+    "role": "moderator",
+    "route": "/admin",
+    "expected": 403,
+    "actual": 403,
+    "body": {
+      "success": false,
+      "message": "Bạn không có quyền truy cập chức năng này"
+    }
+  },
+  {
+    "role": "admin",
+    "route": "/protected",
+    "expected": 200,
+    "actual": 200,
+    "body": {
+      "userId": "6ac81e93adebb6e5d15357d2",
+      "email": "admin@example.test",
+      "fullName": "Disposable Account",
+      "role": "admin",
+      "isSellingRestricted": false,
+      "sellingRestrictedUntil": null
+    }
+  },
+  {
+    "role": "admin",
+    "route": "/moderator",
+    "expected": 204,
+    "actual": 204,
+    "body": {}
+  },
+  {
+    "role": "admin",
+    "route": "/admin",
+    "expected": 204,
+    "actual": 204,
+    "body": {}
+  },
+  {
+    "case": "JWT role claim cannot override database role",
+    "expected": 403,
+    "actual": 403
+  },
+  {
+    "case": "expired token",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "case": "deleted database account",
+    "expected": 401,
+    "actual": 401
+  }
+]
