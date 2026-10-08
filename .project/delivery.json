@@ -169,7 +169,11 @@
     },
     "TASK-054": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/55",
-      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/79"
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/79",
+      "supporting_prs": [
+        "https://github.com/Lecoeurdelest/SecondSafe/pull/83",
+        "https://github.com/Lecoeurdelest/SecondSafe/pull/84"
+      ]
     },
     "TASK-055": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/56"
