@@ -1,0 +1,4 @@
+# npm creates lockfiles; review dependency declarations and installation checks.
+**/*package-lock.json linguist-generated=true
+# Raw verification output stays available without expanding every log by default.
+.project/evidence/**/*.txt linguist-generated=true

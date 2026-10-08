@@ -166,6 +166,7 @@ def render_task_index(model, state):
         evidence = ', '.join(f'[{Path(e).parent.name}](../../{e})' for e in record.get('evidence', [])) or '—'
         remote = delivery['tasks'].get(task['id'], {})
         links = [f'[{kind.upper()}]({remote[kind]})' for kind in ('issue', 'pr') if remote.get(kind)]
+        links.extend(f'[PR slice {i}]({url})' for i, url in enumerate(remote.get('supporting_prs', []), 1))
         lines.append(f"| {marker} | [{task['id']}]({task['id']}.md) | {cell(task['title'])} | `{record['execution']}` | "
                      f"`{record['relevance']}` | {milestone(task['id'])[0]} | {deps} | {cell(record.get('detail') or '—')} | {evidence} | {', '.join(links) or '—'} |")
     lines += ['', '## Milestones', '', '| Milestone | Tasks | Done |', '|---|---|---|']
