@@ -3,8 +3,8 @@
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
     "project.yaml": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
-    ".project/state.json": "e21a869816c247f345a1e67f698dc651df9208b6b75b8498574203b02c89ddfd",
-    ".project/delivery.json": "3fe816598514c452b6f89779c3922cc6fde46642a65bfec3ff59d914cb5b8ce5",
+    ".project/state.json": "62d9f8ead1b7e4194c7fa50b49975f601a246a1befb43c5590a412d4e5c714e1",
+    ".project/delivery.json": "f99e09177f5d48e12926efbfb73e3f610350a5333b1a6625211d1023f06f6450",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
     "backend/src/modules/delivery/delivery.model.js": "90056fcdd26eb2d4eb7b76cda3796abb641d53d5ab1e4ae33b1fd12445e1301d",
@@ -33,7 +33,7 @@
     },
     "docs/requirements/FR-PROD.md": {
       "ownership": "generated",
-      "sha256": "f8f2c18700e686698697c7e04455b963b486b2b81126f6edf72a6eab8ce30c66"
+      "sha256": "588ad898e58ce5272dc5723cc3e9ea4466d6cfabcaf0fae81651e916debf1a40"
     },
     "docs/requirements/FR-BROW.md": {
       "ownership": "generated",
@@ -101,7 +101,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "b6a09a7ca2e822d181f52c6c59a66b176ba5892eafee59c672fe203cb4858214"
+      "sha256": "38bed1ed0518e4bdcaded2babe25269a9901a8df909ee901ed3d403aee01ff27"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -169,7 +169,7 @@
     },
     "docs/task/TASK-017.md": {
       "ownership": "generated",
-      "sha256": "8f6b6669631e54b60f164aa5edfdab6e4edc780af7ba40a1b5b35b62dbc72c3a"
+      "sha256": "987992c1e4ed6e445b558be21ec02b83ab11aa3000094f74cc522860466aba07"
     },
     "docs/task/TASK-018.md": {
       "ownership": "generated",
@@ -407,7 +407,7 @@
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "357050150b2fc58382c8c5e8648f67a7cd0307e19b58d38e952fac2d36915b8c"
+      "sha256": "72e4a324d6a74c5c56fb7c5971764c35377c6c7c932ec3435f2ca98a888e1d99"
     }
   }
 }

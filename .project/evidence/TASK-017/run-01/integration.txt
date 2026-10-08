@@ -1,0 +1,6 @@
+Command: node .project/evidence/TASK-017/run-01/integration-runner.js
+PASS: five category HTTP scenarios, 12 assertions against real MongoDB 7.0.24 replica set
+{"timestamp":"2026-10-08T23:04:01.173Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/hidden","error":"Error"}]}
+{"timestamp":"2026-10-08T23:04:01.175Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/missing","error":"Error"}]}
+
+exit_code=0

@@ -298,10 +298,28 @@
       "history": []
     },
     "TASK-017": {
-      "execution": "ready",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Dependencies complete; ready to implement and verify",
-      "history": []
+      "detail": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Started migration from WDP category API"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-017/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-017.md",
+      "criteria": {
+        "AC-PROD-08-1": "inconclusive"
+      }
     },
     "TASK-018": {
       "execution": "todo",

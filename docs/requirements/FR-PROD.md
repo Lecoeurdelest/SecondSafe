@@ -93,4 +93,4 @@ Baseline: `GET /api/categories`, `GET /api/categories/:slug`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-08-1` | Active categories are listed sorted by name; an unknown or inactive slug returns 404. | behavioral test | [TASK-017](../task/TASK-017.md) `[]` |
+| `AC-PROD-08-1` | Active categories are listed sorted by name; an unknown or inactive slug returns 404. | behavioral test | [TASK-017](../task/TASK-017.md) `[!]` |

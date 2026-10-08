@@ -1,0 +1,67 @@
+[
+  {
+    "case": "active categories sorted by name",
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "_id": "6ac82160b958da0782323a83",
+          "name": "Alpha",
+          "slug": "alpha",
+          "description": "First",
+          "icon": "a"
+        },
+        {
+          "_id": "6ac82160b958da0782323a82",
+          "name": "Zeta",
+          "slug": "zeta",
+          "description": "Last",
+          "icon": "z"
+        }
+      ]
+    }
+  },
+  {
+    "case": "active slug detail",
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "_id": "6ac82160b958da0782323a83",
+        "name": "Alpha",
+        "slug": "alpha",
+        "description": "First",
+        "icon": "a",
+        "parentCategory": null,
+        "isActive": true,
+        "createdAt": "2026-10-08T23:04:00.835Z",
+        "__v": 0
+      }
+    }
+  },
+  {
+    "case": "hidden",
+    "status": 404,
+    "body": {
+      "success": false,
+      "message": "Danh mục không tồn tại"
+    }
+  },
+  {
+    "case": "missing",
+    "status": 404,
+    "body": {
+      "success": false,
+      "message": "Danh mục không tồn tại"
+    }
+  },
+  {
+    "case": "empty public category list",
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": []
+    }
+  }
+]
