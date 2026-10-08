@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 4/73 tasks done (4 done, 6 blocked, 6 ready, 57 todo). 156 active requirements, 231 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 5/73 tasks done (5 done, 6 blocked, 5 ready, 57 todo). 156 active requirements, 231 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose

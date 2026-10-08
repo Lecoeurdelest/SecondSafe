@@ -1,0 +1,8 @@
+Command: npm run db:indexes
+
+> secondsafe-backend@0.1.0 db:indexes
+> node create-indexes.js
+
+Error creating indexes: Server selection timed out after 30000 ms
+
+exit_code=1

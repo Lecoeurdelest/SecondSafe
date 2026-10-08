@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-002",
+  "spec_hash": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
+  "source_hash": "18511f8b578afa792627e5b49d29a090ada2a424c9113fdbf7ed2e04c5cbaec5",
+  "completion_policy": "manual configuration/data-operations completion on observed criteria; no new domain-logic acceptance",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-SYS-06-3",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Concrete configuration/script outputs; no calibrated domain confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-002/run-01/attempt-notes.txt",
+            ".project/evidence/TASK-002/run-01/create-admin.txt",
+            ".project/evidence/TASK-002/run-01/data-assertions.txt",
+            ".project/evidence/TASK-002/run-01/db-indexes.txt",
+            ".project/evidence/TASK-002/run-01/db-migrate.txt",
+            ".project/evidence/TASK-002/run-01/environment.txt",
+            ".project/evidence/TASK-002/run-01/index-assertions.txt",
+            ".project/evidence/TASK-002/run-01/jest.txt",
+            ".project/evidence/TASK-002/run-01/preservation.txt",
+            ".project/evidence/TASK-002/run-01/runner.txt",
+            ".project/evidence/TASK-002/run-01/seed-verify.txt",
+            ".project/evidence/TASK-002/run-01/seed.txt",
+            ".project/evidence/TASK-002/run-01/status.txt",
+            ".project/evidence/TASK-002/run-01/validate.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-PERF-02-2",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Concrete configuration/script outputs; no calibrated domain confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-002/run-01/attempt-notes.txt",
+            ".project/evidence/TASK-002/run-01/create-admin.txt",
+            ".project/evidence/TASK-002/run-01/data-assertions.txt",
+            ".project/evidence/TASK-002/run-01/db-indexes.txt",
+            ".project/evidence/TASK-002/run-01/db-migrate.txt",
+            ".project/evidence/TASK-002/run-01/environment.txt",
+            ".project/evidence/TASK-002/run-01/index-assertions.txt",
+            ".project/evidence/TASK-002/run-01/jest.txt",
+            ".project/evidence/TASK-002/run-01/preservation.txt",
+            ".project/evidence/TASK-002/run-01/runner.txt",
+            ".project/evidence/TASK-002/run-01/seed-verify.txt",
+            ".project/evidence/TASK-002/run-01/seed.txt",
+            ".project/evidence/TASK-002/run-01/status.txt",
+            ".project/evidence/TASK-002/run-01/validate.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

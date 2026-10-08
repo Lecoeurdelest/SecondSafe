@@ -1,0 +1,6 @@
+Running npm run seed
+Running npm run seed:verify
+Running npm run db:indexes
+Running npm run db:migrate
+Running npm run create-admin
+PASS: database scripts, all declared indexes and disposable admin validated

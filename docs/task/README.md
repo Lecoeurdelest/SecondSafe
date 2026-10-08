@@ -13,9 +13,9 @@ This index is generated from `.project/state.json` and `project.yaml` by `tools/
 | Status | ID | Title | Execution | Relevance | Milestone | Depends on | Detail | Evidence | Delivery |
 |---|---|---|---|---|---|---|---|---|---|
 | [x] | [TASK-001](TASK-001.md) | Scaffold the backend database layer and control framework | `done` | `superseded` | M0 | — | Historical empty scaffold superseded by D-009/D-010 migration; original evidence retained; current schema and boot regression checks pass in TASK-003 | [run-01](../../.project/evidence/TASK-001/run-01/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/2) |
-| [] | [TASK-002](TASK-002.md) | Verify database scripts against MongoDB | `ready` | `current` | M0 | TASK-001 | Dependencies complete; ready to implement and verify | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/3) |
+| [x] | [TASK-002](TASK-002.md) | Verify database scripts against MongoDB | `done` | `current` | M0 | TASK-001 | MongoDB 7.0.24 replica-set verification passes: all five scripts, 16-model indexes, seeded data and hashed admin; 43 backend tests pass | [run-01](../../.project/evidence/TASK-002/run-01/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/3) |
 | [x] | [TASK-003](TASK-003.md) | HTTP foundation | `done` | `current` | M1 | TASK-001 | HTTP platform/scaffold manually verified: 23 tests pass; orders fail closed while guards are unavailable; no domain-confidence claim | [run-01](../../.project/evidence/TASK-003/run-01/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/4), [PR](https://github.com/Lecoeurdelest/SecondSafe/pull/76) |
-| [x] | [TASK-004](TASK-004.md) | Business configuration module | `done` | `current` | M1 | TASK-001 | Validated baseline money/time defaults and documented environment overrides; all 43 backend tests pass | [run-01](../../.project/evidence/TASK-004/run-01/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/5) |
+| [x] | [TASK-004](TASK-004.md) | Business configuration module | `done` | `current` | M1 | TASK-001 | Validated baseline money/time defaults and documented environment overrides; all 43 backend tests pass | [run-01](../../.project/evidence/TASK-004/run-01/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/5), [PR](https://github.com/Lecoeurdelest/SecondSafe/pull/77) |
 | [] | [TASK-005](TASK-005.md) | JWT authentication middleware and role guards | `ready` | `current` | M1 | TASK-003 | Dependencies complete; ready to implement and verify | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/6) |
 | [] | [TASK-006](TASK-006.md) | Account suspension and selling-restriction service | `todo` | `current` | M1 | TASK-005 | Waiting for TASK-005 | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/7) |
 | [] | [TASK-007](TASK-007.md) | Email delivery and one-time code store | `ready` | `current` | M1 | TASK-003, TASK-004 | Dependencies complete; ready to implement and verify | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/8) |
@@ -90,7 +90,7 @@ This index is generated from `.project/state.json` and `project.yaml` by `tools/
 
 | Milestone | Tasks | Done |
 |---|---|---|
-| M0 Scaffold | TASK-001 … TASK-002 | 1/2 |
+| M0 Scaffold | TASK-001 … TASK-002 | 2/2 |
 | M1 Platform and identity | TASK-003 … TASK-016 | 2/14 |
 | M2 Catalog and chat | TASK-017 … TASK-023 | 0/7 |
 | M3 Money and orders | TASK-024 … TASK-036 | 0/13 |

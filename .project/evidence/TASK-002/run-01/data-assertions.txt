@@ -1,0 +1,3 @@
+PASS: disposable admin exists with admin role and hashed password
+Products: 80
+Categories: 8

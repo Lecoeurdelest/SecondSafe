@@ -183,7 +183,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-NFR-PERF-02-1` | Indexes for the main queries are declared in the schemas. | behavioral test | [TASK-001](../task/TASK-001.md) `[x]` |
-| `AC-NFR-PERF-02-2` | npm run db:indexes creates the declared indexes for every model on a MongoDB instance. | behavioral test | [TASK-002](../task/TASK-002.md) `[]` |
+| `AC-NFR-PERF-02-2` | npm run db:indexes creates the declared indexes for every model on a MongoDB instance. | behavioral test | [TASK-002](../task/TASK-002.md) `[x]` |
 
 ### NFR-PERF-03 — Response time baseline
 

@@ -1,0 +1,8 @@
+Command: npm run create-admin
+
+> secondsafe-backend@0.1.0 create-admin
+> node create-admin.js
+
+Admin account migration-admin@example.test created
+
+exit_code=0

@@ -1,0 +1,130 @@
+Command: npm run seed
+
+> secondsafe-backend@0.1.0 seed
+> node seed-all.js
+
+=== Seeding Categories ===
+MongoDB Connected for seeding categories
+Cleared existing categories
+✓ Inserted 8 categories
+  - Sách (books)
+  - Quần áo (fashion)
+  - Đồ điện tử (electronics)
+  - Đồ gia dụng (home)
+  - Làm đẹp (beauty)
+  - Thể thao (sports)
+  - Đồ chơi (toys)
+  - Thú cưng (pets)
+
+✓ Categories seeding completed successfully
+
+=== Seeding Products ===
+MongoDB Connected for seeding products
+✓ Created test seller user
+Cleared existing products
+✓ Inserted 80 products
+
+Products by category:
+
+Sách (10 products):
+  - Đắc Nhân Tâm - Dale Carnegie (85.000 VNĐ)
+  - Harry Potter Trọn Bộ 7 Tập (650.000 VNĐ)
+  - Nhà Giả Kim - Paulo Coelho (70.000 VNĐ)
+  - Sapiens - Lược Sử Loài Người (150.000 VNĐ)
+  - Tuổi Trẻ Đáng Giá Bao Nhiêu (65.000 VNĐ)
+  - Bộ Sách Giáo Khoa Lớp 12 (200.000 VNĐ)
+  - Doraemon Truyện Dài Tập 1-10 (180.000 VNĐ)
+  - Cà Phê Cùng Tony (75.000 VNĐ)
+  - Tiếng Anh Giao Tiếp Cơ Bản (95.000 VNĐ)
+  - Nghệ Thuật Bán Hàng (120.000 VNĐ)
+
+Quần áo (10 products):
+  - Áo Thun Nam Uniqlo (150.000 VNĐ)
+  - Quần Jeans Nữ Levi's (450.000 VNĐ)
+  - Áo Khoác Denim Nam (380.000 VNĐ)
+  - Váy Maxi Nữ (280.000 VNĐ)
+  - Giày Thể Thao Nike Air Max (1.200.000 VNĐ)
+  - Túi Xách Nữ Da Thật (850.000 VNĐ)
+  - Áo Sơ Mi Nam Công Sở (180.000 VNĐ)
+  - Giày Cao Gót Nữ (320.000 VNĐ)
+  - Áo Hoodie Unisex (250.000 VNĐ)
+  - Dép Adidas Adilette (280.000 VNĐ)
+
+Đồ điện tử (10 products):
+  - iPhone 13 Pro Max 256GB (22.000.000 VNĐ)
+  - MacBook Air M1 2020 (18.000.000 VNĐ)
+  - Samsung Galaxy S22 Ultra (19.500.000 VNĐ)
+  - iPad Pro 11 inch M1 (16.000.000 VNĐ)
+  - Tai Nghe AirPods Pro 2 (4.500.000 VNĐ)
+  - Apple Watch Series 7 (7.500.000 VNĐ)
+  - Laptop Dell XPS 13 (25.000.000 VNĐ)
+  - Máy Ảnh Canon EOS M50 (12.000.000 VNĐ)
+  - Loa Bluetooth JBL Flip 5 (1.800.000 VNĐ)
+  - Chuột Gaming Logitech G502 (950.000 VNĐ)
+
+Đồ gia dụng (10 products):
+  - Bàn Làm Việc Gỗ Cao Su (2.500.000 VNĐ)
+  - Ghế Gaming DXRacer (3.200.000 VNĐ)
+  - Tủ Lạnh Samsung 208L (4.500.000 VNĐ)
+  - Máy Giặt LG 9kg (5.200.000 VNĐ)
+  - Nồi Cơm Điện Tử Sharp 1.8L (1.200.000 VNĐ)
+  - Bộ Nồi Inox 5 Món (850.000 VNĐ)
+  - Quạt Điều Hòa Kangaroo (2.800.000 VNĐ)
+  - Bộ Chăn Ga Gối Cotton (450.000 VNĐ)
+  - Bình Đun Siêu Tốc Philips (380.000 VNĐ)
+  - Đèn Ngủ LED Thông Minh (280.000 VNĐ)
+
+Làm đẹp (10 products):
+  - Son Dior Addict 999 (850.000 VNĐ)
+  - Kem Chống Nắng La Roche-Posay (280.000 VNĐ)
+  - Nước Hoa Chanel No.5 (2.500.000 VNĐ)
+  - Serum Vitamin C The Ordinary (180.000 VNĐ)
+  - Phấn Nước Cushion Laneige (450.000 VNĐ)
+  - Mặt Nạ Innisfree 10 Miếng (150.000 VNĐ)
+  - Sữa Rửa Mặt CeraVe (220.000 VNĐ)
+  - Bảng Phấn Mắt Urban Decay (950.000 VNĐ)
+  - Kem Dưỡng Ẩm Cetaphil (280.000 VNĐ)
+  - Mascara Maybelline Lash Sensational (180.000 VNĐ)
+
+Thể thao (10 products):
+  - Xe Đạp Thể Thao Giant ATX 720 (4.500.000 VNĐ)
+  - Bộ Tạ Tay 20kg (800.000 VNĐ)
+  - Giày Chạy Bộ Adidas Ultraboost (1.800.000 VNĐ)
+  - Vợt Cầu Lông Yonex (950.000 VNĐ)
+  - Bóng Đá Size 5 Nike (380.000 VNĐ)
+  - Thảm Tập Yoga Cao Cấp (280.000 VNĐ)
+  - Găng Tay Boxing Everlast (650.000 VNĐ)
+  - Bàn Bóng Bàn Gấp Gọn (3.500.000 VNĐ)
+  - Dây Nhảy Thể Thao (120.000 VNĐ)
+  - Balo Thể Thao Adidas (450.000 VNĐ)
+
+Đồ chơi (10 products):
+  - Lego City Police Station (1.200.000 VNĐ)
+  - Búp Bê Barbie Dreamhouse (850.000 VNĐ)
+  - Xe Điều Khiển Từ Xa (450.000 VNĐ)
+  - Rubik 3x3 Gan 356 (280.000 VNĐ)
+  - Bộ Đồ Chơi Nấu Ăn (320.000 VNĐ)
+  - Mô Hình Gundam RG (650.000 VNĐ)
+  - Board Game Catan (580.000 VNĐ)
+  - Xe Scooter Trẻ Em (750.000 VNĐ)
+  - Đàn Piano Điện Tử Casio (2.200.000 VNĐ)
+  - Bộ Xếp Hình Gỗ 100 Chi Tiết (180.000 VNĐ)
+
+Thú cưng (10 products):
+  - Thức Ăn Cho Chó Royal Canin 10kg (1.200.000 VNĐ)
+  - Cát Vệ Sinh Cho Mèo 10L (180.000 VNĐ)
+  - Lồng Chó Mèo Size L (850.000 VNĐ)
+  - Vòng Cổ Chống Ve Rận (120.000 VNĐ)
+  - Balo Vận Chuyển Thú Cưng (380.000 VNĐ)
+  - Đồ Chơi Gặm Cho Chó (150.000 VNĐ)
+  - Máy Cắt Lông Thú Cưng (450.000 VNĐ)
+  - Nhà Gỗ Cho Chó Size M (950.000 VNĐ)
+  - Bát Ăn Tự Động Cho Mèo (580.000 VNĐ)
+  - Dây Dắt Chó Tự Động 5m (220.000 VNĐ)
+
+✓ Products seeding completed successfully
+Total: 80 products across 8 categories
+
+✓ All seeding completed successfully!
+
+exit_code=0
