@@ -1,4 +1,5 @@
 const express = require('express');
+const { availableRouter } = require('./common/middlewares/available-router.middleware');
 
 const router = express.Router();
 
@@ -13,7 +14,12 @@ router.use('/upload', require('./modules/products/upload.route'));
 router.use('/wallets', require('./modules/payments/wallet.route'));
 router.use('/payments/sepay', require('./modules/payments/sepay.route'));
 router.use('/payments', require('./modules/payments/payment.route'));
-router.use('/orders', require('./modules/orders/order.route'));
+// Historical orders routes must stay closed until their security dependencies exist.
+router.use('/orders', availableRouter(() => [
+  require('./common/middlewares/auth.middleware').authenticate,
+  require('./common/middlewares/role.middleware').requireRole,
+  require('./common/middlewares/seller-restriction.middleware').requireSellerCanSell
+].every(value => typeof value === 'function'), () => require('./modules/orders/order.route')));
 router.use('/chat', require('./modules/chat/chat.route'));
 router.use('/reviews', require('./modules/reports/review.route'));
 router.use('/', require('./modules/reports/report.route'));

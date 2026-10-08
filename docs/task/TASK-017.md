@@ -1,7 +1,7 @@
 ---
 id: TASK-017
 title: Categories API
-execution_status: todo
+execution_status: ready
 relevance: current
 depends_on: [TASK-003]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-017 — Categories API
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `ready` — Dependencies complete; ready to implement and verify
 
 ## Traceability
 

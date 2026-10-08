@@ -1,3 +1,4 @@
+const logger = require('../../common/utils/logger.util');
 const orderService = require('./order.service');
 const { sendSuccess, sendError } = require('../../common/utils/response.util');
 
@@ -29,7 +30,7 @@ async function createPurchaseRequest(req, res) {
     
     return sendSuccess(res, 201, purchaseRequest, 'Gửi yêu cầu mua hàng thành công');
   } catch (error) {
-    console.error('Create purchase request error:', error);
+    logger.error('Create purchase request error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -56,7 +57,7 @@ async function createSellerOfferFromChat(req, res) {
 
     return sendSuccess(res, 201, result, 'Gửi đề nghị từ người bán thành công');
   } catch (error) {
-    console.error('Create seller offer from chat error:', error);
+    logger.error('Create seller offer from chat error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -83,7 +84,7 @@ async function createBuyerOfferFromChat(req, res) {
 
     return sendSuccess(res, 201, result, 'Gửi đề nghị từ người mua thành công');
   } catch (error) {
-    console.error('Create buyer offer from chat error:', error);
+    logger.error('Create buyer offer from chat error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -106,7 +107,7 @@ async function getSentPurchaseRequests(req, res) {
     
     return sendSuccess(res, 200, result, 'Lấy danh sách yêu cầu đã gửi thành công');
   } catch (error) {
-    console.error('Get sent purchase requests error:', error);
+    logger.error('Get sent purchase requests error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -129,7 +130,7 @@ async function getReceivedPurchaseRequests(req, res) {
     
     return sendSuccess(res, 200, result, 'Lấy danh sách yêu cầu nhận được thành công');
   } catch (error) {
-    console.error('Get received purchase requests error:', error);
+    logger.error('Get received purchase requests error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -151,7 +152,7 @@ async function acceptPurchaseRequest(req, res) {
     
     return sendSuccess(res, 200, order, 'Chấp nhận yêu cầu mua hàng thành công');
   } catch (error) {
-    console.error('Accept purchase request error:', error);
+    logger.error('Accept purchase request error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -174,7 +175,7 @@ async function rejectPurchaseRequest(req, res) {
     
     return sendSuccess(res, 200, request, 'Từ chối yêu cầu mua hàng thành công');
   } catch (error) {
-    console.error('Reject purchase request error:', error);
+    logger.error('Reject purchase request error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -197,7 +198,7 @@ async function getOrdersAsBuyer(req, res) {
     
     return sendSuccess(res, 200, result, 'Lấy danh sách đơn hàng mua thành công');
   } catch (error) {
-    console.error('Get orders as buyer error:', error);
+    logger.error('Get orders as buyer error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -220,7 +221,7 @@ async function getOrdersAsSeller(req, res) {
     
     return sendSuccess(res, 200, result, 'Lấy danh sách đơn hàng bán thành công');
   } catch (error) {
-    console.error('Get orders as seller error:', error);
+    logger.error('Get orders as seller error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -242,7 +243,7 @@ async function getOrderById(req, res) {
     
     return sendSuccess(res, 200, order, 'Lấy thông tin đơn hàng thành công');
   } catch (error) {
-    console.error('Get order by ID error:', error);
+    logger.error('Get order by ID error:', error);
     if (error.message.includes('không tồn tại') || error.message.includes('không có quyền')) {
       return sendError(res, 403, error.message);
     }
@@ -267,7 +268,7 @@ async function payOrder(req, res) {
     
     return sendSuccess(res, 200, order, 'Thanh toán đơn hàng thành công');
   } catch (error) {
-    console.error('Pay order error:', error);
+    logger.error('Pay order error:', error);
     if (error.message.includes('không đủ')) {
       return sendError(res, 400, error.message);
     }
@@ -296,7 +297,7 @@ async function confirmShipment(req, res) {
     
     return sendSuccess(res, 200, order, 'Xác nhận giao hàng thành công');
   } catch (error) {
-    console.error('Confirm shipment error:', error);
+    logger.error('Confirm shipment error:', error);
     if (error.message.includes('không tồn tại') || error.message.includes('không có quyền')) {
       return sendError(res, 403, error.message);
     }
@@ -321,7 +322,7 @@ async function confirmReceipt(req, res) {
     
     return sendSuccess(res, 200, order, 'Xác nhận nhận hàng thành công');
   } catch (error) {
-    console.error('Confirm receipt error:', error);
+    logger.error('Confirm receipt error:', error);
     if (error.message.includes('không tồn tại') || error.message.includes('không có quyền')) {
       return sendError(res, 403, error.message);
     }
@@ -345,7 +346,7 @@ async function confirmDelivery(req, res) {
     const order = await orderService.confirmDelivery(orderId, sellerId);
     return sendSuccess(res, 200, order, 'Xác nhận giao hàng đến nơi thành công');
   } catch (error) {
-    console.error('Confirm delivery error:', error);
+    logger.error('Confirm delivery error:', error);
     if (error.message.includes('không tồn tại') || error.message.includes('không có quyền')) {
       return sendError(res, 403, error.message);
     }
@@ -367,7 +368,7 @@ async function getAllOrdersForMod(req, res) {
     
     return sendSuccess(res, 200, result, 'Lấy danh sách toàn bộ đơn hàng thành công');
   } catch (error) {
-    console.error('Get all orders for mod error:', error);
+    logger.error('Get all orders for mod error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -391,7 +392,7 @@ async function forceCancelOrder(req, res) {
     
     return sendSuccess(res, 200, order, 'Đã ép hủy đơn hàng thành công');
   } catch (error) {
-    console.error('Force cancel order error:', error);
+    logger.error('Force cancel order error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -409,7 +410,7 @@ async function confirmOrderBySeller(req, res) {
     
     return sendSuccess(res, 200, order, 'Đã xác nhận đơn hàng thành công');
   } catch (error) {
-    console.error('Confirm order by seller error:', error);
+    logger.error('Confirm order by seller error:', error);
     return sendError(res, 400, error.message);
   }
 }
@@ -428,7 +429,7 @@ async function cancelOrderAsBuyer(req, res) {
     
     return sendSuccess(res, 200, order, 'Đã hủy đơn hàng thành công');
   } catch (error) {
-    console.error('Cancel order error:', error);
+    logger.error('Cancel order error:', error);
     return sendError(res, 400, error.message);
   }
 }

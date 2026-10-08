@@ -1,0 +1,1 @@
+PASS: no direct console calls in 84 runtime source files; operator seed scripts retain CLI output

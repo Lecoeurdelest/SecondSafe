@@ -20,7 +20,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 | `AC-NFR-SEC-02-1` | Registration uses the shared policy: at least 8 characters with upper case, lower case, digit and special character. | behavioral test | [TASK-011](../task/TASK-011.md) `[]` |
 | `AC-NFR-SEC-02-2` | Admin account creation uses the shared policy. | behavioral test | [TASK-044](../task/TASK-044.md) `[]` |
 | `AC-NFR-SEC-02-3` | Password change and reset use the shared policy. | behavioral test | [TASK-014](../task/TASK-014.md) `[]` |
-| `AC-NFR-SEC-02-4` | The create-admin script refuses a password that violates the policy. | behavioral test | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-SEC-02-4` | The create-admin script refuses a password that violates the policy. | behavioral test | [TASK-001](../task/TASK-001.md) `[x]` |
 
 ### NFR-SEC-03 — Token authentication
 
@@ -71,7 +71,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-08-1` | The repository contains no credentials, .env.example lists every variable, and startup fails when MONGODB_URI or JWT_SECRET is missing. | static flow review, behavioral test | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-SEC-08-1` | The repository contains no credentials, .env.example lists every variable, and startup fails when MONGODB_URI or JWT_SECRET is missing. | static flow review, behavioral test | [TASK-001](../task/TASK-001.md) `[x]` |
 
 ### NFR-SEC-09 — Safe file uploads
 
@@ -97,7 +97,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-11-1` | CORS is configured once and allows only FRONTEND_URL, and security headers are applied to every response. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-SEC-11-1` | CORS is configured once and allows only FRONTEND_URL, and security headers are applied to every response. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-SEC-12 — Safe regular expressions
 
@@ -158,7 +158,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-REL-05-1` | Unique constraints are declared for user email, favorite (user, listing) and conversation (buyer, seller, listing). | behavioral test | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-REL-05-1` | Unique constraints are declared for user email, favorite (user, listing) and conversation (buyer, seller, listing). | behavioral test | [TASK-001](../task/TASK-001.md) `[x]` |
 
 ### NFR-REL-06 — Consistent error responses
 
@@ -166,7 +166,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-REL-06-1` | Errors use {success:false, message} with the correct HTTP status and never include stack traces in production. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-REL-06-1` | Errors use {success:false, message} with the correct HTTP status and never include stack traces in production. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-PERF-01 — Bounded pagination
 
@@ -174,7 +174,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-PERF-01-1` | A shared pagination helper applies default 20 and maximum 100 to every list endpoint. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-PERF-01-1` | A shared pagination helper applies default 20 and maximum 100 to every list endpoint. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-PERF-02 — Query indexes
 
@@ -182,7 +182,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-PERF-02-1` | Indexes for the main queries are declared in the schemas. | behavioral test | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-PERF-02-1` | Indexes for the main queries are declared in the schemas. | behavioral test | [TASK-001](../task/TASK-001.md) `[x]` |
 | `AC-NFR-PERF-02-2` | npm run db:indexes creates the declared indexes for every model on a MongoDB instance. | behavioral test | [TASK-002](../task/TASK-002.md) `[]` |
 
 ### NFR-PERF-03 — Response time baseline
@@ -199,7 +199,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-PERF-04-1` | JSON and form bodies are limited to 1 MB; files go through the upload pipeline. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-PERF-04-1` | JSON and form bodies are limited to 1 MB; files go through the upload pipeline. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-PERF-05 — Lightweight authentication checks
 
@@ -215,7 +215,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-USA-01-1` | User-facing API messages are Vietnamese with full diacritics, and money is expressed in integer VND. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-USA-01-1` | User-facing API messages are Vietnamese with full diacritics, and money is expressed in integer VND. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-USA-03 — Real-time delivery
 
@@ -231,7 +231,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-COMP-02-1` | Runtime code uses no operating-system specific commands. | static flow review | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-COMP-02-1` | Runtime code uses no operating-system specific commands. | static flow review | [TASK-001](../task/TASK-001.md) `[x]` |
 
 ### NFR-INT-01 — Resilient integrations
 
@@ -248,8 +248,8 @@ Risk: `standard` · Component: `CMP-CONTROL` · Source: `plan.md` § 5. Quality 
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-MNT-01-1` | Every baseline module keeps its route, controller, service and model files at the baseline paths, with logic files as empty stubs. | static flow review | [TASK-001](../task/TASK-001.md) `[!]` |
-| `AC-NFR-MNT-01-2` | The application shell starts without business logic and GET /api/health returns 200. | behavioral test | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-MNT-01-1` | Every baseline module keeps its route, controller, service and model files at the baseline paths, with logic files as empty stubs. | static flow review | [TASK-001](../task/TASK-001.md) `[x]` |
+| `AC-NFR-MNT-01-2` | The application shell starts without business logic and GET /api/health returns 200. | behavioral test | [TASK-001](../task/TASK-001.md) `[x]` |
 
 ### NFR-MNT-02 — No duplicate or dead code
 
@@ -257,7 +257,7 @@ Risk: `standard` · Component: `CMP-CONTROL` · Source: `plan.md` § 5. Quality 
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-MNT-02-1` | Baseline dead code (auto-release service, payment wrappers, unused seed exits) is not carried into the skeleton. | static flow review | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-MNT-02-1` | Baseline dead code (auto-release service, payment wrappers, unused seed exits) is not carried into the skeleton. | static flow review | [TASK-001](../task/TASK-001.md) `[x]` |
 
 ### NFR-MNT-03 — Automated tests and coverage
 
@@ -273,7 +273,7 @@ Risk: `standard` · Component: `CMP-CONTROL` · Source: `plan.md` § 5. Quality 
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-MNT-04-1` | README, .env.example and the documentation index describe setup, configuration and the delivery workflow. | document check | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-MNT-04-1` | README, .env.example and the documentation index describe setup, configuration and the delivery workflow. | document check | [TASK-001](../task/TASK-001.md) `[x]` |
 | `AC-NFR-MNT-04-2` | An OpenAPI description covers every endpoint. | document check | [TASK-051](../task/TASK-051.md) `[]` |
 
 ### NFR-MNT-05 — Plan traceability
@@ -282,7 +282,7 @@ Risk: `standard` · Component: `CMP-CONTROL` · Source: `plan.md` § 5. Quality 
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-MNT-05-1` | project.yaml validates with the plan-driven-development checker, every task maps to requirements and criteria, and the task index passes the status audit. | document check | [TASK-001](../task/TASK-001.md) `[!]` |
+| `AC-NFR-MNT-05-1` | project.yaml validates with the plan-driven-development checker, every task maps to requirements and criteria, and the task index passes the status audit. | document check | [TASK-001](../task/TASK-001.md) `[x]` |
 
 ### NFR-OBS-01 — Logging and audit trail
 
@@ -290,7 +290,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-OBS-01-1` | A leveled logger replaces direct console output in application code. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-OBS-01-1` | A leveled logger replaces direct console output in application code. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 | `AC-NFR-OBS-01-2` | Admin, moderator and money actions write an audit record with actor, action, target and time. | behavioral test | [TASK-050](../task/TASK-050.md) `[]` |
 
 ### NFR-BIZ-01 — Money rules as configuration

@@ -160,7 +160,8 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/53"
     },
     "TASK-053": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/54"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/54",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/75"
     },
     "TASK-054": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/55"
