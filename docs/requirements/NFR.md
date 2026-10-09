@@ -28,7 +28,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-03-1` | REST authentication verifies JWTs signed with JWT_SECRET and enforces the configured expiry. | behavioral test | [TASK-005](../task/TASK-005.md) `[]` |
+| `AC-NFR-SEC-03-1` | REST authentication verifies JWTs signed with JWT_SECRET and enforces the configured expiry. | behavioral test | [TASK-005](../task/TASK-005.md) `[!]` |
 | `AC-NFR-SEC-03-2` | Socket.IO connections are authenticated with the same JWT verification. | behavioral test | [TASK-023](../task/TASK-023.md) `[]` |
 
 ### NFR-SEC-04 — Object-level authorization

@@ -1,0 +1,3 @@
+{"timestamp":"2026-10-08T22:50:46.582Z","level":"error","message":"HTTP request failed","context":[{"status":401,"method":"GET","path":"/protected","error":"Error"}]}
+{"timestamp":"2026-10-08T22:50:46.590Z","level":"error","message":"HTTP request failed","context":[{"status":401,"method":"GET","path":"/protected","error":"Error"}]}
+PASS: 12 JWT/role HTTP assertions against real MongoDB 7.0.24 replica set; passwords excluded

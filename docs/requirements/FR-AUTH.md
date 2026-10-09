@@ -102,8 +102,8 @@ Baseline: `auth / role / admin middleware`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-AUTH-09-1` | Protected endpoints return 401 without a valid Bearer token and 403 when the caller role is not allowed. | behavioral test | [TASK-005](../task/TASK-005.md) `[]` |
-| `AC-AUTH-09-2` | Moderator endpoints accept moderator and admin; admin endpoints accept admin only. | behavioral test | [TASK-005](../task/TASK-005.md) `[]` |
+| `AC-AUTH-09-1` | Protected endpoints return 401 without a valid Bearer token and 403 when the caller role is not allowed. | behavioral test | [TASK-005](../task/TASK-005.md) `[!]` |
+| `AC-AUTH-09-2` | Moderator endpoints accept moderator and admin; admin endpoints accept admin only. | behavioral test | [TASK-005](../task/TASK-005.md) `[!]` |
 
 ### FR-AUTH-10 — Enforce suspension and selling restriction on every request
 

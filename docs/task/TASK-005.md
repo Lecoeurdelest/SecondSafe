@@ -1,7 +1,7 @@
 ---
 id: TASK-005
 title: JWT authentication middleware and role guards
-execution_status: ready
+execution_status: verifying
 relevance: current
 depends_on: [TASK-003]
 supersedes: []
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `ready` — Dependencies complete; ready to implement and verify
+**Current state:** `verifying` — 62 backend tests and 12 real-MongoDB HTTP assertions pass; calibrated automatic gate is inconclusive; acceptance policy/review pending
 
 ## Traceability
 
