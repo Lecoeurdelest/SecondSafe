@@ -443,7 +443,7 @@
     "TASK-053": {
       "execution": "done",
       "relevance": "current",
-      "detail": "73 task issues created; 52 BE definitions preserved; 21 migration/web/integration tasks and sole-author Gitflow checks validated",
+      "detail": "73 task issues and migration structure retained; Gitflow routes, commit scope and sole authorship pass for all 11 open PRs; hooks and negative-route tests pass",
       "history": [
         {
           "date": "2026-10-09",
@@ -459,10 +459,16 @@
           "date": "2026-10-09",
           "execution": "done",
           "note": "Documentation/manual completion policy; no domain-code correctness claim"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Gitflow enforcement follow-up verified with installed-hook tests, all 11 open PR audits and explicit feature-to-main rejection; manual tooling/documentation completion"
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-053/run-03/report.json"
+        ".project/evidence/TASK-053/run-03/report.json",
+        ".project/evidence/TASK-053/run-04-gitflow/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-053.md",
       "criteria": {

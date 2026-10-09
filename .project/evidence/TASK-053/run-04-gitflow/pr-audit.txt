@@ -1,0 +1,22 @@
+PR #86 PASS: codex/feature/task-008-auth-rate-limits -> codex/feature/task-017-categories-api; 3 task commits
+PR #86 PASS: PR author Lecoeurdelest; 5 new commits have the sole authorized author and committer
+PR #85 PASS: codex/feature/task-017-categories-api -> codex/feature/task-007-email-otp; 1 task commits
+PR #85 PASS: PR author Lecoeurdelest; 3 new commits have the sole authorized author and committer
+PR #84 PASS: codex/feature/task-054-web-assets -> codex/feature/task-054-web-dependencies; 1 task commits
+PR #84 PASS: PR author Lecoeurdelest; 1 new commits have the sole authorized author and committer
+PR #83 PASS: codex/feature/task-054-web-dependencies -> codex/feature/task-002-database-verification; 1 task commits
+PR #83 PASS: PR author Lecoeurdelest; 1 new commits have the sole authorized author and committer
+PR #82 PASS: codex/feature/task-007-email-otp -> codex/feature/task-005-jwt-guards; 2 task commits
+PR #82 PASS: PR author Lecoeurdelest; 3 new commits have the sole authorized author and committer
+PR #81 PASS: codex/feature/task-005-jwt-guards -> codex/feature/task-054-web-foundation; 1 task commits
+PR #81 PASS: PR author Lecoeurdelest; 2 new commits have the sole authorized author and committer
+PR #79 PASS: codex/feature/task-054-web-foundation -> codex/feature/task-054-web-assets; 2 task commits
+PR #79 PASS: PR author Lecoeurdelest; 3 new commits have the sole authorized author and committer
+PR #78 PASS: codex/feature/task-002-database-verification -> codex/feature/task-004-business-config; 2 task commits
+PR #78 PASS: PR author Lecoeurdelest; 2 new commits have the sole authorized author and committer
+PR #77 PASS: codex/feature/task-004-business-config -> codex/feature/task-003-http-foundation; 1 task commits
+PR #77 PASS: PR author Lecoeurdelest; 1 new commits have the sole authorized author and committer
+PR #76 PASS: codex/feature/task-003-http-foundation -> codex/feature/task-053-migration-plan; 1 task commits
+PR #76 PASS: PR author Lecoeurdelest; 1 new commits have the sole authorized author and committer
+PR #75 PASS: codex/feature/task-053-migration-plan -> develop; 3 task commits
+PR #75 PASS: PR author Lecoeurdelest; 3 new commits have the sole authorized author and committer

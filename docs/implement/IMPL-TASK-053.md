@@ -31,3 +31,9 @@ No runtime behavior or schemas changed. Original task IDs, backend definitions, 
 ## Files changed
 
 Authored model/plan, execution/delivery records, generated requirement/task views, migration/Gitflow documentation, frontend migration README, issue synchronization and structural/authorship checks, and task-delivery CI.
+
+## Gitflow enforcement follow-up (2026-10-09)
+
+Added route/task-scope validation for all PR targets and optional local hooks that reject stable/integration or detached commits, incorrect identity and wrong task IDs. Feature integration targets develop; explicitly enabled temporary feature review stacks retain small diffs, and release/hotfix delivery targets main with synchronization into develop. Existing hooks are preserved. All 11 open PRs pass route, task-scope and sole-author audits; a feature-to-main check is rejected as required. Five tests include real temporary repositories, installed-hook rejection and CI detection of a mixed-task commit. Backend code is unchanged; its 23 baseline tests pass.
+
+Original verification is under `.project/evidence/TASK-053/run-04-gitflow/`. The structural runner output is losslessly compressed as `structural-checks.log.gz`; its uncompressed local copy is ignored. No domain-confidence score or merge authorization is introduced.

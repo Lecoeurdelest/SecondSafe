@@ -286,8 +286,8 @@ decisions:
     status: accepted
     source: User migration request 2026-10-09; preserves D-003 schemas and existing criteria
   - id: D-011
-    title: Gitflow delivery uses main, develop and one feature branch and PR per task; all new authors and committers
-      are Lecoeurdelest
+    title: Gitflow delivery uses main, develop and task-scoped feature branches and review slices; all new authors and
+      committers are Lecoeurdelest
     status: accepted
     source: 'User request 2026-10-09: Gitflow, self-service PR creation, sole user authorship'
 invariants:
@@ -5175,7 +5175,7 @@ tasks:
     - Pin source and destination revisions and document inspected behavior
     - Add bounded FE tasks without changing the 52 existing BE definitions
     - Track task issues and PRs in .project/delivery.json and generated docs
-    - Document Gitflow and enforce the existing sole-author rule
+    - Enforce Gitflow branches, PR routes, commit task scope and the existing sole-author rule
     out_of_scope:
     - Unrelated modules
     - Schema or business-rule changes outside an explicit task
@@ -5196,6 +5196,9 @@ tasks:
     - .project/delivery.json
     - docs/task/TASK-053.md
     - tools/pdd/check-authorship.py
+    - tools/pdd/check-gitflow.py
+    - tools/pdd/install-gitflow-hooks.py
+    - tools/pdd/test_gitflow.py
     - .github/workflows/task-delivery.yml
     invariants:
     - INV-01

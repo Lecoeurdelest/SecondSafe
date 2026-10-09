@@ -1,9 +1,7 @@
 name: Task delivery
 on:
   pull_request:
-    branches:
-      - develop
-      - 'codex/feature/**'
+    types: [opened, synchronize, reopened, edited]
 permissions:
   contents: read
 jobs:
@@ -19,3 +17,12 @@ jobs:
           PR_BASE: ${{ github.event.pull_request.base.sha }}
           PR_HEAD: ${{ github.event.pull_request.head.sha }}
         run: python3 tools/pdd/check-authorship.py --base "$PR_BASE" --head "$PR_HEAD" --pr-author "$PR_AUTHOR"
+      - name: Verify Gitflow rules
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          python3 -m unittest discover -s tools/pdd -p test_gitflow.py -v
+          python3 tools/pdd/check-gitflow.py --head-branch "$PR_HEAD_REF" --base-branch "$PR_BASE_REF" --base "$PR_BASE" --head "$PR_HEAD" --allow-stacked

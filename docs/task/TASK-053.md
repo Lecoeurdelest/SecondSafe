@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `done` — 73 task issues created; 52 BE definitions preserved; 21 migration/web/integration tasks and sole-author Gitflow checks validated
+**Current state:** `done` — 73 task issues and migration structure retained; Gitflow routes, commit scope and sole authorship pass for all 11 open PRs; hooks and negative-route tests pass
 
 ## Traceability
 
@@ -34,7 +34,7 @@ The inventory pins both repositories, preserves TASK-001 through TASK-052, maps 
 - Pin source and destination revisions and document inspected behavior
 - Add bounded FE tasks without changing the 52 existing BE definitions
 - Track task issues and PRs in .project/delivery.json and generated docs
-- Document Gitflow and enforce the existing sole-author rule
+- Enforce Gitflow branches, PR routes, commit task scope and the existing sole-author rule
 
 ## Out of scope
 
@@ -65,6 +65,9 @@ Preserve existing task IDs, criteria, schemas and history. Add a full-stack scop
 - `.project/delivery.json`
 - `docs/task/TASK-053.md`
 - `tools/pdd/check-authorship.py`
+- `tools/pdd/check-gitflow.py`
+- `tools/pdd/install-gitflow-hooks.py`
+- `tools/pdd/test_gitflow.py`
 - `.github/workflows/task-delivery.yml`
 
 ## Invariants and constraints
