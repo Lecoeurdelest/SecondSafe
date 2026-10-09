@@ -161,11 +161,22 @@
           "date": "2026-10-09",
           "execution": "done",
           "note": "Manual configuration revalidation: previous settings unchanged and 84 backend tests pass"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "needs_revalidation",
+          "note": "Rate-limit defaults added by TASK-008; original evidence retained"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Manual configuration revalidation: previous values unchanged and 107 backend tests pass"
         }
       ],
       "evidence": [
         ".project/evidence/TASK-004/run-01/report.json",
-        ".project/evidence/TASK-004/run-02/report.json"
+        ".project/evidence/TASK-004/run-02/report.json",
+        ".project/evidence/TASK-004/run-03/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-004.md",
       "criteria": {
@@ -243,10 +254,38 @@
       }
     },
     "TASK-008": {
-      "execution": "ready",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Dependencies complete; ready to implement and verify",
-      "history": []
+      "detail": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Authentication request limits and replaceable counter store"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-008/run-03/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-008.md",
+      "criteria": {
+        "AC-NFR-SEC-05-1": "inconclusive"
+      }
     },
     "TASK-009": {
       "execution": "todo",

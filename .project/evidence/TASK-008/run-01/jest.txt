@@ -1,0 +1,17 @@
+Command: npm test
+
+> secondsafe-backend@0.1.0 test
+> jest --runInBand
+
+{"timestamp":"2026-10-08T23:06:32.267Z","level":"error","message":"HTTP request failed","context":[{"status":503,"method":"POST","path":"/send","error":"Error"}]}
+{"timestamp":"2026-10-08T23:06:32.378Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/missing","error":"Error"}]}
+{"timestamp":"2026-10-08T23:06:32.379Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/inactive","error":"Error"}]}
+{"timestamp":"2026-10-08T23:06:32.379Z","level":"error","message":"HTTP request failed","context":[{"status":500,"method":"GET","path":"/api/categories/books","error":"Error"}]}
+
+Test Suites: 7 passed, 7 total
+Tests:       107 passed, 107 total
+Snapshots:   0 total
+Time:        0.839 s, estimated 1 s
+Ran all test suites.
+
+exit_code=0

@@ -1,0 +1,3 @@
+Command: node /tmp/secondsafe-verifier/node_modules/eslint/bin/eslint.js --no-eslintrc --env node,es2022 --parser-options {"ecmaVersion":2022} --resolve-plugins-relative-to /tmp/secondsafe-verifier --plugin sonarjs --rule complexity: [error, 10] --rule max-depth: [error, 3] --rule sonarjs/cognitive-complexity: [error, 15] backend/src/common/utils/rate-limit-store.util.js backend/src/common/middlewares/rate-limit.middleware.js backend/src/modules/auth/auth.route.js backend/src/config/business.js
+
+exit_code=0

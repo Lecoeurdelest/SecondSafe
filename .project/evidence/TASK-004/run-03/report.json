@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-004",
+  "spec_hash": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
+  "source_hash": "eb4e96aac9810e4156e0b538a7e6d7453ce867394d7461d1e2653405164e11a4",
+  "completion_policy": "Manual configuration revalidation on recorded 107-test run and unchanged previous settings; no domain-confidence claim",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-NFR-BIZ-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Concrete configuration/script outputs; no calibrated domain confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-004/run-03/jest.txt",
+            ".project/evidence/TASK-004/run-03/impact-review.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-BIZ-02-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Concrete configuration/script outputs; no calibrated domain confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-004/run-03/jest.txt",
+            ".project/evidence/TASK-004/run-03/impact-review.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}
