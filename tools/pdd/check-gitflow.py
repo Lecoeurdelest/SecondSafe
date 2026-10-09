@@ -7,9 +7,9 @@ import subprocess
 from pathlib import Path
 
 IDENTITY = 'Lecoeurdelest <116455158+Lecoeurdelest@users.noreply.github.com>'
-FEATURE = re.compile(r'codex/feature/task-(\d{3})-[a-z0-9]+(?:-[a-z0-9]+)*')
-RELEASE = re.compile(r'codex/release/[a-z0-9][a-z0-9.-]*')
-HOTFIX = re.compile(r'codex/hotfix/[a-z0-9]+(?:-[a-z0-9]+)*')
+FEATURE = re.compile(r'feature/task-(\d{3})-[a-z0-9]+(?:-[a-z0-9]+)*')
+RELEASE = re.compile(r'release/[a-z0-9][a-z0-9.-]*')
+HOTFIX = re.compile(r'hotfix/[a-z0-9]+(?:-[a-z0-9]+)*')
 
 
 def git(*args):
@@ -48,7 +48,7 @@ def validate_subject(subject, branch):
 def check_local(message_file=None):
     branch = git('branch', '--show-current')
     if role(branch) not in ('feature', 'release', 'hotfix'):
-        raise ValueError('Commit on a named codex/feature, codex/release or codex/hotfix branch.')
+        raise ValueError('Commit on a named feature, release or hotfix branch.')
     for variable in ('GIT_AUTHOR_IDENT', 'GIT_COMMITTER_IDENT'):
         if git('var', variable).partition('>')[0] + '>' != IDENTITY:
             raise ValueError(f'{variable} must use {IDENTITY}.')

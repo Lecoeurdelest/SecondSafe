@@ -173,7 +173,7 @@ TASK-053 establishes the migration inventory and delivery conventions. TASK-054 
 
 The review-size amendment of 2026-10-09 permits explicitly stacked dependency, asset and behavior PRs, aiming for at most 500 changed lines of authored implementation per PR. Generated lockfiles and runner output remain separate from that authored review; the final task PR and its supporting slices are recorded in `.project/delivery.json`.
 
-`main` remains stable, `develop` is the integration base, and `codex/feature/task-NNN-<description>` holds each task. Independent PRs target `develop`; dependent work may use a clearly documented stacked PR until its prerequisite is merged, then retarget to `develop`. PR creation is authorized. PRs remain open for review unless the user separately authorizes merging. Release and hotfix branches follow `docs/technical/gitflow.md`.
+`main` remains stable, `develop` is the integration base, and `feature/task-NNN-<description>` holds each task. Independent PRs target `develop`; dependent work may use a clearly documented stacked PR until its prerequisite is merged, then retarget to `develop`. PR creation is authorized. PRs remain open for review unless the user separately authorizes merging. Release and hotfix branches follow `docs/technical/gitflow.md`.
 
 Every new commit author, committer and PR author is Lecoeurdelest, with no co-author or generated attribution. Pre-existing history, including PR #1 by another contributor, is preserved. GitHub issue/PR mappings live in `.project/delivery.json` and are rendered in the task index. A feature copied from WDP is not complete until its current criteria are evidenced. Provider-dependent payment, SMTP and Google checks require sandbox configuration; missing evidence remains visible.
 

@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `done` — 73 task issues and migration structure retained; Gitflow routes, commit scope and sole authorship pass for all 11 open PRs; hooks and negative-route tests pass
+**Current state:** `done` — Direct Gitflow branch names, installed hooks and all 12 PR routes/task scopes/authors verified; PR replacement mapping retains review slices and original history
 
 ## Traceability
 

@@ -7,22 +7,24 @@ from pathlib import Path
 spec = importlib.util.spec_from_file_location('gitflow', Path(__file__).with_name('check-gitflow.py'))
 gitflow = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gitflow)
-FEATURE = 'codex/feature/task-053-gitflow-checks'
-OTHER = 'codex/feature/task-054-web-assets'
+FEATURE = 'feature/task-053-gitflow-checks'
+OTHER = 'feature/task-054-web-assets'
 
 
 class RouteTests(unittest.TestCase):
     def test_allowed_integration_routes(self):
-        for head, base in [(FEATURE, 'develop'), ('codex/release/1.0.0', 'main'),
-                           ('codex/release/1.0.0', 'develop'), ('codex/hotfix/login', 'main'),
-                           ('codex/hotfix/login', 'develop'), ('main', 'develop')]:
+        for head, base in [(FEATURE, 'develop'), ('release/1.0.0', 'main'),
+                           ('release/1.0.0', 'develop'), ('hotfix/login', 'main'),
+                           ('hotfix/login', 'develop'), ('main', 'develop')]:
             with self.subTest(head=head, base=base):
                 gitflow.validate_route(head, base)
 
     def test_invalid_routes(self):
         for head, base in [(FEATURE, 'main'), ('develop', 'main'), ('main', 'main'),
-                           ('feature/task-053-test', 'develop'), ('codex/release/', 'main'),
-                           ('codex/hotfix/', 'main'), (FEATURE, 'random'), (FEATURE, FEATURE)]:
+                           ('codex/' + FEATURE, 'develop'), ('codex/release/1.0.0', 'main'),
+                           ('codex/hotfix/login', 'main'), (FEATURE, 'codex/' + OTHER),
+                           ('release/', 'main'),
+                           ('hotfix/', 'main'), (FEATURE, 'random'), (FEATURE, FEATURE)]:
             with self.subTest(head=head, base=base):
                 with self.assertRaises(ValueError):
                     gitflow.validate_route(head, base, allow_stacked=True)
@@ -52,7 +54,10 @@ class HookTests(unittest.TestCase):
             run('python3', str(root / 'tools/pdd/install-gitflow-hooks.py'))
             blocked = run('git', 'commit', '--allow-empty', '-m', 'Direct stable commit', check=False)
             self.assertNotEqual(blocked.returncode, 0)
-            run('git', 'switch', '-c', FEATURE)
+            run('git', 'switch', '-c', 'codex/' + FEATURE)
+            blocked = run('git', 'commit', '--allow-empty', '-m', 'Legacy namespace (TASK-053)', check=False)
+            self.assertNotEqual(blocked.returncode, 0)
+            run('git', 'branch', '-m', FEATURE)
             blocked = run('git', 'commit', '--allow-empty', '-m', 'Wrong task (TASK-054)', check=False)
             self.assertNotEqual(blocked.returncode, 0)
             run('git', 'commit', '--allow-empty', '-m', 'Valid task (TASK-053)')
