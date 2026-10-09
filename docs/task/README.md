@@ -64,8 +64,8 @@ This index is generated from `.project/state.json` and `project.yaml` by `tools/
 | [] | [TASK-050](TASK-050.md) | Audit logging | `todo` | `current` | M5 | TASK-029, TASK-040, TASK-041, TASK-042, TASK-045 | Waiting for TASK-029, TASK-040, TASK-041, TASK-042, TASK-045 | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/51) |
 | [] | [TASK-051](TASK-051.md) | API documentation | `todo` | `current` | M5 | TASK-049 | Waiting for TASK-049 | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/52) |
 | [] | [TASK-052](TASK-052.md) | Performance baseline | `todo` | `current` | M5 | TASK-049 | Waiting for TASK-049 | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/53) |
-| [x] | [TASK-053](TASK-053.md) | Migration inventory, FE task decomposition and Gitflow delivery | `done` | `current` | M6 | — | 73 task issues created; 52 BE definitions preserved; 21 migration/web/integration tasks and sole-author Gitflow checks validated | [run-03](../../.project/evidence/TASK-053/run-03/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/54), [PR](https://github.com/Lecoeurdelest/SecondSafe/pull/88) |
-| [] | [TASK-054](TASK-054.md) | Web runtime, API client and application shell | `ready` | `current` | M7 | TASK-053 | Dependencies complete; ready to implement and verify | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/55), [PR](https://github.com/Lecoeurdelest/SecondSafe/pull/94) |
+| [x] | [TASK-053](TASK-053.md) | Migration inventory, FE task decomposition and Gitflow delivery | `done` | `current` | M6 | — | 73 task issues created; 52 BE definitions preserved; 21 migration/web/integration tasks and sole-author Gitflow checks validated | [run-03](../../.project/evidence/TASK-053/run-03/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/54), [PR](https://github.com/Lecoeurdelest/SecondSafe/pull/88), [PR slice 1](https://github.com/Lecoeurdelest/SecondSafe/pull/99) |
+| [x] | [TASK-054](TASK-054.md) | Web runtime, API client and application shell | `done` | `current` | M7 | TASK-053 | React shell installs from lockfile; 9 FE and 43 BE tests pass; production build and manual 360/1920 px checks pass | [run-01](../../.project/evidence/TASK-054/run-01/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/55), [PR](https://github.com/Lecoeurdelest/SecondSafe/pull/94), [PR slice 1](https://github.com/Lecoeurdelest/SecondSafe/pull/92), [PR slice 2](https://github.com/Lecoeurdelest/SecondSafe/pull/93) |
 | [] | [TASK-055](TASK-055.md) | Web authentication, session and route guards | `todo` | `current` | M7 | TASK-054, TASK-011, TASK-012, TASK-013, TASK-014 | Waiting for dependencies and feature integration evidence | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/56) |
 | [] | [TASK-056](TASK-056.md) | Web profile, password and public seller pages | `todo` | `current` | M7 | TASK-055, TASK-016 | Waiting for dependencies and feature integration evidence | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/57) |
 | [] | [TASK-057](TASK-057.md) | Web home, catalog search and filters | `todo` | `current` | M7 | TASK-054, TASK-017, TASK-020 | Waiting for dependencies and feature integration evidence | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/58) |
@@ -97,7 +97,7 @@ This index is generated from `.project/state.json` and `project.yaml` by `tools/
 | M4 Trust and moderation | TASK-037 … TASK-043 | 0/7 |
 | M5 Administration and operations | TASK-044 … TASK-052 | 0/9 |
 | M6 Migration control | TASK-053 … TASK-053 | 1/1 |
-| M7 Web client | TASK-054 … TASK-072 | 0/19 |
+| M7 Web client | TASK-054 … TASK-072 | 1/19 |
 | M8 Full-stack integration | TASK-073 … TASK-073 | 0/1 |
 
 ## Open decisions

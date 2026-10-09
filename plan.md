@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 5/73 tasks done (5 done, 6 blocked, 5 ready, 57 todo). 156 active requirements, 231 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 6/73 tasks done (6 done, 6 blocked, 4 ready, 57 todo). 156 active requirements, 231 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
@@ -170,6 +170,8 @@ Proposed. Tasks that depend on an open decision stay blocked until the decision 
 The user requests migration of WDP into SecondSafe through small frontend and backend tasks, documented in the repository and tracked with a separate PR per task under Gitflow. The existing backend task IDs, acceptance criteria, schemas and evidence history remain authoritative. D-009 supersedes the earlier backend-only scope D-002. D-004 describes the historical scaffold; D-010 permits adapting source implementations while preserving all current behavioral requirements and fixing the reviewed defects.
 
 TASK-053 establishes the migration inventory and delivery conventions. TASK-054 through TASK-072 migrate the React client in bounded feature slices. TASK-073 verifies the complete integration. Each task includes its source paths, dependencies, exclusions and observable criteria. The five-hour splitting guideline applies; full-stack integration is explicitly a broader final gate. Source and destination are pinned in `docs/technical/migration-wdp.md`.
+
+The review-size amendment of 2026-10-09 permits a task to use explicitly stacked dependency, asset and behavior PRs, aiming for at most 500 changed lines of authored implementation per PR. TASK-054 uses PR #83 for dependencies, #84 for styles/assets and #79 for runtime/API behavior and final acceptance. Generated lockfiles and raw runner output remain available separately from the authored review. Only the final task PR closes its issue; prerequisite slices are recorded in `.project/delivery.json` under `supporting_prs`.
 
 `main` remains stable, `develop` is the integration base, and `feature/task-NNN-<description>` holds each task. Independent PRs target `develop`; dependent work may use a clearly documented stacked PR until its prerequisite is merged, then retarget to `develop`. PR creation is authorized. PRs remain open for review unless the user separately authorizes merging. Release and hotfix branches follow `docs/technical/gitflow.md`.
 

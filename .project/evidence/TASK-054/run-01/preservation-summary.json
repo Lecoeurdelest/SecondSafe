@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "command": "python3 tools/plan-driven-development/scripts/check_project.py audit-preservation project.yaml --root .",
+  "status": "valid",
+  "errors": [],
+  "warnings": [
+    "TASK-001: decision D-002 is not accepted.",
+    "TASK-015: decision D-101 is not accepted.",
+    "TASK-027: decision D-102 is not accepted.",
+    "TASK-029: decision D-105 is not accepted.",
+    "TASK-043: decision D-106 is not accepted.",
+    "TASK-047: decision D-107 is not accepted.",
+    "TASK-048: decision D-103 is not accepted.",
+    "FR-SYS-05: no task mapping; confirm explicit deferral or ownership."
+  ],
+  "original": {
+    "path": ".project/evidence/TASK-054/run-01/preservation.txt",
+    "storage": "Ignored local file; exact original retained in Git history",
+    "git_commit": "3eaac76ea9f9f4eff017710a33eca3db19bfc067",
+    "sha256": "9827fe6fbd8a276575b223e9f1f7d7c9f6ebc9c673d9bef59fd6aabba0b7bc38",
+    "bytes": 3176931,
+    "lines": 43284
+  },
+  "checked": [
+    {
+      "id": "ART-SCHEMAS",
+      "path": "backend/src/modules/*/*.model.js",
+      "matched_paths": 16,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-DB-CONFIG",
+      "path": "backend/src/config/db.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-ENV-CONFIG",
+      "path": "backend/src/config/env.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-CHAT-CRYPTO",
+      "path": "backend/src/common/utils/chat-crypto.util.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-SEEDS",
+      "path": "backend/src/seeds/*.seed.js",
+      "matched_paths": 2,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-SEED-ALL",
+      "path": "backend/seed-all.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-VERIFY-SEED",
+      "path": "backend/verify-seed-data.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-MIGRATE",
+      "path": "backend/migrate-data-consistency.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-INDEXES",
+      "path": "backend/create-indexes.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-CREATE-ADMIN",
+      "path": "backend/create-admin.js",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-MODULE-LAYOUT",
+      "path": "backend/src/modules/*/*.route.js",
+      "matched_paths": 16,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-REQUIREMENT-IDS",
+      "path": "docs/requirements/*.md",
+      "matched_paths": 19,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-TASK-SPECS",
+      "path": "docs/task/TASK-*.md",
+      "matched_paths": 73,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-TASK-INDEX",
+      "path": "docs/task/README.md",
+      "matched_paths": 1,
+      "dependency_paths": 0,
+      "build_paths": 0
+    },
+    {
+      "id": "ART-BASELINE-FRONTEND",
+      "path": "frontend/**",
+      "matched_paths": 43043,
+      "dependency_paths": 42998,
+      "build_paths": 17
+    }
+  ],
+  "note": "Counts describe the original audit; its raw dependency/build listings are not application source changes."
+}
