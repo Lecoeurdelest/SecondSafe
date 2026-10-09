@@ -7,25 +7,31 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/2"
     },
     "TASK-002": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/3"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/3",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/91"
     },
     "TASK-003": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/4"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/4",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/89"
     },
     "TASK-004": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/5"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/5",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/90"
     },
     "TASK-005": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/6"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/6",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/95"
     },
     "TASK-006": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/7"
     },
     "TASK-007": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/8"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/8",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/96"
     },
     "TASK-008": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/9"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/9",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/98"
     },
     "TASK-009": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/10"
@@ -52,7 +58,8 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/17"
     },
     "TASK-017": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/18"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/18",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/97"
     },
     "TASK-018": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/19"
@@ -160,10 +167,19 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/53"
     },
     "TASK-053": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/54"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/54",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/88",
+      "supporting_prs": [
+        "https://github.com/Lecoeurdelest/SecondSafe/pull/99"
+      ]
     },
     "TASK-054": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/55"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/55",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/94",
+      "supporting_prs": [
+        "https://github.com/Lecoeurdelest/SecondSafe/pull/92",
+        "https://github.com/Lecoeurdelest/SecondSafe/pull/93"
+      ]
     },
     "TASK-055": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/56"
