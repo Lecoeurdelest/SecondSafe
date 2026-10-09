@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-053",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "4f03f2e4a1384186c6c0ee34fa18314267f6d1a0f0e3f13cb9f30c52c8179aeb",
+  "completion_policy": "Manual tooling/documentation completion using deterministic checks and observed GitHub metadata; no domain correctness claim",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-MIG-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Deterministic branch/hook/history checks; no domain calibration applies",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "document_check",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-053/run-05-branch-names/tests.txt",
+            ".project/evidence/TASK-053/run-05-branch-names/backend.txt",
+            ".project/evidence/TASK-053/run-05-branch-names/pr-map.jsonl",
+            ".project/evidence/TASK-053/run-05-branch-names/pr-audit-before-commit.txt",
+            ".project/evidence/TASK-053/run-05-branch-names/github-snapshots.tar.gz",
+            ".project/evidence/TASK-053/run-05-branch-names/backend-checks.tar.gz",
+            ".project/evidence/TASK-053/run-05-branch-names/structural.log.gz",
+            ".project/evidence/TASK-053/run-05-branch-names/source-manifest.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

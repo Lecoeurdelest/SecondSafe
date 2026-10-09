@@ -31,3 +31,15 @@ No runtime behavior or schemas changed. Original task IDs, backend definitions, 
 ## Files changed
 
 Authored model/plan, execution/delivery records, generated requirement/task views, migration/Gitflow documentation, frontend migration README, issue synchronization and structural/authorship checks, and task-delivery CI.
+
+## Gitflow enforcement follow-up (2026-10-09)
+
+Added route/task-scope validation for all PR targets and optional local hooks that reject stable/integration or detached commits, incorrect identity and wrong task IDs. Feature integration targets develop; explicitly enabled temporary feature review stacks retain small diffs, and release/hotfix delivery targets main with synchronization into develop. Existing hooks are preserved. All 11 open PRs pass route, task-scope and sole-author audits; a feature-to-main check is rejected as required. Five tests include real temporary repositories, installed-hook rejection and CI detection of a mixed-task commit. Backend code is unchanged; its 23 baseline tests pass.
+
+Original verification is under `.project/evidence/TASK-053/run-04-gitflow/`. The structural runner output is losslessly compressed as `structural-checks.log.gz`; its uncompressed local copy is ignored. No domain-confidence score or merge authorization is introduced.
+
+## Direct Gitflow branch names (2026-10-09)
+
+The user removed the additional branch namespace. All 12 active task branches now use `feature/...`; release and hotfix validation uses `release/...` and `hotfix/...`. Hooks reject the legacy namespace. GitHub closes PRs when their head branch is renamed, so replacement PRs #88–#99 retain each existing review slice and draft state. Original commits and historical evidence are preserved. Delivery links and CI branch filters are synchronized throughout the stack.
+
+Run-05 retains the rename/PR mapping, original metadata snapshots and deterministic route/hook, history, runtime-preservation and structural checks. The pre-existing TASK-053 scaffold startup failure is preserved; all task branches from the repaired HTTP foundation onward pass their backend suites.

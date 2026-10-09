@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-053",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "5a8c4942ab62ed32d6ac6e16da3bd9835d82b6b0c94600a640979e38d58917a4",
+  "completion_policy": "Manual tooling/documentation completion on deterministic tests and observed GitHub metadata; no domain correctness claim",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-MIG-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Structural governance and Git metadata checks; no domain calibration applies",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "document_check",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-053/run-04-gitflow/tests-final.txt",
+            ".project/evidence/TASK-053/run-04-gitflow/github-prs.json",
+            ".project/evidence/TASK-053/run-04-gitflow/pr-audit.txt",
+            ".project/evidence/TASK-053/run-04-gitflow/feature-to-main-rejected.txt",
+            ".project/evidence/TASK-053/run-04-gitflow/structural-final.log.gz",
+            ".project/evidence/TASK-053/run-04-gitflow/source-manifest-final.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}
