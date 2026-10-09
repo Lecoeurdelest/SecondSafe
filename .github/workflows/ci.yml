@@ -3,7 +3,7 @@ on:
   pull_request:
     branches:
       - develop
-      - 'codex/feature/**'
+      - 'feature/**'
   push:
     branches: [develop, main]
 permissions:

@@ -1,7 +1,7 @@
 name: Web dependency installation
 on:
   pull_request:
-    branches: [develop, 'codex/feature/**']
+    branches: [develop, 'feature/**']
     paths:
       - frontend/package.json
       - frontend/package-lock.json

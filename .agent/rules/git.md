@@ -9,5 +9,5 @@
   ```
 - Commit subjects: short imperative sentence in English, for example `Implement wallet ledger (TASK-024)`.
 - One task per commit series. Include the regenerated views (`python3 tools/pdd/render.py`) in the same commit as the state change.
-- Follow `docs/technical/gitflow.md` (D-011): `main` is stable, `develop` integrates, and each task has a `codex/feature/task-NNN-description` branch and PR. Keep dependent PRs explicitly stacked until their prerequisite merges; retarget to `develop` afterward.
+- Follow `docs/technical/gitflow.md` (D-011): `main` is stable, `develop` integrates, and each task has a `feature/task-NNN-description` branch and PR. Keep dependent PRs explicitly stacked until their prerequisite merges; retarget to `develop` afterward.
 - Create PRs through the authenticated `Lecoeurdelest` account. Keep them open for user review unless merging is separately authorized. Preserve existing history.
