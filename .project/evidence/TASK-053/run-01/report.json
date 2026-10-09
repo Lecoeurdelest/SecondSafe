@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-053",
+  "spec_hash": "5cf724c2ead2dd4efa44142adeb169dc833fb279de1a20db58776ec31a44fc0a",
+  "source_hash": "084a29fd041d10fefb2be57648c1413649305bff2d67697828e276fb518f3410",
+  "completion_policy": "manual documentation completion on observed structural and remote metadata checks",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-MIG-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Documentation task; no domain-logic calibration applies",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "document_check",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-053/run-01/check-01.txt",
+            ".project/evidence/TASK-053/run-01/check-02.txt",
+            ".project/evidence/TASK-053/run-01/check-03.txt",
+            ".project/evidence/TASK-053/run-01/check-04.txt",
+            ".project/evidence/TASK-053/run-01/check-05.txt",
+            ".project/evidence/TASK-053/run-01/check-06.txt",
+            ".project/evidence/TASK-053/run-01/github-issues.json",
+            ".project/evidence/TASK-053/run-01/preservation-review.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

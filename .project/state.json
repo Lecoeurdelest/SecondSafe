@@ -3,9 +3,9 @@
   "model": "project.yaml",
   "tasks": {
     "TASK-001": {
-      "execution": "done",
+      "execution": "needs_revalidation",
       "relevance": "current",
-      "detail": "Scaffold verified; MongoDB run delegated to TASK-002",
+      "detail": "Baseline 5ed8be5 does not boot: merged orders router imports stub authentication middleware; prior evidence preserved; recover in TASK-003/TASK-005.",
       "history": [
         {
           "date": "2026-09-24",
@@ -21,6 +21,11 @@
           "date": "2026-09-24",
           "execution": "done",
           "note": "All 12 criteria pass under the manual completion policy"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "needs_revalidation",
+          "note": "npm test fails during app import with Router.use() requires a middleware function after PR #1; historical outputs retained"
         }
       ],
       "evidence": [
@@ -401,6 +406,275 @@
       "relevance": "current",
       "detail": "Waiting for TASK-049",
       "history": []
+    },
+    "TASK-053": {
+      "execution": "done",
+      "relevance": "current",
+      "detail": "73 task issues created; 52 BE definitions preserved; 21 migration/web/integration tasks and sole-author Gitflow checks validated",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Structural validation and 73 remote issue authors checked"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Documentation/manual completion policy; no domain-code correctness claim"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-053/run-03/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-053.md",
+      "criteria": {
+        "AC-MIG-01-1": "pass"
+      }
+    },
+    "TASK-054": {
+      "execution": "ready",
+      "relevance": "current",
+      "detail": "TASK-053 documentation complete; web shell can start",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-055": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-056": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-057": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-058": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-059": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-060": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-061": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-062": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-063": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-064": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-065": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-066": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-067": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-068": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-069": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-070": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-071": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-072": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
+    },
+    "TASK-073": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for dependencies and feature integration evidence",
+      "history": [
+        {
+          "date": "2026-10-09",
+          "execution": "todo",
+          "note": "Full-stack migration requested; implementation has not yet been verified"
+        }
+      ]
     }
   }
 }

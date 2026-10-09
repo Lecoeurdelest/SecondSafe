@@ -2,11 +2,13 @@
 
 A second-hand marketplace backend with escrow-protected payments: the buyer's money is held until the buyer confirms receipt. Moderators handle reports and disputes.
 
-This repository contains the **backend skeleton**:
+This repository is migrating the WDP frontend and backend through [tracked tasks](docs/task/README.md). The starting point contains the **backend skeleton**:
 
 - the accepted MongoDB data layer (16 Mongoose schemas, seeds, index and migration scripts), carried from the WDP baseline;
 - empty route, controller and service stubs for every module. They are rebuilt task by task;
 - the plan-driven control framework: plan, requirements, tasks, execution state and evidence.
+
+The [migration inventory](docs/technical/migration-wdp.md) maps source modules to 52 existing backend tasks and 21 migration/frontend/integration tasks. Work uses [Gitflow](docs/technical/gitflow.md), with one PR per task and `Lecoeurdelest` as the sole author of new commits and PRs. Initial inspection found an orders-router startup regression; current status and repair evidence are tracked in the task index.
 
 ## Quick start
 

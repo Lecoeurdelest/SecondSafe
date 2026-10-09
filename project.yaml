@@ -7,7 +7,7 @@ project:
   name: SecondSafe
   plan_file: plan.md
   repository: https://github.com/Lecoeurdelest/SecondSafe
-  summary: Second-hand marketplace backend with escrow-protected payments, dispute handling and moderation.
+  summary: Second-hand marketplace with a React web client, escrow-protected API, dispute handling and moderation.
 preservation:
   baselines:
     - id: BASE-WDP
@@ -19,6 +19,9 @@ preservation:
     - id: BASE-PDD
       source: https://github.com/Lecoeurdelest/plan-driven-development
       revision: 41c1bd8ec495524656369a95c126bc09bf465896
+    - id: BASE-SECONDSAFE
+      source: https://github.com/Lecoeurdelest/SecondSafe
+      revision: 5ed8be5
   artifacts:
     - id: ART-SCHEMAS
       path: backend/src/modules/*/*.model.js
@@ -105,9 +108,11 @@ preservation:
     - id: ART-BASELINE-FRONTEND
       path: frontend/**
       role: Baseline React frontend
-      disposition: remove
+      disposition: enhance
       baseline: BASE-WDP
-      approval: 'User request 2026-09-24: backend skeleton only'
+      previous_disposition: remove
+      previous_approval: 'User request 2026-09-24: backend skeleton only'
+      note: Frontend migration restored by user request 2026-10-09 (D-009); the earlier backend-only scaffold history remains intact.
   conventions:
     - Requirement IDs from the tracking workbook (FR-<MODULE>-NN, NFR-<GROUP>-NN) are never renumbered; new requirements take
       the next free number.
@@ -156,6 +161,8 @@ components:
     title: Administration
   - id: CMP-JOBS
     title: Scheduled jobs
+  - id: CMP-WEB
+    title: React marketplace web client
 decisions:
   - id: D-001
     title: 'Stack: Node.js 18+, Express 4, MongoDB with Mongoose 8, CommonJS, Jest and Supertest'
@@ -163,7 +170,8 @@ decisions:
     source: User request 2026-09-24 (backend skeleton from WDP); WDP package.json
   - id: D-002
     title: Repository scope is the backend only; the frontend is out of scope
-    status: accepted
+    status: superseded
+    superseded_by: D-009
     source: User request 2026-09-24 ("khung backend")
   - id: D-003
     title: The WDP Mongoose schemas are the accepted database contract; schema changes need an explicit task with a migration
@@ -267,6 +275,21 @@ decisions:
       - Short access token plus refresh token with revocation
     recommendation: Stateless JWT (baseline) for the first release
     note: 'Non-blocking: TASK-005 and TASK-012 keep the baseline behavior.'
+  - id: D-009
+    title: Migrate both frontend and backend from WDP through small tracked tasks
+    status: accepted
+    source: 'User request 2026-10-09: migrate WDP into SecondSafe, including FE and BE tasks'
+    supersedes:
+    - D-002
+  - id: D-010
+    title: Adapt WDP implementations to SecondSafe requirements and fix reviewed defects before acceptance
+    status: accepted
+    source: User migration request 2026-10-09; preserves D-003 schemas and existing criteria
+  - id: D-011
+    title: Gitflow delivery uses main, develop and one feature branch and PR per task; all new authors and committers
+      are Lecoeurdelest
+    status: accepted
+    source: 'User request 2026-10-09: Gitflow, self-service PR creation, sole user authorship'
 invariants:
   - id: INV-01
     statement: 'Money is never created or lost: every balance change writes a transaction with balance before and after, and
@@ -2488,12 +2511,10 @@ requirements:
     title: Responsive user interface
     kind: non_functional
     risk: standard
-    component: CMP-PLATFORM
-    status: deferred
-    deferral_reason: Frontend is out of scope for this repository (D-002).
+    component: CMP-WEB
     source:
       file: plan.md
-      section: 5. Quality requirements
+      section: 12. Migration amendment (2026-10-09)
     acceptance:
       - id: AC-NFR-USA-02-1
         statement: The user interface works from 360 px to 1920 px wide.
@@ -2503,17 +2524,331 @@ requirements:
     title: Browser support
     kind: non_functional
     risk: standard
-    component: CMP-PLATFORM
-    status: deferred
-    deferral_reason: Frontend is out of scope for this repository (D-002).
+    component: CMP-WEB
     source:
       file: plan.md
-      section: 5. Quality requirements
+      section: 12. Migration amendment (2026-10-09)
     acceptance:
       - id: AC-NFR-COMP-01-1
         statement: Current Chrome, Firefox, Safari and Edge are supported.
         verification:
           - manual_review
+  - id: NFR-MIG-01
+    title: Migration inventory, FE task decomposition and Gitflow delivery
+    kind: non_functional
+    risk: standard
+    component: CMP-CONTROL
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-MIG-01-1
+      statement: The inventory pins both repositories, preserves TASK-001 through TASK-052, maps frontend modules
+        to new bounded tasks, and defines sole-author Gitflow PR delivery.
+      verification:
+      - document_check
+  - id: FR-WEB-01
+    title: Web runtime, API client and application shell
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-01-1
+      statement: The React app installs from a lockfile, builds and renders a Vietnamese shell; API and socket origins
+        come from documented environment variables and errors have visible states.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-02
+    title: Web authentication, session and route guards
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-02-1
+      statement: Registration, email verification, login, Google sign-in and recovery use the accepted API; session
+        changes update guards; protected and staff routes reject unauthorized users; missing Firebase configuration
+        does not crash the app.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-03
+    title: Web profile, password and public seller pages
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-03-1
+      statement: Users edit allowed profile fields and passwords; public seller profiles exclude contact details;
+        loading, validation, unauthorized and error states are visible.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-04
+    title: Web home, catalog search and filters
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-04-1
+      statement: Guests browse searchable, filterable, paginated active listings with empty and error states; Vietnamese
+        text, images and responsive layout work at desktop and mobile widths.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-05
+    title: Web seller listing creation and management
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-05-1
+      statement: Sellers create and edit validated listings with permitted images and structured locations; reserved
+        or sold listings and restricted sellers cannot perform forbidden operations.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-06
+    title: Web listing detail and favorites
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-06-1
+      statement: Listing details link to the seller and allowed purchase/chat actions; authenticated users add and
+        remove favorites with consistent visible state and missing-listing handling.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-07
+    title: Web notification inbox
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-07-1
+      statement: Notifications load, mark read and update unread counts through authenticated real-time events; subscriptions
+        are cleaned up when the session or component changes.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-08
+    title: Web conversations, images and price offers
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-08-1
+      statement: Only conversation members access messages and image uploads; offers follow the API contract; sockets
+        authenticate, reconnect and clean up without duplicate handlers.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-09
+    title: Web purchase requests and checkout
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-09-1
+      statement: Buyers create purchase requests or quick buys and sellers accept or reject them; integer VND totals
+        and unavailable listings are handled without duplicate submission.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-10
+    title: Web order lists, payment and fulfilment
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-10-1
+      statement: Order parties see only their orders and allowed lifecycle actions; payment results are confirmed
+        through the API; shipping, cancellation and receipt states refresh correctly.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-11
+    title: Web wallet, top-up and withdrawal
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-11-1
+      statement: Wallet balances and ledger entries come from the API; top-ups and withdrawals validate configured
+        integer VND bounds and handle pending, failed and confirmed outcomes.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-12
+    title: Web seller reviews and ratings
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-12-1
+      statement: Only an eligible completed-order buyer can submit a review; public ratings and paginated reviews
+        render with optional evidence and duplicate/error handling.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-13
+    title: Web violation reports and disputes
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-13-1
+      statement: Users submit validated reports and eligible order disputes, upload private evidence and view authorized
+        case state; server denials remain visible and private assets are not exposed publicly.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-14
+    title: Web moderator shell, dashboard and profile
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-14-1
+      statement: Moderator and admin roles can navigate the responsive console and load dashboard/profile data; regular
+        users cannot enter and locked moderators are denied.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-15
+    title: Web moderator report, order and review queues
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-15-1
+      statement: Staff search and paginate report/order/review queues, inspect authorized details and execute only
+        server-permitted sanctions or lifecycle actions with validation and refreshed results.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-16
+    title: Web moderator disputes and withdrawals
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-16-1
+      statement: Staff inspect dispute evidence and resolve cases or approve/reject withdrawals through the shared
+        API; repeat submissions and server failures do not fabricate success.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-17
+    title: Web admin shell, dashboard and user management
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-17-1
+      statement: Admins manage users and moderators through permitted operations, with filters and validation; protected
+        admin accounts cannot be suspended, restricted, locked or deleted.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-18
+    title: Web admin order, review and report queues
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-18-1
+      statement: Admin queues and detail pages use paginated authorized APIs and show valid action results and failures
+        without bypassing lifecycle or sanction rules.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-19
+    title: Web admin disputes, withdrawals and revenue
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-19-1
+      statement: Admin dispute settlement, withdrawal approval and revenue views use the shared backend flows and
+        accurate integer VND totals with visible pending and failure states.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-20
+    title: Full-stack migration integration and release checks
+    kind: functional
+    risk: critical
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 12. Migration amendment (2026-10-09)
+    acceptance:
+    - id: AC-WEB-20-1
+      statement: A disposable replica-set environment passes buyer/seller/staff end-to-end journeys, existing backend
+        criteria, frontend tests/build and privacy checks; every task PR and new commit has the sole authorized author;
+        remaining provider credentials and manual sandbox checks are explicitly reported.
+      verification:
+      - behavioral_test
+      - manual_review
 tasks:
   - id: TASK-001
     title: Scaffold the backend database layer and control framework
@@ -4821,6 +5156,1343 @@ tasks:
       - A required decision is not accepted
       - A needed schema change has no approved schema-change task (D-003)
       - Verification cannot run or produces no original output
+  - id: TASK-053
+    title: Migration inventory, FE task decomposition and Gitflow delivery
+    requirement_ids:
+    - NFR-MIG-01
+    component_ids:
+    - CMP-CONTROL
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-MIG-01-1
+    objective: The inventory pins both repositories, preserves TASK-001 through TASK-052, maps frontend modules to
+      new bounded tasks, and defines sole-author Gitflow PR delivery.
+    in_scope:
+    - Pin source and destination revisions and document inspected behavior
+    - Add bounded FE tasks without changing the 52 existing BE definitions
+    - Track task issues and PRs in .project/delivery.json and generated docs
+    - Document Gitflow and enforce the existing sole-author rule
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    outputs:
+    - plan.md
+    - project.yaml
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - tools/pdd/render.py
+    - tools/pdd/check-migration.py
+    - tools/pdd/sync-issues.py
+    - .project/delivery.json
+    - docs/task/TASK-053.md
+    - tools/pdd/check-authorship.py
+    - .github/workflows/task-delivery.yml
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - python3 tools/pdd/check-migration.py
+    - python3 tools/pdd/render.py --check
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Preserve existing task IDs, criteria, schemas and history. Add a full-stack scope amendment,
+      FE requirements, task dependencies and a delivery view. Record the initial backend import regression as observed
+      failure, not passing behavior.
+    baseline_refs: []
+  - id: TASK-054
+    title: Web runtime, API client and application shell
+    requirement_ids:
+    - FR-WEB-01
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-053
+    acceptance_ids:
+    - AC-WEB-01-1
+    objective: The React app installs from a lockfile, builds and renders a Vietnamese shell; API and socket origins
+      come from documented environment variables and errors have visible states.
+    in_scope:
+    - frontend/package.json
+    - frontend/public/
+    - frontend/src/index.js
+    - frontend/src/App.js
+    - frontend/src/services/api.js
+    - frontend/src/services/network.config.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-053 evidence
+    outputs:
+    - frontend/package.json
+    - frontend/public/
+    - frontend/src/index.js
+    - frontend/src/App.js
+    - frontend/src/services/api.js
+    - frontend/src/services/network.config.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/package.json
+    - WDP@1cea2b7:frontend/public/
+    - WDP@1cea2b7:frontend/src/index.js
+    - WDP@1cea2b7:frontend/src/App.js
+    - WDP@1cea2b7:frontend/src/services/api.js
+    - WDP@1cea2b7:frontend/src/services/network.config.js
+  - id: TASK-055
+    title: Web authentication, session and route guards
+    requirement_ids:
+    - FR-WEB-02
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-054
+    - TASK-011
+    - TASK-012
+    - TASK-013
+    - TASK-014
+    acceptance_ids:
+    - AC-WEB-02-1
+    objective: Registration, email verification, login, Google sign-in and recovery use the accepted API; session
+      changes update guards; protected and staff routes reject unauthorized users; missing Firebase configuration
+      does not crash the app.
+    in_scope:
+    - frontend/src/modules/auth/
+    - frontend/src/context/AuthContext.jsx
+    - frontend/src/hooks/useAuth.js
+    - frontend/src/routes/
+    - frontend/src/config/firebase.js
+    - frontend/src/services/auth.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-054 evidence
+    - TASK-011 evidence
+    - TASK-012 evidence
+    - TASK-013 evidence
+    - TASK-014 evidence
+    outputs:
+    - frontend/src/modules/auth/
+    - frontend/src/context/AuthContext.jsx
+    - frontend/src/hooks/useAuth.js
+    - frontend/src/routes/
+    - frontend/src/config/firebase.js
+    - frontend/src/services/auth.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/auth/
+    - WDP@1cea2b7:frontend/src/context/AuthContext.jsx
+    - WDP@1cea2b7:frontend/src/hooks/useAuth.js
+    - WDP@1cea2b7:frontend/src/routes/
+    - WDP@1cea2b7:frontend/src/config/firebase.js
+    - WDP@1cea2b7:frontend/src/services/auth.service.js
+  - id: TASK-056
+    title: Web profile, password and public seller pages
+    requirement_ids:
+    - FR-WEB-03
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-016
+    acceptance_ids:
+    - AC-WEB-03-1
+    objective: Users edit allowed profile fields and passwords; public seller profiles exclude contact details; loading,
+      validation, unauthorized and error states are visible.
+    in_scope:
+    - frontend/src/modules/profile/
+    - frontend/src/services/user.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-016 evidence
+    outputs:
+    - frontend/src/modules/profile/
+    - frontend/src/services/user.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/profile/
+    - WDP@1cea2b7:frontend/src/services/user.service.js
+  - id: TASK-057
+    title: Web home, catalog search and filters
+    requirement_ids:
+    - FR-WEB-04
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-054
+    - TASK-017
+    - TASK-020
+    acceptance_ids:
+    - AC-WEB-04-1
+    objective: Guests browse searchable, filterable, paginated active listings with empty and error states; Vietnamese
+      text, images and responsive layout work at desktop and mobile widths.
+    in_scope:
+    - frontend/src/modules/home/
+    - frontend/src/components/ProductCard.jsx
+    - frontend/src/components/ProductList.jsx
+    - frontend/src/components/SearchBar.jsx
+    - frontend/src/components/FilterPanel.jsx
+    - frontend/src/utils/
+    - frontend/src/services/product.service.js
+    - frontend/src/services/location.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-054 evidence
+    - TASK-017 evidence
+    - TASK-020 evidence
+    outputs:
+    - frontend/src/modules/home/
+    - frontend/src/components/ProductCard.jsx
+    - frontend/src/components/ProductList.jsx
+    - frontend/src/components/SearchBar.jsx
+    - frontend/src/components/FilterPanel.jsx
+    - frontend/src/utils/
+    - frontend/src/services/product.service.js
+    - frontend/src/services/location.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/home/
+    - WDP@1cea2b7:frontend/src/components/ProductCard.jsx
+    - WDP@1cea2b7:frontend/src/components/ProductList.jsx
+    - WDP@1cea2b7:frontend/src/components/SearchBar.jsx
+    - WDP@1cea2b7:frontend/src/components/FilterPanel.jsx
+    - WDP@1cea2b7:frontend/src/utils/
+    - WDP@1cea2b7:frontend/src/services/product.service.js
+    - WDP@1cea2b7:frontend/src/services/location.service.js
+  - id: TASK-058
+    title: Web seller listing creation and management
+    requirement_ids:
+    - FR-WEB-05
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-057
+    - TASK-018
+    acceptance_ids:
+    - AC-WEB-05-1
+    objective: Sellers create and edit validated listings with permitted images and structured locations; reserved
+      or sold listings and restricted sellers cannot perform forbidden operations.
+    in_scope:
+    - frontend/src/modules/product/CreateProduct.jsx
+    - frontend/src/modules/product/EditProduct.jsx
+    - frontend/src/modules/product/MyProducts.jsx
+    - frontend/src/components/LocationSelector.jsx
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-057 evidence
+    - TASK-018 evidence
+    outputs:
+    - frontend/src/modules/product/CreateProduct.jsx
+    - frontend/src/modules/product/EditProduct.jsx
+    - frontend/src/modules/product/MyProducts.jsx
+    - frontend/src/components/LocationSelector.jsx
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/product/CreateProduct.jsx
+    - WDP@1cea2b7:frontend/src/modules/product/EditProduct.jsx
+    - WDP@1cea2b7:frontend/src/modules/product/MyProducts.jsx
+    - WDP@1cea2b7:frontend/src/components/LocationSelector.jsx
+  - id: TASK-059
+    title: Web listing detail and favorites
+    requirement_ids:
+    - FR-WEB-06
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-057
+    - TASK-019
+    - TASK-021
+    acceptance_ids:
+    - AC-WEB-06-1
+    objective: Listing details link to the seller and allowed purchase/chat actions; authenticated users add and remove
+      favorites with consistent visible state and missing-listing handling.
+    in_scope:
+    - frontend/src/modules/product/ProductDetail.jsx
+    - frontend/src/modules/product/Favorites.jsx
+    - frontend/src/modules/product/ProductList.jsx
+    - frontend/src/services/favorite.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-057 evidence
+    - TASK-019 evidence
+    - TASK-021 evidence
+    outputs:
+    - frontend/src/modules/product/ProductDetail.jsx
+    - frontend/src/modules/product/Favorites.jsx
+    - frontend/src/modules/product/ProductList.jsx
+    - frontend/src/services/favorite.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/product/ProductDetail.jsx
+    - WDP@1cea2b7:frontend/src/modules/product/Favorites.jsx
+    - WDP@1cea2b7:frontend/src/modules/product/ProductList.jsx
+    - WDP@1cea2b7:frontend/src/services/favorite.service.js
+  - id: TASK-060
+    title: Web notification inbox
+    requirement_ids:
+    - FR-WEB-07
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-010
+    - TASK-023
+    acceptance_ids:
+    - AC-WEB-07-1
+    objective: Notifications load, mark read and update unread counts through authenticated real-time events; subscriptions
+      are cleaned up when the session or component changes.
+    in_scope:
+    - frontend/src/components/NotificationPanel.jsx
+    - frontend/src/services/notification.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-010 evidence
+    - TASK-023 evidence
+    outputs:
+    - frontend/src/components/NotificationPanel.jsx
+    - frontend/src/services/notification.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/components/NotificationPanel.jsx
+    - WDP@1cea2b7:frontend/src/services/notification.service.js
+  - id: TASK-061
+    title: Web conversations, images and price offers
+    requirement_ids:
+    - FR-WEB-08
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-059
+    - TASK-022
+    - TASK-023
+    - TASK-031
+    acceptance_ids:
+    - AC-WEB-08-1
+    objective: Only conversation members access messages and image uploads; offers follow the API contract; sockets
+      authenticate, reconnect and clean up without duplicate handlers.
+    in_scope:
+    - frontend/src/modules/chat/
+    - frontend/src/services/chat.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-059 evidence
+    - TASK-022 evidence
+    - TASK-023 evidence
+    - TASK-031 evidence
+    outputs:
+    - frontend/src/modules/chat/
+    - frontend/src/services/chat.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/chat/
+    - WDP@1cea2b7:frontend/src/services/chat.service.js
+  - id: TASK-062
+    title: Web purchase requests and checkout
+    requirement_ids:
+    - FR-WEB-09
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-059
+    - TASK-030
+    acceptance_ids:
+    - AC-WEB-09-1
+    objective: Buyers create purchase requests or quick buys and sellers accept or reject them; integer VND totals
+      and unavailable listings are handled without duplicate submission.
+    in_scope:
+    - frontend/src/modules/order/PurchaseRequest.jsx
+    - frontend/src/modules/order/PurchaseRequests.jsx
+    - frontend/src/modules/checkout/
+    - frontend/src/context/CartContext.jsx
+    - frontend/src/services/order.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-059 evidence
+    - TASK-030 evidence
+    outputs:
+    - frontend/src/modules/order/PurchaseRequest.jsx
+    - frontend/src/modules/order/PurchaseRequests.jsx
+    - frontend/src/modules/checkout/
+    - frontend/src/context/CartContext.jsx
+    - frontend/src/services/order.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/order/PurchaseRequest.jsx
+    - WDP@1cea2b7:frontend/src/modules/order/PurchaseRequests.jsx
+    - WDP@1cea2b7:frontend/src/modules/checkout/
+    - WDP@1cea2b7:frontend/src/context/CartContext.jsx
+    - WDP@1cea2b7:frontend/src/services/order.service.js
+  - id: TASK-063
+    title: Web order lists, payment and fulfilment
+    requirement_ids:
+    - FR-WEB-10
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-062
+    - TASK-032
+    - TASK-033
+    - TASK-034
+    - TASK-035
+    acceptance_ids:
+    - AC-WEB-10-1
+    objective: Order parties see only their orders and allowed lifecycle actions; payment results are confirmed through
+      the API; shipping, cancellation and receipt states refresh correctly.
+    in_scope:
+    - frontend/src/modules/order/Orders.jsx
+    - frontend/src/modules/order/OrderDetail.jsx
+    - frontend/src/modules/order/OrderPayment.jsx
+    - frontend/src/modules/order/ConfirmReceipt.jsx
+    - frontend/src/modules/order/SellerOrders.jsx
+    - frontend/src/modules/order/ShipOrder.jsx
+    - frontend/src/modules/order/SEPayOrderSuccess.jsx
+    - frontend/src/modules/delivery/
+    - frontend/src/services/delivery.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-062 evidence
+    - TASK-032 evidence
+    - TASK-033 evidence
+    - TASK-034 evidence
+    - TASK-035 evidence
+    outputs:
+    - frontend/src/modules/order/Orders.jsx
+    - frontend/src/modules/order/OrderDetail.jsx
+    - frontend/src/modules/order/OrderPayment.jsx
+    - frontend/src/modules/order/ConfirmReceipt.jsx
+    - frontend/src/modules/order/SellerOrders.jsx
+    - frontend/src/modules/order/ShipOrder.jsx
+    - frontend/src/modules/order/SEPayOrderSuccess.jsx
+    - frontend/src/modules/delivery/
+    - frontend/src/services/delivery.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/order/Orders.jsx
+    - WDP@1cea2b7:frontend/src/modules/order/OrderDetail.jsx
+    - WDP@1cea2b7:frontend/src/modules/order/OrderPayment.jsx
+    - WDP@1cea2b7:frontend/src/modules/order/ConfirmReceipt.jsx
+    - WDP@1cea2b7:frontend/src/modules/order/SellerOrders.jsx
+    - WDP@1cea2b7:frontend/src/modules/order/ShipOrder.jsx
+    - WDP@1cea2b7:frontend/src/modules/order/SEPayOrderSuccess.jsx
+    - WDP@1cea2b7:frontend/src/modules/delivery/
+    - WDP@1cea2b7:frontend/src/services/delivery.service.js
+  - id: TASK-064
+    title: Web wallet, top-up and withdrawal
+    requirement_ids:
+    - FR-WEB-11
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-024
+    - TASK-026
+    - TASK-028
+    - TASK-029
+    acceptance_ids:
+    - AC-WEB-11-1
+    objective: Wallet balances and ledger entries come from the API; top-ups and withdrawals validate configured integer
+      VND bounds and handle pending, failed and confirmed outcomes.
+    in_scope:
+    - frontend/src/modules/wallet/
+    - frontend/src/services/wallet.service.js
+    - frontend/src/services/sepay.service.js
+    - frontend/src/services/vnpay.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-024 evidence
+    - TASK-026 evidence
+    - TASK-028 evidence
+    - TASK-029 evidence
+    outputs:
+    - frontend/src/modules/wallet/
+    - frontend/src/services/wallet.service.js
+    - frontend/src/services/sepay.service.js
+    - frontend/src/services/vnpay.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/wallet/
+    - WDP@1cea2b7:frontend/src/services/wallet.service.js
+    - WDP@1cea2b7:frontend/src/services/sepay.service.js
+    - WDP@1cea2b7:frontend/src/services/vnpay.service.js
+  - id: TASK-065
+    title: Web seller reviews and ratings
+    requirement_ids:
+    - FR-WEB-12
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-056
+    - TASK-063
+    - TASK-036
+    acceptance_ids:
+    - AC-WEB-12-1
+    objective: Only an eligible completed-order buyer can submit a review; public ratings and paginated reviews render
+      with optional evidence and duplicate/error handling.
+    in_scope:
+    - frontend/src/modules/review/
+    - frontend/src/modules/profile/UserReviews.jsx
+    - frontend/src/services/review.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-056 evidence
+    - TASK-063 evidence
+    - TASK-036 evidence
+    outputs:
+    - frontend/src/modules/review/
+    - frontend/src/modules/profile/UserReviews.jsx
+    - frontend/src/services/review.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/review/
+    - WDP@1cea2b7:frontend/src/modules/profile/UserReviews.jsx
+    - WDP@1cea2b7:frontend/src/services/review.service.js
+  - id: TASK-066
+    title: Web violation reports and disputes
+    requirement_ids:
+    - FR-WEB-13
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-063
+    - TASK-037
+    - TASK-038
+    acceptance_ids:
+    - AC-WEB-13-1
+    objective: Users submit validated reports and eligible order disputes, upload private evidence and view authorized
+      case state; server denials remain visible and private assets are not exposed publicly.
+    in_scope:
+    - frontend/src/modules/report/
+    - frontend/src/services/report.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-063 evidence
+    - TASK-037 evidence
+    - TASK-038 evidence
+    outputs:
+    - frontend/src/modules/report/
+    - frontend/src/services/report.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/report/
+    - WDP@1cea2b7:frontend/src/services/report.service.js
+  - id: TASK-067
+    title: Web moderator shell, dashboard and profile
+    requirement_ids:
+    - FR-WEB-14
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-039
+    acceptance_ids:
+    - AC-WEB-14-1
+    objective: Moderator and admin roles can navigate the responsive console and load dashboard/profile data; regular
+      users cannot enter and locked moderators are denied.
+    in_scope:
+    - frontend/src/modules/moderator/layout/
+    - frontend/src/modules/moderator/dashboard/
+    - frontend/src/modules/moderator/profile/
+    - frontend/src/services/moderator.service.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-039 evidence
+    outputs:
+    - frontend/src/modules/moderator/layout/
+    - frontend/src/modules/moderator/dashboard/
+    - frontend/src/modules/moderator/profile/
+    - frontend/src/services/moderator.service.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/moderator/layout/
+    - WDP@1cea2b7:frontend/src/modules/moderator/dashboard/
+    - WDP@1cea2b7:frontend/src/modules/moderator/profile/
+    - WDP@1cea2b7:frontend/src/services/moderator.service.js
+  - id: TASK-068
+    title: Web moderator report, order and review queues
+    requirement_ids:
+    - FR-WEB-15
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-067
+    - TASK-040
+    - TASK-041
+    acceptance_ids:
+    - AC-WEB-15-1
+    objective: Staff search and paginate report/order/review queues, inspect authorized details and execute only server-permitted
+      sanctions or lifecycle actions with validation and refreshed results.
+    in_scope:
+    - frontend/src/modules/moderator/reports/
+    - frontend/src/modules/moderator/orders/
+    - frontend/src/modules/moderator/reviews/
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-067 evidence
+    - TASK-040 evidence
+    - TASK-041 evidence
+    outputs:
+    - frontend/src/modules/moderator/reports/
+    - frontend/src/modules/moderator/orders/
+    - frontend/src/modules/moderator/reviews/
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/moderator/reports/
+    - WDP@1cea2b7:frontend/src/modules/moderator/orders/
+    - WDP@1cea2b7:frontend/src/modules/moderator/reviews/
+  - id: TASK-069
+    title: Web moderator disputes and withdrawals
+    requirement_ids:
+    - FR-WEB-16
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-067
+    - TASK-029
+    - TASK-042
+    acceptance_ids:
+    - AC-WEB-16-1
+    objective: Staff inspect dispute evidence and resolve cases or approve/reject withdrawals through the shared API;
+      repeat submissions and server failures do not fabricate success.
+    in_scope:
+    - frontend/src/modules/moderator/disputes/
+    - frontend/src/modules/moderator/withdrawals/
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-067 evidence
+    - TASK-029 evidence
+    - TASK-042 evidence
+    outputs:
+    - frontend/src/modules/moderator/disputes/
+    - frontend/src/modules/moderator/withdrawals/
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/moderator/disputes/
+    - WDP@1cea2b7:frontend/src/modules/moderator/withdrawals/
+  - id: TASK-070
+    title: Web admin shell, dashboard and user management
+    requirement_ids:
+    - FR-WEB-17
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-055
+    - TASK-044
+    - TASK-045
+    acceptance_ids:
+    - AC-WEB-17-1
+    objective: Admins manage users and moderators through permitted operations, with filters and validation; protected
+      admin accounts cannot be suspended, restricted, locked or deleted.
+    in_scope:
+    - frontend/src/modules/admin/layout/
+    - frontend/src/modules/admin/dashboard/
+    - frontend/src/modules/admin/users/
+    - frontend/src/modules/admin/components/
+    - frontend/src/services/adminApi.js
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-055 evidence
+    - TASK-044 evidence
+    - TASK-045 evidence
+    outputs:
+    - frontend/src/modules/admin/layout/
+    - frontend/src/modules/admin/dashboard/
+    - frontend/src/modules/admin/users/
+    - frontend/src/modules/admin/components/
+    - frontend/src/services/adminApi.js
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/admin/layout/
+    - WDP@1cea2b7:frontend/src/modules/admin/dashboard/
+    - WDP@1cea2b7:frontend/src/modules/admin/users/
+    - WDP@1cea2b7:frontend/src/modules/admin/components/
+    - WDP@1cea2b7:frontend/src/services/adminApi.js
+  - id: TASK-071
+    title: Web admin order, review and report queues
+    requirement_ids:
+    - FR-WEB-18
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-070
+    - TASK-040
+    - TASK-041
+    acceptance_ids:
+    - AC-WEB-18-1
+    objective: Admin queues and detail pages use paginated authorized APIs and show valid action results and failures
+      without bypassing lifecycle or sanction rules.
+    in_scope:
+    - frontend/src/modules/admin/orders/
+    - frontend/src/modules/admin/reviews/
+    - frontend/src/modules/admin/reports/
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-070 evidence
+    - TASK-040 evidence
+    - TASK-041 evidence
+    outputs:
+    - frontend/src/modules/admin/orders/
+    - frontend/src/modules/admin/reviews/
+    - frontend/src/modules/admin/reports/
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/admin/orders/
+    - WDP@1cea2b7:frontend/src/modules/admin/reviews/
+    - WDP@1cea2b7:frontend/src/modules/admin/reports/
+  - id: TASK-072
+    title: Web admin disputes, withdrawals and revenue
+    requirement_ids:
+    - FR-WEB-19
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-070
+    - TASK-029
+    - TASK-039
+    - TASK-042
+    acceptance_ids:
+    - AC-WEB-19-1
+    objective: Admin dispute settlement, withdrawal approval and revenue views use the shared backend flows and accurate
+      integer VND totals with visible pending and failure states.
+    in_scope:
+    - frontend/src/modules/admin/disputes/
+    - frontend/src/modules/admin/withdrawals/
+    - frontend/src/modules/admin/revenue/
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-070 evidence
+    - TASK-029 evidence
+    - TASK-039 evidence
+    - TASK-042 evidence
+    outputs:
+    - frontend/src/modules/admin/disputes/
+    - frontend/src/modules/admin/withdrawals/
+    - frontend/src/modules/admin/revenue/
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/src/modules/admin/disputes/
+    - WDP@1cea2b7:frontend/src/modules/admin/withdrawals/
+    - WDP@1cea2b7:frontend/src/modules/admin/revenue/
+  - id: TASK-073
+    title: Full-stack migration integration and release checks
+    requirement_ids:
+    - FR-WEB-20
+    - NFR-USA-02
+    - NFR-COMP-01
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-010
+    - D-011
+    depends_on:
+    - TASK-002
+    - TASK-049
+    - TASK-050
+    - TASK-051
+    - TASK-052
+    - TASK-055
+    - TASK-056
+    - TASK-057
+    - TASK-058
+    - TASK-059
+    - TASK-060
+    - TASK-061
+    - TASK-062
+    - TASK-063
+    - TASK-064
+    - TASK-065
+    - TASK-066
+    - TASK-067
+    - TASK-068
+    - TASK-069
+    - TASK-070
+    - TASK-071
+    - TASK-072
+    acceptance_ids:
+    - AC-WEB-20-1
+    - AC-NFR-USA-02-1
+    - AC-NFR-COMP-01-1
+    objective: A disposable replica-set environment passes buyer/seller/staff end-to-end journeys, existing backend
+      criteria, frontend tests/build and privacy checks; every task PR and new commit has the sole authorized author;
+      remaining provider credentials and manual sandbox checks are explicitly reported.
+    in_scope:
+    - frontend/e2e/
+    - docs/technical/migration-wdp.md
+    - docs/technical/release-checklist.md
+    - .github/workflows/
+    - Associated styles, assets and tests; API contract alignment; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    - Production deployment or live payment execution
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/migration-wdp.md
+    - docs/technical/gitflow.md
+    - docs/technical/architecture.md
+    - TASK-002 evidence
+    - TASK-049 evidence
+    - TASK-050 evidence
+    - TASK-051 evidence
+    - TASK-052 evidence
+    - TASK-055 evidence
+    - TASK-056 evidence
+    - TASK-057 evidence
+    - TASK-058 evidence
+    - TASK-059 evidence
+    - TASK-060 evidence
+    - TASK-061 evidence
+    - TASK-062 evidence
+    - TASK-063 evidence
+    - TASK-064 evidence
+    - TASK-065 evidence
+    - TASK-066 evidence
+    - TASK-067 evidence
+    - TASK-068 evidence
+    - TASK-069 evidence
+    - TASK-070 evidence
+    - TASK-071 evidence
+    - TASK-072 evidence
+    outputs:
+    - frontend/e2e/
+    - docs/technical/migration-wdp.md
+    - docs/technical/release-checklist.md
+    - .github/workflows/
+    invariants:
+    - INV-01
+    - INV-05
+    - INV-06
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Adapt only the assigned WDP paths at 1cea2b7; retain Vietnamese product copy and the existing
+      API prefixes. Keep tasks below five estimated hours where practical; integration and staff queues may require
+      splitting after inspection. Backend integration evidence is required before marking a feature task done.
+    baseline_refs:
+    - WDP@1cea2b7:frontend/e2e/
 verification:
   thresholds:
     standard: 0.95
