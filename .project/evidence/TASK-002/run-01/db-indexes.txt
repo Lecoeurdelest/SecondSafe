@@ -1,0 +1,112 @@
+Command: npm run db:indexes
+
+> secondsafe-backend@0.1.0 db:indexes
+> node create-indexes.js
+
+Category:
+  - _id_: [["_id",1]]
+  - name_1: [["name",1]]
+  - slug_1: [["slug",1]]
+Conversation:
+  - _id_: [["_id",1]]
+  - buyerId_1: [["buyerId",1]]
+  - sellerId_1: [["sellerId",1]]
+  - productId_1: [["productId",1]]
+  - lastMessageAt_1: [["lastMessageAt",1]]
+  - buyerId_1_sellerId_1_productId_1: [["buyerId",1],["sellerId",1],["productId",1]]
+  - lastMessageAt_-1: [["lastMessageAt",-1]]
+Delivery:
+  - _id_: [["_id",1]]
+  - orderId_1: [["orderId",1]]
+  - status_1_createdAt_-1: [["status",1],["createdAt",-1]]
+  - trackingNumber_1: [["trackingNumber",1]]
+Dispute:
+  - _id_: [["_id",1]]
+  - orderId_1: [["orderId",1]]
+  - status_1_createdAt_-1: [["status",1],["createdAt",-1]]
+  - buyerId_1_status_1: [["buyerId",1],["status",1]]
+  - sellerId_1_status_1: [["sellerId",1],["status",1]]
+EscrowHold:
+  - _id_: [["_id",1]]
+  - orderId_1: [["orderId",1]]
+  - status_1: [["status",1]]
+  - createdAt_-1: [["createdAt",-1]]
+Favorite:
+  - _id_: [["_id",1]]
+  - user_1: [["user",1]]
+  - product_1: [["product",1]]
+  - user_1_product_1: [["user",1],["product",1]]
+Message:
+  - _id_: [["_id",1]]
+  - conversationId_1: [["conversationId",1]]
+  - senderId_1: [["senderId",1]]
+  - isRead_1: [["isRead",1]]
+  - conversationId_1_createdAt_-1: [["conversationId",1],["createdAt",-1]]
+  - conversationId_1_isRead_1: [["conversationId",1],["isRead",1]]
+Notification:
+  - _id_: [["_id",1]]
+  - recipientId_1: [["recipientId",1]]
+  - recipientId_1_isRead_1_createdAt_-1: [["recipientId",1],["isRead",1],["createdAt",-1]]
+  - recipientId_1_type_1: [["recipientId",1],["type",1]]
+  - recipientId_1_productId_1_createdAt_-1: [["recipientId",1],["productId",1],["createdAt",-1]]
+Order:
+  - _id_: [["_id",1]]
+  - orderCode_1: [["orderCode",1]]
+  - buyerId_1: [["buyerId",1]]
+  - sellerId_1: [["sellerId",1]]
+  - buyerId_1_status_1: [["buyerId",1],["status",1]]
+  - sellerId_1_status_1: [["sellerId",1],["status",1]]
+  - createdAt_-1: [["createdAt",-1]]
+  - status_1_shippedAt_1: [["status",1],["shippedAt",1]]
+  - status_1_deliveredAt_1: [["status",1],["deliveredAt",1]]
+  - status_1_paymentDeadline_1: [["status",1],["paymentDeadline",1]]
+Product:
+  - _id_: [["_id",1]]
+  - seller_1: [["seller",1]]
+  - title_text_description_text: [["_fts","text"],["_ftsx",1]]
+  - status_1_createdAt_-1: [["status",1],["createdAt",-1]]
+  - category_1: [["category",1]]
+  - categories_1: [["categories",1]]
+  - price_1: [["price",1]]
+PurchaseRequest:
+  - _id_: [["_id",1]]
+  - listingId_1: [["listingId",1]]
+  - buyerId_1: [["buyerId",1]]
+  - sellerId_1: [["sellerId",1]]
+  - initiatedBy_1: [["initiatedBy",1]]
+  - sellerId_1_status_1: [["sellerId",1],["status",1]]
+  - buyerId_1_status_1: [["buyerId",1],["status",1]]
+  - initiatedBy_1_status_1: [["initiatedBy",1],["status",1]]
+  - createdAt_-1: [["createdAt",-1]]
+Report:
+  - _id_: [["_id",1]]
+  - reporterId_1: [["reporterId",1]]
+  - reportedUserId_1: [["reportedUserId",1]]
+  - productId_1: [["productId",1]]
+  - status_1_createdAt_-1: [["status",1],["createdAt",-1]]
+  - reportType_1_status_1: [["reportType",1],["status",1]]
+  - productId_1_status_1: [["productId",1],["status",1]]
+Review:
+  - _id_: [["_id",1]]
+  - orderId_1: [["orderId",1]]
+  - reviewerId_1: [["reviewerId",1]]
+  - reviewedUserId_1: [["reviewedUserId",1]]
+  - reviewedUserId_1_status_1_createdAt_-1: [["reviewedUserId",1],["status",1],["createdAt",-1]]
+  - reviewerId_1_createdAt_-1: [["reviewerId",1],["createdAt",-1]]
+  - rating_1: [["rating",1]]
+Transaction:
+  - _id_: [["_id",1]]
+  - userId_1_type_1: [["userId",1],["type",1]]
+  - userId_1_createdAt_-1: [["userId",1],["createdAt",-1]]
+  - status_1_createdAt_-1: [["status",1],["createdAt",-1]]
+  - vnpayTransactionId_1: [["vnpayTransactionId",1]]
+User:
+  - _id_: [["_id",1]]
+  - email_1: [["email",1]]
+Wallet:
+  - _id_: [["_id",1]]
+  - userId_1: [["userId",1]]
+
+✓ Indexes created for 16 models
+
+exit_code=0

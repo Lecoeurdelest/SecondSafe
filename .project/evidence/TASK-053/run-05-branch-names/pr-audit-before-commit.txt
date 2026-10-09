@@ -1,0 +1,37 @@
+PASS: feature/task-053-migration-plan -> develop; 4 task commits
+PASS: PR author Lecoeurdelest; 4 new commits have the sole authorized author and committer
+PASS: #75 -> #88; original history, runtime files and draft state retained
+PASS: feature/task-003-http-foundation -> feature/task-053-migration-plan; 1 task commits
+PASS: PR author Lecoeurdelest; 2 new commits have the sole authorized author and committer
+PASS: #76 -> #89; original history, runtime files and draft state retained
+PASS: feature/task-004-business-config -> feature/task-003-http-foundation; 1 task commits
+PASS: PR author Lecoeurdelest; 2 new commits have the sole authorized author and committer
+PASS: #77 -> #90; original history, runtime files and draft state retained
+PASS: feature/task-002-database-verification -> feature/task-004-business-config; 2 task commits
+PASS: PR author Lecoeurdelest; 3 new commits have the sole authorized author and committer
+PASS: #78 -> #91; original history, runtime files and draft state retained
+PASS: feature/task-054-web-dependencies -> feature/task-002-database-verification; 1 task commits
+PASS: PR author Lecoeurdelest; 2 new commits have the sole authorized author and committer
+PASS: #83 -> #92; original history, runtime files and draft state retained
+PASS: feature/task-054-web-assets -> feature/task-054-web-dependencies; 1 task commits
+PASS: PR author Lecoeurdelest; 2 new commits have the sole authorized author and committer
+PASS: #84 -> #93; original history, runtime files and draft state retained
+PASS: feature/task-054-web-foundation -> feature/task-054-web-assets; 2 task commits
+PASS: PR author Lecoeurdelest; 4 new commits have the sole authorized author and committer
+PASS: #79 -> #94; original history, runtime files and draft state retained
+PASS: feature/task-005-jwt-guards -> feature/task-054-web-foundation; 1 task commits
+PASS: PR author Lecoeurdelest; 3 new commits have the sole authorized author and committer
+PASS: #81 -> #95; original history, runtime files and draft state retained
+PASS: feature/task-007-email-otp -> feature/task-005-jwt-guards; 2 task commits
+PASS: PR author Lecoeurdelest; 4 new commits have the sole authorized author and committer
+PASS: #82 -> #96; original history, runtime files and draft state retained
+PASS: feature/task-017-categories-api -> feature/task-007-email-otp; 1 task commits
+PASS: PR author Lecoeurdelest; 4 new commits have the sole authorized author and committer
+PASS: #85 -> #97; original history, runtime files and draft state retained
+PASS: feature/task-008-auth-rate-limits -> feature/task-017-categories-api; 3 task commits
+PASS: PR author Lecoeurdelest; 6 new commits have the sole authorized author and committer
+PASS: #86 -> #98; original history, runtime files and draft state retained
+PASS: feature/task-053-gitflow-checks -> feature/task-003-http-foundation; 2 task commits
+PASS: PR author Lecoeurdelest; 2 new commits have the sole authorized author and committer
+PASS: #87 -> #99; original history, runtime files and draft state retained
+PASS: no codex branch refs locally/remotely; main/develop unchanged; all 12 replacement PRs have correct heads/bases, original history and unchanged runtime files

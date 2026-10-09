@@ -1,0 +1,10 @@
+Command: npm run db:migrate
+
+> secondsafe-backend@0.1.0 db:migrate
+> node migrate-data-consistency.js
+
+=== Migration summary ===
+Product categories: { matched: 80, modified: 80 }
+Chat encryption: { matched: 0, modified: 0 }
+
+exit_code=0

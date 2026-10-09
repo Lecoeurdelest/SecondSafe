@@ -1,0 +1,404 @@
+{
+  "analyzer": "@babel/parser",
+  "version": "7.29.9",
+  "limitation": "AST-derived branch/call/data-flow inventory for manual review; no calibrated confidence or complete formal semantics claimed",
+  "files": [
+    {
+      "file": "backend/src/common/utils/jwt.util.js",
+      "functions": [
+        {
+          "name": "invalidToken",
+          "line": 4,
+          "parameters": [
+            "message = 'Token không hợp lệ'"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "Object.assign(new Error(message), { statusCode: 401 })"
+          ],
+          "throws": [],
+          "calls": [
+            "Object.assign"
+          ]
+        },
+        {
+          "name": "signingSecret",
+          "line": 8,
+          "parameters": [],
+          "branches": [
+            {
+              "test": "!process.env.JWT_SECRET",
+              "line": 9,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "process.env.JWT_SECRET"
+          ],
+          "throws": [
+            "new Error('Missing JWT_SECRET')"
+          ],
+          "calls": []
+        },
+        {
+          "name": "validUserId",
+          "line": 13,
+          "parameters": [
+            "value"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "/^[a-f\\d]{24}$/i.test(String(value || ''))"
+          ],
+          "throws": [],
+          "calls": [
+            "/^[a-f\\d]{24}$/i.test",
+            "String"
+          ]
+        },
+        {
+          "name": "validClaims",
+          "line": 17,
+          "parameters": [
+            "decoded"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "Boolean(decoded) && typeof decoded === 'object' && typeof decoded.userId === 'string'\n    && validUserId(decoded.userId) && Number.isSafeInteger(decoded.exp)"
+          ],
+          "throws": [],
+          "calls": [
+            "Boolean",
+            "validUserId",
+            "Number.isSafeInteger"
+          ]
+        },
+        {
+          "name": "generateJWT",
+          "line": 22,
+          "parameters": [
+            "payload",
+            "expiresIn = business.jwtTtlSeconds"
+          ],
+          "branches": [
+            {
+              "test": "!payload || !validUserId(payload.userId)",
+              "line": 23,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "jwt.sign({ userId: String(payload.userId) }, signingSecret(), { algorithm: 'HS256', expiresIn })"
+          ],
+          "throws": [
+            "new Error('JWT payload must contain a valid userId')"
+          ],
+          "calls": [
+            "validUserId",
+            "jwt.sign",
+            "String",
+            "signingSecret"
+          ]
+        },
+        {
+          "name": "verifyToken",
+          "line": 27,
+          "parameters": [
+            "token"
+          ],
+          "branches": [
+            {
+              "test": "typeof token !== 'string' || !token.trim()",
+              "line": 28,
+              "then": "ThrowStatement",
+              "else": null
+            },
+            {
+              "exception_edge": true,
+              "finally": false,
+              "line": 30
+            },
+            {
+              "test": "!validClaims(decoded)",
+              "line": 32,
+              "then": "ThrowStatement",
+              "else": null
+            },
+            {
+              "test": "error.name === 'TokenExpiredError'",
+              "then": "'Token đã hết hạn'",
+              "else": "'Token không hợp lệ'"
+            }
+          ],
+          "bindings": [
+            {
+              "target": "secret",
+              "source": "signingSecret()"
+            },
+            {
+              "target": "decoded",
+              "source": "jwt.verify(token, secret, { algorithms: ['HS256'] })"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "decoded"
+          ],
+          "throws": [
+            "invalidToken()",
+            "invalidToken()",
+            "invalidToken(error.name === 'TokenExpiredError' ? 'Token đã hết hạn' : 'Token không hợp lệ')"
+          ],
+          "calls": [
+            "token.trim",
+            "invalidToken",
+            "signingSecret",
+            "jwt.verify",
+            "validClaims",
+            "invalidToken",
+            "invalidToken"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/common/middlewares/auth.middleware.js",
+      "functions": [
+        {
+          "name": "requestUser",
+          "line": 6,
+          "parameters": [
+            "req"
+          ],
+          "branches": [
+            {
+              "test": "!bearer",
+              "line": 9,
+              "then": "ThrowStatement",
+              "else": null
+            },
+            {
+              "test": "!user || !['user', 'moderator', 'admin'].includes(user.role)",
+              "line": 12,
+              "then": "BlockStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "header",
+              "source": "req.headers.authorization"
+            },
+            {
+              "target": "bearer",
+              "source": "typeof header === 'string' && /^Bearer\\s+(\\S+)$/i.exec(header)"
+            },
+            {
+              "target": "decoded",
+              "source": "verifyToken(bearer[1])"
+            },
+            {
+              "target": "user",
+              "source": "await User.findById(decoded.userId).select(AUTH_FIELDS).lean()"
+            }
+          ],
+          "assignments": [],
+          "awaits": [
+            "User.findById(decoded.userId).select(AUTH_FIELDS).lean()"
+          ],
+          "returns": [
+            "{\n    userId: user._id, email: user.email, fullName: user.fullName, role: user.role,\n    isSellingRestricted: Boolean(user.isSellingRestricted), sellingRestrictedUntil: user.sellingRestrictedUntil || null\n  }"
+          ],
+          "throws": [
+            "Object.assign(new Error('Vui lòng đăng nhập'), { statusCode: 401 })",
+            "Object.assign(new Error('Thông tin xác thực không hợp lệ'), { statusCode: 401 })"
+          ],
+          "calls": [
+            "/^Bearer\\s+(\\S+)$/i.exec",
+            "Object.assign",
+            "verifyToken",
+            "User.findById(decoded.userId).select(AUTH_FIELDS).lean",
+            "User.findById(decoded.userId).select",
+            "User.findById",
+            "['user', 'moderator', 'admin'].includes",
+            "Object.assign",
+            "Boolean"
+          ]
+        },
+        {
+          "name": "authenticate",
+          "line": 21,
+          "parameters": [
+            "req",
+            "res",
+            "next"
+          ],
+          "branches": [
+            {
+              "exception_edge": true,
+              "finally": false,
+              "line": 22
+            }
+          ],
+          "bindings": [],
+          "assignments": [
+            {
+              "target": "req.user",
+              "source": "await requestUser(req)"
+            }
+          ],
+          "awaits": [
+            "requestUser(req)"
+          ],
+          "returns": [
+            "next()",
+            "next(error)"
+          ],
+          "throws": [],
+          "calls": [
+            "requestUser",
+            "next",
+            "next"
+          ]
+        },
+        {
+          "name": "optionalAuthenticate",
+          "line": 30,
+          "parameters": [
+            "req",
+            "res",
+            "next"
+          ],
+          "branches": [
+            {
+              "test": "!req.headers.authorization",
+              "line": 32,
+              "then": "ReturnStatement",
+              "else": null
+            },
+            {
+              "exception_edge": true,
+              "finally": false,
+              "line": 33
+            },
+            {
+              "test": "error.statusCode === 401",
+              "then": "next()",
+              "else": "next(error)"
+            }
+          ],
+          "bindings": [],
+          "assignments": [
+            {
+              "target": "req.user",
+              "source": "await requestUser(req)"
+            }
+          ],
+          "awaits": [
+            "requestUser(req)"
+          ],
+          "returns": [
+            "next()",
+            "next()",
+            "error.statusCode === 401 ? next() : next(error)"
+          ],
+          "throws": [],
+          "calls": [
+            "next",
+            "requestUser",
+            "next",
+            "next",
+            "next"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/common/middlewares/role.middleware.js",
+      "functions": [
+        {
+          "name": "requireRole",
+          "line": 3,
+          "parameters": [
+            "...roles"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "(req, res, next) => {\n    if (!req.user?.role) return sendError(res, 401, 'Vui lòng đăng nhập');\n    const allowed = roles.includes(req.user.role) || (req.user.role === 'admin' && roles.includes('moderator'));\n    if (!allowed) return sendError(res, 403, 'Bạn không có quyền truy cập chức năng này');\n    return next();\n  }"
+          ],
+          "throws": [],
+          "calls": []
+        },
+        {
+          "name": "anonymous@4",
+          "line": 4,
+          "parameters": [
+            "req",
+            "res",
+            "next"
+          ],
+          "branches": [
+            {
+              "test": "!req.user?.role",
+              "line": 5,
+              "then": "ReturnStatement",
+              "else": null
+            },
+            {
+              "test": "!allowed",
+              "line": 7,
+              "then": "ReturnStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "allowed",
+              "source": "roles.includes(req.user.role) || (req.user.role === 'admin' && roles.includes('moderator'))"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "sendError(res, 401, 'Vui lòng đăng nhập')",
+            "sendError(res, 403, 'Bạn không có quyền truy cập chức năng này')",
+            "next()"
+          ],
+          "throws": [],
+          "calls": [
+            "sendError",
+            "roles.includes",
+            "roles.includes",
+            "sendError",
+            "next"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/common/middlewares/admin.middleware.js",
+      "functions": []
+    }
+  ]
+}

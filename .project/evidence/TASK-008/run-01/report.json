@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-008",
+  "spec_hash": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
+  "source_hash": "9b5151ca631c631d8af0bb0b998c59cc137a3c3e15cf139642a668e16a75db25",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "Bounded AST inventory supports manual review; it is not a complete formal verifier",
+    "No applicable calibrated evaluator exists"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-SEC-05-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-008/run-01/jest.txt"
+          ]
+        },
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-008/run-01/ast-flow.json",
+            ".project/evidence/TASK-008/run-01/complexity.txt",
+            ".project/evidence/TASK-008/run-01/flow-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+
+> secondsafe-backend@0.1.0 test
+> jest --runInBand
+
+FAIL tests/scaffold.test.js
+  ● Test suite failed to run
+
+    TypeError: Router.use() requires a middleware function
+
+      11 |
+      12 | // Apply authentication middleware to all routes
+    > 13 | router.use(authenticate);
+         |        ^
+      14 |
+      15 | /**
+      16 |  * Purchase Request Routes
+
+      at router.use (node_modules/express/lib/router/index.js:462:11)
+      at Object.use (src/modules/orders/order.route.js:13:8)
+      at Object.require (src/routes.js:16:23)
+      at Object.require (src/app.js:3:16)
+      at Object.require (tests/scaffold.test.js:9:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.296 s
+Ran all test suites.
+
+exit_code=1

@@ -2,17 +2,17 @@
 id: TASK-001
 title: Scaffold the backend database layer and control framework
 execution_status: done
-relevance: current
+relevance: superseded
 depends_on: []
 supersedes: []
-superseded_by: null
+superseded_by: TASK-053
 ---
 
 # TASK-001 — Scaffold the backend database layer and control framework
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `done` — Scaffold verified; MongoDB run delegated to TASK-002
+**Current state:** `done` — Historical empty scaffold superseded by D-009/D-010 migration; original evidence retained; current schema and boot regression checks pass in TASK-003
 
 ## Traceability
 
@@ -21,7 +21,7 @@ superseded_by: null
 | Requirements | [FR-SYS-06](../requirements/FR-SYS.md#fr-sys-06--database-initialization-scripts), [NFR-SEC-02](../requirements/NFR.md#nfr-sec-02--one-strong-password-policy), [NFR-SEC-08](../requirements/NFR.md#nfr-sec-08--secrets-management), [NFR-REL-05](../requirements/NFR.md#nfr-rel-05--database-constraints), [NFR-PERF-02](../requirements/NFR.md#nfr-perf-02--query-indexes), [NFR-COMP-02](../requirements/NFR.md#nfr-comp-02--portable-runtime), [NFR-MNT-01](../requirements/NFR.md#nfr-mnt-01--modular-structure), [NFR-MNT-02](../requirements/NFR.md#nfr-mnt-02--no-duplicate-or-dead-code), [NFR-MNT-04](../requirements/NFR.md#nfr-mnt-04--project-documentation), [NFR-MNT-05](../requirements/NFR.md#nfr-mnt-05--plan-traceability) |
 | Acceptance criteria | `AC-SYS-06-1`, `AC-SYS-06-2`, `AC-NFR-SEC-02-4`, `AC-NFR-SEC-08-1`, `AC-NFR-REL-05-1`, `AC-NFR-PERF-02-1`, `AC-NFR-COMP-02-1`, `AC-NFR-MNT-01-1`, `AC-NFR-MNT-01-2`, `AC-NFR-MNT-02-1`, `AC-NFR-MNT-04-1`, `AC-NFR-MNT-05-1` |
 | Components | `CMP-DATA`, `CMP-PLATFORM`, `CMP-CONTROL` |
-| Decisions | `D-001` (accepted), `D-002` (accepted), `D-003` (accepted), `D-004` (accepted), `D-005` (accepted), `D-006` (accepted), `D-007` (accepted), `D-008` (accepted) |
+| Decisions | `D-001` (accepted), `D-002` (superseded), `D-003` (accepted), `D-004` (accepted), `D-005` (accepted), `D-006` (accepted), `D-007` (accepted), `D-008` (accepted) |
 | Milestone | M0 Scaffold |
 | Baseline references | `WDP@1cea2b7:backend/src/modules/*/*.model.js`, `WDP@1cea2b7:backend/src/seeds/`, `WDP@1cea2b7:backend/create-admin.js` |
 

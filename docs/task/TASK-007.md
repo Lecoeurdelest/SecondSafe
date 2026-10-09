@@ -1,7 +1,7 @@
 ---
 id: TASK-007
 title: Email delivery and one-time code store
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-003, TASK-004]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-007 — Email delivery and one-time code store
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

@@ -22,4 +22,5 @@ IDs come from the Project Tracking workbook (BASE-TRACKING) and are never renumb
 | [FR-MOD.md](FR-MOD.md) | Moderation | 10 | 17 |
 | [FR-ADM.md](FR-ADM.md) | Administration | 8 | 8 |
 | [FR-SYS.md](FR-SYS.md) | Scheduled jobs and data operations | 6 | 8 |
-| [NFR.md](NFR.md) | Quality requirements | 38 | 57 |
+| [FR-WEB.md](FR-WEB.md) | Web client migration | 20 | 20 |
+| [NFR.md](NFR.md) | Quality requirements | 39 | 58 |

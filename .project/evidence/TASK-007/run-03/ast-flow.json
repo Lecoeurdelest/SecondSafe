@@ -1,0 +1,885 @@
+{
+  "analyzer": "@babel/parser",
+  "version": "7.29.9",
+  "limitation": "AST-derived branch/call/data-flow inventory for manual review; no calibrated confidence or complete formal semantics claimed",
+  "files": [
+    {
+      "file": "backend/src/common/utils/email.util.js",
+      "functions": [
+        {
+          "name": "anonymous@5",
+          "line": 5,
+          "parameters": [],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "Object.assign"
+          ]
+        },
+        {
+          "name": "anonymous@6",
+          "line": 6,
+          "parameters": [
+            "value"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "String(value).replace",
+            "String"
+          ]
+        },
+        {
+          "name": "anonymous@6",
+          "line": 6,
+          "parameters": [
+            "character"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": []
+        },
+        {
+          "name": "smtpOptions",
+          "line": 8,
+          "parameters": [
+            "env",
+            "timeoutMs"
+          ],
+          "branches": [
+            {
+              "test": "!auth.user || !auth.pass",
+              "line": 11,
+              "then": "ThrowStatement",
+              "else": null
+            },
+            {
+              "test": "!env.SMTP_HOST",
+              "line": 12,
+              "then": "ReturnStatement",
+              "else": null
+            },
+            {
+              "test": "!Number.isInteger(port) || port < 1 || port > 65535",
+              "line": 14,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "auth",
+              "source": "{ user: env.SMTP_USER || env.EMAIL_USER, pass: env.SMTP_PASS || env.EMAIL_PASS }"
+            },
+            {
+              "target": "timeouts",
+              "source": "{ connectionTimeout: timeoutMs, greetingTimeout: timeoutMs, socketTimeout: timeoutMs }"
+            },
+            {
+              "target": "port",
+              "source": "Number(env.SMTP_PORT || 587)"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "{ service: 'gmail', auth, ...timeouts }",
+            "{ host: env.SMTP_HOST, port, secure: env.SMTP_SECURE === 'true', auth, ...timeouts }"
+          ],
+          "throws": [
+            "deliveryError()",
+            "deliveryError()"
+          ],
+          "calls": [
+            "deliveryError",
+            "Number",
+            "Number.isInteger",
+            "deliveryError"
+          ]
+        },
+        {
+          "name": "createMailer",
+          "line": 18,
+          "parameters": [
+            "{ env = process.env, transport, timeoutMs = 10000 } = {}"
+          ],
+          "branches": [
+            {
+              "test": "!Number.isSafeInteger(timeoutMs) || timeoutMs <= 0",
+              "line": 19,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "sender",
+              "source": "transport"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "{\n    sendRegisterOtpEmail: (to, code) => sendCode(to, code, { subject: 'Mã xác thực đăng ký tài khoản', title: 'Xác thực tài khoản', description: 'Sử dụng mã dưới đây để hoàn tất đăng ký SecondSafe.', lifetimeMs: business.otpTtlMs }),\n    sendLogin2faOtpEmail: (to, code) => sendCode(to, code, { subject: 'Mã xác thực đăng nhập 2FA', title: 'Xác thực đăng nhập', description: 'Sử dụng mã dưới đây để hoàn tất đăng nhập SecondSafe.', lifetimeMs: business.otpTtlMs }),\n    sendRecoveryEmail: (to, code) => sendCode(to, code, { subject: 'Khôi phục mật khẩu SecondSafe', title: 'Khôi phục mật khẩu', description: 'Sử dụng mã khôi phục dưới đây để đặt mật khẩu mới.', lifetimeMs: business.resetCredentialTtlMs })\n  }"
+          ],
+          "throws": [
+            "new TypeError('SMTP timeout must be positive')"
+          ],
+          "calls": [
+            "Number.isSafeInteger"
+          ]
+        },
+        {
+          "name": "sendCode",
+          "line": 22,
+          "parameters": [
+            "to",
+            "code",
+            "{ subject, title, description, lifetimeMs }"
+          ],
+          "branches": [
+            {
+              "test": "typeof to !== 'string' || !/^[^\\s@,;<>]+@[^\\s@,;<>]+\\.[^\\s@,;<>]+$/.test(to)",
+              "line": 23,
+              "then": "BlockStatement",
+              "else": null
+            },
+            {
+              "exception_edge": true,
+              "finally": true,
+              "line": 27
+            },
+            {
+              "test": "result?.rejected?.length",
+              "line": 36,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "timer",
+              "source": null
+            },
+            {
+              "target": "mail",
+              "source": "{\n        from: { name: 'SecondSafe', address: env.SMTP_USER || env.EMAIL_USER }, to, subject,\n        text: `${title}\\n${description}\\n${code}\\nHiệu lực: ${Math.ceil(lifetimeMs / 60000)} phút. Không chia sẻ mã này với bất kỳ ai.`,\n        html: `<h2>${escapeHtml(title)}</h2><p>${escapeHtml(description)}</p><p><strong>${escapeHtml(code)}</strong></p><p>Hiệu lực: ${Math.ceil(lifetimeMs / 60000)} phút. Không chia sẻ mã này với bất kỳ ai.</p>`\n      }"
+            },
+            {
+              "target": "deadline",
+              "source": "new Promise((resolve, reject) => { timer = setTimeout(() => reject(deliveryError()), timeoutMs); })"
+            },
+            {
+              "target": "result",
+              "source": "await Promise.race([sender.sendMail(mail), deadline])"
+            }
+          ],
+          "assignments": [
+            {
+              "target": "sender",
+              "source": "nodemailer.createTransport(smtpOptions(env, timeoutMs))"
+            }
+          ],
+          "awaits": [
+            "Promise.race([sender.sendMail(mail), deadline])"
+          ],
+          "returns": [
+            "{ delivered: true }"
+          ],
+          "throws": [
+            "Object.assign(new Error('Địa chỉ email không hợp lệ'), { statusCode: 400 })",
+            "deliveryError()",
+            "deliveryError()"
+          ],
+          "calls": [
+            "/^[^\\s@,;<>]+@[^\\s@,;<>]+\\.[^\\s@,;<>]+$/.test",
+            "Object.assign",
+            "nodemailer.createTransport",
+            "smtpOptions",
+            "Math.ceil",
+            "escapeHtml",
+            "escapeHtml",
+            "escapeHtml",
+            "Math.ceil",
+            "Promise.race",
+            "sender.sendMail",
+            "deliveryError",
+            "deliveryError",
+            "clearTimeout"
+          ]
+        },
+        {
+          "name": "anonymous@34",
+          "line": 34,
+          "parameters": [
+            "resolve",
+            "reject"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [
+            {
+              "target": "timer",
+              "source": "setTimeout(() => reject(deliveryError()), timeoutMs)"
+            }
+          ],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "setTimeout"
+          ]
+        },
+        {
+          "name": "anonymous@34",
+          "line": 34,
+          "parameters": [],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "reject",
+            "deliveryError"
+          ]
+        },
+        {
+          "name": "anonymous@46",
+          "line": 46,
+          "parameters": [
+            "to",
+            "code"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "sendCode"
+          ]
+        },
+        {
+          "name": "anonymous@47",
+          "line": 47,
+          "parameters": [
+            "to",
+            "code"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "sendCode"
+          ]
+        },
+        {
+          "name": "anonymous@48",
+          "line": 48,
+          "parameters": [
+            "to",
+            "code"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "sendCode"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/common/utils/otp.manager.js",
+      "functions": [
+        {
+          "name": "anonymous@5",
+          "line": 5,
+          "parameters": [],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": []
+        },
+        {
+          "name": "anonymous@6",
+          "line": 6,
+          "parameters": [
+            "value"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "crypto.createHash('sha256').update(value).digest",
+            "crypto.createHash('sha256').update",
+            "crypto.createHash"
+          ]
+        },
+        {
+          "name": "codeKey",
+          "line": 8,
+          "parameters": [
+            "subject",
+            "purpose"
+          ],
+          "branches": [
+            {
+              "test": "typeof subject !== 'string' || !subject.trim() || typeof purpose !== 'string' || !/^[a-z][a-z0-9-]{0,39}$/.test(purpose)",
+              "line": 9,
+              "then": "BlockStatement",
+              "else": null
+            }
+          ],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "`code:${purpose}:${digest(subject.trim().toLowerCase()).toString('hex')}`"
+          ],
+          "throws": [
+            "Object.assign(new Error('Thông tin xác thực không hợp lệ'), { statusCode: 400 })"
+          ],
+          "calls": [
+            "subject.trim",
+            "/^[a-z][a-z0-9-]{0,39}$/.test",
+            "Object.assign",
+            "digest(subject.trim().toLowerCase()).toString",
+            "digest",
+            "subject.trim().toLowerCase",
+            "subject.trim"
+          ]
+        },
+        {
+          "name": "matchesCode",
+          "line": 15,
+          "parameters": [
+            "record",
+            "code"
+          ],
+          "branches": [
+            {
+              "test": "typeof code !== 'string' || code.length > 128",
+              "line": 16,
+              "then": "ReturnStatement",
+              "else": null
+            }
+          ],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "false",
+            "crypto.timingSafeEqual(digest(`${record.salt}:${code}`), Buffer.from(record.hash, 'hex'))"
+          ],
+          "throws": [],
+          "calls": [
+            "crypto.timingSafeEqual",
+            "digest",
+            "Buffer.from"
+          ]
+        },
+        {
+          "name": "createCodeManager",
+          "line": 20,
+          "parameters": [
+            "{ now = Date.now, store = createMemoryStore({ now }) } = {}"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "{\n    issue, consume, invalidate,\n    generateAndSaveOtp: (email, userData, purpose = 'register') => issue(email, { payload: userData, purpose }),\n    verifyOtp: (email, code, purpose = 'register') => consume(email, String(code), { purpose })\n  }"
+          ],
+          "throws": [],
+          "calls": [
+            "createMemoryStore"
+          ]
+        },
+        {
+          "name": "issue",
+          "line": 21,
+          "parameters": [
+            "subject",
+            "{ purpose = 'register', payload = null, ttlMs = business.otpTtlMs, token = false } = {}"
+          ],
+          "branches": [
+            {
+              "test": "!Number.isSafeInteger(ttlMs) || ttlMs <= 0",
+              "line": 23,
+              "then": "ThrowStatement",
+              "else": null
+            },
+            {
+              "test": "token",
+              "then": "crypto.randomBytes(32).toString('hex')",
+              "else": "String(crypto.randomInt(100000, 1000000))"
+            }
+          ],
+          "bindings": [
+            {
+              "target": "key",
+              "source": "codeKey(subject, purpose)"
+            },
+            {
+              "target": "code",
+              "source": "token ? crypto.randomBytes(32).toString('hex') : String(crypto.randomInt(100000, 1000000))"
+            },
+            {
+              "target": "salt",
+              "source": "crypto.randomBytes(16).toString('hex')"
+            },
+            {
+              "target": "record",
+              "source": "{ hash: digest(`${salt}:${code}`).toString('hex'), salt, payload, attempts: 0, expiresAt: now() + ttlMs }"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "store.update(key, () => ({ record, result: code }))"
+          ],
+          "throws": [
+            "new TypeError('Code lifetime must be a positive integer')"
+          ],
+          "calls": [
+            "codeKey",
+            "Number.isSafeInteger",
+            "crypto.randomBytes(32).toString",
+            "crypto.randomBytes",
+            "String",
+            "crypto.randomInt",
+            "crypto.randomBytes(16).toString",
+            "crypto.randomBytes",
+            "digest(`${salt}:${code}`).toString",
+            "digest",
+            "now",
+            "store.update"
+          ]
+        },
+        {
+          "name": "anonymous@27",
+          "line": 27,
+          "parameters": [],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": []
+        },
+        {
+          "name": "consume",
+          "line": 30,
+          "parameters": [
+            "subject",
+            "code",
+            "{ purpose = 'register' } = {}"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "store.update(codeKey(subject, purpose), record => {\n      if (!record || record.expiresAt <= now()) return { result: invalid() };\n      if (matchesCode(record, code)) return { result: { valid: true, payload: record.payload, userData: record.payload } };\n      record.attempts += 1;\n      return { record: record.attempts < business.otpMaxAttempts ? record : undefined, result: invalid() };\n    })"
+          ],
+          "throws": [],
+          "calls": [
+            "store.update",
+            "codeKey"
+          ]
+        },
+        {
+          "name": "anonymous@31",
+          "line": 31,
+          "parameters": [
+            "record"
+          ],
+          "branches": [
+            {
+              "test": "!record || record.expiresAt <= now()",
+              "line": 32,
+              "then": "ReturnStatement",
+              "else": null
+            },
+            {
+              "test": "matchesCode(record, code)",
+              "line": 33,
+              "then": "ReturnStatement",
+              "else": null
+            },
+            {
+              "test": "record.attempts < business.otpMaxAttempts",
+              "then": "record",
+              "else": "undefined"
+            }
+          ],
+          "bindings": [],
+          "assignments": [
+            {
+              "target": "record.attempts",
+              "source": "1"
+            }
+          ],
+          "awaits": [],
+          "returns": [
+            "{ result: invalid() }",
+            "{ result: { valid: true, payload: record.payload, userData: record.payload } }",
+            "{ record: record.attempts < business.otpMaxAttempts ? record : undefined, result: invalid() }"
+          ],
+          "throws": [],
+          "calls": [
+            "now",
+            "invalid",
+            "matchesCode",
+            "invalid"
+          ]
+        },
+        {
+          "name": "invalidate",
+          "line": 39,
+          "parameters": [
+            "subject",
+            "{ purpose = 'register' } = {}"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "store.update(codeKey(subject, purpose), () => ({}))"
+          ],
+          "throws": [],
+          "calls": [
+            "store.update",
+            "codeKey"
+          ]
+        },
+        {
+          "name": "anonymous@40",
+          "line": 40,
+          "parameters": [],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": []
+        },
+        {
+          "name": "anonymous@45",
+          "line": 45,
+          "parameters": [
+            "email",
+            "userData",
+            "purpose = 'register'"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "issue"
+          ]
+        },
+        {
+          "name": "anonymous@46",
+          "line": 46,
+          "parameters": [
+            "email",
+            "code",
+            "purpose = 'register'"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "consume",
+            "String"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/common/utils/expiring-store.util.js",
+      "functions": [
+        {
+          "name": "createMemoryStore",
+          "line": 1,
+          "parameters": [
+            "{ now = Date.now, maxEntries = 10000 } = {}"
+          ],
+          "branches": [
+            {
+              "test": "!Number.isSafeInteger(maxEntries) || maxEntries <= 0",
+              "line": 2,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "records",
+              "source": "new Map()"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "{ update }"
+          ],
+          "throws": [
+            "new TypeError('Store capacity must be positive')"
+          ],
+          "calls": [
+            "Number.isSafeInteger"
+          ]
+        },
+        {
+          "name": "discardExpired",
+          "line": 5,
+          "parameters": [],
+          "branches": [
+            {
+              "test": "record.expiresAt <= now()",
+              "line": 7,
+              "then": "ExpressionStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "[key, record]",
+              "source": null
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "now",
+            "records.delete"
+          ]
+        },
+        {
+          "name": "update",
+          "line": 12,
+          "parameters": [
+            "key",
+            "updater"
+          ],
+          "branches": [
+            {
+              "test": "previous && previous.expiresAt <= now()",
+              "line": 14,
+              "then": "BlockStatement",
+              "else": null
+            },
+            {
+              "test": "!record",
+              "line": 19,
+              "then": "BlockStatement",
+              "else": null
+            },
+            {
+              "test": "!records.has(key) && records.size >= maxEntries",
+              "line": 23,
+              "then": "ExpressionStatement",
+              "else": null
+            },
+            {
+              "test": "!records.has(key) && records.size >= maxEntries",
+              "line": 24,
+              "then": "BlockStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "previous",
+              "source": "records.get(key)"
+            },
+            {
+              "target": "{ record, result }",
+              "source": "updater(structuredClone(previous))"
+            }
+          ],
+          "assignments": [
+            {
+              "target": "previous",
+              "source": "undefined"
+            }
+          ],
+          "awaits": [],
+          "returns": [
+            "result",
+            "result"
+          ],
+          "throws": [
+            "Object.assign(new Error('Dịch vụ xác thực đang bận. Vui lòng thử lại sau.'), { statusCode: 503, expose: true })"
+          ],
+          "calls": [
+            "records.get",
+            "now",
+            "records.delete",
+            "updater",
+            "structuredClone",
+            "records.delete",
+            "records.has",
+            "discardExpired",
+            "records.has",
+            "Object.assign",
+            "records.set",
+            "structuredClone"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/config/business.js",
+      "functions": [
+        {
+          "name": "setting",
+          "line": 1,
+          "parameters": [
+            "env",
+            "name",
+            "fallback",
+            "{ min = 1, max = Number.MAX_SAFE_INTEGER, integer = true } = {}"
+          ],
+          "branches": [
+            {
+              "test": "env[name] === undefined",
+              "line": 2,
+              "then": "ReturnStatement",
+              "else": null
+            },
+            {
+              "test": "/^\\d+(\\.\\d+)?$/.test(raw)",
+              "then": "Number(raw)",
+              "else": "NaN"
+            },
+            {
+              "test": "!Number.isFinite(value) || value < min || value > max || (integer && !Number.isSafeInteger(value))",
+              "line": 5,
+              "then": "BlockStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "raw",
+              "source": "String(env[name]).trim()"
+            },
+            {
+              "target": "value",
+              "source": "/^\\d+(\\.\\d+)?$/.test(raw) ? Number(raw) : NaN"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "fallback",
+            "value"
+          ],
+          "throws": [
+            "new Error(`Invalid business configuration: ${name}`)"
+          ],
+          "calls": [
+            "String(env[name]).trim",
+            "String",
+            "/^\\d+(\\.\\d+)?$/.test",
+            "Number",
+            "Number.isFinite",
+            "Number.isSafeInteger"
+          ]
+        },
+        {
+          "name": "loadBusinessConfig",
+          "line": 11,
+          "parameters": [
+            "env = process.env"
+          ],
+          "branches": [
+            {
+              "test": "topUp.min > topUp.max",
+              "line": 16,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "topUp",
+              "source": "Object.freeze({\n    min: setting(env, 'TOPUP_MIN_AMOUNT', 10000),\n    max: setting(env, 'TOPUP_MAX_AMOUNT', 500000000)\n  })"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "Object.freeze({\n    feeRate: setting(env, 'PLATFORM_FEE_RATE', 0.05, { min: 0, max: 1, integer: false }),\n    topUp,\n    withdrawalMin: setting(env, 'WITHDRAWAL_MIN_AMOUNT', 50000),\n    otpTtlMs: setting(env, 'OTP_TTL_MS', 5 * 60 * 1000),\n    otpMaxAttempts: 5,\n    paymentWindowMs: setting(env, 'PAYMENT_WINDOW_MS', 3 * 60 * 1000),\n    shippingWindowMs: setting(env, 'SHIPPING_WINDOW_MS', 24 * 60 * 60 * 1000),\n    autoCompletionWindowMs: setting(env, 'AUTO_COMPLETION_WINDOW_MS', 5 * 24 * 60 * 60 * 1000),\n    listingMaxAgeMs: setting(env, 'LISTING_MAX_AGE_MS', 30 * 24 * 60 * 60 * 1000),\n    resetCredentialTtlMs: setting(env, 'RESET_CREDENTIAL_TTL_MS', 60 * 60 * 1000),\n    jwtTtlSeconds: setting(env, 'JWT_TTL_SECONDS', 7 * 24 * 60 * 60),\n    reportRestrictionThreshold: setting(env, 'REPORT_RESTRICTION_THRESHOLD', 3),\n    sanctionThresholds: Object.freeze([3, 6, 9]),\n    sanctionDurationsMs: Object.freeze([24 * 60 * 60 * 1000, 7 * 24 * 60 * 60 * 1000, 365 * 24 * 60 * 60 * 1000]),\n    disputeRestrictionThreshold: setting(env, 'DISPUTE_RESTRICTION_THRESHOLD', 3),\n    disputeRestrictionDurationMs: setting(env, 'DISPUTE_RESTRICTION_DURATION_MS', 30 * 24 * 60 * 60 * 1000)\n  })"
+          ],
+          "throws": [
+            "new Error('Invalid business configuration: TOPUP_MIN_AMOUNT exceeds TOPUP_MAX_AMOUNT')"
+          ],
+          "calls": [
+            "Object.freeze",
+            "setting",
+            "setting",
+            "Object.freeze",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "Object.freeze",
+            "Object.freeze",
+            "setting",
+            "setting"
+          ]
+        }
+      ]
+    }
+  ]
+}

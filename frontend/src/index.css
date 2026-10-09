@@ -1,0 +1,12 @@
+body { min-width: 320px; }
+:focus-visible { outline: 3px solid var(--primary-blue); outline-offset: 4px; }
+.skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; padding: 12px; background: white; transform: translateY(-160%); }
+.skip-link:focus { transform: translateY(0); }
+.site-header { background: white; border-bottom: 1px solid var(--border-color); padding: 22px 0; }
+.site-brand { font-size: 24px; font-weight: 700; letter-spacing: -0.6px; }
+.welcome { min-height: 65vh; padding: 88px 0; max-width: 720px; }
+.welcome__eyebrow { color: var(--primary-dark); font-weight: 600; }
+.welcome h1 { font-size: clamp(32px, 5.5vw, 60px); letter-spacing: -1.5px; margin-bottom: 24px; }
+.welcome p { color: var(--gray-700); font-size: 18px; line-height: 1.7; }
+.site-footer { padding: 24px 0; border-top: 1px solid var(--border-color); background: white; color: var(--gray-600); }
+@media (max-width: 576px) { .welcome { padding: 56px 8px; } .welcome p { font-size: 16px; } }

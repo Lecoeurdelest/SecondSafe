@@ -4,7 +4,7 @@
 
 | Concern | Choice |
 |---|---|
-| Runtime | Node.js 18+ (CommonJS) |
+| Runtime | Node.js 20+ (CommonJS); CI uses Node.js 22. SMTP dependency requires Node.js 20+. |
 | HTTP | Express 4 |
 | Database | MongoDB with Mongoose 8. Multi-document transactions need a replica set, including in development. |
 | Real time | Socket.IO (TASK-023) |

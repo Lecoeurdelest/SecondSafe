@@ -1,0 +1,4 @@
+ESLint 8 core cyclomatic complexity maximum 10
+
+exit_code=0
+Cognitive complexity analyzer unavailable; no numeric cognitive score claimed.

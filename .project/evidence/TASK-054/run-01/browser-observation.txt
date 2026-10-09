@@ -1,0 +1,8 @@
+Manual observation using Codex in-app browser against http://127.0.0.1:3000:
+- Vietnamese welcome heading, main landmark, skip link, brand home link and footer are visible.
+- Viewport 360 x 800: window.innerWidth = 360; document.documentElement.scrollWidth = 360; screenshot inspected, no horizontal overflow or clipped text.
+- Viewport 1920 x 1080: window.innerWidth = 1920; document.documentElement.scrollWidth = 1920; heading remains visible.
+- Temporary viewport override reset after inspection.
+- /missing-page shows “Không tìm thấy trang”; clicking “Về trang chủ” returns to / with the welcome heading.
+- Browser developer error log returned an empty list.
+These observations cover only the foundational shell. Full feature/browser journeys remain TASK-073.

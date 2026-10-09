@@ -1,0 +1,138 @@
+{
+  "analyzer": "@babel/parser",
+  "version": "7.29.9",
+  "limitation": "AST-derived branch/call/data-flow inventory for manual review; no calibrated confidence or complete formal semantics claimed",
+  "files": [
+    {
+      "file": "backend/src/modules/products/category.route.js",
+      "functions": []
+    },
+    {
+      "file": "backend/src/modules/products/category.controller.js",
+      "functions": [
+        {
+          "name": "list",
+          "line": 4,
+          "parameters": [
+            "req",
+            "res",
+            "next"
+          ],
+          "branches": [
+            {
+              "exception_edge": true,
+              "finally": false,
+              "line": 5
+            }
+          ],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [
+            "categoryService.listCategories()"
+          ],
+          "returns": [
+            "sendSuccess(res, 200, await categoryService.listCategories())",
+            "next(error)"
+          ],
+          "throws": [],
+          "calls": [
+            "sendSuccess",
+            "categoryService.listCategories",
+            "next"
+          ]
+        },
+        {
+          "name": "getBySlug",
+          "line": 12,
+          "parameters": [
+            "req",
+            "res",
+            "next"
+          ],
+          "branches": [
+            {
+              "exception_edge": true,
+              "finally": false,
+              "line": 13
+            }
+          ],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [
+            "categoryService.getCategoryBySlug(req.params.slug)"
+          ],
+          "returns": [
+            "sendSuccess(res, 200, await categoryService.getCategoryBySlug(req.params.slug))",
+            "next(error)"
+          ],
+          "throws": [],
+          "calls": [
+            "sendSuccess",
+            "categoryService.getCategoryBySlug",
+            "next"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/modules/products/category.service.js",
+      "functions": [
+        {
+          "name": "listCategories",
+          "line": 3,
+          "parameters": [],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "Category.find({ isActive: true }).select('name slug description icon').sort({ name: 1 }).lean()"
+          ],
+          "throws": [],
+          "calls": [
+            "Category.find({ isActive: true }).select('name slug description icon').sort({ name: 1 }).lean",
+            "Category.find({ isActive: true }).select('name slug description icon').sort",
+            "Category.find({ isActive: true }).select",
+            "Category.find"
+          ]
+        },
+        {
+          "name": "getCategoryBySlug",
+          "line": 7,
+          "parameters": [
+            "slug"
+          ],
+          "branches": [
+            {
+              "test": "!category",
+              "line": 9,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "category",
+              "source": "await Category.findOne({ slug, isActive: true }).lean()"
+            }
+          ],
+          "assignments": [],
+          "awaits": [
+            "Category.findOne({ slug, isActive: true }).lean()"
+          ],
+          "returns": [
+            "category"
+          ],
+          "throws": [
+            "Object.assign(new Error('Danh mục không tồn tại'), { statusCode: 404 })"
+          ],
+          "calls": [
+            "Category.findOne({ slug, isActive: true }).lean",
+            "Category.findOne",
+            "Object.assign"
+          ]
+        }
+      ]
+    }
+  ]
+}

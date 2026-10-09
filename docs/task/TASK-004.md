@@ -1,7 +1,7 @@
 ---
 id: TASK-004
 title: Business configuration module
-execution_status: ready
+execution_status: done
 relevance: current
 depends_on: [TASK-001]
 supersedes: []
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `ready` — Dependencies done; ready to start
+**Current state:** `done` — Validated baseline money/time defaults and documented environment overrides; all 43 backend tests pass
 
 ## Traceability
 
@@ -62,8 +62,8 @@ Defaults equal the baseline constants listed in plan.md section 7; the payment w
 
 ## Acceptance criteria and verification
 
-- [ ] `AC-NFR-BIZ-01-1` (NFR-BIZ-01) — Fee rate, top-up bounds and withdrawal minimum are configuration values with the baseline defaults, and all amounts are integer VND. Verify with: behavioral test; `cd backend && npm test`.
-- [ ] `AC-NFR-BIZ-02-1` (NFR-BIZ-02) — OTP lifetime, payment window (decision D-104), shipping window, auto-completion window, listing age, reset lifetime and JWT lifetime are configuration values with the baseline defaults. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-BIZ-01-1` (NFR-BIZ-01) — Fee rate, top-up bounds and withdrawal minimum are configuration values with the baseline defaults, and all amounts are integer VND. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-BIZ-02-1` (NFR-BIZ-02) — OTP lifetime, payment window (decision D-104), shipping window, auto-completion window, listing age, reset lifetime and JWT lifetime are configuration values with the baseline defaults. Verify with: behavioral test; `cd backend && npm test`.
 
 ## Required evidence
 

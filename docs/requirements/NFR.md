@@ -28,7 +28,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-03-1` | REST authentication verifies JWTs signed with JWT_SECRET and enforces the configured expiry. | behavioral test | [TASK-005](../task/TASK-005.md) `[]` |
+| `AC-NFR-SEC-03-1` | REST authentication verifies JWTs signed with JWT_SECRET and enforces the configured expiry. | behavioral test | [TASK-005](../task/TASK-005.md) `[!]` |
 | `AC-NFR-SEC-03-2` | Socket.IO connections are authenticated with the same JWT verification. | behavioral test | [TASK-023](../task/TASK-023.md) `[]` |
 
 ### NFR-SEC-04 — Object-level authorization
@@ -45,8 +45,8 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-05-1` | Login, code requests, code verification and password recovery are rate limited (default 5 per minute per IP and email) and return 429 when exceeded. | behavioral test | [TASK-008](../task/TASK-008.md) `[]` |
-| `AC-NFR-SEC-05-2` | A one-time code is invalidated after 5 wrong attempts. | behavioral test | [TASK-007](../task/TASK-007.md) `[]` |
+| `AC-NFR-SEC-05-1` | Login, code requests, code verification and password recovery are rate limited (default 5 per minute per IP and email) and return 429 when exceeded. | behavioral test | [TASK-008](../task/TASK-008.md) `[!]` |
+| `AC-NFR-SEC-05-2` | A one-time code is invalidated after 5 wrong attempts. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |
 
 ### NFR-SEC-06 — Payment webhook security
 
@@ -97,7 +97,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-11-1` | CORS is configured once and allows only FRONTEND_URL, and security headers are applied to every response. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-SEC-11-1` | CORS is configured once and allows only FRONTEND_URL, and security headers are applied to every response. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-SEC-12 — Safe regular expressions
 
@@ -149,7 +149,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-REL-04-1` | One-time codes and rate-limit counters use a store interface with an in-memory adapter by default and a shared adapter chosen by D-108. | behavioral test | [TASK-007](../task/TASK-007.md) `[]` |
+| `AC-NFR-REL-04-1` | One-time codes and rate-limit counters use a store interface with an in-memory adapter by default and a shared adapter chosen by D-108. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |
 | `AC-NFR-REL-04-2` | Socket presence uses the same store interface. | behavioral test | [TASK-023](../task/TASK-023.md) `[]` |
 
 ### NFR-REL-05 — Database constraints
@@ -166,7 +166,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-REL-06-1` | Errors use {success:false, message} with the correct HTTP status and never include stack traces in production. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-REL-06-1` | Errors use {success:false, message} with the correct HTTP status and never include stack traces in production. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-PERF-01 — Bounded pagination
 
@@ -174,7 +174,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-PERF-01-1` | A shared pagination helper applies default 20 and maximum 100 to every list endpoint. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-PERF-01-1` | A shared pagination helper applies default 20 and maximum 100 to every list endpoint. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-PERF-02 — Query indexes
 
@@ -183,7 +183,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-NFR-PERF-02-1` | Indexes for the main queries are declared in the schemas. | behavioral test | [TASK-001](../task/TASK-001.md) `[x]` |
-| `AC-NFR-PERF-02-2` | npm run db:indexes creates the declared indexes for every model on a MongoDB instance. | behavioral test | [TASK-002](../task/TASK-002.md) `[]` |
+| `AC-NFR-PERF-02-2` | npm run db:indexes creates the declared indexes for every model on a MongoDB instance. | behavioral test | [TASK-002](../task/TASK-002.md) `[x]` |
 
 ### NFR-PERF-03 — Response time baseline
 
@@ -199,7 +199,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-PERF-04-1` | JSON and form bodies are limited to 1 MB; files go through the upload pipeline. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-PERF-04-1` | JSON and form bodies are limited to 1 MB; files go through the upload pipeline. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-PERF-05 — Lightweight authentication checks
 
@@ -215,7 +215,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-USA-01-1` | User-facing API messages are Vietnamese with full diacritics, and money is expressed in integer VND. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-USA-01-1` | User-facing API messages are Vietnamese with full diacritics, and money is expressed in integer VND. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 
 ### NFR-USA-03 — Real-time delivery
 
@@ -239,7 +239,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-INT-01-1` | SMTP calls have timeouts and mapped errors. | behavioral test | [TASK-007](../task/TASK-007.md) `[]` |
+| `AC-NFR-INT-01-1` | SMTP calls have timeouts and mapped errors. | behavioral test | [TASK-007](../task/TASK-007.md) `[!]` |
 | `AC-NFR-INT-01-2` | Payment gateway calls have timeouts and mapped errors. | behavioral test | [TASK-026](../task/TASK-026.md) `[]` |
 
 ### NFR-MNT-01 — Modular structure
@@ -290,7 +290,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-OBS-01-1` | A leveled logger replaces direct console output in application code. | behavioral test | [TASK-003](../task/TASK-003.md) `[]` |
+| `AC-NFR-OBS-01-1` | A leveled logger replaces direct console output in application code. | behavioral test | [TASK-003](../task/TASK-003.md) `[x]` |
 | `AC-NFR-OBS-01-2` | Admin, moderator and money actions write an audit record with actor, action, target and time. | behavioral test | [TASK-050](../task/TASK-050.md) `[]` |
 
 ### NFR-BIZ-01 — Money rules as configuration
@@ -299,7 +299,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-BIZ-01-1` | Fee rate, top-up bounds and withdrawal minimum are configuration values with the baseline defaults, and all amounts are integer VND. | behavioral test | [TASK-004](../task/TASK-004.md) `[]` |
+| `AC-NFR-BIZ-01-1` | Fee rate, top-up bounds and withdrawal minimum are configuration values with the baseline defaults, and all amounts are integer VND. | behavioral test | [TASK-004](../task/TASK-004.md) `[x]` |
 
 ### NFR-BIZ-02 — Time rules as configuration
 
@@ -307,24 +307,28 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-BIZ-02-1` | OTP lifetime, payment window (decision D-104), shipping window, auto-completion window, listing age, reset lifetime and JWT lifetime are configuration values with the baseline defaults. | behavioral test | [TASK-004](../task/TASK-004.md) `[]` |
+| `AC-NFR-BIZ-02-1` | OTP lifetime, payment window (decision D-104), shipping window, auto-completion window, listing age, reset lifetime and JWT lifetime are configuration values with the baseline defaults. | behavioral test | [TASK-004](../task/TASK-004.md) `[x]` |
 
 ### NFR-USA-02 — Responsive user interface
 
-Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality requirements · Status: **deferred**
-
-> Frontend is out of scope for this repository (D-002).
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration amendment (2026-10-09)
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-USA-02-1` | The user interface works from 360 px to 1920 px wide. | manual review | — |
+| `AC-NFR-USA-02-1` | The user interface works from 360 px to 1920 px wide. | manual review | [TASK-073](../task/TASK-073.md) `[]` |
 
 ### NFR-COMP-01 — Browser support
 
-Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality requirements · Status: **deferred**
-
-> Frontend is out of scope for this repository (D-002).
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration amendment (2026-10-09)
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-COMP-01-1` | Current Chrome, Firefox, Safari and Edge are supported. | manual review | — |
+| `AC-NFR-COMP-01-1` | Current Chrome, Firefox, Safari and Edge are supported. | manual review | [TASK-073](../task/TASK-073.md) `[]` |
+
+### NFR-MIG-01 — Migration inventory, FE task decomposition and Gitflow delivery
+
+Risk: `standard` · Component: `CMP-CONTROL` · Source: `plan.md` § 12. Migration amendment (2026-10-09)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-MIG-01-1` | The inventory pins both repositories, preserves TASK-001 through TASK-052, maps frontend modules to new bounded tasks, and defines sole-author Gitflow PR delivery. | document check | [TASK-053](../task/TASK-053.md) `[x]` |

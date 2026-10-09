@@ -1,0 +1,466 @@
+{
+  "analyzer": "@babel/parser",
+  "version": "7.29.9",
+  "limitation": "AST-derived branch/call/data-flow inventory for manual review; no calibrated confidence or complete formal semantics claimed",
+  "files": [
+    {
+      "file": "backend/src/common/utils/rate-limit-store.util.js",
+      "functions": [
+        {
+          "name": "createMemoryCounterStore",
+          "line": 1,
+          "parameters": [
+            "{ now = Date.now, maxEntries = 10000 } = {}"
+          ],
+          "branches": [
+            {
+              "test": "!Number.isSafeInteger(maxEntries) || maxEntries <= 0",
+              "line": 2,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "counters",
+              "source": "new Map()"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "{ increment }"
+          ],
+          "throws": [
+            "new TypeError('Counter-store capacity must be positive')"
+          ],
+          "calls": [
+            "Number.isSafeInteger"
+          ]
+        },
+        {
+          "name": "reclaimExpired",
+          "line": 5,
+          "parameters": [],
+          "branches": [
+            {
+              "test": "counter.resetAt <= now()",
+              "line": 7,
+              "then": "ExpressionStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "[key, counter]",
+              "source": null
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "now",
+            "counters.delete"
+          ]
+        },
+        {
+          "name": "increment",
+          "line": 12,
+          "parameters": [
+            "key",
+            "windowMs"
+          ],
+          "branches": [
+            {
+              "test": "counter && counter.resetAt <= now()",
+              "line": 14,
+              "then": "BlockStatement",
+              "else": null
+            },
+            {
+              "test": "!counter && counters.size >= maxEntries",
+              "line": 18,
+              "then": "ExpressionStatement",
+              "else": null
+            },
+            {
+              "test": "!counter && counters.size >= maxEntries",
+              "line": 19,
+              "then": "BlockStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "counter",
+              "source": "counters.get(key)"
+            }
+          ],
+          "assignments": [
+            {
+              "target": "counter",
+              "source": "undefined"
+            },
+            {
+              "target": "counter",
+              "source": "{ count: 0, resetAt: now() + windowMs }"
+            },
+            {
+              "target": "counter.count",
+              "source": "1"
+            }
+          ],
+          "awaits": [],
+          "returns": [
+            "{ ...counter }"
+          ],
+          "throws": [
+            "Object.assign(new Error('Dịch vụ xác thực đang bận. Vui lòng thử lại sau.'), { statusCode: 503, expose: true })"
+          ],
+          "calls": [
+            "counters.get",
+            "now",
+            "counters.delete",
+            "reclaimExpired",
+            "Object.assign",
+            "now",
+            "counters.set"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "backend/src/common/middlewares/rate-limit.middleware.js",
+      "functions": [
+        {
+          "name": "anonymous@7",
+          "line": 7,
+          "parameters": [
+            "value"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "crypto.createHash('sha256').update(value).digest",
+            "crypto.createHash('sha256').update",
+            "crypto.createHash"
+          ]
+        },
+        {
+          "name": "requestKeys",
+          "line": 9,
+          "parameters": [
+            "req",
+            "scope"
+          ],
+          "branches": [
+            {
+              "test": "typeof email === 'string' && email.trim() && email.length <= 320",
+              "line": 13,
+              "then": "BlockStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "ip",
+              "source": "req.ip || req.socket?.remoteAddress || 'unknown'"
+            },
+            {
+              "target": "keys",
+              "source": "[`rate:${scope}:ip:${hash(ip)}`]"
+            },
+            {
+              "target": "email",
+              "source": "req.body?.email"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "keys"
+          ],
+          "throws": [],
+          "calls": [
+            "hash",
+            "email.trim",
+            "keys.push",
+            "hash",
+            "email.trim().toLowerCase",
+            "email.trim"
+          ]
+        },
+        {
+          "name": "createAuthRateLimit",
+          "line": 19,
+          "parameters": [
+            "{ scope, store = defaultStore, now = Date.now, limit = business.authRateLimit.requests, windowMs = business.authRateLimit.windowMs } = {}"
+          ],
+          "branches": [
+            {
+              "test": "!/^[a-z][a-z0-9-]{0,39}$/.test(scope)",
+              "line": 20,
+              "then": "ThrowStatement",
+              "else": null
+            },
+            {
+              "test": "!Number.isSafeInteger(limit) || limit <= 0",
+              "line": 21,
+              "then": "ThrowStatement",
+              "else": null
+            },
+            {
+              "test": "!Number.isSafeInteger(windowMs) || windowMs <= 0",
+              "line": 22,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "async function authRateLimit(req, res, next) {\n    try {\n      const counters = await Promise.all(requestKeys(req, scope).map(key => store.increment(key, windowMs)));\n      const exceeded = counters.filter(counter => counter.count > limit);\n      if (!exceeded.length) return next();\n      const retrySeconds = Math.max(1, Math.ceil((Math.max(...exceeded.map(counter => counter.resetAt)) - now()) / 1000));\n      res.set('Retry-After', String(retrySeconds));\n      return sendError(res, 429, 'Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau.');\n    } catch (error) {\n      return next(error);\n    }\n  }"
+          ],
+          "throws": [
+            "new TypeError('A valid rate-limit scope is required')",
+            "new TypeError('Rate limit must be positive')",
+            "new TypeError('Rate-limit window must be positive')"
+          ],
+          "calls": [
+            "/^[a-z][a-z0-9-]{0,39}$/.test",
+            "Number.isSafeInteger",
+            "Number.isSafeInteger"
+          ]
+        },
+        {
+          "name": "authRateLimit",
+          "line": 24,
+          "parameters": [
+            "req",
+            "res",
+            "next"
+          ],
+          "branches": [
+            {
+              "exception_edge": true,
+              "finally": false,
+              "line": 25
+            },
+            {
+              "test": "!exceeded.length",
+              "line": 28,
+              "then": "ReturnStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "counters",
+              "source": "await Promise.all(requestKeys(req, scope).map(key => store.increment(key, windowMs)))"
+            },
+            {
+              "target": "exceeded",
+              "source": "counters.filter(counter => counter.count > limit)"
+            },
+            {
+              "target": "retrySeconds",
+              "source": "Math.max(1, Math.ceil((Math.max(...exceeded.map(counter => counter.resetAt)) - now()) / 1000))"
+            }
+          ],
+          "assignments": [],
+          "awaits": [
+            "Promise.all(requestKeys(req, scope).map(key => store.increment(key, windowMs)))"
+          ],
+          "returns": [
+            "next()",
+            "sendError(res, 429, 'Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau.')",
+            "next(error)"
+          ],
+          "throws": [],
+          "calls": [
+            "Promise.all",
+            "requestKeys(req, scope).map",
+            "requestKeys",
+            "counters.filter",
+            "next",
+            "Math.max",
+            "Math.ceil",
+            "Math.max",
+            "exceeded.map",
+            "now",
+            "res.set",
+            "String",
+            "sendError",
+            "next"
+          ]
+        },
+        {
+          "name": "anonymous@26",
+          "line": 26,
+          "parameters": [
+            "key"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": [
+            "store.increment"
+          ]
+        },
+        {
+          "name": "anonymous@27",
+          "line": 27,
+          "parameters": [
+            "counter"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": []
+        },
+        {
+          "name": "anonymous@29",
+          "line": 29,
+          "parameters": [
+            "counter"
+          ],
+          "branches": [],
+          "bindings": [],
+          "assignments": [],
+          "awaits": [],
+          "returns": [],
+          "throws": [],
+          "calls": []
+        }
+      ]
+    },
+    {
+      "file": "backend/src/modules/auth/auth.route.js",
+      "functions": []
+    },
+    {
+      "file": "backend/src/config/business.js",
+      "functions": [
+        {
+          "name": "setting",
+          "line": 1,
+          "parameters": [
+            "env",
+            "name",
+            "fallback",
+            "{ min = 1, max = Number.MAX_SAFE_INTEGER, integer = true } = {}"
+          ],
+          "branches": [
+            {
+              "test": "env[name] === undefined",
+              "line": 2,
+              "then": "ReturnStatement",
+              "else": null
+            },
+            {
+              "test": "/^\\d+(\\.\\d+)?$/.test(raw)",
+              "then": "Number(raw)",
+              "else": "NaN"
+            },
+            {
+              "test": "!Number.isFinite(value) || value < min || value > max || (integer && !Number.isSafeInteger(value))",
+              "line": 5,
+              "then": "BlockStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "raw",
+              "source": "String(env[name]).trim()"
+            },
+            {
+              "target": "value",
+              "source": "/^\\d+(\\.\\d+)?$/.test(raw) ? Number(raw) : NaN"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "fallback",
+            "value"
+          ],
+          "throws": [
+            "new Error(`Invalid business configuration: ${name}`)"
+          ],
+          "calls": [
+            "String(env[name]).trim",
+            "String",
+            "/^\\d+(\\.\\d+)?$/.test",
+            "Number",
+            "Number.isFinite",
+            "Number.isSafeInteger"
+          ]
+        },
+        {
+          "name": "loadBusinessConfig",
+          "line": 11,
+          "parameters": [
+            "env = process.env"
+          ],
+          "branches": [
+            {
+              "test": "topUp.min > topUp.max",
+              "line": 16,
+              "then": "ThrowStatement",
+              "else": null
+            }
+          ],
+          "bindings": [
+            {
+              "target": "topUp",
+              "source": "Object.freeze({\n    min: setting(env, 'TOPUP_MIN_AMOUNT', 10000),\n    max: setting(env, 'TOPUP_MAX_AMOUNT', 500000000)\n  })"
+            }
+          ],
+          "assignments": [],
+          "awaits": [],
+          "returns": [
+            "Object.freeze({\n    feeRate: setting(env, 'PLATFORM_FEE_RATE', 0.05, { min: 0, max: 1, integer: false }),\n    topUp,\n    withdrawalMin: setting(env, 'WITHDRAWAL_MIN_AMOUNT', 50000),\n    otpTtlMs: setting(env, 'OTP_TTL_MS', 5 * 60 * 1000),\n    otpMaxAttempts: 5,\n    authRateLimit: Object.freeze({ requests: 5, windowMs: 60 * 1000 }),\n    paymentWindowMs: setting(env, 'PAYMENT_WINDOW_MS', 3 * 60 * 1000),\n    shippingWindowMs: setting(env, 'SHIPPING_WINDOW_MS', 24 * 60 * 60 * 1000),\n    autoCompletionWindowMs: setting(env, 'AUTO_COMPLETION_WINDOW_MS', 5 * 24 * 60 * 60 * 1000),\n    listingMaxAgeMs: setting(env, 'LISTING_MAX_AGE_MS', 30 * 24 * 60 * 60 * 1000),\n    resetCredentialTtlMs: setting(env, 'RESET_CREDENTIAL_TTL_MS', 60 * 60 * 1000),\n    jwtTtlSeconds: setting(env, 'JWT_TTL_SECONDS', 7 * 24 * 60 * 60),\n    reportRestrictionThreshold: setting(env, 'REPORT_RESTRICTION_THRESHOLD', 3),\n    sanctionThresholds: Object.freeze([3, 6, 9]),\n    sanctionDurationsMs: Object.freeze([24 * 60 * 60 * 1000, 7 * 24 * 60 * 60 * 1000, 365 * 24 * 60 * 60 * 1000]),\n    disputeRestrictionThreshold: setting(env, 'DISPUTE_RESTRICTION_THRESHOLD', 3),\n    disputeRestrictionDurationMs: setting(env, 'DISPUTE_RESTRICTION_DURATION_MS', 30 * 24 * 60 * 60 * 1000)\n  })"
+          ],
+          "throws": [
+            "new Error('Invalid business configuration: TOPUP_MIN_AMOUNT exceeds TOPUP_MAX_AMOUNT')"
+          ],
+          "calls": [
+            "Object.freeze",
+            "setting",
+            "setting",
+            "Object.freeze",
+            "setting",
+            "setting",
+            "setting",
+            "Object.freeze",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "setting",
+            "Object.freeze",
+            "Object.freeze",
+            "setting",
+            "setting"
+          ]
+        }
+      ]
+    }
+  ]
+}

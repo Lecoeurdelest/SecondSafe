@@ -1,4 +1,6 @@
+const logger = require('../common/utils/logger.util');
 require('dotenv').config();
+const business = require('./business');
 
 const config = {
   mongodb: {
@@ -6,7 +8,7 @@ const config = {
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    expiresIn: '7d',
+    expiresIn: business.jwtTtlSeconds,
   },
   chat: {
     // Uu tien khoa rieng cho chat; fallback JWT_SECRET de khong vo moi truong cu.
@@ -25,7 +27,7 @@ const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-  console.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  logger.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
   process.exit(1);
 }
 

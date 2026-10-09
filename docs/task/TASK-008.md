@@ -1,7 +1,7 @@
 ---
 id: TASK-008
 title: Rate limiting for authentication endpoints
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-003]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-008 — Rate limiting for authentication endpoints
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Behavioral tests and bounded AST/complexity review recorded; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

@@ -1,0 +1,11 @@
+# Authentication limiter flow review
+
+AC-NFR-SEC-05-1: reviewed the source and AST inventory. The auth router attaches the appropriate limiter before future login, OTP request, OTP verification and recovery controllers. `requestKeys` always includes the Express peer IP and adds a normalized email when provided. Both identifiers are hashed in store keys. Untrusted forwarding headers are not read by this implementation. Independent scopes separate the operations.
+
+`authRateLimit` increments both counters through the replaceable asynchronous counter-store interface. A count above five blocks with the standard Vietnamese 429 and Retry-After based on the latest exceeded window. Errors go to the safe shared error boundary; they never allow the request through. The memory adapter increments synchronously before returning its promise, so concurrent local requests cannot bypass the limit. It resets at the inclusive deadline and bounds entry count, reclaiming expired counters under pressure.
+
+18 behavioral scenarios cover the two dimensions independently, normalized email across IPs, forwarded-header spoofing, exact expiry, retry headers, separate scopes, missing email, adapter keys, concurrent requests, store failure/capacity and all six real auth-router paths. All 108 backend tests pass. The router's first five requests reach the current 404 because those controllers remain pending; the sixth is intercepted with 429. Shared multi-process storage remains D-108; email limits require an email in the request, and routes using only an opaque recovery credential retain the IP limit. TASK-012 supplies the one-time recovery flow.
+
+Cyclomatic complexity <=10, cognitive complexity <=15 and nesting <=3 pass under ESLint/SonarJS. This is bounded manual flow evidence, not calibrated confidence. The automatic gate remains inconclusive.
+
+Additional constructor validation rejects missing/non-string scopes and invalid budget/window/capacity settings. The explicit type guard prevents JavaScript regex coercion from treating undefined as a valid scope.

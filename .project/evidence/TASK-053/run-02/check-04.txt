@@ -1,0 +1,246 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py audit-preservation project.yaml --root .
+{
+  "status": "valid",
+  "errors": [],
+  "warnings": [
+    "TASK-001: decision D-002 is not accepted.",
+    "TASK-015: decision D-101 is not accepted.",
+    "TASK-027: decision D-102 is not accepted.",
+    "TASK-029: decision D-105 is not accepted.",
+    "TASK-043: decision D-106 is not accepted.",
+    "TASK-047: decision D-107 is not accepted.",
+    "TASK-048: decision D-103 is not accepted.",
+    "FR-SYS-05: no task mapping; confirm explicit deferral or ownership."
+  ],
+  "checked": [
+    {
+      "id": "ART-SCHEMAS",
+      "path": "backend/src/modules/*/*.model.js",
+      "matches": [
+        "backend/src/modules/chat/conversation.model.js",
+        "backend/src/modules/chat/message.model.js",
+        "backend/src/modules/delivery/delivery.model.js",
+        "backend/src/modules/notifications/notification.model.js",
+        "backend/src/modules/orders/order.model.js",
+        "backend/src/modules/orders/purchase-request.model.js",
+        "backend/src/modules/payments/escrow-hold.model.js",
+        "backend/src/modules/payments/transaction.model.js",
+        "backend/src/modules/payments/wallet.model.js",
+        "backend/src/modules/products/category.model.js",
+        "backend/src/modules/products/product.model.js",
+        "backend/src/modules/reports/dispute.model.js",
+        "backend/src/modules/reports/report.model.js",
+        "backend/src/modules/reports/review.model.js",
+        "backend/src/modules/users/favorite.model.js",
+        "backend/src/modules/users/user.model.js"
+      ]
+    },
+    {
+      "id": "ART-DB-CONFIG",
+      "path": "backend/src/config/db.js",
+      "matches": [
+        "backend/src/config/db.js"
+      ]
+    },
+    {
+      "id": "ART-ENV-CONFIG",
+      "path": "backend/src/config/env.js",
+      "matches": [
+        "backend/src/config/env.js"
+      ]
+    },
+    {
+      "id": "ART-CHAT-CRYPTO",
+      "path": "backend/src/common/utils/chat-crypto.util.js",
+      "matches": [
+        "backend/src/common/utils/chat-crypto.util.js"
+      ]
+    },
+    {
+      "id": "ART-SEEDS",
+      "path": "backend/src/seeds/*.seed.js",
+      "matches": [
+        "backend/src/seeds/categories.seed.js",
+        "backend/src/seeds/products.seed.js"
+      ]
+    },
+    {
+      "id": "ART-SEED-ALL",
+      "path": "backend/seed-all.js",
+      "matches": [
+        "backend/seed-all.js"
+      ]
+    },
+    {
+      "id": "ART-VERIFY-SEED",
+      "path": "backend/verify-seed-data.js",
+      "matches": [
+        "backend/verify-seed-data.js"
+      ]
+    },
+    {
+      "id": "ART-MIGRATE",
+      "path": "backend/migrate-data-consistency.js",
+      "matches": [
+        "backend/migrate-data-consistency.js"
+      ]
+    },
+    {
+      "id": "ART-INDEXES",
+      "path": "backend/create-indexes.js",
+      "matches": [
+        "backend/create-indexes.js"
+      ]
+    },
+    {
+      "id": "ART-CREATE-ADMIN",
+      "path": "backend/create-admin.js",
+      "matches": [
+        "backend/create-admin.js"
+      ]
+    },
+    {
+      "id": "ART-MODULE-LAYOUT",
+      "path": "backend/src/modules/*/*.route.js",
+      "matches": [
+        "backend/src/modules/auth/auth.route.js",
+        "backend/src/modules/chat/chat.route.js",
+        "backend/src/modules/delivery/delivery.route.js",
+        "backend/src/modules/moderator/moderator.route.js",
+        "backend/src/modules/notifications/notification.route.js",
+        "backend/src/modules/orders/order.route.js",
+        "backend/src/modules/payments/payment.route.js",
+        "backend/src/modules/payments/sepay.route.js",
+        "backend/src/modules/payments/wallet.route.js",
+        "backend/src/modules/products/category.route.js",
+        "backend/src/modules/products/product.route.js",
+        "backend/src/modules/products/upload.route.js",
+        "backend/src/modules/reports/report.route.js",
+        "backend/src/modules/reports/review.route.js",
+        "backend/src/modules/users/favorite.route.js",
+        "backend/src/modules/users/user.route.js"
+      ]
+    },
+    {
+      "id": "ART-REQUIREMENT-IDS",
+      "path": "docs/requirements/*.md",
+      "matches": [
+        "docs/requirements/FR-ADM.md",
+        "docs/requirements/FR-AUTH.md",
+        "docs/requirements/FR-BROW.md",
+        "docs/requirements/FR-CHAT.md",
+        "docs/requirements/FR-DSP.md",
+        "docs/requirements/FR-FAV.md",
+        "docs/requirements/FR-MOD.md",
+        "docs/requirements/FR-NOTI.md",
+        "docs/requirements/FR-ORD.md",
+        "docs/requirements/FR-PAY.md",
+        "docs/requirements/FR-PROD.md",
+        "docs/requirements/FR-PROF.md",
+        "docs/requirements/FR-REV.md",
+        "docs/requirements/FR-RPT.md",
+        "docs/requirements/FR-SHIP.md",
+        "docs/requirements/FR-SYS.md",
+        "docs/requirements/FR-WEB.md",
+        "docs/requirements/NFR.md",
+        "docs/requirements/README.md"
+      ]
+    },
+    {
+      "id": "ART-TASK-SPECS",
+      "path": "docs/task/TASK-*.md",
+      "matches": [
+        "docs/task/TASK-001.md",
+        "docs/task/TASK-002.md",
+        "docs/task/TASK-003.md",
+        "docs/task/TASK-004.md",
+        "docs/task/TASK-005.md",
+        "docs/task/TASK-006.md",
+        "docs/task/TASK-007.md",
+        "docs/task/TASK-008.md",
+        "docs/task/TASK-009.md",
+        "docs/task/TASK-010.md",
+        "docs/task/TASK-011.md",
+        "docs/task/TASK-012.md",
+        "docs/task/TASK-013.md",
+        "docs/task/TASK-014.md",
+        "docs/task/TASK-015.md",
+        "docs/task/TASK-016.md",
+        "docs/task/TASK-017.md",
+        "docs/task/TASK-018.md",
+        "docs/task/TASK-019.md",
+        "docs/task/TASK-020.md",
+        "docs/task/TASK-021.md",
+        "docs/task/TASK-022.md",
+        "docs/task/TASK-023.md",
+        "docs/task/TASK-024.md",
+        "docs/task/TASK-025.md",
+        "docs/task/TASK-026.md",
+        "docs/task/TASK-027.md",
+        "docs/task/TASK-028.md",
+        "docs/task/TASK-029.md",
+        "docs/task/TASK-030.md",
+        "docs/task/TASK-031.md",
+        "docs/task/TASK-032.md",
+        "docs/task/TASK-033.md",
+        "docs/task/TASK-034.md",
+        "docs/task/TASK-035.md",
+        "docs/task/TASK-036.md",
+        "docs/task/TASK-037.md",
+        "docs/task/TASK-038.md",
+        "docs/task/TASK-039.md",
+        "docs/task/TASK-040.md",
+        "docs/task/TASK-041.md",
+        "docs/task/TASK-042.md",
+        "docs/task/TASK-043.md",
+        "docs/task/TASK-044.md",
+        "docs/task/TASK-045.md",
+        "docs/task/TASK-046.md",
+        "docs/task/TASK-047.md",
+        "docs/task/TASK-048.md",
+        "docs/task/TASK-049.md",
+        "docs/task/TASK-050.md",
+        "docs/task/TASK-051.md",
+        "docs/task/TASK-052.md",
+        "docs/task/TASK-053.md",
+        "docs/task/TASK-054.md",
+        "docs/task/TASK-055.md",
+        "docs/task/TASK-056.md",
+        "docs/task/TASK-057.md",
+        "docs/task/TASK-058.md",
+        "docs/task/TASK-059.md",
+        "docs/task/TASK-060.md",
+        "docs/task/TASK-061.md",
+        "docs/task/TASK-062.md",
+        "docs/task/TASK-063.md",
+        "docs/task/TASK-064.md",
+        "docs/task/TASK-065.md",
+        "docs/task/TASK-066.md",
+        "docs/task/TASK-067.md",
+        "docs/task/TASK-068.md",
+        "docs/task/TASK-069.md",
+        "docs/task/TASK-070.md",
+        "docs/task/TASK-071.md",
+        "docs/task/TASK-072.md",
+        "docs/task/TASK-073.md"
+      ]
+    },
+    {
+      "id": "ART-TASK-INDEX",
+      "path": "docs/task/README.md",
+      "matches": [
+        "docs/task/README.md"
+      ]
+    },
+    {
+      "id": "ART-BASELINE-FRONTEND",
+      "path": "frontend/**",
+      "matches": [
+        "frontend",
+        "frontend/README.md"
+      ]
+    }
+  ]
+}
+
+exit_code=0

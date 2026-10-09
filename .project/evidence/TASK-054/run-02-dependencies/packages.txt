@@ -1,0 +1,13 @@
+$ npm ls --depth=0
+secondsafe-frontend@1.0.0 /private/tmp/secondsafe-web-dependencies-20261009/frontend
+├── @testing-library/jest-dom@6.9.1
+├── @testing-library/react@16.3.3
+├── @testing-library/user-event@14.6.7
+├── axios@1.20.0
+├── react-dom@18.3.1
+├── react-router-dom@6.30.6
+├── react-scripts@5.0.1
+└── react@18.3.1
+
+
+exit_code=0

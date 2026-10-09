@@ -1,0 +1,12 @@
+test_installed_hooks_block_invalid_commits_and_preserve_existing_hooks (test_gitflow.HookTests.test_installed_hooks_block_invalid_commits_and_preserve_existing_hooks) ... ok
+test_allowed_integration_routes (test_gitflow.RouteTests.test_allowed_integration_routes) ... ok
+test_invalid_routes (test_gitflow.RouteTests.test_invalid_routes) ... ok
+test_stacks_require_explicit_permission (test_gitflow.RouteTests.test_stacks_require_explicit_permission) ... ok
+test_task_subject_scope (test_gitflow.RouteTests.test_task_subject_scope) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.754s
+
+OK
+
+exit_code=0

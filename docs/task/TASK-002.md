@@ -1,7 +1,7 @@
 ---
 id: TASK-002
 title: Verify database scripts against MongoDB
-execution_status: ready
+execution_status: done
 relevance: current
 depends_on: [TASK-001]
 supersedes: []
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `ready` — Dependencies done; ready to start
+**Current state:** `done` — MongoDB 7.0.24 replica-set verification passes: all five scripts, 16-model indexes, seeded data and hashed admin; 43 backend tests pass
 
 ## Traceability
 
@@ -60,8 +60,8 @@ Use a local or containerized MongoDB 7 with a throwaway database; record version
 
 ## Acceptance criteria and verification
 
-- [ ] `AC-SYS-06-3` (FR-SYS-06) — Against a MongoDB instance, npm run seed, npm run seed:verify, npm run db:indexes, npm run db:migrate and npm run create-admin complete successfully. Verify with: behavioral test; `cd backend && npm test`.
-- [ ] `AC-NFR-PERF-02-2` (NFR-PERF-02) — npm run db:indexes creates the declared indexes for every model on a MongoDB instance. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-SYS-06-3` (FR-SYS-06) — Against a MongoDB instance, npm run seed, npm run seed:verify, npm run db:indexes, npm run db:migrate and npm run create-admin complete successfully. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-PERF-02-2` (NFR-PERF-02) — npm run db:indexes creates the declared indexes for every model on a MongoDB instance. Verify with: behavioral test; `cd backend && npm test`.
 
 ## Required evidence
 

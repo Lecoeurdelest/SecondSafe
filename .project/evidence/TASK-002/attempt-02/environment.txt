@@ -1,0 +1,4 @@
+Node v26.5.0
+MongoDB 7.0.24
+Single-node disposable replica set
+Database secondsafe_disposable_validation

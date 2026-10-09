@@ -30,12 +30,15 @@ METHOD_LABEL = {'behavioral_test': 'behavioral test', 'static_flow': 'static flo
                 'document_check': 'document check', 'device_observation': 'device observation'}
 MILESTONES = [('M0', 'Scaffold', 1, 2), ('M1', 'Platform and identity', 3, 16), ('M2', 'Catalog and chat', 17, 23),
               ('M3', 'Money and orders', 24, 36), ('M4', 'Trust and moderation', 37, 43),
-              ('M5', 'Administration and operations', 44, 52)]
+              ('M5', 'Administration and operations', 44, 52),
+              ('M6', 'Migration control', 53, 53), ('M7', 'Web client', 54, 72),
+              ('M8', 'Full-stack integration', 73, 73)]
 FR_GROUPS = OrderedDict([
     ('AUTH', 'Identity and access'), ('PROF', 'Profiles'), ('PROD', 'Listings'), ('BROW', 'Browse and search'),
     ('FAV', 'Favorites'), ('CHAT', 'Chat and negotiation'), ('ORD', 'Orders'), ('PAY', 'Wallet, payments and escrow'),
     ('SHIP', 'Delivery'), ('REV', 'Reviews'), ('RPT', 'Violation reports'), ('DSP', 'Disputes'), ('NOTI', 'Notifications'),
     ('MOD', 'Moderation'), ('ADM', 'Administration'), ('SYS', 'Scheduled jobs and data operations'),
+    ('WEB', 'Web client migration'),
 ])
 PROGRESS_BEGIN = '<!-- BEGIN GENERATED: progress -->'
 PROGRESS_END = '<!-- END GENERATED: progress -->'
@@ -144,6 +147,8 @@ def cell(text):
 
 def render_task_index(model, state):
     decisions = {d['id']: d for d in model['decisions']}
+    delivery_path = ROOT / '.project' / 'delivery.json'
+    delivery = json.loads(delivery_path.read_text()) if delivery_path.exists() else {'tasks': {}}
     lines = ['# Tasks', '',
              'This index is generated from `.project/state.json` and `project.yaml` by `tools/pdd/render.py`. '
              'Update the execution record first; never hand-edit a marker.', '',
@@ -152,15 +157,18 @@ def render_task_index(model, state):
              '- `[!]` — `in_progress`, `verifying`, `blocked`, or `needs_revalidation`',
              '- `[x]` — `done` with current evidence', '',
              '## Status', '',
-             '| Status | ID | Title | Execution | Relevance | Milestone | Depends on | Detail | Evidence |',
-             '|---|---|---|---|---|---|---|---|---|']
+             '| Status | ID | Title | Execution | Relevance | Milestone | Depends on | Detail | Evidence | Delivery |',
+             '|---|---|---|---|---|---|---|---|---|---|']
     for task in model['tasks']:
         record = task_record(state, task['id'])
         marker = MARKERS[record['execution']]
         deps = ', '.join(task['depends_on']) or '—'
         evidence = ', '.join(f'[{Path(e).parent.name}](../../{e})' for e in record.get('evidence', [])) or '—'
+        remote = delivery['tasks'].get(task['id'], {})
+        links = [f'[{kind.upper()}]({remote[kind]})' for kind in ('issue', 'pr') if remote.get(kind)]
+        links.extend(f'[PR slice {i}]({url})' for i, url in enumerate(remote.get('supporting_prs', []), 1))
         lines.append(f"| {marker} | [{task['id']}]({task['id']}.md) | {cell(task['title'])} | `{record['execution']}` | "
-                     f"`{record['relevance']}` | {milestone(task['id'])[0]} | {deps} | {cell(record.get('detail') or '—')} | {evidence} |")
+                     f"`{record['relevance']}` | {milestone(task['id'])[0]} | {deps} | {cell(record.get('detail') or '—')} | {evidence} | {', '.join(links) or '—'} |")
     lines += ['', '## Milestones', '', '| Milestone | Tasks | Done |', '|---|---|---|']
     for code, title, first, last in MILESTONES:
         ids = [f'TASK-{n:03d}' for n in range(first, last + 1)]
@@ -337,6 +345,8 @@ def manifest(model_bytes, state_bytes, outputs, plan_text):
         'inputs': {
             'project.yaml': sha256(model_bytes),
             '.project/state.json': sha256(state_bytes),
+            **({'.project/delivery.json': sha256((ROOT / '.project/delivery.json').read_bytes())}
+               if (ROOT / '.project/delivery.json').exists() else {}),
             **{p: sha256((ROOT / p).read_bytes()) for p in schema_inputs},
         },
         'outputs': {path: {'ownership': 'generated', 'sha256': sha256(content)} for path, content in outputs.items()},

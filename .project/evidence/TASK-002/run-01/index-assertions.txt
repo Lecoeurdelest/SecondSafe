@@ -1,0 +1,17 @@
+PASS: all 16 models have every declared index
+Category: 2 declared indexes present; 3 total indexes
+Conversation: 6 declared indexes present; 7 total indexes
+Delivery: 3 declared indexes present; 4 total indexes
+Dispute: 4 declared indexes present; 5 total indexes
+EscrowHold: 3 declared indexes present; 4 total indexes
+Favorite: 3 declared indexes present; 4 total indexes
+Message: 5 declared indexes present; 6 total indexes
+Notification: 4 declared indexes present; 5 total indexes
+Order: 9 declared indexes present; 10 total indexes
+Product: 6 declared indexes present; 7 total indexes
+PurchaseRequest: 8 declared indexes present; 9 total indexes
+Report: 6 declared indexes present; 7 total indexes
+Review: 6 declared indexes present; 7 total indexes
+Transaction: 4 declared indexes present; 5 total indexes
+User: 1 declared indexes present; 2 total indexes
+Wallet: 1 declared indexes present; 2 total indexes
