@@ -54,16 +54,39 @@
       "superseded_by": "TASK-053"
     },
     "TASK-002": {
-      "execution": "ready",
+      "execution": "done",
       "relevance": "current",
-      "detail": "Dependencies complete; ready to implement and verify",
+      "detail": "MongoDB 7.0.24 replica-set verification passes: all five scripts, 16-model indexes, seeded data and hashed admin; 43 backend tests pass",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "ready",
           "note": "TASK-001 done"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Disposable MongoDB runner installed outside the repository; no existing database used"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Original runner outputs recorded; applicable criteria checked"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Manual configuration/data-operations completion on concrete tests; no calibrated domain confidence claim"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-002/run-02/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-002.md",
+      "criteria": {
+        "AC-SYS-06-3": "pass",
+        "AC-NFR-PERF-02-2": "pass"
+      }
     },
     "TASK-003": {
       "execution": "done",

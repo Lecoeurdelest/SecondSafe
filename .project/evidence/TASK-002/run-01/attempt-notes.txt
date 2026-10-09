@@ -1,0 +1,3 @@
+Attempt 01: the runner used synchronous child execution and db:indexes timed out. A subsequent asynchronous runner succeeded. Original individual script outputs are retained.
+Attempt 02: all database scripts passed; the index assertion incorrectly compared MongoDB physical text-index keys to Mongoose logical text-index declarations. Corrected the runner to compare text-index weights. No schema or application fix was needed.
+Current run uses asynchronous child execution, logical text-index comparison, the latest validated business configuration and a fresh throwaway replica set.

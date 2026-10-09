@@ -3,7 +3,7 @@
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
     "project.yaml": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
-    ".project/state.json": "0e4302413ab4dbd9ea2ef2e47b3252e58017fde0d7e4f9c383fc4a1e08ef4ff7",
+    ".project/state.json": "1438aed9d088e64196daafd822e1b33ab2d33e941d57409dbd945bfe395f3273",
     ".project/delivery.json": "bf46dd3ebbba64b3c70ff45870d5cd4e5d233bbfef03d6a31cdce4b6ef2de123",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
@@ -85,7 +85,7 @@
     },
     "docs/requirements/FR-SYS.md": {
       "ownership": "generated",
-      "sha256": "e2ef31e1a297fd2d1db9785fb75bda7719d57362297c8baba5a9a8561dc501b9"
+      "sha256": "b3ec72fa2fe7940bd9429841c407ad13dd9145040526192f8b1b6ecf3b3fb1e0"
     },
     "docs/requirements/FR-WEB.md": {
       "ownership": "generated",
@@ -93,7 +93,7 @@
     },
     "docs/requirements/NFR.md": {
       "ownership": "generated",
-      "sha256": "eab777c22cb96090f4c5459fa8fcd36eebfdf5bb25e81165a8cf35c3282fc7a5"
+      "sha256": "707eddba6a039e3d9947da8e11f85d8e69fce3240df72155b27c174858d96a64"
     },
     "docs/requirements/README.md": {
       "ownership": "generated",
@@ -101,7 +101,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "cce06f55530c33a1777f1e6891513a8a6f4f5284fa935ca45159f24a79245494"
+      "sha256": "9bdf181176999cf5aff9cf72ec96482d31ac7d1834be67f73ace7fdc12ee0123"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -109,7 +109,7 @@
     },
     "docs/task/TASK-002.md": {
       "ownership": "generated",
-      "sha256": "58a2b58256c3d13c1041a04632ebe225bf870b852074c673cdfe9db94f003eea"
+      "sha256": "8a63be49cc071dc9dad7eae4463e00a4a88ec6af8b96cdbc890a2b75028824b2"
     },
     "docs/task/TASK-003.md": {
       "ownership": "generated",
@@ -407,7 +407,7 @@
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "d59c1cf63943c10b2b0e2170fe60e338127b840ce1b7ce7fd251ded05074e3e4"
+      "sha256": "3e8df12cfdb333808ac7aab5d0c2806b3633370f796b40fdb62c820829c6d226"
     }
   }
 }

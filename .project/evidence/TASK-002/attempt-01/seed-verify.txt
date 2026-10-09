@@ -1,0 +1,529 @@
+Command: npm run seed:verify
+
+> secondsafe-backend@0.1.0 seed:verify
+> node verify-seed-data.js
+
+MongoDB Connected for verification
+
+=== Categories (8) ===
+✓ Sách (books) - Active: true
+✓ Quần áo (fashion) - Active: true
+✓ Đồ điện tử (electronics) - Active: true
+✓ Đồ gia dụng (home) - Active: true
+✓ Làm đẹp (beauty) - Active: true
+✓ Thể thao (sports) - Active: true
+✓ Đồ chơi (toys) - Active: true
+✓ Thú cưng (pets) - Active: true
+
+=== Active Products (80) ===
+
+Thú cưng:
+  ✓ Vòng Cổ Chống Ve Rận
+    Price: 120.000 VNĐ
+    Condition: new
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 173
+  ✓ Balo Vận Chuyển Thú Cưng
+    Price: 380.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 96
+  ✓ Đồ Chơi Gặm Cho Chó
+    Price: 150.000 VNĐ
+    Condition: new
+    Location: Hà Nội, Hoàn Kiếm
+    Seller: Test Seller (seller@example.com)
+    Views: 311
+  ✓ Máy Cắt Lông Thú Cưng
+    Price: 450.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 210
+  ✓ Nhà Gỗ Cho Chó Size M
+    Price: 950.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 256
+  ✓ Bát Ăn Tự Động Cho Mèo
+    Price: 580.000 VNĐ
+    Condition: like-new
+    Location: Đà Nẵng, Thanh Khê
+    Seller: Test Seller (seller@example.com)
+    Views: 446
+  ✓ Dây Dắt Chó Tự Động 5m
+    Price: 220.000 VNĐ
+    Condition: new
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 256
+  ✓ Thức Ăn Cho Chó Royal Canin 10kg
+    Price: 1.200.000 VNĐ
+    Condition: new
+    Location: Hà Nội, Ba Đình
+    Seller: Test Seller (seller@example.com)
+    Views: 471
+  ✓ Cát Vệ Sinh Cho Mèo 10L
+    Price: 180.000 VNĐ
+    Condition: new
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 99
+  ✓ Lồng Chó Mèo Size L
+    Price: 850.000 VNĐ
+    Condition: like-new
+    Location: Đà Nẵng, Hải Châu
+    Seller: Test Seller (seller@example.com)
+    Views: 380
+
+Đồ chơi:
+  ✓ Đàn Piano Điện Tử Casio
+    Price: 2.200.000 VNĐ
+    Condition: good
+    Location: Đà Nẵng, Thanh Khê
+    Seller: Test Seller (seller@example.com)
+    Views: 439
+  ✓ Bộ Xếp Hình Gỗ 100 Chi Tiết
+    Price: 180.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 159
+  ✓ Lego City Police Station
+    Price: 1.200.000 VNĐ
+    Condition: new
+    Location: Hà Nội, Hoàn Kiếm
+    Seller: Test Seller (seller@example.com)
+    Views: 132
+  ✓ Búp Bê Barbie Dreamhouse
+    Price: 850.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 433
+  ✓ Xe Điều Khiển Từ Xa
+    Price: 450.000 VNĐ
+    Condition: like-new
+    Location: Đà Nẵng, Hải Châu
+    Seller: Test Seller (seller@example.com)
+    Views: 278
+  ✓ Rubik 3x3 Gan 356
+    Price: 280.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 341
+  ✓ Bộ Đồ Chơi Nấu Ăn
+    Price: 320.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 155
+  ✓ Mô Hình Gundam RG
+    Price: 650.000 VNĐ
+    Condition: new
+    Location: Hà Nội, Đống Đa
+    Seller: Test Seller (seller@example.com)
+    Views: 40
+  ✓ Board Game Catan
+    Price: 580.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 123
+  ✓ Xe Scooter Trẻ Em
+    Price: 750.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 426
+
+Thể thao:
+  ✓ Balo Thể Thao Adidas
+    Price: 450.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 91
+  ✓ Xe Đạp Thể Thao Giant ATX 720
+    Price: 4.500.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Đống Đa
+    Seller: Test Seller (seller@example.com)
+    Views: 440
+  ✓ Bộ Tạ Tay 20kg
+    Price: 800.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 10
+    Seller: Test Seller (seller@example.com)
+    Views: 249
+  ✓ Giày Chạy Bộ Adidas Ultraboost
+    Price: 1.800.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 189
+  ✓ Vợt Cầu Lông Yonex
+    Price: 950.000 VNĐ
+    Condition: like-new
+    Location: Đà Nẵng, Thanh Khê
+    Seller: Test Seller (seller@example.com)
+    Views: 69
+  ✓ Bóng Đá Size 5 Nike
+    Price: 380.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 373
+  ✓ Thảm Tập Yoga Cao Cấp
+    Price: 280.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Ba Đình
+    Seller: Test Seller (seller@example.com)
+    Views: 11
+  ✓ Găng Tay Boxing Everlast
+    Price: 650.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 302
+  ✓ Bàn Bóng Bàn Gấp Gọn
+    Price: 3.500.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 123
+  ✓ Dây Nhảy Thể Thao
+    Price: 120.000 VNĐ
+    Condition: new
+    Location: Hải Phòng, Ngô Quyền
+    Seller: Test Seller (seller@example.com)
+    Views: 16
+
+Làm đẹp:
+  ✓ Mascara Maybelline Lash Sensational
+    Price: 180.000 VNĐ
+    Condition: new
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 161
+  ✓ Nước Hoa Chanel No.5
+    Price: 2.500.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Hoàn Kiếm
+    Seller: Test Seller (seller@example.com)
+    Views: 495
+  ✓ Serum Vitamin C The Ordinary
+    Price: 180.000 VNĐ
+    Condition: new
+    Location: Đà Nẵng, Thanh Khê
+    Seller: Test Seller (seller@example.com)
+    Views: 365
+  ✓ Phấn Nước Cushion Laneige
+    Price: 450.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 486
+  ✓ Mặt Nạ Innisfree 10 Miếng
+    Price: 150.000 VNĐ
+    Condition: new
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 13
+  ✓ Sữa Rửa Mặt CeraVe
+    Price: 220.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 59
+  ✓ Bảng Phấn Mắt Urban Decay
+    Price: 950.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 132
+  ✓ Kem Dưỡng Ẩm Cetaphil
+    Price: 280.000 VNĐ
+    Condition: good
+    Location: Đà Nẵng, Hải Châu
+    Seller: Test Seller (seller@example.com)
+    Views: 343
+  ✓ Son Dior Addict 999
+    Price: 850.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Ba Đình
+    Seller: Test Seller (seller@example.com)
+    Views: 342
+  ✓ Kem Chống Nắng La Roche-Posay
+    Price: 280.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 164
+
+Đồ điện tử:
+  ✓ Chuột Gaming Logitech G502
+    Price: 950.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 17
+  ✓ iPhone 13 Pro Max 256GB
+    Price: 22.000.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 318
+  ✓ MacBook Air M1 2020
+    Price: 18.000.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 253
+  ✓ Samsung Galaxy S22 Ultra
+    Price: 19.500.000 VNĐ
+    Condition: like-new
+    Location: Đà Nẵng, Hải Châu
+    Seller: Test Seller (seller@example.com)
+    Views: 110
+  ✓ iPad Pro 11 inch M1
+    Price: 16.000.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 2
+    Seller: Test Seller (seller@example.com)
+    Views: 360
+  ✓ Tai Nghe AirPods Pro 2
+    Price: 4.500.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Ba Đình
+    Seller: Test Seller (seller@example.com)
+    Views: 267
+  ✓ Apple Watch Series 7
+    Price: 7.500.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 372
+  ✓ Laptop Dell XPS 13
+    Price: 25.000.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Đống Đa
+    Seller: Test Seller (seller@example.com)
+    Views: 232
+  ✓ Máy Ảnh Canon EOS M50
+    Price: 12.000.000 VNĐ
+    Condition: good
+    Location: Đà Nẵng, Thanh Khê
+    Seller: Test Seller (seller@example.com)
+    Views: 324
+  ✓ Loa Bluetooth JBL Flip 5
+    Price: 1.800.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 65
+
+Đồ gia dụng:
+  ✓ Bàn Làm Việc Gỗ Cao Su
+    Price: 2.500.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 283
+  ✓ Ghế Gaming DXRacer
+    Price: 3.200.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 351
+  ✓ Tủ Lạnh Samsung 208L
+    Price: 4.500.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 67
+  ✓ Máy Giặt LG 9kg
+    Price: 5.200.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 169
+  ✓ Nồi Cơm Điện Tử Sharp 1.8L
+    Price: 1.200.000 VNĐ
+    Condition: like-new
+    Location: Đà Nẵng, Hải Châu
+    Seller: Test Seller (seller@example.com)
+    Views: 207
+  ✓ Bộ Nồi Inox 5 Món
+    Price: 850.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Hoàn Kiếm
+    Seller: Test Seller (seller@example.com)
+    Views: 279
+  ✓ Quạt Điều Hòa Kangaroo
+    Price: 2.800.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 203
+  ✓ Bộ Chăn Ga Gối Cotton
+    Price: 450.000 VNĐ
+    Condition: new
+    Location: Hà Nội, Đống Đa
+    Seller: Test Seller (seller@example.com)
+    Views: 450
+  ✓ Bình Đun Siêu Tốc Philips
+    Price: 380.000 VNĐ
+    Condition: like-new
+    Location: Hải Phòng, Lê Chân
+    Seller: Test Seller (seller@example.com)
+    Views: 197
+  ✓ Đèn Ngủ LED Thông Minh
+    Price: 280.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 14
+
+Quần áo:
+  ✓ Váy Maxi Nữ
+    Price: 280.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Hoàn Kiếm
+    Seller: Test Seller (seller@example.com)
+    Views: 18
+  ✓ Giày Thể Thao Nike Air Max
+    Price: 1.200.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 91
+  ✓ Túi Xách Nữ Da Thật
+    Price: 850.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 171
+  ✓ Áo Sơ Mi Nam Công Sở
+    Price: 180.000 VNĐ
+    Condition: good
+    Location: Hải Phòng, Ngô Quyền
+    Seller: Test Seller (seller@example.com)
+    Views: 148
+  ✓ Giày Cao Gót Nữ
+    Price: 320.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 369
+  ✓ Áo Hoodie Unisex
+    Price: 250.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 182
+  ✓ Dép Adidas Adilette
+    Price: 280.000 VNĐ
+    Condition: like-new
+    Location: Đà Nẵng, Hải Châu
+    Seller: Test Seller (seller@example.com)
+    Views: 106
+  ✓ Áo Thun Nam Uniqlo
+    Price: 150.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Ba Đình
+    Seller: Test Seller (seller@example.com)
+    Views: 488
+  ✓ Quần Jeans Nữ Levi's
+    Price: 450.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 382
+  ✓ Áo Khoác Denim Nam
+    Price: 380.000 VNĐ
+    Condition: good
+    Location: Đà Nẵng, Thanh Khê
+    Seller: Test Seller (seller@example.com)
+    Views: 246
+
+Sách:
+  ✓ Tuổi Trẻ Đáng Giá Bao Nhiêu
+    Price: 65.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 3
+    Seller: Test Seller (seller@example.com)
+    Views: 496
+  ✓ Bộ Sách Giáo Khoa Lớp 12
+    Price: 200.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Thanh Xuân
+    Seller: Test Seller (seller@example.com)
+    Views: 233
+  ✓ Doraemon Truyện Dài Tập 1-10
+    Price: 180.000 VNĐ
+    Condition: like-new
+    Location: Hải Phòng, Lê Chân
+    Seller: Test Seller (seller@example.com)
+    Views: 175
+  ✓ Cà Phê Cùng Tony
+    Price: 75.000 VNĐ
+    Condition: like-new
+    Location: Cần Thơ, Ninh Kiều
+    Seller: Test Seller (seller@example.com)
+    Views: 100
+  ✓ Tiếng Anh Giao Tiếp Cơ Bản
+    Price: 95.000 VNĐ
+    Condition: good
+    Location: Hà Nội, Đống Đa
+    Seller: Test Seller (seller@example.com)
+    Views: 408
+  ✓ Nghệ Thuật Bán Hàng
+    Price: 120.000 VNĐ
+    Condition: like-new
+    Location: Hồ Chí Minh, Quận 7
+    Seller: Test Seller (seller@example.com)
+    Views: 465
+  ✓ Đắc Nhân Tâm - Dale Carnegie
+    Price: 85.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Hoàn Kiếm
+    Seller: Test Seller (seller@example.com)
+    Views: 67
+  ✓ Harry Potter Trọn Bộ 7 Tập
+    Price: 650.000 VNĐ
+    Condition: good
+    Location: Hồ Chí Minh, Quận 1
+    Seller: Test Seller (seller@example.com)
+    Views: 131
+  ✓ Nhà Giả Kim - Paulo Coelho
+    Price: 70.000 VNĐ
+    Condition: new
+    Location: Đà Nẵng, Hải Châu
+    Seller: Test Seller (seller@example.com)
+    Views: 483
+  ✓ Sapiens - Lược Sử Loài Người
+    Price: 150.000 VNĐ
+    Condition: like-new
+    Location: Hà Nội, Cầu Giấy
+    Seller: Test Seller (seller@example.com)
+    Views: 104
+
+=== Seller User ===
+✓ Email: seller@example.com
+✓ Full Name: Test Seller
+✓ Role: user
+✓ Verified: undefined
+
+=== Summary ===
+✓ Categories: 8
+✓ Active Products: 80
+✓ Seller User: Found
+
+✓ Data verification completed successfully
+
+exit_code=0
