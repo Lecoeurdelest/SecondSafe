@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-003",
+  "spec_hash": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
+  "source_hash": "627f355e0be282b8256e7a25f07e2dc313b60ea0ede246d5ae39a4542c02b7ae",
+  "completion_policy": "manual platform/scaffold completion; no order or other domain business logic is accepted by this task",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-NFR-SEC-11-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Observed HTTP/platform evidence; no calibrated domain-logic confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/jest.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/flow-review.txt",
+            ".project/evidence/TASK-003/run-01/syntax.txt",
+            ".project/evidence/TASK-003/run-01/logging-scan.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-REL-06-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Observed HTTP/platform evidence; no calibrated domain-logic confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/jest.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/flow-review.txt",
+            ".project/evidence/TASK-003/run-01/syntax.txt",
+            ".project/evidence/TASK-003/run-01/logging-scan.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-PERF-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Observed HTTP/platform evidence; no calibrated domain-logic confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/jest.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/flow-review.txt",
+            ".project/evidence/TASK-003/run-01/syntax.txt",
+            ".project/evidence/TASK-003/run-01/logging-scan.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-PERF-04-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Observed HTTP/platform evidence; no calibrated domain-logic confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/jest.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/flow-review.txt",
+            ".project/evidence/TASK-003/run-01/syntax.txt",
+            ".project/evidence/TASK-003/run-01/logging-scan.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-USA-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Observed HTTP/platform evidence; no calibrated domain-logic confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/jest.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/flow-review.txt",
+            ".project/evidence/TASK-003/run-01/syntax.txt",
+            ".project/evidence/TASK-003/run-01/logging-scan.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-OBS-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Observed HTTP/platform evidence; no calibrated domain-logic confidence claimed",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/jest.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-003/run-01/flow-review.txt",
+            ".project/evidence/TASK-003/run-01/syntax.txt",
+            ".project/evidence/TASK-003/run-01/logging-scan.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

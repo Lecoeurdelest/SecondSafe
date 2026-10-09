@@ -3,7 +3,7 @@
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
     "project.yaml": "1855f7d565174eef0ad64e4ff2f041bba0803612701039ce8bb83dd974034d31",
-    ".project/state.json": "f79edb6825fef8858d24d21513489b5c99d509a93603d839b30f892967091813",
+    ".project/state.json": "6c021034c6acf53ee701a50f31c82f23045431bbb23f465fe7d9ab986e3fbd08",
     ".project/delivery.json": "bf46dd3ebbba64b3c70ff45870d5cd4e5d233bbfef03d6a31cdce4b6ef2de123",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
@@ -85,7 +85,7 @@
     },
     "docs/requirements/FR-SYS.md": {
       "ownership": "generated",
-      "sha256": "7b6e6ea071387129f17afa8f408ef439ed0f54da4be45c447a1f0a9c5559e6b7"
+      "sha256": "e2ef31e1a297fd2d1db9785fb75bda7719d57362297c8baba5a9a8561dc501b9"
     },
     "docs/requirements/FR-WEB.md": {
       "ownership": "generated",
@@ -93,7 +93,7 @@
     },
     "docs/requirements/NFR.md": {
       "ownership": "generated",
-      "sha256": "d5df40cb00378ae656e040b2bfa46b2983afb2d0e6e144b1f6978e8d2881c0c9"
+      "sha256": "acb7ae84df67734f2398539ae1495153e774ba62cd7d73a269e8faa4d77416f1"
     },
     "docs/requirements/README.md": {
       "ownership": "generated",
@@ -101,27 +101,27 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "69f0e82978408a783c3b0064ee6b54e7224f47f87b44ccc91bb1ce9bf73f49b5"
+      "sha256": "4eeec783100fc66cefb7c5832dfffe0a40bf770ab69115b346549ae509a0072c"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
-      "sha256": "7c19ef249e036015fb6e25b1c9854e558465814f56971e2ca7ce2e1735785940"
+      "sha256": "8582e41b4e366e880a622c9dbe535907e50406dcd7e76c2f7ff2fb91cc388901"
     },
     "docs/task/TASK-002.md": {
       "ownership": "generated",
-      "sha256": "95822311f5361ef6a314a50e6793a4d61a2d38f2c6ff43d534edb44501aef93c"
+      "sha256": "58a2b58256c3d13c1041a04632ebe225bf870b852074c673cdfe9db94f003eea"
     },
     "docs/task/TASK-003.md": {
       "ownership": "generated",
-      "sha256": "7ab1b4fd40a08348c1b309196c3afdc54236d77cecb0b420073e5e10e1269a77"
+      "sha256": "d68ef6530fbc20917ad52615c9a0fcfb3a0ea956d5939332082dec50ca84256d"
     },
     "docs/task/TASK-004.md": {
       "ownership": "generated",
-      "sha256": "8995520dece9c9274be0815f19f74c1fb51edead0f6216d0f9dcf49439c72c3b"
+      "sha256": "5f1158ce62bb712ceffb24a5eadfa4cc0eb6988805243ef4d5eaf639af07decc"
     },
     "docs/task/TASK-005.md": {
       "ownership": "generated",
-      "sha256": "063a66eacabae716ec0a5d4f2d4fda99c37ebadf65d9798aad54b373d416c680"
+      "sha256": "0049349b47d4986d44a82587ca11299991de3723bfa619becbd1533c341f4053"
     },
     "docs/task/TASK-006.md": {
       "ownership": "generated",
@@ -133,7 +133,7 @@
     },
     "docs/task/TASK-008.md": {
       "ownership": "generated",
-      "sha256": "6f76b4a9ae634c6be8f8d92b29d4876e61d77b9ee979d836b5cdadfe44cc877e"
+      "sha256": "e69c36e516563b733a60182ffc2286ff2d26892fe5d57aa6ca20aeefe5a5b6d2"
     },
     "docs/task/TASK-009.md": {
       "ownership": "generated",
@@ -169,7 +169,7 @@
     },
     "docs/task/TASK-017.md": {
       "ownership": "generated",
-      "sha256": "94cc14ba6e9c7d7f791456ffe67a27ee3982464f18b9c0942895611ae3cda633"
+      "sha256": "8f6b6669631e54b60f164aa5edfdab6e4edc780af7ba40a1b5b35b62dbc72c3a"
     },
     "docs/task/TASK-018.md": {
       "ownership": "generated",
@@ -317,7 +317,7 @@
     },
     "docs/task/TASK-054.md": {
       "ownership": "generated",
-      "sha256": "d31862c46ba76a01e9723abe48112a292357aa5b6c8f9a51e99bd74f30d78e00"
+      "sha256": "715062ed1a2b3433e5472f8755133221cd0e6ac5a2047e1faa376cf53a01b188"
     },
     "docs/task/TASK-055.md": {
       "ownership": "generated",
@@ -407,7 +407,7 @@
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "89ad386188f0169953032c91632dd3ffffd1ba1983697e9b7d5b8a27ef1278d3"
+      "sha256": "aeaa234ad8c5da64ab1de3f0f082bbc0b86da397c4882c4aebdd0817feb0859e"
     }
   }
 }

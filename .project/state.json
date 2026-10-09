@@ -3,9 +3,9 @@
   "model": "project.yaml",
   "tasks": {
     "TASK-001": {
-      "execution": "needs_revalidation",
-      "relevance": "current",
-      "detail": "Baseline 5ed8be5 does not boot: merged orders router imports stub authentication middleware; prior evidence preserved; recover in TASK-003/TASK-005.",
+      "execution": "done",
+      "relevance": "superseded",
+      "detail": "Historical empty scaffold superseded by D-009/D-010 migration; original evidence retained; current schema and boot regression checks pass in TASK-003",
       "history": [
         {
           "date": "2026-09-24",
@@ -26,6 +26,11 @@
           "date": "2026-10-09",
           "execution": "needs_revalidation",
           "note": "npm test fails during app import with Router.use() requires a middleware function after PR #1; historical outputs retained"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "HTTP boot regression repaired by TASK-003; empty-stub scaffold is a historical stage, explicitly superseded by the full-stack migration; schema contract survives"
         }
       ],
       "evidence": [
@@ -45,12 +50,13 @@
         "AC-NFR-MNT-02-1": "pass",
         "AC-NFR-MNT-04-1": "pass",
         "AC-NFR-MNT-05-1": "pass"
-      }
+      },
+      "superseded_by": "TASK-053"
     },
     "TASK-002": {
       "execution": "ready",
       "relevance": "current",
-      "detail": "Dependencies done; ready to start",
+      "detail": "Dependencies complete; ready to implement and verify",
       "history": [
         {
           "date": "2026-09-24",
@@ -60,21 +66,48 @@
       ]
     },
     "TASK-003": {
-      "execution": "ready",
+      "execution": "done",
       "relevance": "current",
-      "detail": "Dependencies done; ready to start",
+      "detail": "HTTP platform/scaffold manually verified: 23 tests pass; orders fail closed while guards are unavailable; no domain-confidence claim",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "ready",
           "note": "TASK-001 done"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Repair proceeds despite TASK-001 needing revalidation because this task recovers the failing prerequisite"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "All 23 HTTP/schema tests, syntax and logging scan pass"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Manual platform/scaffold completion on concrete checks; calibrated domain auto-gate not claimed"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-003/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-003.md",
+      "criteria": {
+        "AC-NFR-SEC-11-1": "pass",
+        "AC-NFR-REL-06-1": "pass",
+        "AC-NFR-PERF-01-1": "pass",
+        "AC-NFR-PERF-04-1": "pass",
+        "AC-NFR-USA-01-1": "pass",
+        "AC-NFR-OBS-01-1": "pass"
+      }
     },
     "TASK-004": {
       "execution": "ready",
       "relevance": "current",
-      "detail": "Dependencies done; ready to start",
+      "detail": "Dependencies complete; ready to implement and verify",
       "history": [
         {
           "date": "2026-09-24",
@@ -84,9 +117,9 @@
       ]
     },
     "TASK-005": {
-      "execution": "todo",
+      "execution": "ready",
       "relevance": "current",
-      "detail": "Waiting for TASK-003",
+      "detail": "Dependencies complete; ready to implement and verify",
       "history": []
     },
     "TASK-006": {
@@ -102,9 +135,9 @@
       "history": []
     },
     "TASK-008": {
-      "execution": "todo",
+      "execution": "ready",
       "relevance": "current",
-      "detail": "Waiting for TASK-003",
+      "detail": "Dependencies complete; ready to implement and verify",
       "history": []
     },
     "TASK-009": {
@@ -162,9 +195,9 @@
       "history": []
     },
     "TASK-017": {
-      "execution": "todo",
+      "execution": "ready",
       "relevance": "current",
-      "detail": "Waiting for TASK-003",
+      "detail": "Dependencies complete; ready to implement and verify",
       "history": []
     },
     "TASK-018": {
@@ -439,7 +472,7 @@
     "TASK-054": {
       "execution": "ready",
       "relevance": "current",
-      "detail": "TASK-053 documentation complete; web shell can start",
+      "detail": "Dependencies complete; ready to implement and verify",
       "history": [
         {
           "date": "2026-10-09",

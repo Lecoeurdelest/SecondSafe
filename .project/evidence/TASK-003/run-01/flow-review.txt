@@ -1,0 +1,6 @@
+app.js: helmet precedes CORS, bounded JSON/form parsers, API routing, 404, and terminal error handler. One origin callback rejects foreign origins before the route handlers.
+error.middleware.js: parser/Mongoose/JWT categories map to Vietnamese errors; unexpected server messages and stacks never reach responses; headers-sent errors delegate.
+pagination.util.js: only safe positive integer strings/numbers accepted, limits capped at 100 and skip arithmetic bounded.
+routes.js -> availableRouter: historical orders module is loaded only after all three security middleware exports exist. Unavailable dependencies yield 503 before any order controller or service runs.
+logger.util.js: priority zero is retained with nullish fallback; runtime console calls migrated to leveled output. No request body or Authorization header is logged by HTTP errors.
+No calibrated evaluator exists; this review plus passing tests does not manufacture a calibrated automatic completion score.

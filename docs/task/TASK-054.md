@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `ready` — TASK-053 documentation complete; web shell can start
+**Current state:** `ready` — Dependencies complete; ready to implement and verify
 
 ## Traceability
 

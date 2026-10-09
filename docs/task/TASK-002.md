@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `ready` — Dependencies done; ready to start
+**Current state:** `ready` — Dependencies complete; ready to implement and verify
 
 ## Traceability
 

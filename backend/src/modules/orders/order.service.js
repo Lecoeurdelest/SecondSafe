@@ -1,3 +1,4 @@
+const logger = require('../../common/utils/logger.util');
 const Order = require('./order.model');
 const PurchaseRequest = require('./purchase-request.model');
 const Product = require('../products/product.model');
@@ -174,7 +175,7 @@ async function createPurchaseRequest(buyerId, listingId, message, agreedPrice) {
           message: `Người mua ${buyer.fullName || 'khách hàng'} vừa tạo đơn cho "${product.title}". Vui lòng xác nhận đơn.`
         });
       } catch (notificationError) {
-        console.error('Error sending quick-buy order notification:', notificationError);
+        logger.error('Error sending quick-buy order notification:', notificationError);
       }
       
       return order;
@@ -219,7 +220,7 @@ async function createPurchaseRequest(buyerId, listingId, message, agreedPrice) {
         message: `${buyer.fullName || 'Một người dùng'} vừa gửi yêu cầu mua cho sản phẩm "${product.title}".`
       });
     } catch (notificationError) {
-      console.error('Error sending purchase-request notification:', notificationError);
+      logger.error('Error sending purchase-request notification:', notificationError);
     }
     
     return purchaseRequest;
@@ -446,7 +447,7 @@ async function acceptPurchaseRequest(requestId, sellerId) {
         emitMessageToConversation(updatedOfferMessage.conversationId.toString(), normalizedMessage);
       }
     } catch (emitError) {
-      console.error('Error emitting accepted offer update:', emitError);
+      logger.error('Error emitting accepted offer update:', emitError);
     }
 
     // Send notification to the user who needs to take next action
@@ -478,7 +479,7 @@ async function acceptPurchaseRequest(requestId, sellerId) {
         );
       }
     } catch (error) {
-      console.error('Error sending order notification:', error);
+      logger.error('Error sending order notification:', error);
     }
     
     return order[0];
@@ -558,7 +559,7 @@ async function rejectPurchaseRequest(requestId, sellerId, reason = '') {
       emitMessageToConversation(updatedOfferMessage.conversationId.toString(), normalizedMessage);
     }
   } catch (emitError) {
-    console.error('Error emitting rejected offer update:', emitError);
+    logger.error('Error emitting rejected offer update:', emitError);
   }
 
   try {
@@ -573,7 +574,7 @@ async function rejectPurchaseRequest(requestId, sellerId, reason = '') {
       message: `${responder?.fullName || 'Người dùng'} đã từ chối đề nghị cho sản phẩm "${product?.title || 'Sản phẩm'}".${reason ? ` Lý do: ${reason}` : ''}`
     });
   } catch (notificationError) {
-    console.error('Error sending rejected-offer notification:', notificationError);
+    logger.error('Error sending rejected-offer notification:', notificationError);
   }
   
   return request;
@@ -1097,7 +1098,7 @@ async function forceCancelOrder(orderId, moderatorId, reason) {
         })
       ]);
     } catch (notificationError) {
-      console.error('Error sending force-cancel notifications:', notificationError);
+      logger.error('Error sending force-cancel notifications:', notificationError);
     }
 
     return order;
@@ -1146,7 +1147,7 @@ async function confirmOrderBySeller(orderId, sellerId) {
       message: 'Người bán đã xác nhận đơn hàng của bạn. Bạn có thể tiến hành thanh toán ngay.'
     });
   } catch (error) {
-    console.error('Error sending order confirmed notification:', error);
+    logger.error('Error sending order confirmed notification:', error);
   }
   
   // Populate order details
@@ -1327,7 +1328,7 @@ async function confirmShipment(orderId, sellerId, shipmentData = {}) {
         message: 'Người bán đã xác nhận giao hàng. Bạn có thể theo dõi tiến trình trong chi tiết đơn hàng.'
       });
     } catch (notificationError) {
-      console.error('Error sending shipped notification:', notificationError);
+      logger.error('Error sending shipped notification:', notificationError);
     }
     
     return order;
@@ -1374,7 +1375,7 @@ async function confirmDelivery(orderId, sellerId) {
       message: 'Người bán xác nhận đơn hàng đã giao đến nơi. Vui lòng xác nhận nhận hàng trong 5 ngày.'
     });
   } catch (notificationError) {
-    console.error('Error sending delivered notification:', notificationError);
+    logger.error('Error sending delivered notification:', notificationError);
   }
 
   return order;
@@ -1439,7 +1440,7 @@ async function confirmReceipt(orderId, buyerId) {
         message: `Người mua đã xác nhận nhận hàng cho đơn "${order.productId?.title || 'Sản phẩm'}".`
       });
     } catch (notificationError) {
-      console.error('Error sending completed notification:', notificationError);
+      logger.error('Error sending completed notification:', notificationError);
     }
     
     return order;
@@ -1481,7 +1482,7 @@ async function cancelOrderAsBuyer(orderId, buyerId, reason = 'Người mua hủy
         message: `Người mua đã hủy đơn hàng mã #${order.orderCode || order._id.toString().slice(-8).toUpperCase()}. Tiền đã được hoàn về ví người mua.`
       });
     } catch (e) {
-      console.error('Lỗi khi gửi thông báo hủy đơn:', e);
+      logger.error('Lỗi khi gửi thông báo hủy đơn:', e);
     }
     
     return await Order.findById(orderId);
@@ -1510,7 +1511,7 @@ async function cancelOrderAsBuyer(orderId, buyerId, reason = 'Người mua hủy
           message: `Người mua đã hủy đơn hàng mã #${order.orderCode || order._id.toString().slice(-8).toUpperCase()} trước khi thanh toán.`
         });
       } catch (e) {
-        console.error('Lỗi khi gửi thông báo hủy đơn:', e);
+        logger.error('Lỗi khi gửi thông báo hủy đơn:', e);
       }
 
       return order;

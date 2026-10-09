@@ -1,18 +1,18 @@
 ---
 id: TASK-001
 title: Scaffold the backend database layer and control framework
-execution_status: needs_revalidation
-relevance: current
+execution_status: done
+relevance: superseded
 depends_on: []
 supersedes: []
-superseded_by: null
+superseded_by: TASK-053
 ---
 
 # TASK-001 — Scaffold the backend database layer and control framework
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `needs_revalidation` — Baseline 5ed8be5 does not boot: merged orders router imports stub authentication middleware; prior evidence preserved; recover in TASK-003/TASK-005.
+**Current state:** `done` — Historical empty scaffold superseded by D-009/D-010 migration; original evidence retained; current schema and boot regression checks pass in TASK-003
 
 ## Traceability
 

@@ -1,7 +1,7 @@
 ---
 id: TASK-003
 title: HTTP foundation
-execution_status: ready
+execution_status: done
 relevance: current
 depends_on: [TASK-001]
 supersedes: []
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `ready` — Dependencies done; ready to start
+**Current state:** `done` — HTTP platform/scaffold manually verified: 23 tests pass; orders fail closed while guards are unavailable; no domain-confidence claim
 
 ## Traceability
 
@@ -66,12 +66,12 @@ Errors carry statusCode; the error middleware maps unknown errors to 500 without
 
 ## Acceptance criteria and verification
 
-- [ ] `AC-NFR-SEC-11-1` (NFR-SEC-11) — CORS is configured once and allows only FRONTEND_URL, and security headers are applied to every response. Verify with: behavioral test; `cd backend && npm test`.
-- [ ] `AC-NFR-REL-06-1` (NFR-REL-06) — Errors use {success:false, message} with the correct HTTP status and never include stack traces in production. Verify with: behavioral test; `cd backend && npm test`.
-- [ ] `AC-NFR-PERF-01-1` (NFR-PERF-01) — A shared pagination helper applies default 20 and maximum 100 to every list endpoint. Verify with: behavioral test; `cd backend && npm test`.
-- [ ] `AC-NFR-PERF-04-1` (NFR-PERF-04) — JSON and form bodies are limited to 1 MB; files go through the upload pipeline. Verify with: behavioral test; `cd backend && npm test`.
-- [ ] `AC-NFR-USA-01-1` (NFR-USA-01) — User-facing API messages are Vietnamese with full diacritics, and money is expressed in integer VND. Verify with: behavioral test; `cd backend && npm test`.
-- [ ] `AC-NFR-OBS-01-1` (NFR-OBS-01) — A leveled logger replaces direct console output in application code. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-SEC-11-1` (NFR-SEC-11) — CORS is configured once and allows only FRONTEND_URL, and security headers are applied to every response. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-REL-06-1` (NFR-REL-06) — Errors use {success:false, message} with the correct HTTP status and never include stack traces in production. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-PERF-01-1` (NFR-PERF-01) — A shared pagination helper applies default 20 and maximum 100 to every list endpoint. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-PERF-04-1` (NFR-PERF-04) — JSON and form bodies are limited to 1 MB; files go through the upload pipeline. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-USA-01-1` (NFR-USA-01) — User-facing API messages are Vietnamese with full diacritics, and money is expressed in integer VND. Verify with: behavioral test; `cd backend && npm test`.
+- [x] `AC-NFR-OBS-01-1` (NFR-OBS-01) — A leveled logger replaces direct console output in application code. Verify with: behavioral test; `cd backend && npm test`.
 
 ## Required evidence
 
