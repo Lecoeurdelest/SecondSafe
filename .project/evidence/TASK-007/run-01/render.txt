@@ -1,0 +1,4 @@
+Command: python3 tools/pdd/render.py
+updated 4 file(s)
+
+exit_code=0

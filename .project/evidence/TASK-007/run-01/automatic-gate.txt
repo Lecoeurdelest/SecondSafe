@@ -1,0 +1,21 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py gate project.yaml /Users/quyn28654/Documents/ChatGPT/wdp/SecondSafe/.project/evidence/TASK-007/run-01/report.json --task TASK-007 --source-hash 510bec7502c1a3df9ca6af1d14dcf903683ae2582b367b10e031ed4576888c08
+{
+  "status": "inconclusive",
+  "task_id": "TASK-007",
+  "failures": [],
+  "blockers": [
+    "Applicable validated calibration is unavailable.",
+    "AC-NOTI-04-1: criterion did not pass.",
+    "AC-NOTI-04-1: finite measured confidence is unavailable.",
+    "AC-NFR-SEC-05-2: criterion did not pass.",
+    "AC-NFR-SEC-05-2: finite measured confidence is unavailable.",
+    "AC-NFR-REL-04-1: criterion did not pass.",
+    "AC-NFR-REL-04-1: finite measured confidence is unavailable.",
+    "AC-NFR-INT-01-1: criterion did not pass.",
+    "AC-NFR-INT-01-1: finite measured confidence is unavailable."
+  ],
+  "minimum_criterion_confidence": null,
+  "scope": "Supplied metadata only; independently verify artifacts, calibration, and dependency state."
+}
+
+exit_code=2

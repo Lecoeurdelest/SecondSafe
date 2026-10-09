@@ -15,3 +15,5 @@ Both criteria pass through the configuration tests and the full 43-test backend 
 Existing orders code still contains baseline constants and must consume this configuration when its own tasks rebuild the domain flows. Other services are stubs. Sanction thresholds retain baseline values; adjustable money/timing/restriction settings are listed in `.env.example`. No schemas or account policies changed. INV-08 is retained through safe integer validation for amounts.
 
 Changed files: `backend/src/config/business.js`, `backend/src/config/env.js`, `backend/.env.example`, `backend/tests/business-config.test.js`, execution/delivery records, evidence and generated views. No dependency was added.
+
+Revalidation during TASK-007: added fixed `otpMaxAttempts=5`. All 84 backend tests pass, prior configuration values are unchanged, and the JWT flow is unaffected. Evidence: `.project/evidence/TASK-004/run-02/`.

@@ -1,0 +1,1 @@
+TASK-007 adds the immutable otpMaxAttempts=5 setting required by AC-NFR-SEC-05-2. Existing configuration tests and all 84 backend tests pass. All previous setting values and JWT lifetime paths are unchanged. TASK-005 authentication flow is unaffected. This is configuration revalidation, not a calibrated domain-code acceptance.
