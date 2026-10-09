@@ -105,16 +105,39 @@
       }
     },
     "TASK-004": {
-      "execution": "ready",
+      "execution": "done",
       "relevance": "current",
-      "detail": "Dependencies complete; ready to implement and verify",
+      "detail": "Validated baseline money/time defaults and documented environment overrides; all 43 backend tests pass",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "ready",
           "note": "TASK-001 done"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "in_progress",
+          "note": "Configuration-only task; proposed product decisions retain baseline values"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "verifying",
+          "note": "Original runner outputs recorded; applicable criteria checked"
+        },
+        {
+          "date": "2026-10-09",
+          "execution": "done",
+          "note": "Manual configuration/data-operations completion on concrete tests; no calibrated domain confidence claim"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-004/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-004.md",
+      "criteria": {
+        "AC-NFR-BIZ-01-1": "pass",
+        "AC-NFR-BIZ-02-1": "pass"
+      }
     },
     "TASK-005": {
       "execution": "ready",
@@ -129,9 +152,9 @@
       "history": []
     },
     "TASK-007": {
-      "execution": "todo",
+      "execution": "ready",
       "relevance": "current",
-      "detail": "Waiting for TASK-003, TASK-004",
+      "detail": "Dependencies complete; ready to implement and verify",
       "history": []
     },
     "TASK-008": {

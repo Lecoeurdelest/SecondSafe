@@ -299,7 +299,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-BIZ-01-1` | Fee rate, top-up bounds and withdrawal minimum are configuration values with the baseline defaults, and all amounts are integer VND. | behavioral test | [TASK-004](../task/TASK-004.md) `[]` |
+| `AC-NFR-BIZ-01-1` | Fee rate, top-up bounds and withdrawal minimum are configuration values with the baseline defaults, and all amounts are integer VND. | behavioral test | [TASK-004](../task/TASK-004.md) `[x]` |
 
 ### NFR-BIZ-02 — Time rules as configuration
 
@@ -307,7 +307,7 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-BIZ-02-1` | OTP lifetime, payment window (decision D-104), shipping window, auto-completion window, listing age, reset lifetime and JWT lifetime are configuration values with the baseline defaults. | behavioral test | [TASK-004](../task/TASK-004.md) `[]` |
+| `AC-NFR-BIZ-02-1` | OTP lifetime, payment window (decision D-104), shipping window, auto-completion window, listing age, reset lifetime and JWT lifetime are configuration values with the baseline defaults. | behavioral test | [TASK-004](../task/TASK-004.md) `[x]` |
 
 ### NFR-USA-02 — Responsive user interface
 
