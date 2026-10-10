@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 6/73 tasks done (6 done, 4 verifying, 6 blocked, 57 todo). 156 active requirements, 231 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 6/73 tasks done (6 done, 4 verifying, 63 todo). 153 active requirements, 227 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
@@ -39,7 +39,7 @@ Success means:
 
 ### 4.1 Identity and access
 
-Users register with email verification, log in with email and password or Google, change and recover passwords, and optionally confirm logins with an emailed code (D-101). Access is role-based. Suspension and selling restriction are evaluated on every request by one shared service. Login and recovery never reveal whether an account exists. Requirements: FR-AUTH-01 … FR-AUTH-10.
+Users register with email verification, log in with email and password or Google, and change and recover passwords. Direct password login matches WDP; the unshipped per-user two-factor extension is retired under D-101/D-012. Access is role-based. Suspension and selling restriction are evaluated on every request by one shared service. Login and recovery never reveal whether an account exists. Requirements: FR-AUTH-01 … FR-AUTH-10; FR-AUTH-04 is retained as retired history.
 
 ### 4.2 Profiles
 
@@ -47,7 +47,7 @@ Users and moderators manage their profile (name, phone, structured address, avat
 
 ### 4.3 Listings and catalog
 
-Sellers publish listings with images, categories, condition and location. Listings are published immediately unless D-103 adopts pre-publication moderation (FR-PROD-09). Reserved, sold or order-linked listings are read-only. Buyers browse, search, filter and keep favorites. Requirements: FR-PROD-01 … FR-PROD-09, FR-BROW-01 … FR-BROW-03, FR-FAV-01 … FR-FAV-02.
+Sellers publish listings with images, categories, condition and location. Listings publish immediately with `active`/`approved` status, as in WDP (D-103/D-012); pre-publication moderation is retired. Reserved, sold or order-linked listings are read-only. Buyers browse, search, filter and keep favorites. Requirements: FR-PROD-01 … FR-PROD-09, FR-BROW-01 … FR-BROW-03, FR-FAV-01 … FR-FAV-02; FR-PROD-09 is retained as retired history.
 
 ### 4.4 Chat and negotiation
 
@@ -59,7 +59,7 @@ An order starts from an accepted purchase request, an accepted offer, or a quick
 
 ### 4.6 Wallet, payments and escrow
 
-Each user has a wallet ledger. Users top up through SePay (VNPay depends on D-102), pay orders into escrow, and withdraw through one approval flow (D-105). The platform fee is deducted from the seller payout. Requirements: FR-PAY-01 … FR-PAY-07.
+Each user has a wallet ledger. Users top up through SePay or VNPay (D-102), pay orders into escrow, and withdraw through one approval service accessible through the baseline admin and moderator routes (D-105). The platform fee is deducted from the seller payout. Requirements: FR-PAY-01 … FR-PAY-07.
 
 ### 4.7 Delivery
 
@@ -79,7 +79,7 @@ Domain events create stored notifications that are pushed in real time. Transact
 
 ### 4.11 Moderation
 
-Moderators work from a dashboard. They resolve reports with graded sanctions, correct order states within the transition matrix, judge reviews, and settle disputes by refund, release, or a partial refund (D-106). Requirements: FR-MOD-01 … FR-MOD-10.
+Moderators work from a dashboard. They resolve reports with graded sanctions, correct order states within the transition matrix, judge reviews, and settle disputes by refund or release, matching WDP (D-106/D-012). The unused `partial_refund` enum is preserved under D-003; split settlement is retired. Requirements: FR-MOD-01 … FR-MOD-10; FR-MOD-10 is retained as retired history.
 
 ### 4.12 Administration
 
@@ -116,7 +116,7 @@ Baseline values become configuration defaults (NFR-BIZ-01, NFR-BIZ-02).
 | Top-up bounds | 10,000 – 500,000,000 VND | WDP sepay/vnpay services |
 | Minimum withdrawal | 50,000 VND | WDP wallet.service.js |
 | OTP lifetime | 5 minutes | WDP otp.manager.js |
-| Payment window | 3 minutes (D-104 proposes 15) | WDP order.service.js |
+| Payment window | 3 minutes (D-104 accepted baseline) | WDP order.service.js |
 | Shipping window before automatic refund | 24 hours | WDP cron.service.js |
 | Automatic completion after delivery | 5 days | WDP escrow.service.js |
 | Maximum listing age | 30 days | WDP cron.service.js |
@@ -128,19 +128,19 @@ Baseline values become configuration defaults (NFR-BIZ-01, NFR-BIZ-02).
 
 ## 8. Decisions
 
-Accepted: D-001 stack, D-002 backend-only scope, D-003 schema contract, D-004 empty logic stubs, D-005 English artifacts, D-006 control framework, D-007 single author, D-008 baseline API prefixes.
+Accepted: D-001 stack, D-003 schema contract, D-004 historical empty logic stubs, D-005 English artifacts, D-006 control framework, D-007 single author, D-008 baseline API prefixes, D-009 full-stack scope, D-010 adaptation with defect review, D-011 Gitflow and D-012 baseline parity. D-002 backend-only scope is superseded by D-009.
 
-Proposed. Tasks that depend on an open decision stay blocked until the decision is accepted:
+The earlier recommendations are preserved in `project.yaml`. The user accepted the WDP baseline choices on 2026-10-11; none of these product decisions remains open:
 
-| ID | Question | Recommendation | Blocks |
+| ID | Question | Accepted baseline choice | Task |
 |---|---|---|---|
-| D-101 | Keep two-factor login? | Keep as per-user opt-in | TASK-015 |
-| D-102 | Keep VNPay? | Retire; SePay only | TASK-027 |
-| D-103 | Moderate listings before publishing? | Publish immediately | TASK-048 |
-| D-104 | Payment window | 15 minutes | none (configuration) |
+| D-101 | Keep two-factor login? | Direct login; retire unshipped opt-in extension | TASK-015 retired |
+| D-102 | Keep VNPay? | Keep alongside SePay | TASK-027 |
+| D-103 | Moderate listings before publishing? | Publish immediately | TASK-048 retired |
+| D-104 | Payment window | 3 minutes | none (configuration) |
 | D-105 | Who approves withdrawals? | Admin and moderator through one flow | TASK-029 |
-| D-106 | Partial refunds in disputes? | Implement | TASK-043 |
-| D-107 | Expired listings | Soft expire (status `expired`) | TASK-047 |
+| D-106 | Partial refunds in disputes? | Refund/release only; preserve unused enum | TASK-043 retired |
+| D-107 | Expired listings | Hard delete active listings aged at least 30 days at 03:00 | TASK-047 |
 | D-108 | Shared store for codes, limits, presence | In-memory until scaling | none (adapter boundary) |
 | D-109 | Token revocation | Stateless JWT for the first release | none |
 
@@ -180,3 +180,11 @@ Every new commit author, committer and PR author is Lecoeurdelest, with no co-au
 Gitflow enforcement amendment (2026-10-09): every new commit and PR, including documentation, tooling and review slices, follows the branch and integration rules in `docs/technical/gitflow.md`. Local hooks reject direct stable/integration commits, detached work and incorrect task scope or identity. CI checks every PR target, rejects feature-to-main delivery and verifies task scope. Temporary review stacks preserve small diffs until prerequisites merge, then integrate into `develop`; no merge or history rewrite is authorized by this amendment.
 
 The initial destination inspection finds an app-start regression: the merged orders routes call authentication and seller guards that are still stubs. TASK-001 is marked `needs_revalidation` with historical evidence retained. TASK-003 restores fail-closed HTTP startup while TASK-005/TASK-006 supply the guards. The repair must never expose orders without authentication.
+
+## 13. Baseline parity amendment (2026-10-11)
+
+The user states "Làm y như dự án cũ là được" (matching the old project is sufficient). D-012 uses the pinned WDP revision as the scope and default for product choices. Preserve its working screens, navigation, API contracts, payment providers, constants and user journeys. Do not add unshipped product extensions to the migration.
+
+The inspected choices and exact source paths are recorded in `docs/technical/baseline-choices.md`. D-101 through D-109 are accepted accordingly. TASK-015, TASK-043 and TASK-048 are retired, not completed: their original criteria and IDs stay in the model and their state/history remains visible. Their legacy schema fields and dormant compatibility paths are not removed. TASK-027, TASK-029 and TASK-047 no longer wait for a product decision, but still wait for their existing implementation dependencies.
+
+This amendment changes product scope explicitly. It does not copy reviewed security defects, weaken the accepted wallet/escrow invariants, authorize merges or rewrite contributor history. Behavioral task completion remains subject to the existing verification policy; the parity instruction alone does not supply a calibrated evaluator or amend that policy.

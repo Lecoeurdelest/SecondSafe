@@ -1,7 +1,7 @@
 ---
 id: TASK-047
 title: Listing expiry job
-execution_status: blocked
+execution_status: todo
 relevance: current
 depends_on: [TASK-018]
 supersedes: []
@@ -12,8 +12,6 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-107 (proposed)
-
 ## Traceability
 
 | Field | Value |
@@ -21,7 +19,7 @@ superseded_by: null
 | Requirements | [FR-SYS-04](../requirements/FR-SYS.md#fr-sys-04--expire-old-listings) |
 | Acceptance criteria | `AC-SYS-04-1` |
 | Components | `CMP-JOBS` |
-| Decisions | `D-107` (proposed) |
+| Decisions | `D-107` (accepted) |
 | Milestone | M5 Administration and operations |
 | Baseline references | — |
 

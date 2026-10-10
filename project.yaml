@@ -200,81 +200,146 @@ decisions:
     source: Approved skeleton keeps baseline module routers and mount paths (backend/src/routes.js)
   - id: D-101
     title: 'Two-factor login: keep as a per-user opt-in or retire FR-AUTH-04'
-    status: proposed
+    status: accepted
     source: Tracking sheet decision list item 2
     options:
       - Keep as opt-in per user
       - Retire FR-AUTH-04
+      - Preserve direct password login; retire the new per-user two-factor extension
     recommendation: Keep as opt-in per user
+    selected_option: Preserve direct password login; retire the new per-user two-factor extension
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/modules/auth/auth.service.js loginUser returns user/token; user.model.js has no enablement
+      flag; controller and UI challenge code are dormant.
+    superseding_amendment: D-012
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
   - id: D-102
     title: 'VNPay: keep alongside SePay or retire FR-PAY-04'
-    status: proposed
+    status: accepted
     source: Tracking sheet decision list item 2
     options:
       - Keep VNPay
       - Retire VNPay; SePay only
+      - Keep VNPay alongside SePay
     recommendation: Retire VNPay; SePay only
+    selected_option: Keep VNPay alongside SePay
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/modules/payments/payment.route.js mounts VNPay and SePay; sepay.route.js and frontend payment
+      services preserve provider contracts.
+    superseding_amendment: D-012
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
   - id: D-103
     title: 'Listings: publish immediately or require moderator approval before publishing'
-    status: proposed
+    status: accepted
     source: Tracking sheet decision list item 1
     options:
       - Publish immediately (baseline)
       - Moderator approval first
     recommendation: Publish immediately (baseline)
+    selected_option: Publish immediately (baseline)
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/modules/products/product.service.js createProduct sets status active and moderationStatus
+      approved.
+    superseding_amendment: D-012
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
   - id: D-104
     title: Payment window after order confirmation (baseline 3 minutes)
-    status: proposed
+    status: accepted
     source: Tracking sheet decision list item 3
     options:
       - 3 minutes (baseline)
       - 15 minutes
       - 30 minutes
     recommendation: 15 minutes
-    note: 'Non-blocking: the value is configuration (NFR-BIZ-02); TASK-004 keeps the baseline default until accepted.'
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
+    selected_option: 3 minutes (baseline)
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/modules/orders/order.service.js; baseline paymentDeadline and timeout cron.
+    superseding_amendment: D-012
+    previous_note: 'Non-blocking: the value is configuration (NFR-BIZ-02); TASK-004 keeps the baseline default until accepted.'
   - id: D-105
     title: Withdrawal approval owner
-    status: proposed
+    status: accepted
     source: Tracking sheet decision list item 4
     options:
       - Admin only
       - Moderator only
       - Admin and moderator through one flow
     recommendation: Admin and moderator through one flow
+    selected_option: Admin and moderator through one flow
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/modules/payments/wallet.route.js and modules/moderator/moderator.route.js; both staff withdrawal
+      UIs. Preserve both route contracts and use one ledger service to avoid duplicate debit.
+    superseding_amendment: D-012
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
   - id: D-106
     title: Partial refunds in dispute resolution
-    status: proposed
+    status: accepted
     source: Tracking sheet decision list item 5
     options:
       - Implement partial_refund
       - Remove partial_refund from the enum
+      - Preserve refund/release only; retain the dormant partial_refund enum
     recommendation: Implement partial_refund
+    selected_option: Preserve refund/release only; retain the dormant partial_refund enum
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/modules/moderator/moderator.controller.js validates refund/release; moderator.service.js
+      resolves these two outcomes; both staff dispute detail screens offer them.
+    superseding_amendment: D-012
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
   - id: D-107
     title: Listing expiry handling after the maximum age
-    status: proposed
+    status: accepted
     source: Tracking sheet defect DEF-13
     options:
       - Soft expire (status expired)
       - Hard delete (baseline)
     recommendation: Soft expire (status expired)
+    selected_option: Hard delete (baseline)
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/services/cron.service.js startExpiredListingCleanupCron deletes active listings aged at least
+      30 days at 03:00 daily.
+    superseding_amendment: D-012
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
   - id: D-108
     title: Shared store (for example Redis) for one-time codes, rate limits and socket presence
-    status: proposed
+    status: accepted
     source: NFR-REL-04
     options:
       - Single instance, in-memory adapter
       - Shared Redis adapter
     recommendation: Single instance, in-memory adapter until horizontal scaling is needed
-    note: 'Non-blocking: tasks implement a store interface with an in-memory adapter.'
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
+    selected_option: Single instance, in-memory adapter
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/common/utils/otp.manager.js uses a Map. Retain the implemented adapter boundary; Redis and
+      horizontal deployment are outside baseline parity.
+    superseding_amendment: D-012
+    previous_note: 'Non-blocking: tasks implement a store interface with an in-memory adapter.'
   - id: D-109
     title: Token revocation and refresh strategy
-    status: proposed
+    status: accepted
     source: FR-AUTH-08, NFR-SEC-03
     options:
       - Stateless JWT, client discards on logout (baseline)
       - Short access token plus refresh token with revocation
     recommendation: Stateless JWT (baseline) for the first release
-    note: 'Non-blocking: TASK-005 and TASK-012 keep the baseline behavior.'
+    note: Baseline choice accepted under D-012; earlier recommendations are retained as history, not the selected behavior.
+    selected_option: Stateless JWT, client discards on logout (baseline)
+    accepted_on: '2026-10-11'
+    approval: 'User instruction 2026-10-11: "Làm y như dự án cũ là được" (match the old project).'
+    baseline_evidence: backend/src/common/utils/jwt.util.js generates seven-day JWTs; no refresh or revocation store in the
+      baseline.
+    superseding_amendment: D-012
+    previous_note: 'Non-blocking: TASK-005 and TASK-012 keep the baseline behavior.'
   - id: D-009
     title: Migrate both frontend and backend from WDP through small tracked tasks
     status: accepted
@@ -290,6 +355,14 @@ decisions:
       committers are Lecoeurdelest
     status: accepted
     source: 'User request 2026-10-09: Gitflow, self-service PR creation, sole user authorship'
+  - id: D-012
+    title: The pinned WDP behavior is the product scope and default for migration decisions
+    status: accepted
+    source: 'User instruction 2026-10-11: "Làm y như dự án cũ là được"'
+    baseline_revision: 1cea2b7fc673619f19e9bf76eb745e0e44cc50c1
+    note: Preserve working user-visible flows, APIs, FE layout and baseline constants. Retire unshipped extensions TASK-015/TASK-043/TASK-048
+      without deleting IDs, criteria, schema fields or evidence. Retain accepted security and ledger invariants; no code acceptance-policy
+      change or merge authorization is implied.
 invariants:
   - id: INV-01
     statement: 'Money is never created or lost: every balance change writes a transaction with balance before and after, and
@@ -402,6 +475,10 @@ requirements:
       - id: AC-AUTH-04-2
         statement: POST /api/auth/login/verify-2fa issues the token only for a valid, unexpired code with purpose login_2fa.
         verification: *id001
+    status: retired
+    deferral_reason: 'Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor setting.
+      Preserve dormant compatibility code and schemas; do not add a new opt-in feature.'
+    retirement_decision: D-012
   - id: FR-AUTH-05
     title: Recover a forgotten password
     kind: functional
@@ -708,6 +785,10 @@ requirements:
         statement: When enabled by D-103, new listings stay pending until a moderator approves them, and rejection stores
           a reason visible to the seller.
         verification: *id001
+    status: retired
+    deferral_reason: 'Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication
+      queue is part of baseline migration.'
+    retirement_decision: D-012
   - id: FR-PROD-08
     title: Categories
     kind: functional
@@ -1778,6 +1859,10 @@ requirements:
         statement: A partial_refund resolution returns refundAmount (0 < refundAmount < totalToPay) to the buyer and releases
           the remainder to the seller in one transaction.
         verification: *id002
+    status: retired
+    deferral_reason: 'Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund
+      enum under D-003; do not add split settlement.'
+    retirement_decision: D-012
   - id: FR-ADM-01
     title: Admin dashboard
     kind: functional
@@ -3533,6 +3618,7 @@ tasks:
       - CMP-AUTH
     decision_ids:
       - D-101
+      - D-012
     depends_on:
       - TASK-007
       - TASK-012
@@ -3563,6 +3649,9 @@ tasks:
       - A needed schema change has no approved schema-change task (D-003)
       - Verification cannot run or produces no original output
       - 'D-101 is rejected: retire FR-AUTH-04 and this task instead of implementing it'
+    retirement_decision: D-012
+    retirement_reason: 'Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor
+      setting. Preserve dormant compatibility code and schemas; do not add a new opt-in feature.'
   - id: TASK-016
     title: Profiles and public profile
     requirement_ids:
@@ -4752,6 +4841,7 @@ tasks:
       - CMP-WALLET
     decision_ids:
       - D-106
+      - D-012
     depends_on:
       - TASK-042
     acceptance_ids:
@@ -4782,6 +4872,9 @@ tasks:
       - A needed schema change has no approved schema-change task (D-003)
       - Verification cannot run or produces no original output
       - 'D-106 is rejected: remove partial_refund from the dispute enum through a schema-change task and retire FR-MOD-10'
+    retirement_decision: D-012
+    retirement_reason: 'Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund
+      enum under D-003; do not add split settlement.'
   - id: TASK-044
     title: Admin user management
     requirement_ids:
@@ -4957,6 +5050,7 @@ tasks:
       - CMP-MODERATION
     decision_ids:
       - D-103
+      - D-012
     depends_on:
       - TASK-018
       - TASK-040
@@ -4989,6 +5083,9 @@ tasks:
       - A needed schema change has no approved schema-change task (D-003)
       - Verification cannot run or produces no original output
       - 'D-103 keeps immediate publishing: retire this task'
+    retirement_decision: D-012
+    retirement_reason: 'Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication
+      queue is part of baseline migration.'
   - id: TASK-049
     title: Authorization, privacy and coverage gates
     requirement_ids:
@@ -5159,62 +5256,66 @@ tasks:
   - id: TASK-053
     title: Migration inventory, FE task decomposition and Gitflow delivery
     requirement_ids:
-    - NFR-MIG-01
+      - NFR-MIG-01
     component_ids:
-    - CMP-CONTROL
+      - CMP-CONTROL
     decision_ids:
-    - D-009
-    - D-010
-    - D-011
+      - D-009
+      - D-010
+      - D-011
+      - D-012
     depends_on: []
     acceptance_ids:
-    - AC-MIG-01-1
-    objective: The inventory pins both repositories, preserves TASK-001 through TASK-052, maps frontend modules to
-      new bounded tasks, and defines sole-author Gitflow PR delivery.
+      - AC-MIG-01-1
+    objective: The inventory pins both repositories, preserves TASK-001 through TASK-052, maps frontend modules to new bounded
+      tasks, and defines sole-author Gitflow PR delivery.
     in_scope:
-    - Pin source and destination revisions and document inspected behavior
-    - Add bounded FE tasks without changing the 52 existing BE definitions
-    - Track task issues and PRs in .project/delivery.json and generated docs
-    - Enforce Gitflow branches, PR routes, commit task scope and the existing sole-author rule
+      - Pin source and destination revisions and document inspected behavior
+      - Add bounded FE tasks without changing the 52 existing BE definitions
+      - Track task issues and PRs in .project/delivery.json and generated docs
+      - Enforce Gitflow branches, PR routes, commit task scope and the existing sole-author rule
+      - Record the explicitly authorized WDP parity decisions and retire unshipped extensions while preserving original IDs,
+        criteria and evidence
     out_of_scope:
-    - Unrelated modules
-    - Schema or business-rule changes outside an explicit task
-    - Production deployment or live payment execution
+      - Unrelated modules
+      - Schema or business-rule changes outside an explicit task
+      - Production deployment or live payment execution
     inputs:
-    - plan.md#12. Migration amendment (2026-10-09)
-    - docs/technical/migration-wdp.md
-    - docs/technical/gitflow.md
-    - docs/technical/architecture.md
+      - plan.md#12. Migration amendment (2026-10-09)
+      - docs/technical/migration-wdp.md
+      - docs/technical/gitflow.md
+      - docs/technical/architecture.md
+      - plan.md#13. Baseline parity amendment (2026-10-11)
     outputs:
-    - plan.md
-    - project.yaml
-    - docs/technical/migration-wdp.md
-    - docs/technical/gitflow.md
-    - tools/pdd/render.py
-    - tools/pdd/check-migration.py
-    - tools/pdd/sync-issues.py
-    - .project/delivery.json
-    - docs/task/TASK-053.md
-    - tools/pdd/check-authorship.py
-    - tools/pdd/check-gitflow.py
-    - tools/pdd/install-gitflow-hooks.py
-    - tools/pdd/test_gitflow.py
-    - .github/workflows/task-delivery.yml
+      - plan.md
+      - project.yaml
+      - docs/technical/migration-wdp.md
+      - docs/technical/gitflow.md
+      - tools/pdd/render.py
+      - tools/pdd/check-migration.py
+      - tools/pdd/sync-issues.py
+      - .project/delivery.json
+      - docs/task/TASK-053.md
+      - tools/pdd/check-authorship.py
+      - tools/pdd/check-gitflow.py
+      - tools/pdd/install-gitflow-hooks.py
+      - tools/pdd/test_gitflow.py
+      - .github/workflows/task-delivery.yml
+      - docs/technical/baseline-choices.md
     invariants:
-    - INV-01
-    - INV-05
-    - INV-06
-    - INV-08
+      - INV-01
+      - INV-05
+      - INV-06
+      - INV-08
     verification_commands:
-    - python3 tools/pdd/check-migration.py
-    - python3 tools/pdd/render.py --check
+      - python3 tools/pdd/check-migration.py
+      - python3 tools/pdd/render.py --check
     stop_conditions:
-    - A required decision is not accepted
-    - A needed schema change has no approved schema-change task (D-003)
-    - Verification cannot run or produces no original output
-    technical_approach: Preserve existing task IDs, criteria, schemas and history. Add a full-stack scope amendment,
-      FE requirements, task dependencies and a delivery view. Record the initial backend import regression as observed
-      failure, not passing behavior.
+      - A required decision is not accepted
+      - A needed schema change has no approved schema-change task (D-003)
+      - Verification cannot run or produces no original output
+    technical_approach: Preserve existing task IDs, criteria, schemas and history. Add a full-stack scope amendment, FE requirements,
+      task dependencies and a delivery view. Record the initial backend import regression as observed failure, not passing behavior.
     baseline_refs: []
   - id: TASK-054
     title: Web runtime, API client and application shell

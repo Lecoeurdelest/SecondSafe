@@ -324,16 +324,23 @@
       "history": []
     },
     "TASK-015": {
-      "execution": "blocked",
-      "relevance": "current",
-      "detail": "Awaiting decision D-101 (proposed)",
+      "execution": "todo",
+      "relevance": "retired",
+      "detail": "Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor setting. Preserve dormant compatibility code and schemas; do not add a new opt-in feature.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-101"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "retired",
+          "note": "Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor setting. Preserve dormant compatibility code and schemas; do not add a new opt-in feature."
         }
-      ]
+      ],
+      "retirement_decision": "D-012"
     },
     "TASK-016": {
       "execution": "todo",
@@ -420,14 +427,20 @@
       "history": []
     },
     "TASK-027": {
-      "execution": "blocked",
+      "execution": "todo",
       "relevance": "current",
-      "detail": "Awaiting decision D-102 (proposed)",
+      "detail": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-102"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "current",
+          "note": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies."
         }
       ]
     },
@@ -438,14 +451,20 @@
       "history": []
     },
     "TASK-029": {
-      "execution": "blocked",
+      "execution": "todo",
       "relevance": "current",
-      "detail": "Awaiting decision D-105 (proposed)",
+      "detail": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-105"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "current",
+          "note": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies."
         }
       ]
     },
@@ -528,16 +547,23 @@
       "history": []
     },
     "TASK-043": {
-      "execution": "blocked",
-      "relevance": "current",
-      "detail": "Awaiting decision D-106 (proposed)",
+      "execution": "todo",
+      "relevance": "retired",
+      "detail": "Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund enum under D-003; do not add split settlement.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-106"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "retired",
+          "note": "Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund enum under D-003; do not add split settlement."
         }
-      ]
+      ],
+      "retirement_decision": "D-012"
     },
     "TASK-044": {
       "execution": "todo",
@@ -558,28 +584,41 @@
       "history": []
     },
     "TASK-047": {
-      "execution": "blocked",
+      "execution": "todo",
       "relevance": "current",
-      "detail": "Awaiting decision D-107 (proposed)",
+      "detail": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-107"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "current",
+          "note": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies."
         }
       ]
     },
     "TASK-048": {
-      "execution": "blocked",
-      "relevance": "current",
-      "detail": "Awaiting decision D-103 (proposed)",
+      "execution": "todo",
+      "relevance": "retired",
+      "detail": "Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication queue is part of baseline migration.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-103"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "retired",
+          "note": "Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication queue is part of baseline migration."
         }
-      ]
+      ],
+      "retirement_decision": "D-012"
     },
     "TASK-049": {
       "execution": "todo",
@@ -608,7 +647,7 @@
     "TASK-053": {
       "execution": "done",
       "relevance": "current",
-      "detail": "Direct Gitflow branch names, installed hooks and all 12 PR routes/task scopes/authors verified; PR replacement mapping retains review slices and original history",
+      "detail": "D-012 pins WDP parity: nine product choices accepted, three unshipped extensions retired, original criteria/IDs preserved; 110 backend tests and structural checks pass.",
       "history": [
         {
           "date": "2026-10-09",
@@ -634,12 +673,23 @@
           "date": "2026-10-09",
           "execution": "done",
           "note": "User removes branch namespace; renamed 12 task branches, replaced GitHub PR heads, synchronized delivery links/CI filters and verified direct Gitflow naming"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "in_progress",
+          "note": "Applying the user-authorized baseline parity amendment and reconciling retired extensions; original evidence retained."
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "done",
+          "note": "D-012 pins WDP parity: nine product choices accepted, three unshipped extensions retired, original criteria/IDs preserved; 110 backend tests and structural checks pass."
         }
       ],
       "evidence": [
         ".project/evidence/TASK-053/run-03/report.json",
         ".project/evidence/TASK-053/run-04-gitflow/report.json",
-        ".project/evidence/TASK-053/run-05-branch-names/report.json"
+        ".project/evidence/TASK-053/run-05-branch-names/report.json",
+        ".project/evidence/TASK-053/run-06-baseline-parity/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-053.md",
       "criteria": {

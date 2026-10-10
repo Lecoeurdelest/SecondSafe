@@ -101,10 +101,12 @@ Baseline: `GET /api/users/profile`, `PUT /api/users/profile`, `POST /api/users/c
 
 ### FR-MOD-10 — Partial refund in dispute resolution
 
-Risk: `critical` · Component: `CMP-MODERATION` · Source: `plan.md` § 4.11 Moderation
+Risk: `critical` · Component: `CMP-MODERATION` · Source: `plan.md` § 4.11 Moderation · Status: **retired**
+
+> Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund enum under D-003; do not add split settlement.
 
 Baseline: `dispute.model.js resolution partial_refund, refundAmount`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-10-1` | A partial_refund resolution returns refundAmount (0 < refundAmount < totalToPay) to the buyer and releases the remainder to the seller in one transaction. | static flow review, behavioral test | [TASK-043](../task/TASK-043.md) `[!]` |
+| `AC-MOD-10-1` | A partial_refund resolution returns refundAmount (0 < refundAmount < totalToPay) to the buyer and releases the remainder to the seller in one transaction. | static flow review, behavioral test | [TASK-043](../task/TASK-043.md) `[]` |

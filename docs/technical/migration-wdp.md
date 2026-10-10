@@ -2,6 +2,8 @@
 
 Source: [Trungnc273/WDP](https://github.com/Trungnc273/WDP), inspected commit `1cea2b7fc673619f19e9bf76eb745e0e44cc50c1`. Destination: [Lecoeurdelest/SecondSafe](https://github.com/Lecoeurdelest/SecondSafe), starting commit `5ed8be5`. No source commit history is imported. Existing destination history and accepted schemas are retained.
 
+The user confirmed WDP parity on 2026-10-11 (D-012). [Accepted baseline choices](baseline-choices.md) resolve D-101 through D-109 using source behavior; unshipped two-factor enablement, split refunds and pre-publication moderation are retired while their IDs, criteria and schema fields remain. Preserve the working baseline FE screens and flows; each slice still needs its own evidence.
+
 WDP contains a CommonJS Express/Mongoose API and a React 18 application using React Router, Axios, Socket.IO, Ant Design, Recharts and Firebase. Its user-facing product name is ReFlow. SecondSafe contains the accepted data layer, PDD documents and mostly empty application stubs, plus orders code added by PR #1. The frontend is absent. The source revision matches the baseline already recorded by SecondSafe.
 
 ## Backend mapping

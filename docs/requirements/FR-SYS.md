@@ -40,7 +40,7 @@ Baseline: `cron.service.js startExpiredListingCleanupCron`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-SYS-04-1` | A daily 03:00 job handles active listings older than the configured age (default 30 days) as decided in D-107. | behavioral test | [TASK-047](../task/TASK-047.md) `[!]` |
+| `AC-SYS-04-1` | A daily 03:00 job handles active listings older than the configured age (default 30 days) as decided in D-107. | behavioral test | [TASK-047](../task/TASK-047.md) `[]` |
 
 ### FR-SYS-06 — Database initialization scripts
 
