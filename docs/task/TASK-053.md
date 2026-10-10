@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `done` — Direct Gitflow branch names, installed hooks and all 12 PR routes/task scopes/authors verified; PR replacement mapping retains review slices and original history
+**Current state:** `done` — D-012 pins WDP parity: nine product choices accepted, three unshipped extensions retired, original criteria/IDs preserved; 110 backend tests and structural checks pass.
 
 ## Traceability
 
@@ -21,7 +21,7 @@ superseded_by: null
 | Requirements | [NFR-MIG-01](../requirements/NFR.md#nfr-mig-01--migration-inventory-fe-task-decomposition-and-gitflow-delivery) |
 | Acceptance criteria | `AC-MIG-01-1` |
 | Components | `CMP-CONTROL` |
-| Decisions | `D-009` (accepted), `D-010` (accepted), `D-011` (accepted) |
+| Decisions | `D-009` (accepted), `D-010` (accepted), `D-011` (accepted), `D-012` (accepted) |
 | Milestone | M6 Migration control |
 | Baseline references | — |
 
@@ -35,6 +35,7 @@ The inventory pins both repositories, preserves TASK-001 through TASK-052, maps 
 - Add bounded FE tasks without changing the 52 existing BE definitions
 - Track task issues and PRs in .project/delivery.json and generated docs
 - Enforce Gitflow branches, PR routes, commit task scope and the existing sole-author rule
+- Record the explicitly authorized WDP parity decisions and retire unshipped extensions while preserving original IDs, criteria and evidence
 
 ## Out of scope
 
@@ -48,6 +49,7 @@ The inventory pins both repositories, preserves TASK-001 through TASK-052, maps 
 - docs/technical/migration-wdp.md
 - docs/technical/gitflow.md
 - docs/technical/architecture.md
+- plan.md#13. Baseline parity amendment (2026-10-11)
 
 ## Technical approach
 
@@ -69,6 +71,7 @@ Preserve existing task IDs, criteria, schemas and history. Add a full-stack scop
 - `tools/pdd/install-gitflow-hooks.py`
 - `tools/pdd/test_gitflow.py`
 - `.github/workflows/task-delivery.yml`
+- `docs/technical/baseline-choices.md`
 
 ## Invariants and constraints
 

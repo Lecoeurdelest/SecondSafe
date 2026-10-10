@@ -43,3 +43,15 @@ Original verification is under `.project/evidence/TASK-053/run-04-gitflow/`. The
 The user removed the additional branch namespace. All 12 active task branches now use `feature/...`; release and hotfix validation uses `release/...` and `hotfix/...`. Hooks reject the legacy namespace. GitHub closes PRs when their head branch is renamed, so replacement PRs #88–#99 retain each existing review slice and draft state. Original commits and historical evidence are preserved. Delivery links and CI branch filters are synchronized throughout the stack.
 
 Run-05 retains the rename/PR mapping, original metadata snapshots and deterministic route/hook, history, runtime-preservation and structural checks. The pre-existing TASK-053 scaffold startup failure is preserved; all task branches from the repaired HTTP foundation onward pass their backend suites.
+
+## User-authorized baseline parity (2026-10-11)
+
+D-012 records the user's instruction to match WDP. D-101 through D-109 now select inspected baseline behavior instead of leaving product questions open: both payment providers, immediate publication, three-minute payment, admin/moderator withdrawal access, refund/release settlement, hard deletion of old active listings, in-memory adapters and stateless JWTs.
+
+The unshipped opt-in two-factor, split-refund and pre-publication extensions (TASK-015, TASK-043, TASK-048) are retired with their original acceptance criteria, IDs and schema fields preserved. Retirement is not implementation completion. TASK-027, TASK-029 and TASK-047 return to the unfinished backlog with their existing dependencies. The renderer shows retirement detail in each generated task specification.
+
+Original source inspection, preservation checks, backend regression results and structural outputs are recorded in `.project/evidence/TASK-053/run-06-baseline-parity/`. Runtime and schema files are unchanged; the source revision is pinned in the source-review output. Global evidence history is preserved. The scope changes affect the three retired extensions; remaining criteria and runtime expectations are unchanged. TASK-053 is revalidated as documentation, while TASK-005/007/008/017 remain verifying under the unchanged code acceptance policy.
+
+The separate FE contribution in PR #102 remains on main and is not reverted. This docs delivery starts from develop; all its new commits and its PR use Lecoeurdelest. No merge, force push or completion-policy amendment is authorized by the parity instruction.
+
+Run-07 records PR #103 as a supporting delivery alongside canonical PR #88 and Gitflow PR #99. Authorship and the develop target are verified from GitHub; mapping/status/generated checks are rerun. Run-06 source inspection and backend results remain applicable because the follow-up changes only delivery documentation. Original outputs are retained.

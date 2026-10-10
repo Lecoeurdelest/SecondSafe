@@ -1,7 +1,7 @@
 ---
 id: TASK-029
 title: Withdrawal approval
-execution_status: blocked
+execution_status: todo
 relevance: current
 depends_on: [TASK-010, TASK-028]
 supersedes: []
@@ -12,8 +12,6 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-105 (proposed)
-
 ## Traceability
 
 | Field | Value |
@@ -21,7 +19,7 @@ superseded_by: null
 | Requirements | [FR-PAY-06](../requirements/FR-PAY.md#fr-pay-06--approve-or-reject-withdrawals) |
 | Acceptance criteria | `AC-PAY-06-1`, `AC-PAY-06-2` |
 | Components | `CMP-WALLET`, `CMP-MODERATION` |
-| Decisions | `D-105` (proposed) |
+| Decisions | `D-105` (accepted) |
 | Milestone | M3 Money and orders |
 | Baseline references | — |
 

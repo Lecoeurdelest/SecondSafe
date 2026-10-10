@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-053",
+  "spec_hash": "2bc2a21a100788b56065c16f37689ca23f2c36caf238a9c8aaf3ce46c9f9a204",
+  "source_hash": "c7efa8125929c47b46572cb6f7430a0f75ae87868cc133b4352f780bf9f85b06",
+  "outcome": "pass",
+  "completion_policy": "Manual documentation completion on verified delivery metadata and structural checks",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-MIG-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Documentation scope; no domain calibration applies",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "document_check",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-053/run-07-parity-delivery/github-pr.json",
+            ".project/evidence/TASK-053/run-07-parity-delivery/commands.json",
+            ".project/evidence/TASK-053/run-07-parity-delivery/validate.json",
+            ".project/evidence/TASK-053/run-07-parity-delivery/preservation.txt.gz",
+            ".project/evidence/TASK-053/run-07-parity-delivery/task-status.json.gz",
+            ".project/evidence/TASK-053/run-07-parity-delivery/migration.txt",
+            ".project/evidence/TASK-053/run-07-parity-delivery/render.txt",
+            ".project/evidence/TASK-053/run-07-parity-delivery/source-manifest.txt",
+            ".project/evidence/TASK-053/run-06-baseline-parity/source-review.json",
+            ".project/evidence/TASK-053/run-06-baseline-parity/backend.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

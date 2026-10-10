@@ -1,0 +1,14 @@
+{
+  "author": {
+    "id": "U_kgDOBvD29g",
+    "is_bot": false,
+    "login": "Lecoeurdelest",
+    "name": ""
+  },
+  "baseRefName": "develop",
+  "headRefName": "feature/task-053-baseline-parity",
+  "headRefOid": "d9b399501a4c5c9ff263b2b3d044d9378c4e466d",
+  "number": 103,
+  "state": "OPEN",
+  "url": "https://github.com/Lecoeurdelest/SecondSafe/pull/103"
+}

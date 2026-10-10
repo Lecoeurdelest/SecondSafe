@@ -42,7 +42,7 @@ Baseline: `POST /api/payments/vnpay/create`, `GET /api/payments/vnpay/callback`,
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PAY-04-1` | VNPay payment URLs are signed, callbacks and returns are accepted only with a valid HMAC signature, and each payment credits the wallet at most once. | static flow review, behavioral test | [TASK-027](../task/TASK-027.md) `[!]` |
+| `AC-PAY-04-1` | VNPay payment URLs are signed, callbacks and returns are accepted only with a valid HMAC signature, and each payment credits the wallet at most once. | static flow review, behavioral test | [TASK-027](../task/TASK-027.md) `[]` |
 
 ### FR-PAY-05 — Request a withdrawal
 
@@ -62,8 +62,8 @@ Baseline: `/api/wallets/admin/withdrawals/*`, `/api/moderator/withdrawals/*`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PAY-06-1` | A single approval flow exists, owned by the role chosen in decision D-105. | static flow review | [TASK-029](../task/TASK-029.md) `[!]` |
-| `AC-PAY-06-2` | Only pending withdrawals can be processed; approval debits the wallet and completes the request, and rejection records the reason without a debit. | static flow review, behavioral test | [TASK-029](../task/TASK-029.md) `[!]` |
+| `AC-PAY-06-1` | A single approval flow exists, owned by the role chosen in decision D-105. | static flow review | [TASK-029](../task/TASK-029.md) `[]` |
+| `AC-PAY-06-2` | Only pending withdrawals can be processed; approval debits the wallet and completes the request, and rejection records the reason without a debit. | static flow review, behavioral test | [TASK-029](../task/TASK-029.md) `[]` |
 
 ### FR-PAY-07 — Escrow
 

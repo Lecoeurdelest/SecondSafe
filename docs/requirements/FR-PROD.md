@@ -77,13 +77,15 @@ Baseline: `GET /api/products/:id`
 
 ### FR-PROD-09 — Pre-publication listing moderation
 
-Risk: `standard` · Component: `CMP-CATALOG` · Source: `plan.md` § 4.3 Listings and catalog
+Risk: `standard` · Component: `CMP-CATALOG` · Source: `plan.md` § 4.3 Listings and catalog · Status: **retired**
+
+> Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication queue is part of baseline migration.
 
 Baseline: `moderationStatus field in product.model.js (unused in baseline)`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-09-1` | When enabled by D-103, new listings stay pending until a moderator approves them, and rejection stores a reason visible to the seller. | behavioral test | [TASK-048](../task/TASK-048.md) `[!]` |
+| `AC-PROD-09-1` | When enabled by D-103, new listings stay pending until a moderator approves them, and rejection stores a reason visible to the seller. | behavioral test | [TASK-048](../task/TASK-048.md) `[]` |
 
 ### FR-PROD-08 — Categories
 

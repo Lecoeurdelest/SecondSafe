@@ -1,8 +1,8 @@
 ---
 id: TASK-048
 title: Listing pre-publication moderation
-execution_status: blocked
-relevance: current
+execution_status: todo
+relevance: retired
 depends_on: [TASK-018, TASK-040]
 supersedes: []
 superseded_by: null
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-103 (proposed)
+**Current state:** `todo` — Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication queue is part of baseline migration.
 
 ## Traceability
 
@@ -21,7 +21,7 @@ superseded_by: null
 | Requirements | [FR-PROD-09](../requirements/FR-PROD.md#fr-prod-09--pre-publication-listing-moderation) |
 | Acceptance criteria | `AC-PROD-09-1` |
 | Components | `CMP-CATALOG`, `CMP-MODERATION` |
-| Decisions | `D-103` (proposed) |
+| Decisions | `D-103` (accepted), `D-012` (accepted) |
 | Milestone | M5 Administration and operations |
 | Baseline references | — |
 

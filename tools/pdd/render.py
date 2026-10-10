@@ -195,7 +195,7 @@ def render_task_spec(model, state, task):
              f"supersedes: [{', '.join(record.get('supersedes', []))}]", f"superseded_by: {record.get('superseded_by') or 'null'}", '---', '']
     lines = front + [f"# {task['id']} — {task['title']}", '',
                      '> Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.', '']
-    if record['execution'] != 'todo' and record.get('detail'):
+    if record.get('detail') and (record['execution'] != 'todo' or record.get('relevance') != 'current'):
         lines += [f"**Current state:** `{record['execution']}` — {record['detail']}", '']
     lines += ['## Traceability', '', '| Field | Value |', '|---|---|',
               '| Requirements | ' + ', '.join(f"[{r}](../requirements/{requirement_file(r)}#{anchor(model, r)})" for r in task['requirement_ids']) + ' |',

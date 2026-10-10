@@ -1,8 +1,8 @@
 ---
 id: TASK-015
 title: Optional two-factor login
-execution_status: blocked
-relevance: current
+execution_status: todo
+relevance: retired
 depends_on: [TASK-007, TASK-012]
 supersedes: []
 superseded_by: null
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-101 (proposed)
+**Current state:** `todo` — Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor setting. Preserve dormant compatibility code and schemas; do not add a new opt-in feature.
 
 ## Traceability
 
@@ -21,7 +21,7 @@ superseded_by: null
 | Requirements | [FR-AUTH-04](../requirements/FR-AUTH.md#fr-auth-04--two-factor-login-optional) |
 | Acceptance criteria | `AC-AUTH-04-1`, `AC-AUTH-04-2` |
 | Components | `CMP-AUTH` |
-| Decisions | `D-101` (proposed) |
+| Decisions | `D-101` (accepted), `D-012` (accepted) |
 | Milestone | M1 Platform and identity |
 | Baseline references | — |
 
