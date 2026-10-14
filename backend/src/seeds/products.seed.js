@@ -868,7 +868,7 @@ async function seedProducts() {
       category: categoryMap[product.categorySlug],
       seller: seller._id,
       views: Math.floor(Math.random() * 500), // Random views between 0-499
-      images: ['/images/placeholders/product-placeholder.svg'] // Use placeholder image
+      images: [`/images/products/${product.categorySlug}.${product.categorySlug === 'toys' ? 'svg' : 'jpg'}`]
     }));
 
     // Remove categorySlug field
