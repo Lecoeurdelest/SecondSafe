@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import productService from '../../services/product.service';
-import locationService from '../../services/location.service';
 import ProductList from '../../components/ProductList';
 import './Home.css';
 
@@ -17,6 +16,8 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  const loadMoreRequested = useRef(false);
+  const newProductsStartId = useRef(null);
 
   // State for filters (Req 6-9)
   const [filters, setFilters] = useState({
@@ -29,10 +30,6 @@ function Home() {
     condition: null
   });
 
-  const [provinces, setProvinces] = useState([]);
-  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const locationDropdownRef = useRef(null);
-
   // State phan trang (Yeu cau 5)
   const [pagination, setPagination] = useState({
     page: 1,
@@ -40,29 +37,6 @@ function Home() {
     total: 0,
     totalPages: 0
   });
-
-  // Tai danh muc tinh/thanh khi component mount
-  useEffect(() => {
-    fetchProvinces();
-  }, []);
-
-  const fetchProvinces = async () => {
-    const data = await locationService.getProvinces();
-    setProvinces(data);
-  };
-
-  // Dong dropdown khi click ra ngoai
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (locationDropdownRef.current && !locationDropdownRef.current.contains(e.target)) {
-        setShowLocationDropdown(false);
-      }
-    };
-    if (showLocationDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showLocationDropdown]);
 
   // Tai san pham khi bo loc thay doi (reset ve trang 1)
   useEffect(() => {
@@ -78,6 +52,14 @@ function Home() {
     fetchProducts(1, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
+
+  useEffect(() => {
+    if (!newProductsStartId.current) return;
+    const firstNewProduct = document.getElementById(`product-${newProductsStartId.current}`);
+    if (!firstNewProduct) return;
+    firstNewProduct.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    newProductsStartId.current = null;
+  }, [products]);
 
   useEffect(() => {
     const handleProductsUpdated = () => {
@@ -144,8 +126,14 @@ function Home() {
       }
 
       if (reset) {
+        loadMoreRequested.current = false;
         setProducts(processed);
       } else {
+        const shouldScrollToNewPage = loadMoreRequested.current;
+        loadMoreRequested.current = false;
+        if (shouldScrollToNewPage && processed.length > 0) {
+          newProductsStartId.current = processed[0]._id;
+        }
         setProducts(prev => {
           const merged = [...prev, ...processed];
           if (filters.sort === 'name_asc' || filters.sort === 'name_desc') {
@@ -169,6 +157,7 @@ function Home() {
 
       setHasMore(page < (result.totalPages || 0));
     } catch (err) {
+      loadMoreRequested.current = false;
       console.error('Error fetching products:', err);
       setError('Không thể tải sản phẩm. Vui lòng thử lại sau.');
     } finally {
@@ -180,7 +169,9 @@ function Home() {
    * Handle load more
    */
   const handleLoadMore = () => {
+    if (loading) return;
     const nextPage = pagination.page + 1;
+    loadMoreRequested.current = true;
     fetchProducts(nextPage, false);
   };
 
@@ -203,17 +194,6 @@ function Home() {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
 
-  const toggleCity = (cityName) => {
-    const next = filters.cities.includes(cityName)
-      ? filters.cities.filter(c => c !== cityName)
-      : [...filters.cities, cityName];
-    handleFilterChange({ cities: next });
-  };
-
-  const locationLabel = filters.cities && filters.cities.length > 0
-    ? (filters.cities.length === 1 ? filters.cities[0] : `${filters.cities.length} tỉnh/thành`)
-    : 'Chọn khu vực';
-
   // Categories data - Updated to match seed data
   const categories = [
     { id: 'books', name: 'Sách', icon: '📚' },
@@ -230,12 +210,7 @@ function Home() {
     <div className="home">
       {/* Hero Banner */}
       <div className="home__hero">
-        <div className="home__hero-background">
-          <img
-            src="/images/banners/banner.png"
-            alt="ReFlow Banner"
-            className="home__hero-image"
-          />
+        <div className="home__hero-background" aria-hidden="true">
           <div className="home__hero-overlay"></div>
         </div>
 
@@ -278,42 +253,20 @@ function Home() {
                 />
               </div>
 
-              {/* Location Dropdown */}
-              <div className="search-advanced__location" ref={locationDropdownRef} style={{ position: 'relative' }}>
+              {/* City filter */}
+              <label className="search-advanced__location">
                 <span className="search-advanced__location-icon">📍</span>
-                <button
-                  type="button"
-                  className="search-advanced__location-btn"
-                  onClick={() => setShowLocationDropdown(prev => !prev)}
-                >
-                  {locationLabel}
-                  <span style={{ marginLeft: '6px', fontSize: '10px' }}>▼</span>
-                </button>
-                {showLocationDropdown && (
-                  <div className="location-dropdown-panel">
-                    <div className="location-dropdown-panel__list">
-                      {provinces.map((province) => (
-                        <label key={province.code} className="location-dropdown-panel__item">
-                          <input
-                            type="checkbox"
-                            checked={filters.cities.includes(province.name)}
-                            onChange={() => toggleCity(province.name)}
-                          />
-                          {province.name}
-                        </label>
-                      ))}
-                    </div>
-                    {filters.cities.length > 0 && (
-                      <button
-                        className="location-dropdown-panel__clear"
-                        onClick={() => handleFilterChange({ cities: [] })}
-                      >
-                        ✕ Xóa lựa chọn
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
+                <input
+                  className="search-advanced__city"
+                  type="text"
+                  placeholder="Tỉnh/thành"
+                  aria-label="Lọc theo tỉnh/thành"
+                  value={filters.cities[0] || ''}
+                  onChange={(event) => handleFilterChange({
+                    cities: event.target.value ? [event.target.value] : []
+                  })}
+                />
+              </label>
 
               {/* (Sort removed from search bar - moved below categories) */}
               {/* Search Button */}
@@ -380,7 +333,7 @@ function Home() {
       <div className="home__content">
         {/* Products Section */}
         <div className="home__products-container">
-          <main className="home__main">
+          <section className="home__main" aria-label="Sản phẩm đang được rao bán">
             {/* Error Message */}
             {error && (
               <div className="home__error">
@@ -392,17 +345,17 @@ function Home() {
             )}
 
             {/* Product List - Requirement 5 */}
-            <ProductList products={products} loading={loading} />
+            <ProductList products={products} loading={loading && products.length === 0} />
 
             {/* Load More Button */}
-            {!loading && !error && hasMore && products.length > 0 && (
+            {!error && hasMore && products.length > 0 && (
               <div className="home__load-more">
-                <button onClick={handleLoadMore} className="home__load-more-button">
-                  Xem thêm
+                <button onClick={handleLoadMore} className="home__load-more-button" disabled={loading}>
+                  {loading ? 'Đang tải sản phẩm...' : 'Xem thêm'}
                 </button>
               </div>
             )}
-          </main>
+          </section>
         </div>
       </div>
     </div>

@@ -19,9 +19,13 @@ function ProductCard({ product }) {
     price,
     images,
     location,
-    createdAt,
-    seller
+    createdAt
   } = product;
+  const isIllustration = !images?.some(image => (
+    typeof image === 'string'
+    && image.trim()
+    && !image.endsWith('/placeholders/product-placeholder.svg')
+  ));
 
   // Dinh dang gia theo tien te Viet Nam
   const formatPrice = (price) => {
@@ -53,13 +57,14 @@ function ProductCard({ product }) {
   };
 
   return (
-    <div className="product-card" onClick={handleClick}>
+    <div id={`product-${_id}`} className="product-card" onClick={handleClick}>
       <div className="product-card__image">
         <img 
           src={imageUrl} 
-          alt={title}
+          alt={isIllustration ? `${title} (ảnh minh họa)` : title}
           onError={(e) => handleImageError(e, 'product')}
         />
+        {isIllustration && <span className="product-card__image-label">Ảnh minh họa</span>}
         {images && images.length > 1 && (
           <div className="product-card__image-count">
             📷 {images.length}

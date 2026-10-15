@@ -36,10 +36,6 @@ describe('HTTP shell', () => {
     expect(response.body).toEqual({ success: true, service: 'secondsafe-backend' });
   });
 
-  test('module routers are mounted but expose no business endpoints yet', async () => {
-    const response = await request(app).get('/api/products');
-    expect(response.status).toBe(404);
-  });
 });
 
 describe('Database contract', () => {

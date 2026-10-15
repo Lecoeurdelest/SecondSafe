@@ -11,8 +11,8 @@ const config = {
     expiresIn: business.jwtTtlSeconds,
   },
   chat: {
-    // Uu tien khoa rieng cho chat; fallback JWT_SECRET de khong vo moi truong cu.
-    encryptionKey: process.env.CHAT_ENCRYPTION_KEY || process.env.JWT_SECRET,
+    // Khoa rieng bat buoc cho chat (NFR-SEC-07): khong dung chung JWT_SECRET.
+    encryptionKey: process.env.CHAT_ENCRYPTION_KEY,
   },
   server: {
     port: process.env.PORT || 5000,
