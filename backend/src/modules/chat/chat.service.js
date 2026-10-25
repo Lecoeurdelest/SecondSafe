@@ -186,6 +186,10 @@ async function sendMessage(conversationId, senderId, payload, role) {
   const { type, content, metadata } = normalizePayload(payload);
   const conversation = await getConversationById(conversationId, senderId, role);
   if (conversation.status !== 'active') throw httpError(409, 'Cuộc trò chuyện không còn hoạt động');
+  // Anh phai la file da upload vao chinh cuoc tro chuyen nay (khong nhan link ngoai).
+  if (type === 'image' && !metadata.imageUrl.startsWith(`/uploads/chat/${conversation._id}/`)) {
+    throw httpError(400, 'Ảnh không thuộc cuộc trò chuyện này');
+  }
 
   const message = await Message.create({
     conversationId: conversation._id,

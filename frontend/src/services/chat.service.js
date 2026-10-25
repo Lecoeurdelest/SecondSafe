@@ -27,9 +27,21 @@ const chatService = {
   markAsRead: async conversationId =>
     (await api.patch(`/chat/conversations/${conversationId}/read`)).data.data,
 
-  // REST fallback khi socket mat ket noi.
-  sendMessage: async (conversationId, content) =>
-    (await api.post('/chat/messages', { conversationId, content })).data.data
+  // REST fallback khi socket mat ket noi; payload la chuoi (text) hoac { content, type, metadata }.
+  sendMessage: async (conversationId, payload) =>
+    (await api.post('/chat/messages', { conversationId, ...(typeof payload === 'string' ? { content: payload } : payload) })).data.data,
+
+  // Upload anh vao cuoc tro chuyen; tra ve { imageUrl } de gui tin nhan type image.
+  uploadImage: async (conversationId, file) => {
+    const form = new FormData();
+    form.append('image', file);
+    return (await api.post(`/chat/conversations/${conversationId}/images`, form)).data.data;
+  }
 };
+
+// Anh luu tren backend duoi /uploads; frontend chay o origin khac nen can ghep origin API.
+export function chatImageUrl(imageUrl) {
+  return /^https?:\/\//i.test(imageUrl) ? imageUrl : `${NETWORK_CONFIG.API_ORIGIN}${imageUrl}`;
+}
 
 export default chatService;

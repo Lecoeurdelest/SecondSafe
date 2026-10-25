@@ -1,11 +1,12 @@
 const chatService = require('./chat.service');
 const { emitNewMessage } = require('./chat.socket');
-const { sendSuccess } = require('../../common/utils/response.util');
+const { publicPath } = require('./chat.upload');
+const { sendSuccess, sendError } = require('../../common/utils/response.util');
 
 function handle(action) {
   return async (req, res, next) => {
     try {
-      return await action(req, res);
+      return await action(req, res, next);
     } catch (error) {
       return next(error);
     }
@@ -56,7 +57,25 @@ const sendMessage = handle(async (req, res) => {
   return sendSuccess(res, 200, message, 'Gửi tin nhắn thành công');
 });
 
+// Kiem tra quyen truoc khi multer ghi file: nguoi ngoai khong de lai file tren dia (AC-CHAT-03-1).
+const requireParticipant = handle(async (req, res, next) => {
+  req.chatConversation = await chatService.getConversationById(req.params.id, req.user.userId, req.user.role);
+  return next();
+});
+
+const uploadImage = handle(async (req, res) => {
+  if (!req.file) return sendError(res, 400, 'Vui lòng chọn ảnh để upload');
+  return sendSuccess(res, 200, {
+    imageUrl: publicPath(String(req.chatConversation._id), req.file.filename),
+    fileName: req.file.originalname,
+    mimeType: req.file.mimetype,
+    size: req.file.size
+  }, 'Upload ảnh chat thành công');
+});
+
 module.exports = {
+  requireParticipant,
+  uploadImage,
   getConversations,
   createConversation,
   getOrCreateConversationByOrder,

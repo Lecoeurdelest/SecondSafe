@@ -165,15 +165,19 @@ describe('AC-CHAT-02-3 / AC-NFR-SEC-07-1 send over REST with encryption at rest'
     }));
   });
 
-  test('image messages need an imageUrl and use a photo preview', async () => {
+  test('image messages need an uploaded image of this conversation and use a photo preview', async () => {
+    const imageUrl = `/uploads/chat/${CONVERSATION}/a.png`;
     const missing = await request(app).post('/api/chat/messages')
       .set('Authorization', auth(SELLER)).send({ conversationId: CONVERSATION, type: 'image' });
+    const external = await request(app).post('/api/chat/messages')
+      .set('Authorization', auth(SELLER)).send({ conversationId: CONVERSATION, type: 'image', metadata: { imageUrl: 'https://evil.test/x.png' } });
     const sent = await request(app).post('/api/chat/messages')
-      .set('Authorization', auth(SELLER)).send({ conversationId: CONVERSATION, type: 'image', metadata: { imageUrl: '/uploads/a.png' } });
+      .set('Authorization', auth(SELLER)).send({ conversationId: CONVERSATION, type: 'image', metadata: { imageUrl } });
 
     expect(missing.status).toBe(400);
+    expect(external.status).toBe(400);
     expect(sent.status).toBe(200);
-    expect(sent.body.data.metadata).toEqual({ imageUrl: '/uploads/a.png' });
+    expect(sent.body.data.metadata).toEqual({ imageUrl });
     expect(Conversation.updateOne).toHaveBeenCalledWith({ _id: CONVERSATION }, expect.objectContaining({
       $set: expect.objectContaining({ lastMessage: '📷 Hình ảnh' }),
       $inc: { buyerUnreadCount: 1 }
@@ -247,4 +251,49 @@ test('AC-NFR-SEC-07-1 encryption requires CHAT_ENCRYPTION_KEY without falling ba
   } finally {
     process.env.CHAT_ENCRYPTION_KEY = key;
   }
+});
+
+describe('AC-CHAT-03-1 chat image upload', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const { UPLOAD_ROOT, MAX_IMAGE_BYTES } = require('../src/modules/chat/chat.upload');
+  const conversationDir = path.join(UPLOAD_ROOT, CONVERSATION);
+  const png = Buffer.from('89504e470d0a1a0a', 'hex');
+
+  beforeEach(() => Conversation.findById.mockReturnValue(chain(conversationDoc())));
+  afterAll(() => fs.rmSync(conversationDir, { recursive: true, force: true }));
+
+  test('a participant uploads an image and gets its stored path', async () => {
+    const response = await request(app).post(`/api/chat/conversations/${CONVERSATION}/images`)
+      .set('Authorization', auth(BUYER)).attach('image', png, { filename: 'photo.png', contentType: 'image/png' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.data).toMatchObject({ fileName: 'photo.png', mimeType: 'image/png', size: png.length });
+    expect(response.body.data.imageUrl.startsWith(`/uploads/chat/${CONVERSATION}/`)).toBe(true);
+    expect(path.basename(response.body.data.imageUrl)).toMatch(/^[\w-]+\.png$/);
+    expect(fs.existsSync(path.join(conversationDir, path.basename(response.body.data.imageUrl)))).toBe(true);
+  });
+
+  test('a non-participant is rejected before any file is written', async () => {
+    fs.rmSync(conversationDir, { recursive: true, force: true });
+    const response = await request(app).post(`/api/chat/conversations/${CONVERSATION}/images`)
+      .set('Authorization', auth(STRANGER)).attach('image', png, { filename: 'photo.png', contentType: 'image/png' });
+
+    expect(response.status).toBe(403);
+    expect(fs.existsSync(conversationDir)).toBe(false);
+  });
+
+  test('rejects non-image files, files over 20 MB and missing files', async () => {
+    const pdf = await request(app).post(`/api/chat/conversations/${CONVERSATION}/images`)
+      .set('Authorization', auth(BUYER)).attach('image', Buffer.from('%PDF'), { filename: 'a.pdf', contentType: 'application/pdf' });
+    const tooLarge = await request(app).post(`/api/chat/conversations/${CONVERSATION}/images`)
+      .set('Authorization', auth(BUYER))
+      .attach('image', Buffer.alloc(MAX_IMAGE_BYTES + 1), { filename: 'big.png', contentType: 'image/png' });
+    const missing = await request(app).post(`/api/chat/conversations/${CONVERSATION}/images`)
+      .set('Authorization', auth(BUYER));
+
+    expect(pdf.status).toBe(400);
+    expect(tooLarge.status).toBe(413);
+    expect(missing.status).toBe(400);
+  });
 });

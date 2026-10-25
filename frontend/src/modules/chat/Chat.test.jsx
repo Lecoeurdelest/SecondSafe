@@ -7,7 +7,8 @@ import chatService, { connectChatSocket } from '../../services/chat.service';
 jest.mock('../../services/chat.service', () => ({
   __esModule: true,
   connectChatSocket: jest.fn(),
-  default: { getConversations: jest.fn(), getMessages: jest.fn(), sendMessage: jest.fn() }
+  chatImageUrl: url => `http://api.test${url}`,
+  default: { getConversations: jest.fn(), getMessages: jest.fn(), sendMessage: jest.fn(), uploadImage: jest.fn() }
 }));
 
 const ME = '507f1f77bcf86cd799439011';
@@ -90,6 +91,43 @@ test('falls back to REST when the socket is disconnected', async () => {
   fireEvent.change(screen.getByLabelText('Nội dung tin nhắn'), { target: { value: 'Gửi qua REST' } });
   fireEvent.click(screen.getByRole('button', { name: 'Gửi' }));
 
-  await waitFor(() => expect(chatService.sendMessage).toHaveBeenCalledWith(CONVERSATION, 'Gửi qua REST'));
+  await waitFor(() => expect(chatService.sendMessage).toHaveBeenCalledWith(CONVERSATION, { content: 'Gửi qua REST' }));
   expect(await screen.findByText('Gửi qua REST')).toBeInTheDocument();
+});
+
+test('uploads a chosen image then sends it as an image message', async () => {
+  const socket = fakeSocket(true);
+  connectChatSocket.mockReturnValue(socket);
+  const imageUrl = `/uploads/chat/${CONVERSATION}/a.png`;
+  chatService.uploadImage.mockResolvedValue({ imageUrl });
+  renderChat(`/chat/${CONVERSATION}`);
+  await screen.findByText('Chào bạn');
+
+  const file = new File(['png'], 'a.png', { type: 'image/png' });
+  fireEvent.change(screen.getByLabelText('Gửi ảnh'), { target: { files: [file] } });
+
+  await waitFor(() => expect(chatService.uploadImage).toHaveBeenCalledWith(CONVERSATION, file));
+  await waitFor(() => expect(socket.emit).toHaveBeenCalledWith(
+    'send_message', { conversationId: CONVERSATION, type: 'image', metadata: { imageUrl } }, expect.any(Function)
+  ));
+});
+
+test('rejects non-image files without uploading', async () => {
+  connectChatSocket.mockReturnValue(fakeSocket(true));
+  renderChat(`/chat/${CONVERSATION}`);
+  await screen.findByText('Chào bạn');
+
+  fireEvent.change(screen.getByLabelText('Gửi ảnh'), { target: { files: [new File(['x'], 'a.pdf', { type: 'application/pdf' })] } });
+
+  expect(await screen.findByRole('alert')).toHaveTextContent('Vui lòng chọn tệp ảnh');
+  expect(chatService.uploadImage).not.toHaveBeenCalled();
+});
+
+test('renders image messages from the backend origin', async () => {
+  connectChatSocket.mockReturnValue(fakeSocket(true));
+  chatService.getMessages.mockResolvedValue({
+    messages: [{ _id: 'm3', type: 'image', content: 'Đã gửi một ảnh', metadata: { imageUrl: '/uploads/chat/x/a.png' }, senderId: { _id: SELLER } }]
+  });
+  renderChat(`/chat/${CONVERSATION}`);
+  expect(await screen.findByRole('img', { name: 'Đã gửi một ảnh' })).toHaveAttribute('src', 'http://api.test/uploads/chat/x/a.png');
 });
