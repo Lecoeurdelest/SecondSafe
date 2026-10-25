@@ -2,9 +2,13 @@ const chatService = require('./chat.service');
 const User = require('../users/user.model');
 const { verifyToken } = require('../../common/utils/jwt.util');
 const logger = require('../../common/utils/logger.util');
+const { createMemoryStore } = require('../../common/utils/expiring-store.util');
 
-// userId -> so socket dang mo (mot user co the mo nhieu tab).
-const onlineUsers = new Map();
+// Presence dung chung store interface voi OTP (NFR-REL-04): mac dinh in-memory,
+// adapter dung chung (D-108) duoc truyen vao initializeChatSocket.
+// Han du phong de ban ghi mo coi (process chet giua chung) tu het han.
+const PRESENCE_TTL_MS = 24 * 60 * 60 * 1000;
+let presenceStore = createMemoryStore();
 let ioInstance = null;
 
 const userRoom = userId => `user:${userId}`;
@@ -60,19 +64,35 @@ function emitNewMessage(conversationId, message, recipients = []) {
   }
 }
 
-function trackOnline(userId, delta) {
-  const count = (onlineUsers.get(userId) || 0) + delta;
-  if (count > 0) onlineUsers.set(userId, count);
-  else onlineUsers.delete(userId);
-  return count;
+const presenceKey = userId => `presence:${userId}`;
+
+// Dem so socket dang mo cua user (nhieu tab); tra ve so luong sau khi cap nhat.
+function changePresence(userId, delta) {
+  return presenceStore.update(presenceKey(userId), previous => {
+    const count = Math.max(0, (previous?.count || 0) + delta);
+    return { record: count > 0 ? { count, expiresAt: Date.now() + PRESENCE_TTL_MS } : null, result: count };
+  });
+}
+
+// Lay tu cac socket dang ket noi (fetchSockets hoat dong ca khi co adapter dung chung).
+async function onlineUserIds(io) {
+  const sockets = await io.fetchSockets();
+  return Array.from(new Set(sockets.map(item => item.data.user?.userId).filter(Boolean)));
+}
+
+async function announcePresence(io, socket, userId) {
+  try {
+    if (await changePresence(userId, 1) === 1) socket.broadcast.emit('user_online', { userId });
+    socket.emit('online_users', await onlineUserIds(io));
+  } catch (error) {
+    logger.error('Socket presence update failed', error);
+  }
 }
 
 function registerHandlers(io, socket) {
   const { userId, role } = socket.data.user;
 
   socket.join(userRoom(userId));
-  if (trackOnline(userId, 1) === 1) socket.broadcast.emit('user_online', { userId });
-  socket.emit('online_users', Array.from(onlineUsers.keys()));
 
   socket.on('join_conversation', guarded(socket, async data => {
     const conversationId = conversationIdOf(data);
@@ -111,20 +131,29 @@ function registerHandlers(io, socket) {
     return result;
   }));
 
-  socket.on('disconnect', () => {
-    if (trackOnline(userId, -1) === 0) socket.broadcast.emit('user_offline', { userId });
+  socket.on('disconnect', async () => {
+    try {
+      if (await changePresence(userId, -1) === 0) socket.broadcast.emit('user_offline', { userId });
+    } catch (error) {
+      logger.error('Socket presence update failed', error);
+    }
   });
+
+  // Dang ky handler truoc, cap nhat presence sau: khong lo su kien gui ngay sau khi ket noi.
+  announcePresence(io, socket, userId);
 }
 
-function initializeChatSocket(io) {
+function initializeChatSocket(io, { store } = {}) {
   ioInstance = io;
+  if (store) presenceStore = store;
   io.use(authenticateSocket);
   io.on('connection', socket => registerHandlers(io, socket));
   logger.info('Socket.IO chat gateway initialized');
 }
 
-function isUserOnline(userId) {
-  return onlineUsers.has(String(userId));
+async function isUserOnline(userId) {
+  const count = await presenceStore.update(presenceKey(String(userId)), previous => ({ record: previous, result: previous?.count || 0 }));
+  return count > 0;
 }
 
 function emitToUser(userId, eventName, payload) {
