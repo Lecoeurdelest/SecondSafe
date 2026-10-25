@@ -131,4 +131,9 @@ function emitToUser(userId, eventName, payload) {
   if (ioInstance && userId && eventName) ioInstance.to(userRoom(String(userId))).emit(eventName, payload);
 }
 
-module.exports = { initializeChatSocket, emitNewMessage, emitToUser, isUserOnline };
+// Ten cu ma module orders (offer trong chat) dang goi: chi phat toi phong cuoc tro chuyen.
+function emitMessageToConversation(conversationId, message) {
+  emitNewMessage(conversationId, message);
+}
+
+module.exports = { initializeChatSocket, emitNewMessage, emitMessageToConversation, emitToUser, isUserOnline };

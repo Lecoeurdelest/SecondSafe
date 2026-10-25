@@ -12,7 +12,7 @@ const { Server } = require('socket.io');
 const { io: connectClient } = require('socket.io-client');
 const User = require('../src/modules/users/user.model');
 const chatService = require('../src/modules/chat/chat.service');
-const { initializeChatSocket, isUserOnline } = require('../src/modules/chat/chat.socket');
+const { initializeChatSocket, isUserOnline, emitMessageToConversation } = require('../src/modules/chat/chat.socket');
 const { generateJWT } = require('../src/common/utils/jwt.util');
 const logger = require('../src/common/utils/logger.util');
 
@@ -125,4 +125,15 @@ test('service failures are reported to the sender without crashing the connectio
   const ack = await emitWithAck(buyer, 'send_message', { conversationId: CONVERSATION, content: 'x' });
   expect(ack).toEqual({ success: false, message: 'Lỗi hệ thống, vui lòng thử lại sau' });
   expect(buyer.connected).toBe(true);
+});
+
+test('emitMessageToConversation (used by chat offers in orders) broadcasts to the conversation room', async () => {
+  const seller = await connected(SELLER);
+  await emitWithAck(seller, 'join_conversation', CONVERSATION);
+  const offer = { _id: 'offer-1', type: 'offer', content: 'Người bán gửi đề nghị: 100.000đ' };
+  const received = once(seller, 'receive_message');
+
+  emitMessageToConversation(CONVERSATION, offer);
+
+  expect(await received).toEqual({ conversationId: CONVERSATION, message: { ...offer, conversation: CONVERSATION } });
 });
