@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import chatService, { connectChatSocket } from '../../services/chat.service';
+import chatService, { chatImageUrl, connectChatSocket } from '../../services/chat.service';
 import './Chat.css';
 
 const TYPING_IDLE_MS = 1500;
+const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
 
 function sessionToken() {
   try { return window.localStorage.getItem('token'); } catch { return null; }
@@ -37,6 +38,7 @@ export default function Chat() {
   const [error, setError] = useState(null);
   const [typingUser, setTypingUser] = useState(null);
   const [online, setOnline] = useState(() => new Set());
+  const [uploading, setUploading] = useState(false);
   const socketRef = useRef(null);
   const typingTimer = useRef(null);
   const listEnd = useRef(null);
@@ -109,27 +111,49 @@ export default function Chat() {
     typingTimer.current = setTimeout(() => socket.emit('stop_typing', { conversationId }), TYPING_IDLE_MS);
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    const content = draft.trim();
-    if (!content || !conversationId) return;
-    setDraft('');
+  // Gui qua socket neu dang ket noi, nguoc lai dung REST fallback.
+  async function deliver(payload) {
     setError(null);
     const socket = socketRef.current;
-    socket?.emit('stop_typing', { conversationId });
     if (socket?.connected) {
-      socket.emit('send_message', { conversationId, content }, ack => {
+      socket.emit('send_message', { conversationId, ...payload }, ack => {
         if (!ack?.success) setError(ack?.message || 'Không thể gửi tin nhắn');
         else loadConversations();
       });
       return;
     }
     try {
-      const message = await chatService.sendMessage(conversationId, content);
+      const message = await chatService.sendMessage(conversationId, payload);
       setMessages(current => [...current, message]);
       loadConversations();
     } catch (failure) {
       setError(failure.message);
+    }
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const content = draft.trim();
+    if (!content || !conversationId) return;
+    setDraft('');
+    socketRef.current?.emit('stop_typing', { conversationId });
+    deliver({ content });
+  }
+
+  async function handleImageChange(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file || !conversationId) return;
+    if (!file.type.startsWith('image/')) return setError('Vui lòng chọn tệp ảnh');
+    if (file.size > MAX_IMAGE_BYTES) return setError('Ảnh không được vượt quá 20 MB');
+    setUploading(true);
+    try {
+      const { imageUrl } = await chatService.uploadImage(conversationId, file);
+      await deliver({ type: 'image', metadata: { imageUrl } });
+    } catch (failure) {
+      setError(failure.message);
+    } finally {
+      setUploading(false);
     }
   }
 
@@ -180,7 +204,7 @@ export default function Chat() {
                 return (
                   <li key={message._id} className={`chat-bubble${mine ? ' is-mine' : ''}`}>
                     {message.type === 'image' && message.metadata?.imageUrl
-                      ? <img src={message.metadata.imageUrl} alt={message.content} />
+                      ? <img src={chatImageUrl(message.metadata.imageUrl)} alt={message.content} />
                       : <span>{message.content}</span>}
                     <time dateTime={message.createdAt}>{formatTime(message.createdAt)}</time>
                   </li>
@@ -190,6 +214,11 @@ export default function Chat() {
             </ol>
             {typingUser && <p className="chat-typing">{partner?.fullName || 'Đối phương'} đang nhập...</p>}
             <form className="chat-form" onSubmit={handleSubmit}>
+              <label className="chat-attach" aria-disabled={uploading}>
+                <span aria-hidden="true">{uploading ? '…' : '📷'}</span>
+                <input type="file" aria-label="Gửi ảnh" accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={handleImageChange} disabled={uploading} className="visually-hidden" />
+              </label>
               <label className="visually-hidden" htmlFor="chat-input">Nội dung tin nhắn</label>
               <input id="chat-input" value={draft} onChange={handleDraftChange} maxLength={1000}
                 placeholder="Nhập tin nhắn..." autoComplete="off" />

@@ -210,3 +210,24 @@
     max-width: 85%;
   }
 }
+
+.chat-attach {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.chat-attach[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.chat-attach:focus-within {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
