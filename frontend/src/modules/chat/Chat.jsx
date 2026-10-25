@@ -85,10 +85,18 @@ export default function Chat() {
     let active = true;
     setMessages([]);
     setTypingUser(null);
-    chatService.getMessages(conversationId)
+    const loadHistory = () => chatService.getMessages(conversationId)
       .then(result => { if (active) setMessages(result.messages); })
       .catch(failure => active && setError(failure.message));
-    socket.emit('join_conversation', { conversationId });
+    loadHistory();
+    const join = () => socket.emit('join_conversation', { conversationId });
+    if (socket.connected) join();
+    // Ket noi lai: server da mat phong cu -> join lai va tai lai tin co the da lo.
+    const onReconnect = () => {
+      join();
+      loadHistory();
+    };
+    socket.on('connect', onReconnect);
 
     const onReceive = payload => {
       if (payload.conversationId !== conversationId) return;
@@ -104,6 +112,7 @@ export default function Chat() {
     return () => {
       active = false;
       socket.emit('leave_conversation', { conversationId });
+      socket.off('connect', onReconnect);
       socket.off('receive_message', onReceive);
       socket.off('user_typing', onTyping);
       socket.off('user_stop_typing', onStopTyping);

@@ -197,3 +197,25 @@ describe('price offers in chat', () => {
     expect(screen.getAllByText('1.500.000đ')).toHaveLength(1);
   });
 });
+
+test('rejoins the room and reloads history after the socket reconnects, without duplicate handlers', async () => {
+  const socket = fakeSocket(true);
+  connectChatSocket.mockReturnValue(socket);
+  const { unmount } = renderChat(`/chat/${CONVERSATION}`);
+  await screen.findByText('Chào bạn');
+  expect(chatService.getMessages).toHaveBeenCalledTimes(1);
+
+  const onReconnect = socket.on.mock.calls.find(([event]) => event === 'connect')[1];
+  act(() => onReconnect());
+
+  await waitFor(() => expect(chatService.getMessages).toHaveBeenCalledTimes(2));
+  expect(socket.emit.mock.calls.filter(([event]) => event === 'join_conversation')).toHaveLength(2);
+
+  unmount();
+  for (const event of ['connect', 'receive_message', 'user_typing', 'user_stop_typing']) {
+    const added = socket.on.mock.calls.filter(([name]) => name === event).length;
+    const removed = socket.off.mock.calls.filter(([name]) => name === event).length;
+    expect(removed).toBe(added);
+  }
+  expect(socket.disconnect).toHaveBeenCalled();
+});
