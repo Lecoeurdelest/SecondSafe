@@ -11,6 +11,7 @@ jest.mock('../src/modules/chat/message.model', () => ({
   find: jest.fn(), countDocuments: jest.fn(), create: jest.fn(), markAllAsRead: jest.fn()
 }));
 
+const express = require('express');
 const request = require('supertest');
 const User = require('../src/modules/users/user.model');
 const Product = require('../src/modules/products/product.model');
@@ -20,7 +21,13 @@ const Message = require('../src/modules/chat/message.model');
 const { generateJWT } = require('../src/common/utils/jwt.util');
 const { encryptChatContent, decryptChatContent } = require('../src/common/utils/chat-crypto.util');
 const logger = require('../src/common/utils/logger.util');
-const app = require('../src/app');
+const { errorHandler } = require('../src/common/middlewares/error.middleware');
+
+// Chi mount router chat de test khong phu thuoc cac module khac trong routes.js.
+const app = express();
+app.use(express.json());
+app.use('/api/chat', require('../src/modules/chat/chat.route'));
+app.use(errorHandler);
 
 const BUYER = '507f1f77bcf86cd799439011';
 const SELLER = '507f1f77bcf86cd799439012';
