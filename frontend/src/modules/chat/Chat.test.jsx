@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Chat from './Chat';
 import chatService, { connectChatSocket } from '../../services/chat.service';
@@ -8,7 +8,8 @@ jest.mock('../../services/chat.service', () => ({
   __esModule: true,
   connectChatSocket: jest.fn(),
   chatImageUrl: url => `http://api.test${url}`,
-  default: { getConversations: jest.fn(), getMessages: jest.fn(), sendMessage: jest.fn(), uploadImage: jest.fn() }
+  default: { getConversations: jest.fn(), getMessages: jest.fn(), sendMessage: jest.fn(), uploadImage: jest.fn(),
+    createOffer: jest.fn(), respondToOffer: jest.fn() }
 }));
 
 const ME = '507f1f77bcf86cd799439011';
@@ -130,4 +131,69 @@ test('renders image messages from the backend origin', async () => {
   });
   renderChat(`/chat/${CONVERSATION}`);
   expect(await screen.findByRole('img', { name: 'Đã gửi một ảnh' })).toHaveAttribute('src', 'http://api.test/uploads/chat/x/a.png');
+});
+
+describe('price offers in chat', () => {
+  const offer = (overrides = {}) => ({
+    _id: 'offer-1',
+    type: 'offer',
+    content: 'Bớt chút nhé',
+    senderId: { _id: SELLER },
+    metadata: { purchaseRequestId: 'pr-1', agreedPrice: 1500000, initiatedBy: 'seller', status: 'pending' },
+    ...overrides
+  });
+
+  test('a buyer sees the seller offer and can accept it', async () => {
+    connectChatSocket.mockReturnValue(fakeSocket(true));
+    chatService.getMessages.mockResolvedValue({ messages: [offer()] });
+    chatService.respondToOffer.mockResolvedValue({});
+    renderChat(`/chat/${CONVERSATION}`);
+
+    expect(await screen.findByText('1.500.000đ')).toBeInTheDocument();
+    expect(screen.getByText('Người bán đề nghị')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Chấp nhận' }));
+
+    await waitFor(() => expect(chatService.respondToOffer).toHaveBeenCalledWith('pr-1', true));
+    expect(await screen.findByText('Đã chấp nhận')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Chấp nhận' })).not.toBeInTheDocument();
+  });
+
+  test('the sender of an offer cannot respond to it', async () => {
+    connectChatSocket.mockReturnValue(fakeSocket(true));
+    chatService.getMessages.mockResolvedValue({ messages: [offer({ senderId: { _id: ME }, metadata: { ...offer().metadata, initiatedBy: 'buyer' } })] });
+    renderChat(`/chat/${CONVERSATION}`);
+
+    expect(await screen.findByText('Người mua đề nghị')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Chấp nhận' })).not.toBeInTheDocument();
+  });
+
+  test('the buyer sends a buyer offer with a positive price', async () => {
+    connectChatSocket.mockReturnValue(fakeSocket(true));
+    chatService.createOffer.mockResolvedValue({});
+    renderChat(`/chat/${CONVERSATION}`);
+    await screen.findByText('Chào bạn');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Đề nghị giá' }));
+    fireEvent.change(screen.getByLabelText('Giá đề nghị (đ)'), { target: { value: '1200000' } });
+    fireEvent.change(screen.getByLabelText('Lời nhắn'), { target: { value: ' Mình lấy luôn ' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Gửi đề nghị' }));
+
+    await waitFor(() => expect(chatService.createOffer).toHaveBeenCalledWith({
+      conversationId: CONVERSATION, agreedPrice: 1200000, message: 'Mình lấy luôn', asSeller: false
+    }));
+  });
+
+  test('an updated offer pushed over the socket replaces the existing message', async () => {
+    const socket = fakeSocket(true);
+    connectChatSocket.mockReturnValue(socket);
+    chatService.getMessages.mockResolvedValue({ messages: [offer()] });
+    renderChat(`/chat/${CONVERSATION}`);
+    await screen.findByText('Đang chờ phản hồi');
+
+    const onReceive = socket.on.mock.calls.find(([event]) => event === 'receive_message')[1];
+    act(() => onReceive({ conversationId: CONVERSATION, message: offer({ metadata: { ...offer().metadata, status: 'rejected' } }) }));
+
+    expect(await screen.findByText('Đã từ chối')).toBeInTheDocument();
+    expect(screen.getAllByText('1.500.000đ')).toHaveLength(1);
+  });
 });

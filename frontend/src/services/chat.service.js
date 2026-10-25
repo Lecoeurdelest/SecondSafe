@@ -31,6 +31,14 @@ const chatService = {
   sendMessage: async (conversationId, payload) =>
     (await api.post('/chat/messages', { conversationId, ...(typeof payload === 'string' ? { content: payload } : payload) })).data.data,
 
+  // De nghi gia trong chat (API cua module orders): nguoi ban -> seller-offer, nguoi mua -> buyer-offer.
+  createOffer: async ({ conversationId, agreedPrice, message, asSeller }) =>
+    (await api.post(asSeller ? '/orders/seller-offer' : '/orders/buyer-offer', { conversationId, agreedPrice, message })).data.data,
+
+  // Ben nhan de nghi chap nhan (tao don hang) hoac tu choi.
+  respondToOffer: async (purchaseRequestId, accept, reason = '') =>
+    (await api.post(`/orders/${purchaseRequestId}/${accept ? 'accept' : 'reject'}`, accept ? undefined : { reason })).data.data,
+
   // Upload anh vao cuoc tro chuyen; tra ve { imageUrl } de gui tin nhan type image.
   uploadImage: async (conversationId, file) => {
     const form = new FormData();

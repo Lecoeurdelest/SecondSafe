@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import chatService, { chatImageUrl, connectChatSocket } from '../../services/chat.service';
+import OfferCard from './OfferCard';
 import './Chat.css';
 
 const TYPING_IDLE_MS = 1500;
@@ -23,6 +24,12 @@ function counterpart(conversation, myId) {
   return idOf(conversation.buyerId) === myId ? conversation.sellerId : conversation.buyerId;
 }
 
+function upsertMessage(messages, message) {
+  const index = messages.findIndex(item => idOf(item) === idOf(message));
+  if (index === -1) return [...messages, message];
+  return messages.map((item, position) => (position === index ? { ...item, ...message } : item));
+}
+
 function myIdFromToken(token) {
   try { return JSON.parse(atob(token.split('.')[1])).userId || ''; } catch { return ''; }
 }
@@ -39,6 +46,10 @@ export default function Chat() {
   const [typingUser, setTypingUser] = useState(null);
   const [online, setOnline] = useState(() => new Set());
   const [uploading, setUploading] = useState(false);
+  const [offerOpen, setOfferOpen] = useState(false);
+  const [offerPrice, setOfferPrice] = useState('');
+  const [offerNote, setOfferNote] = useState('');
+  const [offerSending, setOfferSending] = useState(false);
   const socketRef = useRef(null);
   const typingTimer = useRef(null);
   const listEnd = useRef(null);
@@ -81,7 +92,8 @@ export default function Chat() {
 
     const onReceive = payload => {
       if (payload.conversationId !== conversationId) return;
-      setMessages(current => (current.some(item => item._id === payload.message._id) ? current : [...current, payload.message]));
+      // Cung _id = cap nhat (vd. de nghi gia doi trang thai), khac _id = tin moi.
+      setMessages(current => upsertMessage(current, payload.message));
       socket.emit('mark_as_read', { conversationId });
     };
     const onTyping = payload => payload.conversationId === conversationId && setTypingUser(payload.userId);
@@ -157,12 +169,51 @@ export default function Chat() {
     }
   }
 
+  // Tin offer do server tao va phat qua socket; mat socket thi tai lai lich su.
+  async function refreshIfOffline() {
+    if (socketRef.current?.connected) return;
+    setMessages((await chatService.getMessages(conversationId)).messages);
+  }
+
+  async function handleOfferSubmit(event) {
+    event.preventDefault();
+    const agreedPrice = Number(offerPrice);
+    if (!Number.isFinite(agreedPrice) || agreedPrice <= 0) return setError('Giá đề nghị phải lớn hơn 0');
+    setOfferSending(true);
+    setError(null);
+    try {
+      await chatService.createOffer({ conversationId, agreedPrice, message: offerNote.trim(), asSeller: iAmSeller });
+      setOfferOpen(false);
+      setOfferPrice('');
+      setOfferNote('');
+      await refreshIfOffline();
+      loadConversations();
+    } catch (failure) {
+      setError(failure.message);
+    } finally {
+      setOfferSending(false);
+    }
+  }
+
+  async function handleOfferResponse(message, accept) {
+    setError(null);
+    try {
+      await chatService.respondToOffer(message.metadata.purchaseRequestId, accept);
+      const status = accept ? 'accepted' : 'rejected';
+      setMessages(current => upsertMessage(current, { ...message, metadata: { ...message.metadata, status } }));
+      await refreshIfOffline();
+    } catch (failure) {
+      setError(failure.message);
+    }
+  }
+
   if (!token) {
     return <section className="chat-empty"><h1>Tin nhắn</h1><p>Vui lòng đăng nhập để xem tin nhắn.</p><Link to="/">Về trang chủ</Link></section>;
   }
 
   const active = conversations.find(item => idOf(item) === conversationId);
   const partner = active ? counterpart(active, myId) : null;
+  const iAmSeller = Boolean(active) && idOf(active.sellerId) === myId;
 
   return (
     <section className="chat container" aria-label="Tin nhắn">
@@ -203,9 +254,10 @@ export default function Chat() {
                 const mine = idOf(message.senderId) === myId;
                 return (
                   <li key={message._id} className={`chat-bubble${mine ? ' is-mine' : ''}`}>
+                    {message.type === 'offer' && <OfferCard message={message} mine={mine} onRespond={handleOfferResponse} />}
                     {message.type === 'image' && message.metadata?.imageUrl
-                      ? <img src={chatImageUrl(message.metadata.imageUrl)} alt={message.content} />
-                      : <span>{message.content}</span>}
+                      && <img src={chatImageUrl(message.metadata.imageUrl)} alt={message.content} />}
+                    {!['offer', 'image'].includes(message.type) && <span>{message.content}</span>}
                     <time dateTime={message.createdAt}>{formatTime(message.createdAt)}</time>
                   </li>
                 );
@@ -213,6 +265,26 @@ export default function Chat() {
               <li ref={listEnd} aria-hidden="true" />
             </ol>
             {typingUser && <p className="chat-typing">{partner?.fullName || 'Đối phương'} đang nhập...</p>}
+            {active && (
+              <div className="chat-offer-bar">
+                <button type="button" className="chat-offer-toggle" aria-expanded={offerOpen}
+                  onClick={() => setOfferOpen(open => !open)}>
+                  {iAmSeller ? 'Gửi đề nghị bán' : 'Đề nghị giá'}
+                </button>
+                {offerOpen && (
+                  <form className="chat-offer-form" onSubmit={handleOfferSubmit}>
+                    <label>Giá đề nghị (đ)
+                      <input type="number" min="1" step="1000" required value={offerPrice}
+                        onChange={event => setOfferPrice(event.target.value)} />
+                    </label>
+                    <label>Lời nhắn
+                      <input value={offerNote} maxLength={500} onChange={event => setOfferNote(event.target.value)} />
+                    </label>
+                    <button type="submit" disabled={offerSending}>{offerSending ? 'Đang gửi...' : 'Gửi đề nghị'}</button>
+                  </form>
+                )}
+              </div>
+            )}
             <form className="chat-form" onSubmit={handleSubmit}>
               <label className="chat-attach" aria-disabled={uploading}>
                 <span aria-hidden="true">{uploading ? '…' : '📷'}</span>
