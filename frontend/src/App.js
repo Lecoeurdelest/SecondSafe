@@ -1,39 +1,26 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
-import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, useLocation } from 'react-router-dom';
 import AppErrorBoundary from './components/AppErrorBoundary';
-import Home from './modules/home/Home';
-import Assistant from './modules/assistant/Assistant';
-import Support from './modules/support/Support';
+import AppRoutes from './routes';
 import authService from './services/auth.service';
 import { clearSession, getSession } from './services/session.service';
 
-const Chat = lazy(() => import('./modules/chat/Chat'));
-const ProductDetail = lazy(() => import('./modules/product/ProductDetail'));
-const Cart = lazy(() => import('./modules/product/Cart'));
-const Favorites = lazy(() => import('./modules/product/Favorites'));
-const Login = lazy(() => import('./modules/auth/Login'));
-const Register = lazy(() => import('./modules/auth/Register'));
-const ForgotPassword = lazy(() => import('./modules/auth/ForgotPassword'));
-const ChangePassword = lazy(() => import('./modules/auth/ChangePassword'));
-const Dashboard = lazy(() => import('./modules/dashboard/Dashboard'));
+const NotificationPanel = lazy(() => import('./components/NotificationPanel'));
 
-function NotFound() {
-  return <section className="welcome"><h1>Không tìm thấy trang</h1><p>Trang bạn đang tìm không tồn tại.</p><Link to="/">Về trang chủ</Link></section>;
-}
-
-function DashboardRoute({ role, children }) {
-  const session = getSession();
-  if (!session.token) return <Navigate to="/login" replace />;
-  const allowed = session.role === role || (role === 'moderator' && session.role === 'admin');
-  if (!allowed) {
-    return <section className="welcome"><h1>Không có quyền truy cập</h1><p>Tài khoản này không được phép mở dashboard này.</p><Link to="/">Về trang chủ</Link></section>;
-  }
-  return children;
+function PageContent() {
+  const { pathname } = useLocation();
+  const hasInnerMain = pathname === '/admin/users' || pathname === '/moderator' || pathname === '/moderator/profile';
+  const Content = hasInnerMain ? 'div' : 'main';
+  return <Content id="main-content" tabIndex="-1">
+    <Suspense fallback={<p role="status">Đang tải...</p>}><AppRoutes /></Suspense>
+  </Content>;
 }
 
 export default function App() {
   const [session, setSession] = useState(getSession);
   const [logoutError, setLogoutError] = useState('');
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     const updateSession = () => setSession(getSession());
@@ -60,6 +47,7 @@ export default function App() {
         setLogoutError(failure.message);
       }
       setSession(getSession());
+      setNotificationsOpen(false);
     }
   }
 
@@ -78,8 +66,17 @@ export default function App() {
             <Link to="/cart">Giỏ hàng</Link>
             <Link to="/assistant">Trợ lý AI</Link>
             <Link to="/support">Hỗ trợ</Link>
-            {isAuthenticated && <Link to="/chat">Tin nhắn</Link>}
-            {adminRole && <Link to="/admin">Dashboard</Link>}
+            {isAuthenticated && <>
+              <Link to="/chat">Tin nhắn</Link>
+              <Link to="/profile">Hồ sơ</Link>
+              <div className="notification-dropdown-wrapper">
+                <button type="button" className="site-header__logout" aria-expanded={notificationsOpen} onClick={() => setNotificationsOpen(open => !open)}>Thông báo{unreadCount > 0 ? ` (${unreadCount})` : ''}</button>
+                {notificationsOpen && <Suspense fallback={<p role="status">Đang tải thông báo...</p>}>
+                  <NotificationPanel isOpen onClose={() => setNotificationsOpen(false)} onUnreadCountChange={setUnreadCount} />
+                </Suspense>}
+              </div>
+            </>}
+            {adminRole && <><Link to="/admin">Dashboard</Link><Link to="/admin/users">Quản lý người dùng</Link></>}
             {staffRole && <Link to="/staff">Dashboard nhân viên</Link>}
             {isAuthenticated ? (
               <>
@@ -95,29 +92,7 @@ export default function App() {
           </nav>
         </div></header>
         {logoutError && <p className="site-header__error" role="alert">{logoutError}</p>}
-        <main id="main-content" tabIndex="-1">
-          <Suspense fallback={<p role="status">Đang tải...</p>}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/change-password" element={<ChangePassword />} />
-              <Route path="/admin" element={<DashboardRoute role="admin"><Dashboard role="admin" /></DashboardRoute>} />
-              <Route path="/staff" element={<DashboardRoute role="moderator"><Dashboard role="moderator" /></DashboardRoute>} />
-              <Route path="/assistant" element={<Assistant />} />
-              <Route path="/assistant/reports/:reportId" element={<DashboardRoute role="moderator"><Assistant moderation /></DashboardRoute>} />
-              <Route path="/support" element={<Support />} />
-              <Route path="/support/:conversationId" element={<Support />} />
-              <Route path="/chat" element={<Chat />} />
-              <Route path="/chat/:conversationId" element={<Chat />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </main>
+        <PageContent />
         <footer className="site-footer"><div className="container">SecondSafe · Trao đồ cũ, nhận giá trị mới.</div></footer>
       </BrowserRouter>
     </AppErrorBoundary>

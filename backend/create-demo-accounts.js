@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const User = require('./src/modules/users/user.model');
-const { validateStrongPassword } = require('./src/common/validators/password.validator');
+const { assertStrongPassword } = require('./src/common/validators/password.validator');
 const { validateDemoUri } = require('./import-demo-dashboard-data');
 
 const EMAIL_PATTERN = /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/;
@@ -13,7 +13,7 @@ function accountFromEnv(prefix, role, fullName) {
   if (!email || !EMAIL_PATTERN.test(email) || !password) {
     throw new Error(`Set a valid ${prefix}_EMAIL and ${prefix}_PASSWORD in backend/.env`);
   }
-  validateStrongPassword(password);
+  assertStrongPassword(password);
   return { email, password, role, fullName };
 }
 

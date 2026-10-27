@@ -119,6 +119,7 @@ test.each([
   ['/login', { email: 'invalid' }, 401],
   ['/register/request-otp', { email: 'invalid' }, 400],
   ['/register/verify', { email: 'invalid' }, 400],
+  ['/login/verify-2fa', { email: 'invalid' }, 400],
   ['/forgot-password', { email: 'invalid' }, 400],
   ['/reset-password', { email: 'invalid' }, 400]
 ])('actual auth router applies limits before %s handler', async (route, body, expectedStatus) => {

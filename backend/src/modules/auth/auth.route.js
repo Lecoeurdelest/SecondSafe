@@ -1,16 +1,69 @@
 const express = require('express');
-const { loginLimiter, codeRequestLimiter, codeVerificationLimiter, recoveryLimiter } = require('../../common/middlewares/rate-limit.middleware');
-const { authenticate } = require('../../common/middlewares/auth.middleware');
-const controller = require('./auth.controller');
-
 const router = express.Router();
+const authController = require('./auth.controller');
+const { authenticate } = require('../../common/middlewares/auth.middleware');
+const { loginLimiter, codeRequestLimiter, codeVerificationLimiter, recoveryLimiter } = require('../../common/middlewares/rate-limit.middleware');
 
-router.post('/login', loginLimiter, controller.login);
-router.post('/register/request-otp', codeRequestLimiter, controller.requestRegistrationCode);
-router.post('/register/verify', codeVerificationLimiter, controller.verifyRegistration);
-router.post('/forgot-password', recoveryLimiter, controller.forgotPassword);
-router.post('/reset-password', recoveryLimiter, controller.resetPassword);
-router.post('/change-password', authenticate, controller.changePassword);
-router.post('/logout', authenticate, controller.logout);
+/**
+ * POST /api/auth/register/request-otp
+ * Request an OTP for registration
+ */
+router.post('/register/request-otp', codeRequestLimiter, authController.requestRegisterOtp);
+
+/**
+ * POST /api/auth/register/verify
+ * Verify OTP and actually create the user
+ */
+router.post('/register/verify', codeVerificationLimiter, authController.verifyAndRegister);
+
+/**
+ * POST /api/auth/login
+ * Login user
+ * Public route
+ */
+router.post('/login', loginLimiter, authController.login);
+router.post('/login/verify-2fa', codeVerificationLimiter, authController.verifyLogin2FA);
+
+/**
+ * GET /api/auth/profile
+ * Get user profile
+ * Protected route - requires authentication
+ */
+router.get('/profile', authenticate, authController.getProfile);
+
+/**
+ * POST /api/auth/logout
+ * Logout user
+ * Protected route - requires authentication
+ */
+router.post('/logout', authenticate, authController.logout);
+
+/**
+ * POST /api/auth/change-password
+ * Change password for authenticated user
+ * Protected route - requires authentication
+ */
+router.post('/change-password', authenticate, authController.changePassword);
+
+/**
+ * POST /api/auth/forgot-password
+ * Request password reset token
+ * Public route
+ */
+router.post('/forgot-password', recoveryLimiter, authController.forgotPassword);
+
+/**
+ * POST /api/auth/reset-password
+ * Reset password using reset token
+ * Public route
+ */
+router.post('/reset-password', recoveryLimiter, authController.resetPassword);
+
+/**
+ * POST /api/auth/google
+ * Login or Register with Google
+ * Public route
+ */
+router.post('/google', authController.googleLogin);
 
 module.exports = router;

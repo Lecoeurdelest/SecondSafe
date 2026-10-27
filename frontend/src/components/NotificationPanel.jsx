@@ -1,0 +1,383 @@
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import notificationService from "../services/notification.service";
+import productService from "../services/product.service";
+import { useAuth } from "../hooks/useAuth";
+import "./NotificationPanel.css";
+
+const PAGE_SIZE = 20;
+
+const normalizeLegacyVietnamese = (text = '') => {
+  if (!text || typeof text !== 'string') return text;
+
+  return text
+    .replace(/^Dang tin thanh cong$/i, 'Đăng tin thành công')
+    .replace(/^Tin dang\s+/i, 'Tin đăng ')
+    .replace(/\sda duoc dang thanh cong\.?$/i, ' đã được đăng thành công.');
+};
+
+const SYSTEM_ORDER_HINT_REGEX = /(đơn hàng|thanh toán|giao hàng|hoàn tất|hủy)/i;
+const SYSTEM_SELLER_HINT_REGEX = /(đề nghị|yêu cầu mua|người mua)/i;
+
+const NotificationPanel = ({
+  isOpen,
+  onClose,
+  refreshTrigger = 0,
+  onUnreadCountChange,
+}) => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [, setUnreadCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+
+  const fetchNotifications = useCallback(async ({ targetPage = 1, append = false } = {}) => {
+    try {
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
+      const data = await notificationService.getNotifications(targetPage, PAGE_SIZE);
+      const pageNotifications = data?.notifications || [];
+      const pagination = data?.pagination || {};
+
+      setNotifications((prev) => {
+        if (!append) return pageNotifications;
+
+        const existingIds = new Set(prev.map((item) => item._id));
+        const nextItems = pageNotifications.filter(
+          (item) => !existingIds.has(item._id),
+        );
+        return [...prev, ...nextItems];
+      });
+
+      const currentPage = Number(pagination.page || targetPage);
+      const totalPages = Number(pagination.totalPages || currentPage);
+      setPage(currentPage);
+      setHasMore(currentPage < totalPages);
+
+      const count = await notificationService.getUnreadCount();
+      setUnreadCount(count);
+      onUnreadCountChange?.(count);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [onUnreadCountChange]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    fetchNotifications({ targetPage: 1, append: false });
+    const intervalId = setInterval(() => {
+      fetchNotifications({ targetPage: 1, append: false });
+    }, 15000);
+    return () => clearInterval(intervalId);
+  }, [isOpen, refreshTrigger, fetchNotifications]);
+
+  const handleLoadMore = async () => {
+    if (loadingMore || !hasMore) return;
+    await fetchNotifications({ targetPage: page + 1, append: true });
+  };
+
+  const extractEntityId = (value) => {
+    if (!value) return null;
+    if (typeof value === "string" || typeof value === "number")
+      return value.toString();
+    return value._id?.toString?.() || value.id?.toString?.() || null;
+  };
+
+  const resolveOrderIdFromNotification = async (notification) => {
+    const directOrderId = extractEntityId(notification?.orderId);
+    if (directOrderId) return directOrderId;
+
+    const disputeId = extractEntityId(notification?.disputeId);
+    if (disputeId) {
+      try {
+        const dispute = await notificationService.getDisputeById(disputeId);
+        return extractEntityId(dispute?.orderId);
+      } catch (error) {
+        console.error("Error resolving dispute notification order:", error);
+      }
+    }
+
+    return null;
+  };
+
+  const resolveReportTargetFromNotification = async (notification) => {
+    const reportId = extractEntityId(notification?.reportId);
+    if (!reportId) {
+      return null;
+    }
+
+    try {
+      const report = await notificationService.getReportById(reportId);
+      const reportProductId = extractEntityId(report?.productId);
+      if (reportProductId) {
+        return `/product/${reportProductId}`;
+      }
+    } catch (error) {
+      console.error("Error resolving report notification target:", error);
+    }
+
+    return null;
+  };
+
+  const extractProductTitleFromMessage = (notification) => {
+    const message = String(notification?.message || "").trim();
+    if (!message) {
+      return null;
+    }
+
+    const doubleQuoteMatch = message.match(/Tin đăng\s+"([^"]+)"\s+đã được đăng thành công\.?/i);
+    if (doubleQuoteMatch?.[1]) {
+      return doubleQuoteMatch[1].trim();
+    }
+
+    const singleQuoteMatch = message.match(/Tin đăng\s+'([^']+)'\s+đã được đăng thành công\.?/i);
+    if (singleQuoteMatch?.[1]) {
+      return singleQuoteMatch[1].trim();
+    }
+
+    return null;
+  };
+
+  const resolveProductIdFromNotification = async (notification) => {
+    const directProductId = extractEntityId(notification?.productId);
+    if (directProductId) {
+      return directProductId;
+    }
+
+    const isCreateProductNotification =
+      normalizeLegacyVietnamese(notification?.title || "").toLowerCase() === "đăng tin thành công";
+
+    if (!isCreateProductNotification || !user?._id) {
+      return null;
+    }
+
+    const productTitle = extractProductTitleFromMessage(notification);
+    if (!productTitle) {
+      return null;
+    }
+
+    try {
+      const result = await productService.getProducts({
+        seller: user._id,
+        search: productTitle,
+        page: 1,
+        limit: 20
+      });
+
+      const products = result?.products || [];
+      const normalizedTitle = productTitle.toLowerCase();
+
+      const exactMatch = products.find(
+        (product) => String(product?.title || "").trim().toLowerCase() === normalizedTitle,
+      );
+
+      if (exactMatch?._id) {
+        return String(exactMatch._id);
+      }
+
+      const firstMatch = products[0];
+      return firstMatch?._id ? String(firstMatch._id) : null;
+    } catch (error) {
+      console.error("Error resolving product notification:", error);
+      return null;
+    }
+  };
+
+  const handleNotificationClick = async (notification) => {
+    try {
+      // Danh dau da doc
+      if (!notification.isRead) {
+        await notificationService.markAsRead(notification._id);
+        setNotifications((prev) =>
+          prev.map((item) =>
+            item._id === notification._id ? { ...item, isRead: true } : item,
+          ),
+        );
+        setUnreadCount((prev) => {
+          const nextCount = Math.max(0, prev - 1);
+          onUnreadCountChange?.(nextCount);
+          return nextCount;
+        });
+      }
+
+      // Dieu huong uu tien theo entityId de tranh sai khi title/type bien doi.
+      const productId = await resolveProductIdFromNotification(notification);
+      if (productId) {
+        navigate(`/product/${productId}`);
+        onClose();
+        return;
+      }
+
+      const orderId = await resolveOrderIdFromNotification(notification);
+      if (orderId) {
+        navigate(`/order-detail/${orderId}`);
+        onClose();
+        return;
+      }
+
+      const reportTarget = await resolveReportTargetFromNotification(notification);
+      if (reportTarget) {
+        navigate(reportTarget);
+        onClose();
+        return;
+      }
+
+      switch (notification.type) {
+        case "order_created":
+        case "order_confirmed":
+        case "order_shipped":
+        case "order_completed":
+        case "payment_success":
+        case "dispute_created":
+        case "dispute_update":
+        case "review_received": {
+          navigate("/orders");
+          break;
+        }
+        case "report_update": {
+          navigate("/my-products");
+          break;
+        }
+        case "security": {
+          navigate("/profile");
+          break;
+        }
+        case "system": {
+          const rawText = `${notification?.title || ""} ${notification?.message || ""}`;
+
+          if (SYSTEM_ORDER_HINT_REGEX.test(rawText)) {
+            navigate("/orders");
+          } else if (SYSTEM_SELLER_HINT_REGEX.test(rawText)) {
+            navigate("/seller-orders");
+          }
+          break;
+        }
+
+        default:
+          break;
+      }
+
+      onClose();
+    } catch (error) {
+      console.error("Error handling notification:", error);
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications((prev) =>
+        prev.map((notification) => ({ ...notification, isRead: true })),
+      );
+      setUnreadCount(0);
+      onUnreadCountChange?.(0);
+    } catch (error) {
+      console.error("Error marking all as read:", error);
+    }
+  };
+
+  const getNotificationIcon = (type) => {
+    switch (type) {
+      case "order_created":
+        return "📦";
+      case "order_confirmed":
+        return "✅";
+      case "order_shipped":
+        return "🚚";
+      case "order_completed":
+        return "🎉";
+      case "payment_success":
+        return "💸";
+      case "report_update":
+        return "🛡️";
+      case "dispute_update":
+        return "⚖️";
+      case "system":
+        return "📢";
+      case "dispute_created":
+        return "⚠️";
+      case "review_received":
+        return "⭐";
+      case "security":
+        return "🔒";
+      default:
+        return "🔔";
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="notification-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="notification-header">
+        <h3>Thông báo</h3>
+        <button className="close-btn" onClick={onClose}>
+          ×
+        </button>
+      </div>
+
+      {notifications.length > 0 && (
+        <button className="mark-all-btn" onClick={handleMarkAllAsRead}>
+          Đánh dấu tất cả đã đọc
+        </button>
+      )}
+
+      <div className="notification-list">
+        {loading ? (
+          <div className="loading">Đang tải...</div>
+        ) : notifications.length === 0 ? (
+          <div className="empty-state">
+            <p>Không có thông báo nào</p>
+          </div>
+        ) : (
+          notifications.map((notification) => (
+            <div
+              key={notification._id}
+              className={`notification-item ${notification.isRead ? "is-read" : "is-unread"}`}
+              onClick={() => handleNotificationClick(notification)}
+            >
+              <span className="notification-icon">
+                {getNotificationIcon(notification.type)}
+              </span>
+              <div className="notification-content">
+                <div className="notification-title">{normalizeLegacyVietnamese(notification.title)}</div>
+                {notification.message && (
+                  <div className="notification-message">
+                    {normalizeLegacyVietnamese(notification.message)}
+                  </div>
+                )}
+                <div className="notification-time">
+                  {new Date(notification.createdAt).toLocaleString("vi-VN")}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+
+        {!loading && hasMore && (
+          <div className="notification-load-more-wrap">
+            <button
+              className="notification-load-more-btn"
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+            >
+              {loadingMore ? "Đang tải thêm..." : "Tải thêm"}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default NotificationPanel;

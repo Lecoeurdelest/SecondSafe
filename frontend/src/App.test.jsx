@@ -9,6 +9,12 @@ import chatService from './services/chat.service';
 import { createPurchaseRequest } from './services/order.service';
 import authService from './services/auth.service';
 import dashboardService from './services/dashboard.service';
+import { signInWithPopup } from 'firebase/auth';
+import { AuthProvider } from './context/AuthContext';
+import notificationService from './services/notification.service';
+
+jest.mock('firebase/auth', () => ({ GoogleAuthProvider: jest.fn(), signInWithPopup: jest.fn() }));
+jest.mock('./config/firebase', () => ({ auth: {} }));
 
 jest.mock('./services/product.service', () => ({
   __esModule: true,
@@ -48,17 +54,23 @@ jest.mock('./services/chat.service', () => ({
 jest.mock('./services/order.service', () => ({
   createPurchaseRequest: jest.fn()
 }));
-jest.mock('./services/auth.service', () => ({
-  __esModule: true,
-  default: {
+jest.mock('./services/auth.service', () => {
+  const service = {
     login: jest.fn(),
+    loginWithGoogle: jest.fn(),
+    verifyLogin2FA: jest.fn(),
+    getProfile: jest.fn(),
     requestRegistrationCode: jest.fn(),
     verifyRegistration: jest.fn(),
     forgotPassword: jest.fn(),
     resetPassword: jest.fn(),
     changePassword: jest.fn(),
     logout: jest.fn()
-  }
+  };
+  return { __esModule: true, default: service, authService: service };
+});
+jest.mock('./services/notification.service', () => ({
+  __esModule: true, default: { getNotifications: jest.fn(), getUnreadCount: jest.fn() }
 }));
 jest.mock('./services/dashboard.service', () => ({
   __esModule: true,
@@ -68,6 +80,7 @@ jest.mock('./services/dashboard.service', () => ({
 beforeEach(() => {
   window.localStorage.removeItem('token');
   window.localStorage.removeItem('secondsafe:role');
+  window.localStorage.removeItem('user');
   jest.clearAllMocks();
 });
 
@@ -191,6 +204,56 @@ test('registration verifies the emailed code and signs in the new account', asyn
   fireEvent.click(screen.getByRole('button', { name: 'Xác nhận đăng ký' }));
   await waitFor(() => expect(window.localStorage.getItem('token')).toBe('registered-token'));
   expect(authService.verifyRegistration).toHaveBeenCalledWith({ email: 'person@example.test', code: '123456' });
+});
+
+test('two-factor login stores no session until the emailed code is verified', async () => {
+  productService.getProducts.mockResolvedValue({ products: [], total: 0, totalPages: 0, limit: 20 });
+  authService.login.mockResolvedValue({ requires2FA: true, email: 'person@example.test' });
+  authService.verifyLogin2FA.mockResolvedValue({ token: 'verified-token', user: { role: 'user' } });
+  window.history.replaceState({}, '', '/login');
+  render(<App />);
+  await screen.findByRole('heading', { name: 'Đăng nhập' });
+  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'person@example.test' } });
+  fireEvent.change(screen.getByLabelText('Mật khẩu'), { target: { value: 'StrongPass1!' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Đăng nhập' }));
+  const code = await screen.findByLabelText('Mã xác thực 6 chữ số');
+  expect(window.localStorage.getItem('token')).toBeNull();
+  fireEvent.change(code, { target: { value: '123456' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Xác thực đăng nhập' }));
+  await waitFor(() => expect(window.localStorage.getItem('token')).toBe('verified-token'));
+  expect(authService.verifyLogin2FA).toHaveBeenCalledWith('person@example.test', '123456');
+});
+
+test('Google login exchanges the Firebase token and shares the resulting session', async () => {
+  productService.getProducts.mockResolvedValue({ products: [], total: 0, totalPages: 0, limit: 20 });
+  signInWithPopup.mockResolvedValue({ user: { getIdToken: jest.fn().mockResolvedValue('firebase-token') } });
+  authService.loginWithGoogle.mockResolvedValue({ token: 'google-token', user: { role: 'user' } });
+  window.history.replaceState({}, '', '/login');
+  render(<App />);
+  fireEvent.click(await screen.findByRole('button', { name: 'Đăng nhập với Google' }));
+  await waitFor(() => expect(window.localStorage.getItem('token')).toBe('google-token'));
+  expect(authService.loginWithGoogle).toHaveBeenCalledWith('firebase-token');
+  expect(window.localStorage.getItem('secondsafe:role')).toBe('user');
+});
+
+test('an authenticated profile can open notifications and logout clears the shared session', async () => {
+  productService.getProducts.mockResolvedValue({ products: [], total: 0, totalPages: 0, limit: 20 });
+  authService.getProfile.mockResolvedValue({ _id: '507f1f77bcf86cd799439011', role: 'user', fullName: 'Test User' });
+  authService.logout.mockResolvedValue(null);
+  notificationService.getNotifications.mockResolvedValue({ notifications: [], pagination: { page: 1, totalPages: 1 } });
+  notificationService.getUnreadCount.mockResolvedValue(0);
+  window.localStorage.setItem('token', 'profile-token');
+  window.history.replaceState({}, '', '/');
+  render(<AuthProvider><App /></AuthProvider>);
+  await waitFor(() => expect(window.localStorage.getItem('secondsafe:role')).toBe('user'));
+  fireEvent.click(screen.getByRole('button', { name: 'Thông báo' }));
+  expect(await screen.findByText('Không có thông báo nào')).toBeInTheDocument();
+  expect(notificationService.getNotifications).toHaveBeenCalledWith(1, 20);
+  fireEvent.click(screen.getByRole('button', { name: 'Đăng xuất' }));
+  await waitFor(() => expect(window.localStorage.getItem('user')).toBeNull());
+  expect(window.localStorage.getItem('token')).toBeNull();
+  expect(window.localStorage.getItem('secondsafe:role')).toBeNull();
+  expect(screen.queryByRole('heading', { name: 'Thông báo' })).not.toBeInTheDocument();
 });
 
 test('admin role sees the admin dashboard and loads live platform metrics', async () => {

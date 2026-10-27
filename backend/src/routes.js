@@ -5,6 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
+router.get('/health', (req, res) => res.json({ success: true, service: 'secondsafe-backend' }));
 
 // Import route modules
 const authRoutes = require('./modules/auth/auth.route');

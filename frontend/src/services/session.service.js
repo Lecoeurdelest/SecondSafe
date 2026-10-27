@@ -21,10 +21,12 @@ export function saveSession(result) {
   try {
     window.localStorage.setItem('token', result.token);
     window.localStorage.setItem('secondsafe:role', result.user.role);
+    window.localStorage.setItem('user', JSON.stringify(result.user));
   } catch {
     try {
       window.localStorage.removeItem('token');
       window.localStorage.removeItem('secondsafe:role');
+      window.localStorage.removeItem('user');
     } catch {
       throw new Error('Không thể lưu phiên đăng nhập trên trình duyệt này.');
     }
@@ -38,6 +40,7 @@ export function clearSession() {
   try {
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('secondsafe:role');
+    window.localStorage.removeItem('user');
   } catch (error) {
     storageError = error;
   }

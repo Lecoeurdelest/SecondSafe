@@ -32,6 +32,7 @@ export function createApiClient({ storage = browserStorage(), onUnauthorized, ad
       try {
         storage.removeItem('token');
         storage.removeItem('secondsafe:role');
+        storage.removeItem('user');
       } catch { /* Storage can be unavailable in private browsing. */ }
       expired();
     }

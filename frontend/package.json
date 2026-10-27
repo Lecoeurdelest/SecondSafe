@@ -8,7 +8,11 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "@ant-design/icons": "^6.1.0",
+    "antd": "^6.3.2",
+    "firebase": "^12.11.0",
+    "dayjs": "^1.11.13"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -38,8 +42,12 @@
     "@testing-library/user-event": "^14.6.1"
   },
   "jest": {
+    "moduleNameMapper": {
+      "^@rc-component/([^/]+)/(locale|generate)/(.*)$": "<rootDir>/node_modules/@rc-component/$1/lib/$2/$3",
+      "^@rc-component/picker/(generate|interface)$": "<rootDir>/node_modules/@rc-component/picker/lib/$1"
+    },
     "transformIgnorePatterns": [
-      "node_modules/(?!(axios)/)"
+      "node_modules/(?!(axios|@ant-design)/)"
     ]
   },
   "author": "Lecoeurdelest",

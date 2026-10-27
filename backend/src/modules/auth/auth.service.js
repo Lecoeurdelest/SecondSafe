@@ -4,7 +4,10 @@ const Notification = require('../notifications/notification.model');
 const { generateJWT } = require('../../common/utils/jwt.util');
 const otpManager = require('../../common/utils/otp.manager');
 const { sendRegisterOtpEmail, sendRecoveryEmail } = require('../../common/utils/email.util');
-const { validateStrongPassword } = require('../../common/validators/password.validator');
+const { assertStrongPassword } = require('../../common/validators/password.validator');
+const admin = require('../../config/firebase');
+const crypto = require('node:crypto');
+const { refreshSellingRestriction } = require('../../common/utils/seller-restriction.util');
 const logger = require('../../common/utils/logger.util');
 const business = require('../../config/business');
 
@@ -22,6 +25,7 @@ function validEmail(email) {
 
 function safeUser(user) {
   const result = user.toObject ? user.toObject() : { ...user };
+  result.id = result._id;
   delete result.password;
   delete result.__v;
   return result;
@@ -34,7 +38,7 @@ function validateRegistration(data) {
   if (!email || !validEmail(email) || !fullName || fullName.length > 100 || !/^0\d{9,10}$/.test(phone)) {
     throw Object.assign(new Error('Vui lòng nhập họ tên, email hợp lệ và số điện thoại hợp lệ'), { statusCode: 400 });
   }
-  validateStrongPassword(data.password);
+  assertStrongPassword(data.password);
   return { email, fullName, phone };
 }
 
@@ -88,6 +92,11 @@ async function login(data = {}) {
     throw Object.assign(new Error(GENERIC_CREDENTIAL_ERROR), { statusCode: 401 });
   }
 
+  await ensureAccountActive(user);
+  return loginResult(user);
+}
+
+async function ensureAccountActive(user) {
   if (user.isSuspended) {
     const suspensionEnds = user.suspendedUntil ? new Date(user.suspendedUntil).getTime() : null;
     if (suspensionEnds === null || !Number.isFinite(suspensionEnds) || suspensionEnds > Date.now()) {
@@ -102,6 +111,10 @@ async function login(data = {}) {
     await user.save();
   }
 
+  await refreshSellingRestriction(user);
+}
+
+function loginResult(user) {
   return { token: generateJWT({ userId: String(user._id) }), user: safeUser(user) };
 }
 
@@ -134,7 +147,7 @@ async function forgotPassword(data = {}) {
 
 async function resetPassword(data = {}) {
   const email = normalizedEmail(data.email);
-  validateStrongPassword(data.newPassword);
+  assertStrongPassword(data.newPassword);
   if (!validEmail(email) || typeof data.token !== 'string') {
     throw Object.assign(new Error('Thông tin khôi phục không hợp lệ'), { statusCode: 400 });
   }
@@ -168,7 +181,7 @@ async function changePassword(userId, data = {}) {
   if (typeof data.currentPassword !== 'string' || typeof data.newPassword !== 'string') {
     throw Object.assign(new Error('Vui lòng nhập mật khẩu hiện tại và mật khẩu mới'), { statusCode: 400 });
   }
-  validateStrongPassword(data.newPassword);
+  assertStrongPassword(data.newPassword);
 
   const user = await User.findById(userId).select('+password');
   if (!user || !(await bcrypt.compare(data.currentPassword, user.password))) {
@@ -176,10 +189,61 @@ async function changePassword(userId, data = {}) {
   }
   user.password = await bcrypt.hash(data.newPassword, 12);
   await user.save();
+  await notifyPasswordChange(user._id);
+
   return { message: 'Đổi mật khẩu thành công' };
 }
 
+async function notifyPasswordChange(userId) {
+  try {
+    await Notification.create({
+      recipientId: userId,
+      type: 'security',
+      title: 'Mật khẩu đã được thay đổi',
+      message: 'Mật khẩu tài khoản SecondSafe của bạn vừa được thay đổi.'
+    });
+  } catch (error) {
+    logger.error('Password change security notification failed', { error: error.message });
+  }
+}
+
+async function loginWithGoogle(idToken) {
+  let decoded;
+  try {
+    decoded = await admin.auth().verifyIdToken(idToken);
+  } catch (error) {
+    if (error.statusCode === 503) throw error;
+    throw Object.assign(new Error('Token Google không hợp lệ hoặc đã hết hạn'), { statusCode: 401 });
+  }
+  const email = normalizedEmail(decoded.email);
+  if (!validEmail(email)) throw Object.assign(new Error('Không lấy được email từ tài khoản Google'), { statusCode: 400 });
+  let user = await User.findOne({ email });
+  if (!user) {
+    user = await User.create({
+      email, fullName: decoded.name || 'Người dùng Google', avatar: decoded.picture,
+      password: await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 12), role: 'user'
+    });
+  }
+  await ensureAccountActive(user);
+  return loginResult(user);
+}
+
+async function getUserById(userId) {
+  const user = await User.findById(userId);
+  if (!user) throw Object.assign(new Error('Người dùng không tồn tại'), { statusCode: 404 });
+  await ensureAccountActive(user);
+  return safeUser(user);
+}
+
+async function complete2FALogin(userId) {
+  const user = await User.findById(userId);
+  if (!user) throw Object.assign(new Error('Người dùng không tồn tại'), { statusCode: 401 });
+  await ensureAccountActive(user);
+  return loginResult(user);
+}
+
 module.exports = {
+  loginWithGoogle, getUserById, complete2FALogin,
   requestRegistrationCode,
   verifyRegistration,
   login,

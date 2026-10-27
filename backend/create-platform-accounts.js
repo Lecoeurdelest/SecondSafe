@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const User = require('./src/modules/users/user.model');
-const { validateStrongPassword } = require('./src/common/validators/password.validator');
+const { assertStrongPassword } = require('./src/common/validators/password.validator');
 
 const EMAIL_PATTERN = /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/;
 
@@ -17,7 +17,7 @@ function accountFromEnv(prefix, role, fullName) {
   }
 
   try {
-    validateStrongPassword(password);
+    assertStrongPassword(password);
   } catch (error) {
     console.error(`${prefix} password validation failed`);
     console.error('Password length:', password.length);

@@ -1,30 +1,29 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const routes = require("./routes");
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const path = require('path');
+const routes = require('./routes');
+const { errorHandler, notFoundHandler } = require('./common/middlewares/error.middleware');
 
 const app = express();
 
-// CORS configuration
+const frontendOrigin = process.env.FRONTEND_URL || 'http://localhost:3000';
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin(origin, callback) {
+    if (!origin || origin === frontendOrigin) return callback(null, true);
+    const error = new Error('Nguồn truy cập không được phép');
+    error.statusCode = 403;
+    return callback(error);
+  },
   credentials: true
 }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Middleware
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  })
-);
-
-// Increase body size limit to handle larger payloads.
-// Default (~100kb) is too small for large base64 uploads; 50mb is safe for dev.
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-
-// Mount API routes
-app.use("/api", routes);
+app.use('/api', routes);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 module.exports = app;

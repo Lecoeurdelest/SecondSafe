@@ -13,7 +13,11 @@ const PORT = process.env.PORT || 5000;
 // Ket noi co so du lieu
 connectDB().then(() => {
   // Start cron jobs after DB is connected
-  startAllCronJobs();
+  if (typeof startAllCronJobs === "function") {
+    startAllCronJobs();
+  } else {
+    console.warn("Scheduled jobs are unavailable: the cron module has not been implemented.");
+  }
 });
 
 const server = http.createServer(app);

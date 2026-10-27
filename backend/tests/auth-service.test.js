@@ -14,6 +14,7 @@ jest.mock('../src/common/utils/email.util', () => ({
   sendRecoveryEmail: jest.fn()
 }));
 jest.mock('../src/common/utils/logger.util', () => ({ error: jest.fn() }));
+jest.mock('../src/config/firebase', () => ({ auth: jest.fn() }));
 
 process.env.JWT_SECRET = 'auth-service-test-secret';
 const bcrypt = require('bcryptjs');
@@ -23,6 +24,7 @@ const otpManager = require('../src/common/utils/otp.manager');
 const email = require('../src/common/utils/email.util');
 const logger = require('../src/common/utils/logger.util');
 const authService = require('../src/modules/auth/auth.service');
+const firebase = require('../src/config/firebase');
 
 const userId = '507f1f77bcf86cd799439011';
 const registration = {
@@ -228,4 +230,32 @@ test('change password requires the current password and the shared strong policy
     newPassword: 'NewStrong2!'
   })).resolves.toEqual({ message: 'Đổi mật khẩu thành công' });
   expect(user.save).toHaveBeenCalledTimes(1);
+  expect(Notification.create).toHaveBeenCalledWith(expect.objectContaining({ recipientId: userId, type: 'security' }));
+});
+
+test('Google login verifies the Firebase token and returns a safe signed profile', async () => {
+  const verifyIdToken = jest.fn().mockResolvedValue({ email: registration.email });
+  firebase.auth.mockReturnValue({ verifyIdToken });
+  User.findOne.mockResolvedValue(userDocument());
+  const result = await authService.loginWithGoogle('firebase-token');
+  expect(verifyIdToken).toHaveBeenCalledWith('firebase-token');
+  expect(result.token).toEqual(expect.any(String));
+  expect(result.user).toMatchObject({ id: userId, email: registration.email });
+  expect(result.user).not.toHaveProperty('password');
+});
+
+test('Google login rejects invalid tokens and suspended accounts', async () => {
+  const verifyIdToken = jest.fn().mockRejectedValue(new Error('invalid token'));
+  firebase.auth.mockReturnValue({ verifyIdToken });
+  await expect(authService.loginWithGoogle('invalid')).rejects.toHaveProperty('statusCode', 401);
+  expect(User.findOne).not.toHaveBeenCalled();
+  verifyIdToken.mockResolvedValue({ email: registration.email });
+  User.findOne.mockResolvedValue(userDocument({ isSuspended: true }));
+  await expect(authService.loginWithGoogle('valid')).rejects.toHaveProperty('statusCode', 403);
+});
+
+test('Google login reports unavailable configuration without requiring Firebase for other auth flows', async () => {
+  firebase.auth.mockImplementation(() => { throw Object.assign(new Error('unavailable'), { statusCode: 503 }); });
+  await expect(authService.loginWithGoogle('firebase-token')).rejects.toHaveProperty('statusCode', 503);
+  expect(User.findOne).not.toHaveBeenCalled();
 });
