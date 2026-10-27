@@ -3,6 +3,7 @@ const User = require('../users/user.model');
 const { verifyToken } = require('../../common/utils/jwt.util');
 const logger = require('../../common/utils/logger.util');
 const { createMemoryStore } = require('../../common/utils/expiring-store.util');
+const supportService = require('../support/support.service');
 
 // Presence dung chung store interface voi OTP (NFR-REL-04): mac dinh in-memory,
 // adapter dung chung (D-108) duoc truyen vao initializeChatSocket.
@@ -13,6 +14,8 @@ let ioInstance = null;
 
 const userRoom = userId => `user:${userId}`;
 const conversationRoom = conversationId => `conversation:${conversationId}`;
+const supportConversationRoom = conversationId => `support-conversation:${conversationId}`;
+const supportStaffRoom = 'support-staff-inbox';
 
 function handshakeToken(socket) {
   const header = socket.handshake.headers?.authorization;
@@ -93,6 +96,7 @@ function registerHandlers(io, socket) {
   const { userId, role } = socket.data.user;
 
   socket.join(userRoom(userId));
+  if (supportService.isStaffRole(role)) socket.join(supportStaffRoom);
 
   socket.on('join_conversation', guarded(socket, async data => {
     const conversationId = conversationIdOf(data);
@@ -131,6 +135,26 @@ function registerHandlers(io, socket) {
     return result;
   }));
 
+  socket.on('join_support_conversation', guarded(socket, async data => {
+    const conversationId = conversationIdOf(data);
+    await supportService.getConversation(conversationId, userId, role);
+    socket.join(supportConversationRoom(conversationId));
+    return { conversationId };
+  }));
+
+  socket.on('leave_support_conversation', data => {
+    const conversationId = conversationIdOf(data);
+    if (conversationId) socket.leave(supportConversationRoom(conversationId));
+  });
+
+  socket.on('send_support_message', guarded(socket, async data => {
+    const result = await supportService.sendMessage(
+      data.conversationId, userId, role, data.content
+    );
+    emitSupportUpdate(result.conversation, result.message);
+    return result.message;
+  }));
+
   socket.on('disconnect', async () => {
     try {
       if (await changePresence(userId, -1) === 0) socket.broadcast.emit('user_offline', { userId });
@@ -165,4 +189,27 @@ function emitMessageToConversation(conversationId, message) {
   emitNewMessage(conversationId, message);
 }
 
-module.exports = { initializeChatSocket, emitNewMessage, emitMessageToConversation, emitToUser, isUserOnline };
+function emitSupportUpdate(conversation, message) {
+  if (!ioInstance || !conversation) return;
+  const conversationId = String(conversation._id);
+  if (message) {
+    ioInstance.to(supportConversationRoom(conversationId)).emit('support_receive_message', {
+      conversationId,
+      message
+    });
+  }
+  const customerId = String(conversation.customerId?._id || conversation.customerId || '');
+  ioInstance.to(supportStaffRoom).emit('support_inbox_updated', { conversationId });
+  if (customerId) {
+    ioInstance.to(userRoom(customerId)).emit('support_conversation_updated', { conversationId });
+  }
+}
+
+module.exports = {
+  initializeChatSocket,
+  emitNewMessage,
+  emitMessageToConversation,
+  emitToUser,
+  emitSupportUpdate,
+  isUserOnline
+};

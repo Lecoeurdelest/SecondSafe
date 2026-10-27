@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { Link } from 'react-router-dom';
 import favoriteService from '../../services/favorite.service';
 import { getImageUrl, handleImageError } from '../../utils/imageHelper';
 import './Favorites.css';
 
-const Favorites = () => {
-  const navigate = useNavigate();
-  const { user } = useAuth();
+function hasSession() {
+  try {
+    return Boolean(window.localStorage.getItem('token'));
+  } catch {
+    return false;
+  }
+}
 
+const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 20,
@@ -22,37 +27,37 @@ const Favorites = () => {
   const fetchFavorites = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
 
       const res = await favoriteService.getFavorites({
         page: pagination.page,
         limit: pagination.limit
       });
 
-      const data = res.data;
+      const data = res.data?.data || res.data;
 
-      setFavorites(data.favorites);
+      setFavorites(data.favorites || []);
       setPagination(prev => ({
         ...prev,
-        total: data.total,
-        totalPages: data.totalPages
+        total: data.total || 0,
+        totalPages: data.totalPages || 0
       }));
 
-    } catch (err) {
-      console.error('Fetch error:', err);
+    } catch (failure) {
+      setError(failure.message || 'Không thể tải danh sách yêu thích.');
     } finally {
       setLoading(false);
     }
   }, [pagination.page, pagination.limit]);
 
-  // ✅ FIX: dependency chuẩn
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
+    if (!hasSession()) {
+      setLoading(false);
       return;
     }
 
     fetchFavorites();
-  }, [user, navigate, fetchFavorites]);
+  }, [fetchFavorites]);
 
   const handleRemoveFavorite = async (id, e) => {
     e.preventDefault();
@@ -66,9 +71,8 @@ const Favorites = () => {
       // reload lại data
       fetchFavorites();
 
-    } catch (err) {
-      console.error(err);
-      alert('Lỗi xoá');
+    } catch (failure) {
+      setError(failure.message || 'Không thể xóa sản phẩm khỏi danh sách yêu thích.');
     }
   };
 
@@ -87,6 +91,16 @@ const Favorites = () => {
     );
   }
 
+  if (!hasSession()) {
+    return (
+      <div className="favorites-container">
+        <h1>Tin đã lưu</h1>
+        <p role="status">Đăng nhập để xem danh sách sản phẩm yêu thích.</p>
+        <Link to="/">Khám phá sản phẩm</Link>
+      </div>
+    );
+  }
+
   return (
     <div className="favorites-container">
       <div className="favorites-header">
@@ -99,6 +113,8 @@ const Favorites = () => {
           <span className="favorites-stat__label">sản phẩm</span>
         </div>
       </div>
+
+      {error && <p className="favorites-error" role="alert">{error}</p>}
 
       {favorites.length === 0 ? (
         <div className="empty-state">

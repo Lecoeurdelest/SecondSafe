@@ -1,0 +1,134 @@
+.product-detail {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.product-detail__back {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.product-detail__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.product-detail__image {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--gray-100);
+}
+
+.product-detail__image img {
+  display: block;
+  width: 100%;
+  max-height: 640px;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+}
+
+.product-detail__information {
+  display: grid;
+  gap: 16px;
+}
+
+.product-detail__information h1,
+.product-detail__information h2,
+.product-detail__information p {
+  margin: 0;
+}
+
+.product-detail__category {
+  color: var(--gray-600);
+}
+
+.product-detail__price {
+  color: var(--primary-dark);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.product-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.product-detail__button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid var(--primary-blue);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.product-detail__button--primary {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.product-detail__button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.product-detail__feedback {
+  margin: 0;
+  color: var(--success);
+}
+
+.product-detail__feedback--error {
+  color: var(--error);
+}
+
+.product-detail__facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.product-detail__facts dt {
+  color: var(--gray-600);
+}
+
+.product-detail__facts dd {
+  margin: 0;
+}
+
+.product-detail__description,
+.product-detail__seller {
+  display: grid;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.product-detail__description p {
+  white-space: pre-wrap;
+}
+
+.product-detail-state {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  min-height: 360px;
+  align-content: center;
+  padding: 32px max(24px, calc((100% - 1120px) / 2));
+}
+
+.product-detail-state h1,
+.product-detail-state p {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .product-detail__layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
