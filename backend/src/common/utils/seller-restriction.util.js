@@ -44,17 +44,6 @@ async function refreshSellingRestriction(user, options = {}) {
     return false;
   }
 
-  // Keep public marketplace clean for already-restricted legacy accounts.
-  await Product.updateMany(
-    {
-      seller: user._id,
-      status: 'active'
-    },
-    {
-      status: 'hidden'
-    }
-  );
-
   return true;
 }
 

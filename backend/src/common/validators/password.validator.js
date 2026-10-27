@@ -25,7 +25,13 @@ function validateStrongPassword(password) {
   return { valid: true };
 }
 
+function assertStrongPassword(password) {
+  const result = validateStrongPassword(password);
+  if (!result.valid) throw Object.assign(new Error('Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt'), { statusCode: 400 });
+}
+
 module.exports = {
+  assertStrongPassword,
   STRONG_PASSWORD_REGEX,
   STRONG_PASSWORD_MESSAGE,
   validateStrongPassword

@@ -19,6 +19,9 @@
     "backend/src/modules/reports/dispute.model.js": "9f17b296a3e1c4bee2dbf2707ee66ad96b23b5be55e5caab2cdf01ae5c72f6f4",
     "backend/src/modules/reports/report.model.js": "f8da726e13dc3fc22222a7c2bf55e941f91e433da79e3ca218047874ec8814f0",
     "backend/src/modules/reports/review.model.js": "ba22a1c9d6f98c657c9b37b2e3b944721975e497e8e0ead75788d6bebb3dbe17",
+    "backend/src/modules/support/support-conversation.model.js": "b34fd575285cc1ddbdb0c8337ace667d6bc64831da2239dd355f576afffacf71",
+    "backend/src/modules/support/support-message.model.js": "7fd396f122ef21d3a6f9fd576ac907e33c06a369371d0a7a5e62a729c9dd10df",
+    "backend/src/modules/users/cart-item.model.js": "2e147feccef2b61276519af9247e72d61998613821270e3ceea32bf00d135baa",
     "backend/src/modules/users/favorite.model.js": "de893fad8098bbedeae50a54612aa9cfdc93f6198107d7c7f23962b3b6f5795f",
     "backend/src/modules/users/user.model.js": "5647f83ecdf39bbc7011c3079f931239a1588694aa7d654015872fa9d9373901"
   },
@@ -397,7 +400,7 @@
     },
     "docs/technical/data-model.md": {
       "ownership": "generated",
-      "sha256": "509916a313b6542c13ca84f8f1c930d2641a487447bf1a75f80bf6845480b55c"
+      "sha256": "9c4bdf459cde7010c21adb69cca3786c7104befb50a74db12bce6b63d1d9c09b"
     },
     ".agent/index.json": {
       "ownership": "generated",

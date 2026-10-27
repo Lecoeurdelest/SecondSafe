@@ -1,5 +1,5 @@
 jest.mock('../src/modules/products/category.model', () => ({ findOne: jest.fn() }));
-jest.mock('../src/modules/products/product.model', () => ({ find: jest.fn(), countDocuments: jest.fn() }));
+jest.mock('../src/modules/products/product.model', () => ({ find: jest.fn(), findOne: jest.fn(), countDocuments: jest.fn() }));
 jest.mock('../src/modules/users/user.model', () => ({ find: jest.fn() }));
 
 const request = require('supertest');
@@ -27,6 +27,15 @@ function mockEligibleSellers(sellers = [{ _id: 'seller-1' }]) {
   const query = { select: jest.fn(), lean: jest.fn().mockResolvedValue(sellers) };
   query.select.mockReturnValue(query);
   User.find.mockReturnValue(query);
+}
+
+function makeSingleProductQuery(product) {
+  const query = {
+    populate: jest.fn(),
+    lean: jest.fn().mockResolvedValue(product)
+  };
+  query.populate.mockReturnValue(query);
+  return query;
 }
 
 beforeEach(() => {
@@ -109,4 +118,33 @@ test('invalid price ranges return a client error', async () => {
   const response = await request(app).get('/api/products?minPrice=500&maxPrice=100');
   expect(response.status).toBe(400);
   expect(response.body.message).toBe('Khoảng giá không hợp lệ');
+});
+
+test('gets an active product with its seller and category details', async () => {
+  const product = {
+    _id: '507f1f77bcf86cd799439011',
+    title: 'Used book',
+    seller: { _id: 'seller-1', fullName: 'Test Seller' },
+    category: { name: 'Books', slug: 'books' }
+  };
+  Product.findOne.mockReturnValue(makeSingleProductQuery(product));
+
+  const response = await request(app).get(`/api/products/${product._id}`);
+
+  expect(response.status).toBe(200);
+  expect(response.body.data).toEqual(product);
+  expect(Product.findOne).toHaveBeenCalledWith({
+    _id: product._id,
+    status: 'active',
+    seller: { $in: ['seller-1'] }
+  });
+});
+
+test('hides products that are missing, inactive or owned by restricted sellers', async () => {
+  Product.findOne.mockReturnValue(makeSingleProductQuery(null));
+
+  const response = await request(app).get('/api/products/507f1f77bcf86cd799439011');
+
+  expect(response.status).toBe(404);
+  expect(response.body.message).toBe('Không tìm thấy sản phẩm');
 });

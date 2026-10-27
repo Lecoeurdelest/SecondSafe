@@ -48,9 +48,11 @@ export const checkFavorite = async (productId) => {
   }
 };
 
-export default {
+const favoriteService = {
   addFavorite,
   removeFavorite,
   getFavorites,
   checkFavorite
 };
+
+export default favoriteService;

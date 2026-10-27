@@ -2,6 +2,8 @@ const express = require('express');
 const { authenticate } = require('../../common/middlewares/auth.middleware');
 const { requireAdmin } = require('../../common/middlewares/admin.middleware');
 const userController = require('./user.controller');
+const { changePassword } = require('../auth/auth.controller');
+const { getDashboard } = require('./admin-dashboard.controller');
 
 const router = express.Router();
 
@@ -17,7 +19,7 @@ router.get('/admin/users', authenticate, requireAdmin, userController.getAllUser
 router.get('/admin/stats', authenticate, requireAdmin, userController.getSystemStats);
 
 // Get admin dashboard stats (Admin only)
-router.get('/admin/dashboard', authenticate, requireAdmin, userController.getAdminDashboardStats);
+router.get('/admin/dashboard', authenticate, requireAdmin, getDashboard);
 
 // Create new user (Admin only)
 router.post('/admin/users', authenticate, requireAdmin, userController.createUser);
@@ -58,7 +60,7 @@ router.put('/profile', authenticate, userController.updateProfile);
 router.post('/avatar', authenticate, userController.uploadAvatar);
 
 // Change password
-router.post('/change-password', authenticate, userController.changePassword);
+router.post('/change-password', authenticate, changePassword);
 
 // Get public profile (no auth required)
 router.get('/:id/public', userController.getPublicProfile);

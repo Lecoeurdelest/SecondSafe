@@ -1,512 +1,253 @@
-const bcrypt = require("bcryptjs");
-const User = require("../users/user.model");
-const { generateJWT, verifyToken } = require("../../common/utils/jwt.util");
-const {
-  validateStrongPassword,
-} = require("../../common/validators/password.validator");
-const { createNotification } = require("../notifications/notification.service");
-const admin = require("../../config/firebase");
-const crypto = require("crypto");
-const { refreshSellingRestriction } = require("../../common/utils/seller-restriction.util");
+const bcrypt = require('bcryptjs');
+const User = require('../users/user.model');
+const Notification = require('../notifications/notification.model');
+const { generateJWT } = require('../../common/utils/jwt.util');
+const otpManager = require('../../common/utils/otp.manager');
+const { sendRegisterOtpEmail, sendRecoveryEmail } = require('../../common/utils/email.util');
+const { assertStrongPassword } = require('../../common/validators/password.validator');
+const admin = require('../../config/firebase');
+const crypto = require('node:crypto');
+const { refreshSellingRestriction } = require('../../common/utils/seller-restriction.util');
+const logger = require('../../common/utils/logger.util');
+const business = require('../../config/business');
 
-/**
- * Login or Register with Google Firebase idToken
- * @param {String} idToken - Firebase idToken from client
- */
-async function loginWithGoogle(idToken) {
-  // 1. Verify token với Firebase Admin
-  let decodedToken;
+const GENERIC_CREDENTIAL_ERROR = 'Email hoặc mật khẩu không chính xác';
+const RECOVERY_MESSAGE = 'Nếu email đã đăng ký, hướng dẫn khôi phục mật khẩu sẽ được gửi đến hộp thư của bạn.';
+const DUMMY_PASSWORD_HASH = bcrypt.hashSync('secondsafe-invalid-login', 12);
+
+function normalizedEmail(email) {
+  return typeof email === 'string' ? email.trim().toLowerCase() : '';
+}
+
+function validEmail(email) {
+  return /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(email);
+}
+
+function safeUser(user) {
+  const result = user.toObject ? user.toObject() : { ...user };
+  result.id = result._id;
+  delete result.password;
+  delete result.__v;
+  return result;
+}
+
+function validateRegistration(data) {
+  const email = normalizedEmail(data.email);
+  const fullName = typeof data.fullName === 'string' ? data.fullName.trim() : '';
+  const phone = typeof data.phone === 'string' ? data.phone.trim() : '';
+  if (!email || !validEmail(email) || !fullName || fullName.length > 100 || !/^0\d{9,10}$/.test(phone)) {
+    throw Object.assign(new Error('Vui lòng nhập họ tên, email hợp lệ và số điện thoại hợp lệ'), { statusCode: 400 });
+  }
+  assertStrongPassword(data.password);
+  return { email, fullName, phone };
+}
+
+async function requestRegistrationCode(data = {}) {
+  const registration = validateRegistration(data);
+  const existing = await User.findOne({
+    $or: [{ email: registration.email }, { phone: registration.phone }]
+  }).select('_id').lean();
+  if (existing) {
+    throw Object.assign(new Error('Email hoặc số điện thoại đã được đăng ký'), { statusCode: 400 });
+  }
+
+  const passwordHash = await bcrypt.hash(data.password, 12);
+  const payload = { ...registration, passwordHash };
+  const code = await otpManager.issue(registration.email, { purpose: 'register', payload });
   try {
-    decodedToken = await admin.auth().verifyIdToken(idToken);
+    await sendRegisterOtpEmail(registration.email, code);
+  } catch (error) {
+    await otpManager.invalidate(registration.email, { purpose: 'register' });
+    throw error;
+  }
+  return { email: registration.email };
+}
+
+async function verifyRegistration(data = {}) {
+  const email = normalizedEmail(data.email);
+  if (!validEmail(email) || typeof data.code !== 'string') {
+    throw Object.assign(new Error('Email hoặc mã xác thực không hợp lệ'), { statusCode: 400 });
+  }
+  const verification = await otpManager.consume(email, data.code, { purpose: 'register' });
+  if (!verification.valid || !verification.payload) {
+    throw Object.assign(new Error('Mã xác thực không hợp lệ hoặc đã hết hạn'), { statusCode: 400 });
+  }
+
+  const { passwordHash, ...profile } = verification.payload;
+  if (profile.email !== email || typeof passwordHash !== 'string' || !passwordHash.startsWith('$2')) {
+    throw Object.assign(new Error('Thông tin đăng ký không hợp lệ'), { statusCode: 400 });
+  }
+  const user = await User.create({ ...profile, password: passwordHash, role: 'user' });
+  return { token: generateJWT({ userId: String(user._id) }), user: safeUser(user) };
+}
+
+async function login(data = {}) {
+  const email = normalizedEmail(data.email);
+  const password = typeof data.password === 'string' ? data.password : '';
+  const user = validEmail(email)
+    ? await User.findOne({ email }).select('+password')
+    : null;
+  const passwordMatches = await bcrypt.compare(password, user ? user.password : DUMMY_PASSWORD_HASH);
+  if (!user || !passwordMatches) {
+    throw Object.assign(new Error(GENERIC_CREDENTIAL_ERROR), { statusCode: 401 });
+  }
+
+  await ensureAccountActive(user);
+  return loginResult(user);
+}
+
+async function ensureAccountActive(user) {
+  if (user.isSuspended) {
+    const suspensionEnds = user.suspendedUntil ? new Date(user.suspendedUntil).getTime() : null;
+    if (suspensionEnds === null || !Number.isFinite(suspensionEnds) || suspensionEnds > Date.now()) {
+      throw Object.assign(new Error('Tài khoản đang bị tạm khóa'), {
+        statusCode: 403,
+        details: { suspendedUntil: user.suspendedUntil || null, reason: user.suspendedReason || null }
+      });
+    }
+    user.isSuspended = false;
+    user.suspendedUntil = undefined;
+    user.suspendedReason = undefined;
+    await user.save();
+  }
+
+  await refreshSellingRestriction(user);
+}
+
+function loginResult(user) {
+  return { token: generateJWT({ userId: String(user._id) }), user: safeUser(user) };
+}
+
+async function forgotPassword(data = {}) {
+  const email = normalizedEmail(data.email);
+  if (!validEmail(email)) {
+    throw Object.assign(new Error('Địa chỉ email không hợp lệ'), { statusCode: 400 });
+  }
+
+  const user = await User.findOne({ email }).select('_id email').lean();
+  if (user) {
+    try {
+      const credential = await otpManager.issue(email, {
+        purpose: 'recovery',
+        token: true,
+        ttlMs: business.resetCredentialTtlMs
+      });
+      await sendRecoveryEmail(email, credential);
+    } catch (error) {
+      logger.error('Password recovery delivery failed', { error: error.message });
+      try {
+        await otpManager.invalidate(email, { purpose: 'recovery' });
+      } catch (cleanupError) {
+        logger.error('Password recovery credential cleanup failed', { error: cleanupError.message });
+      }
+    }
+  }
+  return { message: RECOVERY_MESSAGE };
+}
+
+async function resetPassword(data = {}) {
+  const email = normalizedEmail(data.email);
+  assertStrongPassword(data.newPassword);
+  if (!validEmail(email) || typeof data.token !== 'string') {
+    throw Object.assign(new Error('Thông tin khôi phục không hợp lệ'), { statusCode: 400 });
+  }
+
+  const verification = await otpManager.consume(email, data.token, { purpose: 'recovery' });
+  if (!verification.valid) {
+    throw Object.assign(new Error('Mã khôi phục không hợp lệ hoặc đã hết hạn'), { statusCode: 400 });
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw Object.assign(new Error('Mã khôi phục không hợp lệ hoặc đã hết hạn'), { statusCode: 400 });
+  }
+  user.password = await bcrypt.hash(data.newPassword, 12);
+  await user.save();
+
+  try {
+    await Notification.create({
+      recipientId: user._id,
+      type: 'security',
+      title: 'Mật khẩu đã được thay đổi',
+      message: 'Mật khẩu tài khoản SecondSafe của bạn vừa được đặt lại.'
+    });
+  } catch (error) {
+    logger.error('Password reset security notification failed', { error: error.message });
+  }
+  return { message: 'Đặt lại mật khẩu thành công' };
+}
+
+async function changePassword(userId, data = {}) {
+  if (typeof data.currentPassword !== 'string' || typeof data.newPassword !== 'string') {
+    throw Object.assign(new Error('Vui lòng nhập mật khẩu hiện tại và mật khẩu mới'), { statusCode: 400 });
+  }
+  assertStrongPassword(data.newPassword);
+
+  const user = await User.findById(userId).select('+password');
+  if (!user || !(await bcrypt.compare(data.currentPassword, user.password))) {
+    throw Object.assign(new Error('Mật khẩu hiện tại không chính xác'), { statusCode: 400 });
+  }
+  user.password = await bcrypt.hash(data.newPassword, 12);
+  await user.save();
+  await notifyPasswordChange(user._id);
+
+  return { message: 'Đổi mật khẩu thành công' };
+}
+
+async function notifyPasswordChange(userId) {
+  try {
+    await Notification.create({
+      recipientId: userId,
+      type: 'security',
+      title: 'Mật khẩu đã được thay đổi',
+      message: 'Mật khẩu tài khoản SecondSafe của bạn vừa được thay đổi.'
+    });
+  } catch (error) {
+    logger.error('Password change security notification failed', { error: error.message });
+  }
+}
+
+async function loginWithGoogle(idToken) {
+  let decoded;
+  try {
+    decoded = await admin.auth().verifyIdToken(idToken);
   } catch (error) {
     if (error.statusCode === 503) throw error;
-    const err = new Error("Token Google không hợp lệ hoặc đã hết hạn");
-    err.statusCode = 401;
-    throw err;
+    throw Object.assign(new Error('Token Google không hợp lệ hoặc đã hết hạn'), { statusCode: 401 });
   }
-
-  const { email, name, picture } = decodedToken;
-
-  if (!email) {
-    const error = new Error("Không lấy được email từ tài khoản Google");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  // 2. Kiểm tra xem user đã tồn tại chưa
-  let user = await User.findOne({ email: email.toLowerCase() });
-
+  const email = normalizedEmail(decoded.email);
+  if (!validEmail(email)) throw Object.assign(new Error('Không lấy được email từ tài khoản Google'), { statusCode: 400 });
+  let user = await User.findOne({ email });
   if (!user) {
-    // 3. NẾU USER CHƯA TỒN TẠI: Tạo mới
-    // Sinh mật khẩu ngẫu nhiên cực mạnh để vượt qua mọi policy và đảm bảo bảo mật
-    const randomPassword = crypto.randomBytes(16).toString("hex") + "A1@";
-    const hashedPassword = await bcrypt.hash(randomPassword, 10);
-
-    // Tạo user mới. Model không bắt buộc phone và address nên không cần truyền.
     user = await User.create({
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      fullName: name || "Người dùng Google",
-      avatar: picture || "/images/placeholders/avatar-placeholder.svg",
-      role: "user",
+      email, fullName: decoded.name || 'Người dùng Google', avatar: decoded.picture,
+      password: await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 12), role: 'user'
     });
-  } else {
-    // 4. NẾU USER ĐÃ TỒN TẠI: Kiểm tra khóa tài khoản (copy logic khóa từ hàm loginUser cũ)
-    if (user.isSuspended) {
-      const isModeratorReviewSuspension = String(
-        user.suspendedReason || "",
-      ).includes("Vi phạm đánh giá do moderator xử lý");
-      const belowModeratorThreshold = Number(user.modBadReviewCount || 0) < 3;
-      const isLegacyUnknownSuspension = !String(
-        user.suspendedReason || "",
-      ).trim();
-      const belowViolationThreshold = Number(user.violationCount || 0) < 3;
-
-      if (
-        (isModeratorReviewSuspension && belowModeratorThreshold) ||
-        (isLegacyUnknownSuspension &&
-          belowModeratorThreshold &&
-          belowViolationThreshold)
-      ) {
-        user.isSuspended = false;
-        user.suspendedUntil = undefined;
-        user.suspendedReason = undefined;
-        await user.save();
-      }
-
-      const suspensionExpired =
-        user.suspendedUntil && new Date(user.suspendedUntil) <= new Date();
-      if (!user.isSuspended || suspensionExpired) {
-        user.isSuspended = false;
-        user.suspendedUntil = undefined;
-        user.suspendedReason = undefined;
-        await user.save();
-      } else {
-        const suspendedUntilText = user.suspendedUntil
-          ? ` đến ${new Date(user.suspendedUntil).toLocaleString("vi-VN")}`
-          : "";
-        const reasonText = user.suspendedReason
-          ? ` Lý do: ${user.suspendedReason}`
-          : " Lý do: vi phạm chính sách của hệ thống.";
-        const error = new Error(
-          `Tài khoản đã bị khóa${suspendedUntilText}.${reasonText}`,
-        );
-        error.statusCode = 403;
-        throw error;
-      }
-    }
-
-    await refreshSellingRestriction(user);
   }
-
-  // 5. Generate JWT token cho hệ thống nội bộ
-  const token = generateJWT(
-    {
-      userId: user._id,
-      email: user.email,
-      role: user.role,
-    },
-    "7d",
-  );
-
-  // 6. Trả về response
-  const userResponse = {
-    id: user._id,
-    email: user.email,
-    fullName: user.fullName,
-    avatar: user.avatar,
-    role: user.role,
-  };
-
-  return { user: userResponse, token };
+  await ensureAccountActive(user);
+  return loginResult(user);
 }
 
-async function generateAndSetTempPassword(email) {
-  const user = await User.findOne({ email: email.toLowerCase() });
-
-  if (!user) {
-    const error = new Error("Email không tồn tại trong hệ thống");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  // Tạo mật khẩu ngẫu nhiên: 8 ký tự hex + 'A1@' để thỏa mãn mọi điều kiện validation
-  const tempPassword = crypto.randomBytes(4).toString("hex") + "A1@";
-
-  // Mã hóa mật khẩu tạm thời và lưu đè vào DB
-  const hashedPassword = await bcrypt.hash(tempPassword, 10);
-  user.password = hashedPassword;
-  await user.save();
-  try {
-    await createNotification(user._id, {
-      type: "security",
-      title: "⚠️ Đổi mật khẩu bảo mật",
-      message:
-        'Tài khoản của bạn vừa được đăng nhập bằng mật khẩu tạm thời. Để đảm bảo an toàn tuyệt đối, vui lòng vào mục "Đổi mật khẩu" để cập nhật lại mật khẩu mới của riêng bạn ngay lập tức.',
-    });
-  } catch (notifError) {
-    console.error("Lỗi khi tạo thông báo nhắc đổi pass:", notifError);
-  }
-  return tempPassword;
-}
-
-/**
- * Register a new user
- * @param {String} email - User email
- * @param {String} password - User password (plain text)
- * @param {String} fullName - User full name
- * @returns {Object} { user, token }
- */
-async function registerUser(email, password, fullName, phone, passwordHash) {
-  // Check if email already exists
-  const existingUser = await User.findOne({ email: email.toLowerCase() });
-  if (existingUser) {
-    const error = new Error("Email đã được sử dụng");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const existingPhone = await User.findOne({ phone: phone.trim() });
-  if (existingPhone) {
-    const error = new Error("Số điện thoại này đã được đăng ký cho một tài khoản khác");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  // Hash password with bcrypt (10 salt rounds)
-  const hashedPassword = passwordHash || await bcrypt.hash(password, 10);
-
-  // Create new user
-  const user = await User.create({
-    email: email.toLowerCase(),
-    password: hashedPassword,
-    fullName: fullName.trim(),
-    phone: phone.trim(),
-    role: "user",
-  });
-
-  // Generate JWT token
-  const token = generateJWT(
-    {
-      userId: user._id,
-      email: user.email,
-      role: user.role,
-    },
-    "7d",
-  );
-
-  // Return user without password
-  const userResponse = {
-    id: user._id,
-    email: user.email,
-    fullName: user.fullName,
-    phone: user.phone,
-    role: user.role,
-  };
-
-  return { user: userResponse, token };
-}
-
-/**
- * Login user with email and password
- * @param {String} email - User email
- * @param {String} password - User password (plain text)
- * @returns {Object} { user, token }
- */
-async function loginUser(email, password) {
-  // Find user by email
-  const user = await User.findOne({ email: email.toLowerCase() });
-  if (!user) {
-    const error = new Error("Email hoặc mật khẩu không đúng");
-    error.statusCode = 401;
-    throw error;
-  }
-
-  // Check if account is suspended
-  if (user.isSuspended) {
-    const isModeratorReviewSuspension = String(
-      user.suspendedReason || "",
-    ).includes("Vi phạm đánh giá do moderator xử lý");
-    const belowModeratorThreshold = Number(user.modBadReviewCount || 0) < 3;
-    const isLegacyUnknownSuspension = !String(
-      user.suspendedReason || "",
-    ).trim();
-    const belowViolationThreshold = Number(user.violationCount || 0) < 3;
-
-    if (
-      (isModeratorReviewSuspension && belowModeratorThreshold) ||
-      (isLegacyUnknownSuspension &&
-        belowModeratorThreshold &&
-        belowViolationThreshold)
-    ) {
-      user.isSuspended = false;
-      user.suspendedUntil = undefined;
-      user.suspendedReason = undefined;
-      await user.save();
-    }
-
-    const suspensionExpired =
-      user.suspendedUntil && new Date(user.suspendedUntil) <= new Date();
-    if (!user.isSuspended || suspensionExpired) {
-      user.isSuspended = false;
-      user.suspendedUntil = undefined;
-      user.suspendedReason = undefined;
-      await user.save();
-    } else {
-      const suspendedUntilText = user.suspendedUntil
-        ? ` đến ${new Date(user.suspendedUntil).toLocaleString("vi-VN")}`
-        : "";
-      const reasonText = user.suspendedReason
-        ? ` Lý do: ${user.suspendedReason}`
-        : " Lý do: vi phạm chính sách của hệ thống.";
-      const error = new Error(
-        `Tài khoản đã bị khóa${suspendedUntilText}.${reasonText}`,
-      );
-      error.statusCode = 403;
-      throw error;
-    }
-  }
-
-  await refreshSellingRestriction(user);
-
-  // Verify password
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    const error = new Error("Email hoặc mật khẩu không đúng");
-    error.statusCode = 401;
-    throw error;
-  }
-
-  // Generate JWT token
-  const token = generateJWT(
-    {
-      userId: user._id,
-      email: user.email,
-      role: user.role,
-    },
-    "7d",
-  );
-
-  // Return user without password
-  const userResponse = {
-    id: user._id,
-    email: user.email,
-    fullName: user.fullName,
-    phone: user.phone,
-    address: user.address,
-    role: user.role,
-  };
-
-  return { user: userResponse, token };
-}
-
-/**
- * Get user by ID
- * @param {String} userId - User ID
- * @returns {Object} User data without password
- */
 async function getUserById(userId) {
   const user = await User.findById(userId);
-
-  if (!user) {
-    const error = new Error("User không tồn tại");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  if (user.isSuspended) {
-    const isModeratorReviewSuspension = String(
-      user.suspendedReason || "",
-    ).includes("Vi phạm đánh giá do moderator xử lý");
-    const belowModeratorThreshold = Number(user.modBadReviewCount || 0) < 3;
-    const isLegacyUnknownSuspension = !String(
-      user.suspendedReason || "",
-    ).trim();
-    const belowViolationThreshold = Number(user.violationCount || 0) < 3;
-
-    if (
-      (isModeratorReviewSuspension && belowModeratorThreshold) ||
-      (isLegacyUnknownSuspension &&
-        belowModeratorThreshold &&
-        belowViolationThreshold)
-    ) {
-      user.isSuspended = false;
-      user.suspendedUntil = undefined;
-      user.suspendedReason = undefined;
-      await user.save();
-    }
-
-    const suspensionExpired =
-      user.suspendedUntil && new Date(user.suspendedUntil) <= new Date();
-    if (!user.isSuspended || suspensionExpired) {
-      user.isSuspended = false;
-      user.suspendedUntil = undefined;
-      user.suspendedReason = undefined;
-      await user.save();
-    } else {
-      const suspendedUntilText = user.suspendedUntil
-        ? ` đến ${new Date(user.suspendedUntil).toLocaleString("vi-VN")}`
-        : "";
-      const reasonText = user.suspendedReason
-        ? ` Lý do: ${user.suspendedReason}`
-        : " Lý do: vi phạm chính sách của hệ thống.";
-      const error = new Error(
-        `Tài khoản đã bị khóa${suspendedUntilText}.${reasonText}`,
-      );
-      error.statusCode = 403;
-      throw error;
-    }
-  }
-
-  await refreshSellingRestriction(user);
-
-  return {
-    id: user._id,
-    email: user.email,
-    fullName: user.fullName,
-    avatar: user.avatar,
-    phone: user.phone,
-    address: user.address,
-    role: user.role,
-    isSellingRestricted: Boolean(user.isSellingRestricted),
-    sellingRestrictedUntil: user.sellingRestrictedUntil || null,
-    sellingRestrictedReason: user.sellingRestrictedReason || '',
-    isSuspended: Boolean(user.isSuspended),
-    suspendedUntil: user.suspendedUntil || null,
-    suspendedReason: user.suspendedReason || ''
-  };
-}
-
-/**
- * Change password for an authenticated user
- * @param {String} userId - ID of the user who is changing password
- * @param {String} currentPassword - Current plain text password
- * @param {String} newPassword - New plain text password
- */
-async function changeUserPassword(userId, currentPassword, newPassword) {
-  const user = await User.findById(userId);
-
-  if (!user) {
-    const error = new Error("User không tồn tại");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  const passwordValidation = validateStrongPassword(newPassword);
-  if (!passwordValidation.valid) {
-    const error = new Error(passwordValidation.message);
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
-  if (!isPasswordValid) {
-    const error = new Error("Mật khẩu hiện tại không đúng");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-  user.password = hashedPassword;
-  await user.save();
-
-  return true;
-}
-
-/**
- * Generate a short-lived token for resetting password
- * This implementation is stateless (does not modify user model),
- * so it is convenient to test via Postman.
- * @param {String} email - User email
- * @returns {String} reset token (JWT)
- */
-async function generatePasswordResetToken(email) {
-  const user = await User.findOne({ email: email.toLowerCase() });
-
-  if (!user) {
-    const error = new Error("Email không tồn tại");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  const token = generateJWT(
-    {
-      userId: user._id,
-      email: user.email,
-      role: user.role,
-      purpose: "password_reset",
-    },
-    "1h",
-  );
-
-  return token;
-}
-
-/**
- * Reset password using a password reset token
- * @param {String} token - Password reset token (JWT)
- * @param {String} newPassword - New plain text password
- */
-async function resetPasswordWithToken(token, newPassword) {
-  let decoded;
-
-  try {
-    decoded = verifyToken(token);
-  } catch (error) {
-    error.statusCode = error.statusCode || 400;
-    throw error;
-  }
-
-  if (decoded.purpose !== "password_reset") {
-    const err = new Error("Token đặt lại mật khẩu không hợp lệ");
-    err.statusCode = 400;
-    throw err;
-  }
-
-  const passwordValidation = validateStrongPassword(newPassword);
-  if (!passwordValidation.valid) {
-    const err = new Error(passwordValidation.message);
-    err.statusCode = 400;
-    throw err;
-  }
-
-  const user = await User.findById(decoded.userId);
-
-  if (!user) {
-    const error = new Error("User không tồn tại");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-  user.password = hashedPassword;
-  await user.save();
-
-  return true;
+  if (!user) throw Object.assign(new Error('Người dùng không tồn tại'), { statusCode: 404 });
+  await ensureAccountActive(user);
+  return safeUser(user);
 }
 
 async function complete2FALogin(userId) {
   const user = await User.findById(userId);
-  if (!user) throw new Error("User không tồn tại");
-
-  const token = generateJWT({ userId: user._id, email: user.email, role: user.role }, "7d");
-  
-  const userResponse = {
-    id: user._id, email: user.email, fullName: user.fullName, phone: user.phone,
-    address: user.address, role: user.role,
-  };
-
-  return { user: userResponse, token };
+  if (!user) throw Object.assign(new Error('Người dùng không tồn tại'), { statusCode: 401 });
+  await ensureAccountActive(user);
+  return loginResult(user);
 }
 
 module.exports = {
-  registerUser,
-  loginUser,
-  getUserById,
-  changeUserPassword,
-  generatePasswordResetToken,
-  resetPasswordWithToken,
-  loginWithGoogle,
-  generateAndSetTempPassword,
-  complete2FALogin
+  loginWithGoogle, getUserById, complete2FALogin,
+  requestRegistrationCode,
+  verifyRegistration,
+  login,
+  forgotPassword,
+  resetPassword,
+  changePassword
 };

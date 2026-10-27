@@ -1,9 +1,4 @@
 jest.mock('../src/common/utils/logger.util', () => ({ error: jest.fn() }));
-// Keep provider/database work outside this limiter/router unit test.
-jest.mock('../src/modules/auth/auth.controller', () => Object.fromEntries([
-  'requestRegisterOtp', 'verifyAndRegister', 'login', 'verifyLogin2FA', 'getProfile',
-  'logout', 'changePassword', 'forgotPassword', 'resetPassword', 'googleLogin'
-].map(name => [name, jest.fn((req, res, next) => next('route'))])));
 const express = require('express');
 const request = require('supertest');
 const { createAuthRateLimit } = require('../src/common/middlewares/rate-limit.middleware');
@@ -120,14 +115,21 @@ test('memory counter capacity is bounded and expired counters are reclaimed', as
   expect(await store.increment('two', 10)).toEqual({ count: 1, resetAt: 20 });
 });
 
-test.each(['/login', '/register/request-otp', '/register/verify', '/login/verify-2fa', '/forgot-password', '/reset-password'])('actual auth router limits %s before its future controller', async route => {
+test.each([
+  ['/login', { email: 'invalid' }, 401],
+  ['/register/request-otp', { email: 'invalid' }, 400],
+  ['/register/verify', { email: 'invalid' }, 400],
+  ['/login/verify-2fa', { email: 'invalid' }, 400],
+  ['/forgot-password', { email: 'invalid' }, 400],
+  ['/reset-password', { email: 'invalid' }, 400]
+])('actual auth router applies limits before %s handler', async (route, body, expectedStatus) => {
   let app;
   jest.isolateModules(() => { app = require('../src/app'); });
   let response;
   for (let attempt = 0; attempt < 5; attempt += 1) {
-    response = await request(app).post(`/api/auth${route}`).send({ email: 'router@example.com' });
-    expect(response.status).toBe(404);
+    response = await request(app).post(`/api/auth${route}`).send(body);
+    expect(response.status).toBe(expectedStatus);
   }
-  response = await request(app).post(`/api/auth${route}`).send({ email: 'router@example.com' });
+  response = await request(app).post(`/api/auth${route}`).send(body);
   expect(response.status).toBe(429);
-});
+}, 15000);

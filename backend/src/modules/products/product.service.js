@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Category = require('./category.model');
 const Product = require('./product.model');
-const User = require('../users/user.model');
+const { getEligibleSellerIds } = require('./product-availability.service');
 const { pagination } = require('../../common/utils/pagination.util');
 
 const CONDITIONS = new Set(['new', 'like-new', 'good', 'fair', 'poor']);
@@ -71,11 +71,7 @@ async function listProducts(query = {}) {
   const search = typeof query.search === 'string' ? query.search.trim() : '';
   if (search) productFilter.$text = { $search: search };
 
-  const sellers = await User.find({
-    isSuspended: { $ne: true },
-    isSellingRestricted: { $ne: true }
-  }).select('_id').lean();
-  const sellerIds = sellers.map(seller => seller._id);
+  const sellerIds = await getEligibleSellerIds();
   if (!sellerIds.length) return { products: [], total: 0, page, totalPages: 0, limit };
   productFilter.seller = { $in: sellerIds };
 
@@ -103,4 +99,29 @@ async function listProducts(query = {}) {
   };
 }
 
-module.exports = { listProducts };
+async function getProductById(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw Object.assign(new Error('Không tìm thấy sản phẩm'), { statusCode: 404 });
+  }
+
+  const sellerIds = await getEligibleSellerIds();
+  if (!sellerIds.length) {
+    throw Object.assign(new Error('Không tìm thấy sản phẩm'), { statusCode: 404 });
+  }
+
+  const product = await Product.findOne({
+    _id: id,
+    status: 'active',
+    seller: { $in: sellerIds }
+  })
+    .populate('category', 'name slug')
+    .populate('seller', 'fullName avatar rating')
+    .lean();
+
+  if (!product) {
+    throw Object.assign(new Error('Không tìm thấy sản phẩm'), { statusCode: 404 });
+  }
+  return product;
+}
+
+module.exports = { listProducts, getProductById };

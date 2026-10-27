@@ -1,156 +1,25 @@
-import api from "./api";
+import api from './api';
 
-export const authService = {
-  async requestRegisterOtp(email, password, fullName, phone, address) {
-    try {
-      const response = await api.post("/auth/register/request-otp", {
-        email,
-        password,
-        fullName,
-        phone,
-        address,
-      });
+async function requestData(request) {
+  const response = await request;
+  return response.data.data;
+}
 
-      if (response.data.success) {
-        return response.data;
-      } else {
-        throw new Error(response.data.message || "Yêu cầu gửi mã OTP thất bại");
-      }
-    } catch (error) {
-      throw error.response?.data || error;
-    }
-  },
-
-  async verifyAndRegister(email, otpCode) {
-    try {
-      const response = await api.post("/auth/register/verify", {
-        email,
-        otpCode,
-      });
-
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error(response.data.message || "Xác thực OTP thất bại");
-      }
-    } catch (error) {
-      throw error.response?.data || error;
-    }
-  },
-
-  async login(email, password) {
-    try {
-      const response = await api.post("/auth/login", {
-        email,
-        password,
-      });
-
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error(response.data.message || "Đăng nhập thất bại");
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  async verifyLogin2FA(email, otpCode) {
-    try {
-      const response = await api.post("/auth/login/verify-2fa", { email, otpCode });
-      if (response.data.success) return response.data.data;
-      throw new Error(response.data.message);
-    } catch (error) {
-      throw error.response?.data || error;
-    }
-  },
-
-  async loginWithGoogle(idToken) {
-    try {
-      const response = await api.post("/auth/google", { idToken });
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error(response.data.message || "Đăng nhập Google thất bại");
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  async getProfile(token) {
-    try {
-      const response = await api.get("/auth/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error(
-          response.data.message || "Không thể lấy thông tin profile",
-        );
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  async logout() {
-    // Tam thoi xu ly dang xuat o client bang cach xoa token
-    // Sau nay co the bo sung endpoint backend de vo hieu hoa token
-    localStorage.removeItem("token");
-  },
-
-  async changePassword(currentPassword, newPassword) {
-    try {
-      const response = await api.post("/auth/change-password", {
-        currentPassword,
-        newPassword,
-      });
-
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error(response.data.message || "Đổi mật khẩu thất bại");
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  async forgotPassword(email) {
-    try {
-      const response = await api.post("/auth/forgot-password", { email });
-
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error(
-          response.data.message || "Yêu cầu đặt lại mật khẩu thất bại",
-        );
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  async resetPassword(token, newPassword) {
-    try {
-      const response = await api.post("/auth/reset-password", {
-        token,
-        newPassword,
-      });
-
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error(response.data.message || "Đặt lại mật khẩu thất bại");
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
+const authService = {
+  login: (data, password) => requestData(api.post('/auth/login', typeof data === 'string' ? { email: data, password } : data)),
+  requestRegistrationCode: data => requestData(api.post('/auth/register/request-otp', data)),
+  verifyRegistration: data => requestData(api.post('/auth/register/verify', data)),
+  forgotPassword: data => requestData(api.post('/auth/forgot-password', typeof data === 'string' ? { email: data } : data)),
+  resetPassword: data => requestData(api.post('/auth/reset-password', data)),
+  changePassword: (data, newPassword) => requestData(api.post('/auth/change-password', typeof data === 'string' ? { currentPassword: data, newPassword } : data)),
+  logout: () => requestData(api.post('/auth/logout')),
+  getProfile: token => requestData(api.get('/auth/profile', token ? { headers: { Authorization: `Bearer ${token}` } } : undefined)),
+  loginWithGoogle: idToken => requestData(api.post('/auth/google', { idToken })),
+  verifyLogin2FA: (email, otpCode) => requestData(api.post('/auth/login/verify-2fa', { email, otpCode })),
+  requestRegisterOtp: (email, password, fullName, phone, address) =>
+    requestData(api.post('/auth/register/request-otp', { email, password, fullName, phone, address })),
+  verifyAndRegister: (email, otpCode) => requestData(api.post('/auth/register/verify', { email, otpCode }))
 };
+
+export { authService };
+export default authService;

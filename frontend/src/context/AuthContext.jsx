@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { authService } from "../services/auth.service";
+import { clearSession, saveSession } from "../services/session.service";
 
 export const AuthContext = createContext();
 
@@ -21,6 +22,17 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const syncSession = () => {
+      const storedToken = localStorage.getItem('token');
+      let storedUser = null;
+      try { storedUser = JSON.parse(localStorage.getItem('user')); } catch { /* Invalid cached profile is refreshed on load. */ }
+      setToken(storedToken);
+      setUser(storedToken ? normalizeUser(storedUser) : null);
+      setLoading(false);
+    };
+    window.addEventListener('secondsafe:session-changed', syncSession);
+    window.addEventListener('secondsafe:session-expired', syncSession);
+    window.addEventListener('storage', syncSession);
     // Tai thong tin nguoi dung tu localStorage khi component mount
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -28,21 +40,30 @@ export function AuthProvider({ children }) {
     } else {
       setLoading(false);
     }
+    return () => {
+      window.removeEventListener('secondsafe:session-changed', syncSession);
+      window.removeEventListener('secondsafe:session-expired', syncSession);
+      window.removeEventListener('storage', syncSession);
+    };
   }, []);
 
   const loadUser = async (token) => {
     try {
       const userData = await authService.getProfile(token);
+      if (localStorage.getItem('token') !== token) return;
       const normalizedUser = normalizeUser(userData);
       setUser(normalizedUser);
       setToken(token);
       localStorage.setItem("user", JSON.stringify(normalizedUser));
+      saveSession({ token, user: normalizedUser });
     } catch (error) {
+      if (localStorage.getItem('token') !== token) return;
       // Token khong hop le hoac da het han
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setUser(null);
       setToken(null);
+      clearSession();
     } finally {
       setLoading(false);
     }
@@ -63,7 +84,7 @@ export function AuthProvider({ children }) {
   };
 
   const persistAuthState = async (result) => {
-    localStorage.setItem("token", result.token);
+    saveSession(result);
     setToken(result.token);
 
     try {
@@ -122,8 +143,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    clearSession();
   };
 
   const changePassword = async (currentPassword, newPassword) => {
