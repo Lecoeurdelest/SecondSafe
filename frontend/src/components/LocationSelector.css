@@ -1,0 +1,69 @@
+.location-selector {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.location-selector .form-group {
+  margin-bottom: 0;
+}
+
+.location-selector label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.location-selector .required {
+  color: #dc2626;
+}
+
+.location-selector select {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  border: 1px solid #dbe2ea;
+  border-radius: 16px;
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: white;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.location-selector select:disabled {
+  background-color: #f8fafc;
+  cursor: not-allowed;
+  color: #94a3b8;
+}
+
+.location-selector select:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.24);
+}
+
+.location-selector select.error {
+  border-color: #dc2626;
+}
+
+.location-selector .error-text {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .location-selector {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .location-selector {
+    gap: 12px;
+  }
+}

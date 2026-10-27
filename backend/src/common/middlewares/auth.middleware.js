@@ -1,41 +1,157 @@
 const { verifyToken } = require('../utils/jwt.util');
+const { sendError } = require('../utils/response.util');
 const User = require('../../modules/users/user.model');
+const { refreshSellingRestriction } = require('../utils/seller-restriction.util');
 
-const AUTH_FIELDS = '_id email fullName role isSuspended suspendedUntil suspendedReason isSellingRestricted sellingRestrictedUntil sellingRestrictedReason sellingRestrictionSource';
-
-async function requestUser(req) {
-  const header = req.headers.authorization;
-  const bearer = typeof header === 'string' && /^Bearer\s+(\S+)$/i.exec(header);
-  if (!bearer) throw Object.assign(new Error('Vui lòng đăng nhập'), { statusCode: 401 });
-  const decoded = verifyToken(bearer[1]);
-  const user = await User.findById(decoded.userId).select(AUTH_FIELDS).lean();
-  if (!user || !['user', 'moderator', 'admin'].includes(user.role)) {
-    throw Object.assign(new Error('Thông tin xác thực không hợp lệ'), { statusCode: 401 });
-  }
-  return {
-    userId: user._id, email: user.email, fullName: user.fullName, role: user.role,
-    isSellingRestricted: Boolean(user.isSellingRestricted), sellingRestrictedUntil: user.sellingRestrictedUntil || null
-  };
-}
-
+/**
+ * Middleware to verify JWT token and authenticate user
+ * Extracts token from Authorization header, verifies it, and attaches user to request
+ */
 async function authenticate(req, res, next) {
   try {
-    req.user = await requestUser(req);
-    return next();
+    // Get token from Authorization header
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return sendError(res, 401, 'Token không hợp lệ');
+    }
+
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+
+    // Verify token
+    let decoded;
+    try {
+      decoded = verifyToken(token);
+    } catch (error) {
+      return sendError(res, 401, error.message);
+    }
+
+    // Check if user still exists in database
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return sendError(res, 401, 'User không tồn tại');
+    }
+
+    // Check if user account is suspended (auto-unlock when suspension time has passed)
+    if (user.isSuspended) {
+      const isModeratorReviewSuspension = String(user.suspendedReason || '').includes('Vi phạm đánh giá do moderator xử lý');
+      const belowModeratorThreshold = Number(user.modBadReviewCount || 0) < 3;
+      const isLegacyUnknownSuspension = !String(user.suspendedReason || '').trim();
+      const belowViolationThreshold = Number(user.violationCount || 0) < 3;
+
+      if (
+        (isModeratorReviewSuspension && belowModeratorThreshold) ||
+        (isLegacyUnknownSuspension && belowModeratorThreshold && belowViolationThreshold)
+      ) {
+        user.isSuspended = false;
+        user.suspendedUntil = undefined;
+        user.suspendedReason = undefined;
+        await user.save();
+      }
+
+      const suspensionExpired = user.suspendedUntil && new Date(user.suspendedUntil) <= new Date();
+      if (!user.isSuspended || suspensionExpired) {
+        user.isSuspended = false;
+        user.suspendedUntil = undefined;
+        user.suspendedReason = undefined;
+        await user.save();
+      } else {
+        const suspendedUntilText = user.suspendedUntil
+          ? ` đến ${new Date(user.suspendedUntil).toLocaleString('vi-VN')}`
+          : '';
+        const reasonText = user.suspendedReason
+          ? ` Lý do: ${user.suspendedReason}`
+          : ' Lý do: vi phạm chính sách của hệ thống.';
+        return sendError(res, 403, `Tài khoản đã bị khóa${suspendedUntilText}.${reasonText}`);
+      }
+    }
+
+    await refreshSellingRestriction(user);
+
+    // Attach user info to request object (without password)
+    req.user = {
+      userId: user._id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      isSellingRestricted: Boolean(user.isSellingRestricted),
+      sellingRestrictedUntil: user.sellingRestrictedUntil || null
+    };
+
+    next();
   } catch (error) {
-    return next(error);
+    console.error('Authentication error:', error);
+    return sendError(res, 500, 'Lỗi xác thực');
   }
 }
 
+/**
+ * Optional authentication middleware
+ * Attaches user to request if token is valid, but doesn't block if token is missing
+ */
 async function optionalAuthenticate(req, res, next) {
-  delete req.user;
-  if (!req.headers.authorization) return next();
   try {
-    req.user = await requestUser(req);
-    return next();
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return next();
+    }
+
+    const token = authHeader.substring(7);
+
+    try {
+      const decoded = verifyToken(token);
+      const user = await User.findById(decoded.userId);
+      
+      const isModeratorReviewSuspension = String(user?.suspendedReason || '').includes('Vi phạm đánh giá do moderator xử lý');
+      const belowModeratorThreshold = Number(user?.modBadReviewCount || 0) < 3;
+      const isLegacyUnknownSuspension = !String(user?.suspendedReason || '').trim();
+      const belowViolationThreshold = Number(user?.violationCount || 0) < 3;
+      if (
+        user?.isSuspended && (
+          (isModeratorReviewSuspension && belowModeratorThreshold) ||
+          (isLegacyUnknownSuspension && belowModeratorThreshold && belowViolationThreshold)
+        )
+      ) {
+        user.isSuspended = false;
+        user.suspendedUntil = undefined;
+        user.suspendedReason = undefined;
+        await user.save();
+      }
+
+      if (user?.isSuspended && user.suspendedUntil && new Date(user.suspendedUntil) <= new Date()) {
+        user.isSuspended = false;
+        user.suspendedUntil = undefined;
+        user.suspendedReason = undefined;
+        await user.save();
+      }
+
+      if (user) {
+        await refreshSellingRestriction(user);
+      }
+
+      if (user && !user.isSuspended) {
+        req.user = {
+          userId: user._id,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role,
+          isSellingRestricted: Boolean(user.isSellingRestricted),
+          sellingRestrictedUntil: user.sellingRestrictedUntil || null
+        };
+      }
+    } catch (error) {
+      // Ignore token errors for optional auth
+    }
+
+    next();
   } catch (error) {
-    return error.statusCode === 401 ? next() : next(error);
+    console.error('Optional authentication error:', error);
+    next();
   }
 }
 
-module.exports = { authenticate, optionalAuthenticate };
+module.exports = {
+  authenticate,
+  optionalAuthenticate
+};

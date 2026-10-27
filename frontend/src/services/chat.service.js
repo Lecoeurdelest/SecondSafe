@@ -8,6 +8,8 @@ export function connectChatSocket(token) {
 }
 
 const chatService = {
+  connectSocket: connectChatSocket,
+
   getConversations: async (page = 1, limit = 20) =>
     (await api.get('/chat/conversations', { params: { page, limit } })).data.data,
 

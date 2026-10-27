@@ -1,11 +1,68 @@
 const express = require('express');
-const { loginLimiter, codeRequestLimiter, codeVerificationLimiter, recoveryLimiter } = require('../../common/middlewares/rate-limit.middleware');
-
 const router = express.Router();
+const authController = require('./auth.controller');
+const { authenticate } = require('../../common/middlewares/auth.middleware');
 
-router.post('/login', loginLimiter);
-router.post('/register/request-otp', codeRequestLimiter);
-router.post(['/register/verify', '/login/verify-2fa'], codeVerificationLimiter);
-router.post(['/forgot-password', '/reset-password'], recoveryLimiter);
+/**
+ * POST /api/auth/register/request-otp
+ * Request an OTP for registration
+ */
+router.post('/register/request-otp', authController.requestRegisterOtp);
+
+/**
+ * POST /api/auth/register/verify
+ * Verify OTP and actually create the user
+ */
+router.post('/register/verify', authController.verifyAndRegister);
+
+/**
+ * POST /api/auth/login
+ * Login user
+ * Public route
+ */
+router.post('/login', authController.login);
+router.post('/login/verify-2fa', authController.verifyLogin2FA);
+
+/**
+ * GET /api/auth/profile
+ * Get user profile
+ * Protected route - requires authentication
+ */
+router.get('/profile', authenticate, authController.getProfile);
+
+/**
+ * POST /api/auth/logout
+ * Logout user
+ * Protected route - requires authentication
+ */
+router.post('/logout', authenticate, authController.logout);
+
+/**
+ * POST /api/auth/change-password
+ * Change password for authenticated user
+ * Protected route - requires authentication
+ */
+router.post('/change-password', authenticate, authController.changePassword);
+
+/**
+ * POST /api/auth/forgot-password
+ * Request password reset token
+ * Public route
+ */
+router.post('/forgot-password', authController.forgotPassword);
+
+/**
+ * POST /api/auth/reset-password
+ * Reset password using reset token
+ * Public route
+ */
+router.post('/reset-password', authController.resetPassword);
+
+/**
+ * POST /api/auth/google
+ * Login or Register with Google
+ * Public route
+ */
+router.post('/google', authController.googleLogin);
 
 module.exports = router;
