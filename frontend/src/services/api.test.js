@@ -27,6 +27,7 @@ test('an expired protected request clears the token and updates the session with
   const { client, storage, onUnauthorized } = fixture(401, { message: 'Token đã hết hạn' });
   await expect(client.get('/products')).rejects.toMatchObject({ message: 'Token đã hết hạn', status: 401 });
   expect(storage.removeItem).toHaveBeenCalledWith('token');
+  expect(storage.removeItem).toHaveBeenCalledWith('secondsafe:role');
   expect(onUnauthorized).toHaveBeenCalledTimes(1);
 });
 

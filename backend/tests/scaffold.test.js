@@ -10,7 +10,7 @@ const app = require('../src/app');
 
 const MODULES_DIR = path.join(__dirname, '..', 'src', 'modules');
 const EXPECTED_MODELS = [
-  'Category', 'Conversation', 'Delivery', 'Dispute', 'EscrowHold', 'Favorite', 'Message', 'Notification',
+  'CartItem', 'Category', 'Conversation', 'Delivery', 'Dispute', 'EscrowHold', 'Favorite', 'Message', 'Notification',
   'Order', 'Product', 'PurchaseRequest', 'Report', 'Review', 'Transaction', 'User', 'Wallet'
 ];
 
@@ -39,13 +39,14 @@ describe('HTTP shell', () => {
 });
 
 describe('Database contract', () => {
-  test('all 16 baseline models are registered', () => {
+  test('all application models are registered', () => {
     expect(mongoose.modelNames().sort()).toEqual(EXPECTED_MODELS);
   });
 
   test('uniqueness invariants are declared', () => {
     expect(indexKeys('User')).toContainEqual({ key: { email: 1 }, unique: true });
     expect(indexKeys('Favorite')).toContainEqual({ key: { user: 1, product: 1 }, unique: true });
+    expect(indexKeys('CartItem')).toContainEqual({ key: { user: 1, product: 1 }, unique: true });
     expect(indexKeys('Conversation')).toContainEqual({ key: { buyerId: 1, sellerId: 1, productId: 1 }, unique: true });
   });
 

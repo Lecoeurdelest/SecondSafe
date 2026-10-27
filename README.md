@@ -25,6 +25,14 @@ npm run dev                   # http://localhost:5000/api/health
 
 Other scripts: `npm run seed:verify`, `npm run db:indexes`, `npm run db:migrate`. MongoDB transactions, used by the money flows, need a replica set.
 
+The admin and staff dashboards read live aggregates from the MongoDB database configured by `MONGODB_URI`. For account setup and local access, see [the live dashboard setup](docs/technical/live-dashboard.md).
+
+## Chat and AI assistant
+
+Signed-in users can message a seller from a product page or open a customer-support conversation. Support messages are encrypted at rest using `CHAT_ENCRYPTION_KEY`. To enable Gemini-backed FAQ and product advice, set `GEMINI_API_KEY` in `backend/.env`; `GEMINI_MODEL` is optional and defaults to `gemini-2.5-flash`. The key stays on the backend and is never sent to the browser. Without a configured key, AI requests return a configuration error.
+
+The assistant does not send free-form customer questions to Gemini: FAQ requests send only a fixed topic, and product advice sends only category, condition, and price attributes. Moderation guidance sends only report type, reason, and status; staff must make the final decision. Do not enter passwords, OTPs, payment details, addresses, or private-chat content into AI prompts.
+
 The web foundation is available under `frontend/`:
 
 ```bash
