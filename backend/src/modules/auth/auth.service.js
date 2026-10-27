@@ -19,6 +19,7 @@ async function loginWithGoogle(idToken) {
   try {
     decodedToken = await admin.auth().verifyIdToken(idToken);
   } catch (error) {
+    if (error.statusCode === 503) throw error;
     const err = new Error("Token Google không hợp lệ hoặc đã hết hạn");
     err.statusCode = 401;
     throw err;
@@ -156,7 +157,7 @@ async function generateAndSetTempPassword(email) {
  * @param {String} fullName - User full name
  * @returns {Object} { user, token }
  */
-async function registerUser(email, password, fullName, phone) {
+async function registerUser(email, password, fullName, phone, passwordHash) {
   // Check if email already exists
   const existingUser = await User.findOne({ email: email.toLowerCase() });
   if (existingUser) {
@@ -173,7 +174,7 @@ async function registerUser(email, password, fullName, phone) {
   }
 
   // Hash password with bcrypt (10 salt rounds)
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = passwordHash || await bcrypt.hash(password, 10);
 
   // Create new user
   const user = await User.create({

@@ -1,4 +1,9 @@
 jest.mock('../src/common/utils/logger.util', () => ({ error: jest.fn() }));
+// Keep provider/database work outside this limiter/router unit test.
+jest.mock('../src/modules/auth/auth.controller', () => Object.fromEntries([
+  'requestRegisterOtp', 'verifyAndRegister', 'login', 'verifyLogin2FA', 'getProfile',
+  'logout', 'changePassword', 'forgotPassword', 'resetPassword', 'googleLogin'
+].map(name => [name, jest.fn((req, res, next) => next('route'))])));
 const express = require('express');
 const request = require('supertest');
 const { createAuthRateLimit } = require('../src/common/middlewares/rate-limit.middleware');

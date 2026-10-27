@@ -1,48 +1,39 @@
 const jwt = require('jsonwebtoken');
-const config = require('../../config/env');
+const business = require('../../config/business');
 
-const JWT_SECRET = config.jwt.secret;
-
-/**
- * Generate JWT token with user payload
- * @param {Object} payload - User data to encode in token (userId, email, role)
- * @param {String} expiresIn - Token expiration time (default: 7 days)
- * @returns {String} JWT token
- */
-function generateJWT(payload, expiresIn = '7d') {
-  if (!payload || !payload.userId) {
-    throw new Error('Payload must contain userId');
-  }
-
-  return jwt.sign(payload, JWT_SECRET, { expiresIn });
+function invalidToken(message = 'Token không hợp lệ') {
+  return Object.assign(new Error(message), { statusCode: 401 });
 }
 
-/**
- * Verify and decode JWT token
- * @param {String} token - JWT token to verify
- * @returns {Object} Decoded payload
- * @throws {Error} If token is invalid or expired
- */
-function verifyToken(token) {
-  if (!token || token.trim().length === 0) {
-    throw new Error('Token không hợp lệ');
-  }
+function signingSecret() {
+  if (!process.env.JWT_SECRET) throw new Error('Missing JWT_SECRET');
+  return process.env.JWT_SECRET;
+}
 
+function validUserId(value) {
+  return /^[a-f\d]{24}$/i.test(String(value || ''));
+}
+
+function validClaims(decoded) {
+  return Boolean(decoded) && typeof decoded === 'object' && typeof decoded.userId === 'string'
+    && validUserId(decoded.userId) && Number.isSafeInteger(decoded.exp);
+}
+
+function generateJWT(payload, expiresIn = business.jwtTtlSeconds) {
+  if (!payload || !validUserId(payload.userId)) throw new Error('JWT payload must contain a valid userId');
+  return jwt.sign({ userId: String(payload.userId) }, signingSecret(), { algorithm: 'HS256', expiresIn });
+}
+
+function verifyToken(token) {
+  if (typeof token !== 'string' || !token.trim()) throw invalidToken();
+  const secret = signingSecret();
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, secret, { algorithms: ['HS256'] });
+    if (!validClaims(decoded)) throw invalidToken();
     return decoded;
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      throw new Error('Token đã hết hạn');
-    } else if (error.name === 'JsonWebTokenError') {
-      throw new Error('Token không hợp lệ');
-    } else {
-      throw error;
-    }
+    throw invalidToken(error.name === 'TokenExpiredError' ? 'Token đã hết hạn' : 'Token không hợp lệ');
   }
 }
 
-module.exports = {
-  generateJWT,
-  verifyToken
-};
+module.exports = { generateJWT, verifyToken };

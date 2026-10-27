@@ -88,14 +88,19 @@ test('response helpers preserve the client envelope and integer VND', async () =
 });
 
 test('unavailable order security dependencies return 503 without invoking business handlers', async () => {
-  const response = await request(app).post('/api/orders/purchase-request').send({});
-  expect(response.status).toBe(503);
-  expect(response.body.success).toBe(false);
   const load = jest.fn();
   const fixture = express();
   fixture.use(availableRouter(() => false, load));
-  await request(fixture).get('/');
+  const response = await request(fixture).post('/api/orders/purchase-request').send({});
+  expect(response.status).toBe(503);
+  expect(response.body.success).toBe(false);
   expect(load).not.toHaveBeenCalled();
+});
+
+test('implemented order guards reject anonymous requests', async () => {
+  const response = await request(app).post('/api/orders/purchase-request').send({});
+  expect(response.status).toBe(401);
+  expect(response.body.success).toBe(false);
 });
 
 test('an available router executes normally and forwards loader failures', async () => {

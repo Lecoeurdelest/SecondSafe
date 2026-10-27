@@ -3,24 +3,35 @@
  * Xử lý URL ảnh, placeholder, và fallback
  */
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+import { NETWORK_CONFIG } from '../services/network.config';
+
+const API_URL = NETWORK_CONFIG.API_ORIGIN;
+const PRODUCT_PLACEHOLDER = '/images/placeholders/product-placeholder.svg';
+const AVATAR_PLACEHOLDER = '/images/placeholders/avatar-placeholder.svg';
+const CATEGORY_IMAGES = {
+  books: '/images/products/books.jpg', fashion: '/images/products/fashion.jpg',
+  electronics: '/images/products/electronics.jpg', home: '/images/products/home.jpg',
+  beauty: '/images/products/beauty.jpg', sports: '/images/products/sports.jpg',
+  toys: '/images/products/toys.svg', pets: '/images/products/pets.jpg'
+};
 
 /**
  * Lấy URL đầy đủ cho ảnh đã upload
  * @param {string} path - Đường dẫn tương đối từ backend (ví dụ: "/uploads/products/123/image.jpg")
  * @returns {string} URL đầy đủ
  */
-export const getImageUrl = (path) => {
-  if (!path) return null;
+export const getImageUrl = (path, type = 'product') => {
+  const fallback = type === 'avatar' ? AVATAR_PLACEHOLDER : PRODUCT_PLACEHOLDER;
+  if (!path) return fallback;
 
   // Ho tro du lieu anh dang object, vi du { url: '/uploads/...' }.
   const rawPath = typeof path === 'string'
     ? path
     : (path.url || path.path || path.src || '');
-  if (!rawPath) return null;
+  if (!rawPath) return fallback;
 
   const normalizedRawPath = String(rawPath).trim().replace(/\\/g, '/');
-  if (!normalizedRawPath) return null;
+  if (!normalizedRawPath) return fallback;
 
   // Giữ nguyên data/blob URL để hiển thị preview ảnh cục bộ.
   if (normalizedRawPath.startsWith('data:') || normalizedRawPath.startsWith('blob:')) {
@@ -33,6 +44,7 @@ export const getImageUrl = (path) => {
   }
 
   const normalizedPath = normalizedRawPath.startsWith('/') ? normalizedRawPath : `/${normalizedRawPath}`;
+  if (normalizedPath.startsWith('/images/')) return encodeURI(normalizedPath);
   
   // Ghép với API URL để tạo đường dẫn ảnh hoàn chỉnh.
   return `${API_URL}${encodeURI(normalizedPath)}`;
@@ -45,10 +57,14 @@ export const getImageUrl = (path) => {
  * @returns {string} URL ảnh hoặc ảnh placeholder
  */
 export const getProductImageUrl = (product, index = 0) => {
-  if (product?.images && product.images.length > index) {
-    return getImageUrl(product.images[index]);
-  }
-  return '/images/placeholders/product-placeholder.svg';
+  const images = Array.isArray(product?.images) ? product.images.slice(index) : [];
+  const image = images.find(item => {
+    const value = typeof item === 'string' ? item : item?.url || item?.path || item?.src;
+    return typeof value === 'string' && value.trim() && !value.endsWith('/placeholders/product-placeholder.svg');
+  });
+  if (image) return getImageUrl(image);
+  const category = typeof product?.category === 'string' ? product.category : product?.category?.slug;
+  return CATEGORY_IMAGES[category] || PRODUCT_PLACEHOLDER;
 };
 
 /**
@@ -66,7 +82,7 @@ export const getUserAvatarUrl = (user) => {
     user?.user?.avatar;
 
   if (avatarSource) {
-    return getImageUrl(avatarSource);
+    return getImageUrl(avatarSource, 'avatar');
   }
 
   return '/images/placeholders/avatar-placeholder.svg';
@@ -223,7 +239,7 @@ export const formatFileSize = (bytes) => {
   return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
 };
 
-export default {
+const imageHelper = {
   getImageUrl,
   getProductImageUrl,
   getUserAvatarUrl,
@@ -235,3 +251,5 @@ export default {
   compressImage,
   formatFileSize,
 };
+
+export default imageHelper;

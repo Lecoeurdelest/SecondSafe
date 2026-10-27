@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import notificationService from "../services/notification.service";
 import productService from "../services/product.service";
@@ -30,33 +30,11 @@ const NotificationPanel = ({
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [, setUnreadCount] = useState(0);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchNotifications({ targetPage: 1, append: false });
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (isOpen && refreshTrigger > 0) {
-      fetchNotifications({ targetPage: 1, append: false });
-    }
-  }, [isOpen, refreshTrigger]);
-
-  useEffect(() => {
-    if (!isOpen) return undefined;
-
-    const intervalId = setInterval(() => {
-      fetchNotifications({ targetPage: 1, append: false });
-    }, 15000);
-
-    return () => clearInterval(intervalId);
-  }, [isOpen]);
-
-  const fetchNotifications = async ({ targetPage = 1, append = false } = {}) => {
+  const fetchNotifications = useCallback(async ({ targetPage = 1, append = false } = {}) => {
     try {
       if (append) {
         setLoadingMore(true);
@@ -92,7 +70,16 @@ const NotificationPanel = ({
       setLoading(false);
       setLoadingMore(false);
     }
-  };
+  }, [onUnreadCountChange]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    fetchNotifications({ targetPage: 1, append: false });
+    const intervalId = setInterval(() => {
+      fetchNotifications({ targetPage: 1, append: false });
+    }, 15000);
+    return () => clearInterval(intervalId);
+  }, [isOpen, refreshTrigger, fetchNotifications]);
 
   const handleLoadMore = async () => {
     if (loadingMore || !hasMore) return;
@@ -204,8 +191,6 @@ const NotificationPanel = ({
       console.error("Error resolving product notification:", error);
       return null;
     }
-
-    return null;
   };
 
   const handleNotificationClick = async (notification) => {

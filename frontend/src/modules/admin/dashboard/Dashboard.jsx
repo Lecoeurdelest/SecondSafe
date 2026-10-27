@@ -10,7 +10,6 @@ import {
   AlertOutlined,
   UserOutlined,
   CheckCircleOutlined,
-  RiseOutlined,
   ArrowRightOutlined,
   ReloadOutlined,
   BarChartOutlined,

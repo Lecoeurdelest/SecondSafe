@@ -2,26 +2,27 @@ const express = require('express');
 const router = express.Router();
 const authController = require('./auth.controller');
 const { authenticate } = require('../../common/middlewares/auth.middleware');
+const { loginLimiter, codeRequestLimiter, codeVerificationLimiter, recoveryLimiter } = require('../../common/middlewares/rate-limit.middleware');
 
 /**
  * POST /api/auth/register/request-otp
  * Request an OTP for registration
  */
-router.post('/register/request-otp', authController.requestRegisterOtp);
+router.post('/register/request-otp', codeRequestLimiter, authController.requestRegisterOtp);
 
 /**
  * POST /api/auth/register/verify
  * Verify OTP and actually create the user
  */
-router.post('/register/verify', authController.verifyAndRegister);
+router.post('/register/verify', codeVerificationLimiter, authController.verifyAndRegister);
 
 /**
  * POST /api/auth/login
  * Login user
  * Public route
  */
-router.post('/login', authController.login);
-router.post('/login/verify-2fa', authController.verifyLogin2FA);
+router.post('/login', loginLimiter, authController.login);
+router.post('/login/verify-2fa', codeVerificationLimiter, authController.verifyLogin2FA);
 
 /**
  * GET /api/auth/profile
@@ -49,14 +50,14 @@ router.post('/change-password', authenticate, authController.changePassword);
  * Request password reset token
  * Public route
  */
-router.post('/forgot-password', authController.forgotPassword);
+router.post('/forgot-password', recoveryLimiter, authController.forgotPassword);
 
 /**
  * POST /api/auth/reset-password
  * Reset password using reset token
  * Public route
  */
-router.post('/reset-password', authController.resetPassword);
+router.post('/reset-password', recoveryLimiter, authController.resetPassword);
 
 /**
  * POST /api/auth/google

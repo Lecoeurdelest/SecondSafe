@@ -8,6 +8,7 @@ const { verifyToken } = require("../../common/utils/jwt.util");
 const { sendTempPasswordEmail, sendRegisterOtpEmail, sendLogin2faOtpEmail } = require("../../common/utils/email.util");
 const otpManager = require("../../common/utils/otp.manager");
 const User = require("../users/user.model");
+const bcrypt = require("bcryptjs");
 
 /**
  * Yêu cầu gửi OTP đăng ký
@@ -52,9 +53,10 @@ async function requestRegisterOtp(req, res, next) {
     }
 
     // Đưa data vào quản lý OTP và lấy mã
-    const otpCode = otpManager.generateAndSaveOtp(email, {
+    const passwordHash = await bcrypt.hash(password, 10);
+    const otpCode = await otpManager.generateAndSaveOtp(email, {
       email,
-      password,
+      passwordHash,
       fullName,
       phone,
     });
@@ -86,7 +88,7 @@ async function verifyAndRegister(req, res, next) {
     }
 
     // Kiểm tra OTP
-    const otpCheck = otpManager.verifyOtp(email, otpCode);
+    const otpCheck = await otpManager.verifyOtp(email, otpCode);
     if (!otpCheck.valid) {
       return sendError(res, 400, otpCheck.message);
     }
@@ -94,16 +96,17 @@ async function verifyAndRegister(req, res, next) {
     // Nếu OTP đúng, gọi service đăng ký gốc (bản thân service registerUser đã băm mật khẩu và lưu DB)
     const {
       email: savedEmail,
-      password,
+      passwordHash,
       fullName,
       phone,
     } = otpCheck.userData;
 
     const result = await authService.registerUser(
       savedEmail,
-      password,
+      undefined,
       fullName,
       phone,
+      passwordHash,
     );
 
     return sendSuccess(res, 201, result, "Đăng ký tài khoản thành công");
@@ -152,7 +155,7 @@ async function login(req, res, next) {
     // Call service to login user
     const result = await authService.loginUser(email, password);
     if (result.requires2FA) {
-      const otpCode = otpManager.generateAndSaveOtp(result.user.email, { purpose: 'login_2fa', userId: result.user.id });
+      const otpCode = await otpManager.generateAndSaveOtp(result.user.email, { purpose: 'login_2fa', userId: result.user.id }, 'login-2fa');
       await sendLogin2faOtpEmail(result.user.email, otpCode);
       
       return sendSuccess(res, 200, { requires2FA: true, email: result.user.email }, "Mã OTP đã được gửi đến email để xác thực 2FA");
@@ -174,7 +177,7 @@ async function verifyLogin2FA(req, res, next) {
     const { email, otpCode } = req.body;
     if (!email || !otpCode) return sendError(res, 400, "Vui lòng cung cấp email và mã OTP");
 
-    const otpCheck = otpManager.verifyOtp(email, otpCode);
+    const otpCheck = await otpManager.verifyOtp(email, otpCode, 'login-2fa');
     if (!otpCheck.valid || otpCheck.userData.purpose !== 'login_2fa') {
       return sendError(res, 400, otpCheck.message || "Mã OTP không hợp lệ");
     }

@@ -8,14 +8,15 @@ import Footer from './components/Footer';
 import NotificationPanel from './components/NotificationPanel';
 import notificationService from './services/notification.service';
 import chatService from './services/chat.service';
+import AppErrorBoundary from './components/AppErrorBoundary';
 
 function AppShell() {
   const { isAuthenticated, user, logout, token } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [newNotificationCount, setNewNotificationCount] = useState(0);
-  const [hasNewNotification, setHasNewNotification] = useState(false);
+  const [, setNewNotificationCount] = useState(0);
+  const [, setHasNewNotification] = useState(false);
   const [notificationRefreshTick, setNotificationRefreshTick] = useState(0);
   const [chatUnreadCount, setChatUnreadCount] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -260,9 +261,11 @@ function AppShell() {
   };
 
   const postButtonDisabled = isRestrictionActive(user);
+  const Content = isAdminRoute || isModeratorRoute ? 'div' : 'main';
 
   return (
     <div className="App">
+      <a className="skip-link" href="#main-content">Chuyển đến nội dung chính</a>
       {!isModeratorRoute && !isAdminRoute && (
         <nav className={`navbar ${isScrolled ? 'navbar--scrolled' : 'navbar--transparent'}`}>
           <div className="navbar__container">
@@ -421,7 +424,7 @@ function AppShell() {
         </nav>
       )}
 
-      <AppRoutes />
+      <Content id="main-content" tabIndex="-1"><AppRoutes /></Content>
         
       {!isModeratorRoute && !isAdminRoute && <Footer />}
     </div>
@@ -430,9 +433,11 @@ function AppShell() {
 
 function App() {
   return (
-    <Router>
-      <AppShell />
-    </Router>
+    <AppErrorBoundary>
+      <Router>
+        <AppShell />
+      </Router>
+    </AppErrorBoundary>
   );
 }
 

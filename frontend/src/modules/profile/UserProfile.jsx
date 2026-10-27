@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getPublicProfile, getUserStats } from '../../services/user.service';
 import productService from '../../services/product.service';
@@ -21,11 +21,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
 
-  useEffect(() => {
-    fetchUserProfile();
-  }, [userId]);
-
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -45,7 +41,11 @@ const UserProfile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('vi-VN', {

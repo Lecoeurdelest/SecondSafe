@@ -1,15 +1,18 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import App from './App';
 import AppErrorBoundary from './components/AppErrorBoundary';
 import productService from './services/product.service';
+import { AuthProvider } from './context/AuthContext';
+
+jest.mock('./config/firebase', () => ({ auth: {}, googleProvider: {} }));
 
 jest.mock('./services/product.service', () => ({ __esModule: true, default: { getProducts: jest.fn() } }));
 
 test('renders the Vietnamese catalog and accessible navigation', async () => {
   productService.getProducts.mockResolvedValue({ products: [], total: 0, totalPages: 0, limit: 20 });
   window.history.replaceState({}, '', '/');
-  render(<App />);
+  render(<AuthProvider><App /></AuthProvider>);
   expect(screen.getByRole('heading', { name: 'Giá tốt, gần bạn, chốt nhanh!' })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Chuyển đến nội dung chính' })).toHaveAttribute('href', '#main-content');
   expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content');
@@ -35,18 +38,18 @@ test('loads and scrolls to the next product batch without removing the current l
     .mockImplementationOnce(() => new Promise(resolve => { resolveNextPage = resolve; }));
   window.history.replaceState({}, '', '/');
   try {
-    render(<App />);
+    render(<AuthProvider><App /></AuthProvider>);
 
     expect(await screen.findByRole('heading', { name: 'first product 0' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Xem thêm' }));
 
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(20);
+    expect(within(screen.getByRole('main')).getAllByRole('heading', { level: 3 })).toHaveLength(20);
     expect(screen.getByRole('heading', { name: 'first product 0' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Đang tải sản phẩm...' })).toBeDisabled();
     resolveNextPage({ products: makeProducts('next', 20), total: 40, totalPages: 2, limit: 20 });
 
     expect(await screen.findByRole('heading', { name: 'next product 0' })).toBeInTheDocument();
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(40);
+    expect(within(screen.getByRole('main')).getAllByRole('heading', { level: 3 })).toHaveLength(40);
     await waitFor(() => expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' }));
   } finally {
     if (originalScrollIntoView) Element.prototype.scrollIntoView = originalScrollIntoView;
@@ -56,7 +59,7 @@ test('loads and scrolls to the next product batch without removing the current l
 
 test('unknown routes show an actionable Vietnamese error', () => {
   window.history.replaceState({}, '', '/missing-page');
-  render(<App />);
+  render(<AuthProvider><App /></AuthProvider>);
   expect(screen.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Về trang chủ' })).toHaveAttribute('href', '/');
 });

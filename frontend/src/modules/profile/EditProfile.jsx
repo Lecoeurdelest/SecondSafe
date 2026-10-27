@@ -127,12 +127,10 @@ const EditProfile = () => {
     setSuccess('');
 
     try {
-      let avatarUrl = profile.avatar;
       if (avatarFile) {
         const formData = new FormData();
         formData.append('avatar', avatarFile);
-        const uploadRes = await uploadAvatar(formData);
-        avatarUrl = uploadRes?.data?.avatar || uploadRes?.avatar || avatarUrl;
+        await uploadAvatar(formData);
       }
 
       // Cap nhat thong tin ca nhan

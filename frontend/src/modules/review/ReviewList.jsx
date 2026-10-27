@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getReviews, getRatingStats } from '../../services/review.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './ReviewList.css';
@@ -12,14 +12,7 @@ const ReviewList = ({ userId, showStats = true }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedRating, setSelectedRating] = useState('');
 
-  useEffect(() => {
-    fetchReviews();
-    if (showStats) {
-      fetchStats();
-    }
-  }, [userId, currentPage, selectedRating]);
-
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       setLoading(true);
       const filters = selectedRating ? { rating: selectedRating } : {};
@@ -33,16 +26,21 @@ const ReviewList = ({ userId, showStats = true }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, currentPage, selectedRating]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await getRatingStats(userId);
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching rating stats:', error);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    fetchReviews();
+    if (showStats) fetchStats();
+  }, [fetchReviews, fetchStats, showStats]);
 
   const renderStars = (rating) => {
     const stars = [];
