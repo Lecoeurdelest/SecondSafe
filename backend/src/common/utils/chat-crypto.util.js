@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const config = require('../../config/env');
 
 // Dinh danh phien ban payload ma hoa de ho tro nang cap sau nay.
 const ENCRYPTION_PREFIX = 'enc:v1';
@@ -7,7 +6,8 @@ const ENCRYPTION_PREFIX = 'enc:v1';
 const IV_LENGTH_BYTES = 12;
 
 function buildCipherKey() {
-  const rawKey = String(config.chat?.encryptionKey || '').trim();
+  // Doc khoa luc goi (giong jwt.util) va khong fallback sang JWT_SECRET (NFR-SEC-07).
+  const rawKey = String(process.env.CHAT_ENCRYPTION_KEY || '').trim();
 
   if (!rawKey) {
     throw new Error('Thiếu khóa mã hóa chat');
