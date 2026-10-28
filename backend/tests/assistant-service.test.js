@@ -70,6 +70,15 @@ test('product advice sends only non-identifying public attributes to Gemini', as
   expect(result.products).toHaveLength(1);
 });
 
+test('uses a local answer when Gemini is unavailable', async () => {
+  gemini.generateText.mockRejectedValue(new Error('Trợ lý AI chưa được cấu hình GEMINI_API_KEY trong backend/.env'));
+
+  const result = await ask({ message: 'Tôi quên mật khẩu', mode: 'faq' });
+
+  expect(result.answer).toContain('khôi phục mật khẩu');
+  expect(result.products).toEqual([]);
+});
+
 test('moderation guidance sends only report classification metadata to Gemini', async () => {
   const query = {
     select: jest.fn(() => query),

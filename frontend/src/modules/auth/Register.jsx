@@ -74,6 +74,7 @@ export default function Register() {
             </label>
             <PasswordField
               id="register-password"
+              name="password"
               label="Mật khẩu"
               autoComplete="new-password"
               required
@@ -91,6 +92,7 @@ export default function Register() {
               <input id="register-code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength="6" required value={code} onChange={event => setCode(event.target.value)} />
             </label>
             <button className="auth-submit" type="submit" disabled={loading}>{loading ? 'Đang xác thực...' : 'Xác nhận đăng ký'}</button>
+            <button type="button" className="auth-submit auth-submit--secondary" disabled={loading} onClick={requestCode}>Gửi lại mã xác thực</button>
             <button type="button" className="auth-submit auth-submit--secondary" disabled={loading} onClick={() => setStep('details')}>Sửa thông tin đăng ký</button>
           </form>
         )}

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const routes = require("./routes");
+const { errorHandler, notFoundHandler } = require("./common/middlewares/error.middleware");
 
 const app = express();
 
@@ -26,5 +27,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Mount API routes
 app.use("/api", routes);
+app.use("/api", notFoundHandler);
+app.use(errorHandler);
 
 module.exports = app;

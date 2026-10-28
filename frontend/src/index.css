@@ -2,10 +2,38 @@ body { min-width: 320px; }
 :focus-visible { outline: 3px solid var(--primary-blue); outline-offset: 4px; }
 .skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; padding: 12px; background: white; transform: translateY(-160%); }
 .skip-link:focus { transform: translateY(0); }
-.site-header { background: white; border-bottom: 1px solid var(--border-color); padding: 22px 0; }
+.marketplace-announcement { background: #f6f8fb; border-bottom: 1px solid #edf0f4; color: var(--gray-700); font-size: 12px; }
+.marketplace-announcement__content { height: 32px; display: flex; align-items: center; justify-content: flex-end; gap: 20px; }
+.marketplace-announcement__support { border: 0; background: transparent; color: var(--gray-700); cursor: pointer; font-size: 12px; }
+.marketplace-language { position: relative; display: inline-flex; align-items: center; }
+.marketplace-language__button { height: 30px; min-width: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 0; background: transparent; color: var(--gray-700); cursor: pointer; }
+.marketplace-language__flag { width: 22px; height: 22px; display: inline-grid; place-items: center; overflow: hidden; border-radius: 2px; font-size: 18px; line-height: 1; }
+.marketplace-language__chevron { transition: transform .16s ease; }
+.marketplace-language__button[aria-expanded="true"] .marketplace-language__chevron { transform: rotate(180deg); }
+.marketplace-language__menu { position: absolute; top: 34px; right: 0; z-index: 120; width: 132px; padding: 5px 0; border: 1px solid var(--border-color); border-radius: 3px; background: white; box-shadow: 0 3px 10px rgba(15,23,42,.14); }
+.marketplace-language__menu button { width: 100%; height: 38px; display: flex; align-items: center; gap: 8px; border: 0; background: white; color: var(--gray-900); padding: 0 12px; cursor: pointer; font-size: 13px; text-align: left; }
+.marketplace-language__menu button:hover, .marketplace-language__menu button.is-selected { background: var(--gray-100); }
+.marketplace-language__menu button span:first-child { font-size: 17px; }
+.site-header { background: white; border-bottom: 1px solid var(--border-color); padding: 16px 0; position: relative; z-index: 30; }
 .site-header__content { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.site-header__links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.site-header__links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; font-size: var(--font-size-sm); }
+.site-header__links a { white-space: nowrap; }
 .site-header__logout { padding: 0; background: transparent; color: var(--primary-blue); font: inherit; }
+.site-brand { display: inline-flex; align-items: center; gap: 9px; color: var(--primary-blue) !important; }
+.site-brand__mark { width: 34px; height: 34px; border-radius: 9px; display: inline-grid; place-items: center; color: white; background: linear-gradient(135deg, var(--primary-blue), #38a8ff); box-shadow: 0 6px 14px rgba(0,123,255,.22); }
+.site-header__cart { display: inline-flex; align-items: center; gap: 5px; }
+.site-header__register { background: var(--primary-blue); color: white !important; border-radius: 6px; padding: 9px 16px; }
+.site-header__sell { background: var(--success); color: white !important; border-radius: 6px; padding: 9px 16px; font-weight: 700; }
+.floating-chat { position: fixed; right: 18px; bottom: 18px; z-index: 80; min-width: 104px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #1687d9; color: white !important; box-shadow: 0 8px 24px rgba(22,135,217,.28); }
+.support-contact-modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: rgba(17,24,39,.42); }
+.support-contact-modal__card { position: relative; width: min(420px, 100%); padding: 22px; border-radius: 12px; background: white; box-shadow: 0 18px 50px rgba(0,0,0,.22); }
+.support-contact-modal__card h2 { margin-bottom: 14px; padding-right: 36px; font-size: 20px; }
+.support-contact-modal__close { position: absolute; right: 14px; top: 10px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--gray-100); font-size: 24px; cursor: pointer; }
+.support-contact-modal__card > a { min-height: 62px; display: flex; align-items: center; gap: 12px; padding: 10px 12px; margin-top: 8px; border-radius: 8px; border: 1px solid transparent; }
+.support-contact-modal__card > a:hover { background: var(--gray-50); border-color: var(--gray-200); }
+.support-contact-modal__card > a > span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--gray-100); }
+.support-contact-modal__card > a div { display: flex; flex-direction: column; }
+.support-contact-modal__card > a small { margin-top: 3px; color: var(--gray-600); }
 .site-header__error { margin: 0; padding: 8px 16px; background: #fdf2f2; color: var(--error); text-align: center; }
 .site-brand { font-size: 24px; font-weight: 700; letter-spacing: -0.6px; }
 .welcome { min-height: 65vh; padding: 88px 0; max-width: 720px; }
@@ -13,4 +41,4 @@ body { min-width: 320px; }
 .welcome h1 { font-size: clamp(32px, 5.5vw, 60px); letter-spacing: -1.5px; margin-bottom: 24px; }
 .welcome p { color: var(--gray-700); font-size: 18px; line-height: 1.7; }
 .site-footer { padding: 24px 0; border-top: 1px solid var(--border-color); background: white; color: var(--gray-600); }
-@media (max-width: 576px) { .welcome { padding: 56px 8px; } .welcome p { font-size: 16px; } .site-header__content { align-items: flex-start; flex-direction: column; } .site-header__links { font-size: var(--font-size-sm); } }
+@media (max-width: 576px) { .welcome { padding: 56px 8px; } .welcome p { font-size: 16px; } .marketplace-announcement__content { justify-content: flex-end; } .marketplace-announcement__content > span { display: none; } .site-header { padding: 12px 0; } .site-header__content { align-items: flex-start; flex-direction: column; } .site-header__links { width: 100%; gap: 10px 14px; font-size: var(--font-size-sm); } .site-header__cart span { display: none; } .floating-chat { right: 12px; bottom: 12px; min-width: 84px; } }

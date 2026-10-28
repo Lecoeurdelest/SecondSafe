@@ -31,7 +31,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.0.0",
     "multer": "^2.0.2",
-    "nodemailer": "^10.0.16",
+    "nodemailer": "^10.2.1",
     "sepay-pg-node": "^1.0.0",
     "socket.io": "^4.8.4"
   },

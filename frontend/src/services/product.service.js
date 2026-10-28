@@ -80,6 +80,20 @@ async function createProduct(productData) {
   }
 }
 
+async function getCategories() {
+  const response = await api.get('/categories');
+  return response.data.data;
+}
+
+async function uploadProductImages(files) {
+  const formData = new FormData();
+  files.forEach(file => formData.append('images', file));
+  const response = await api.post('/upload/product', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  return response.data.data.imageUrls;
+}
+
 /**
  * Update a product
  * @param {string} id - Product ID
@@ -146,7 +160,9 @@ const productService = {
   updateProduct,
   deleteProduct,
   updateProductVisibility,
-  getMyProducts
+  getMyProducts,
+  getCategories,
+  uploadProductImages
 };
 
 export default productService;

@@ -38,4 +38,44 @@ async function getById(req, res) {
   }
 }
 
-module.exports = { list, search, getById };
+async function create(req, res) {
+  try {
+    return sendSuccess(res, 201, await productService.createProduct(req.user.userId, req.body), 'Đăng bán sản phẩm thành công');
+  } catch (error) {
+    return respondError(res, error, 'Create product failed');
+  }
+}
+
+async function listMine(req, res) {
+  try {
+    return sendSuccess(res, 200, await productService.getMyProducts(req.user.userId, req.query));
+  } catch (error) {
+    return respondError(res, error, 'List seller products failed');
+  }
+}
+
+async function update(req, res) {
+  try {
+    return sendSuccess(res, 200, await productService.updateProduct(req.params.id, req.user.userId, req.body), 'Cập nhật tin đăng thành công');
+  } catch (error) {
+    return respondError(res, error, 'Update product failed');
+  }
+}
+
+async function remove(req, res) {
+  try {
+    return sendSuccess(res, 200, await productService.deleteProduct(req.params.id, req.user.userId), 'Xóa tin đăng thành công');
+  } catch (error) {
+    return respondError(res, error, 'Delete product failed');
+  }
+}
+
+async function visibility(req, res) {
+  try {
+    return sendSuccess(res, 200, await productService.updateProductVisibility(req.params.id, req.user.userId, req.body.status));
+  } catch (error) {
+    return respondError(res, error, 'Update product visibility failed');
+  }
+}
+
+module.exports = { list, search, getById, create, listMine, update, remove, visibility };

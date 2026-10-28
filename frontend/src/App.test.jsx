@@ -12,7 +12,13 @@ import dashboardService from './services/dashboard.service';
 
 jest.mock('./services/product.service', () => ({
   __esModule: true,
-  default: { getProducts: jest.fn(), getProductById: jest.fn() }
+  default: {
+    getProducts: jest.fn(),
+    getProductById: jest.fn(),
+    getCategories: jest.fn(),
+    uploadProductImages: jest.fn(),
+    createProduct: jest.fn()
+  }
 }));
 jest.mock('./services/favorite.service', () => ({
   __esModule: true,
@@ -68,6 +74,7 @@ jest.mock('./services/dashboard.service', () => ({
 beforeEach(() => {
   window.localStorage.removeItem('token');
   window.localStorage.removeItem('secondsafe:role');
+  window.localStorage.removeItem('secondsafe:language');
   jest.clearAllMocks();
 });
 
@@ -79,6 +86,37 @@ test('renders the Vietnamese catalog and accessible navigation', async () => {
   expect(screen.getByRole('link', { name: 'Chuyển đến nội dung chính' })).toHaveAttribute('href', '#main-content');
   expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content');
   expect(await screen.findByText('Không tìm thấy sản phẩm nào')).toBeInTheDocument();
+});
+
+test('changes and persists the marketplace language from the header selector', () => {
+  window.history.replaceState({}, '', '/');
+  render(<App />);
+
+  const languageButton = screen.getByRole('button', { name: 'Ngôn ngữ' });
+  expect(languageButton).toHaveAttribute('aria-expanded', 'false');
+  fireEvent.click(languageButton);
+  expect(languageButton).toHaveAttribute('aria-expanded', 'true');
+  expect(screen.getAllByRole('menuitem')).toHaveLength(2);
+  fireEvent.click(screen.getByRole('menuitem', { name: /English/ }));
+
+  expect(languageButton).toHaveAttribute('aria-expanded', 'false');
+  expect(document.documentElement).toHaveAttribute('lang', 'en');
+  expect(window.localStorage.getItem('secondsafe:language')).toBe('en');
+  expect(screen.getByText('SecondSafe · Safe, transparent second-hand marketplace')).toBeInTheDocument();
+});
+
+test('authenticated users can open the seller listing form from Đăng bán', async () => {
+  window.localStorage.setItem('token', 'seller-token');
+  window.localStorage.setItem('secondsafe:role', 'user');
+  productService.getCategories.mockResolvedValue([
+    { _id: 'category-1', name: 'Đồ điện tử', slug: 'electronics' }
+  ]);
+  window.history.replaceState({}, '', '/');
+  render(<App />);
+
+  fireEvent.click(screen.getByRole('link', { name: 'Đăng bán' }));
+  expect(await screen.findByRole('heading', { name: 'Đăng bán sản phẩm' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Thêm ảnh/ })).toBeInTheDocument();
 });
 
 test('loads and scrolls to the next product batch without removing the current listings', async () => {
@@ -186,8 +224,19 @@ test('registration verifies the emailed code and signs in the new account', asyn
   expect(passwordInput).toHaveAttribute('type', 'password');
   fireEvent.click(screen.getByRole('button', { name: 'Gửi mã xác thực' }));
   expect(await screen.findByText(/Mã xác thực đã được gửi/)).toBeInTheDocument();
+  expect(authService.requestRegistrationCode).toHaveBeenCalledWith({
+    fullName: 'Test Person',
+    email: 'person@example.test',
+    phone: '0912345678',
+    password: 'StrongPass1!'
+  });
 
   fireEvent.change(screen.getByLabelText('Mã xác thực 6 chữ số'), { target: { value: '123456' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Gửi lại mã xác thực' }));
+  await waitFor(() => {
+    expect(authService.requestRegistrationCode).toHaveBeenCalledTimes(2);
+    expect(screen.getByRole('button', { name: 'Gửi lại mã xác thực' })).not.toBeDisabled();
+  });
   fireEvent.click(screen.getByRole('button', { name: 'Xác nhận đăng ký' }));
   await waitFor(() => expect(window.localStorage.getItem('token')).toBe('registered-token'));
   expect(authService.verifyRegistration).toHaveBeenCalledWith({ email: 'person@example.test', code: '123456' });
