@@ -22,6 +22,7 @@ module.exports = async (req, res) => {
   try {
     await connect();
   } catch (error) {
+    console.error('MongoDB connection failed:', error.message);
     res.statusCode = 503;
     res.setHeader('Content-Type', 'application/json');
     return res.end(JSON.stringify({ success: false, message: 'Database unavailable' }));
