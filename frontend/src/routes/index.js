@@ -25,6 +25,9 @@ const AdminLayout = lazy(() => import('../modules/admin/layout/AdminLayout'));
 const UserManagement = lazy(() => import('../modules/admin/users/UserManagement'));
 const ModeratorLayout = lazy(() => import('../modules/moderator/layout/ModeratorLayout'));
 const ModProfile = lazy(() => import('../modules/moderator/profile/ModProfile'));
+const CreateProduct = lazy(() => import('../modules/product/CreateProduct'));
+const EditProduct = lazy(() => import('../modules/product/EditProduct'));
+const MyProducts = lazy(() => import('../modules/product/MyProducts'));
 
 function DashboardRoute({ role, children }) {
   const session = getSession();
@@ -39,7 +42,10 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/product/create" element={<ProtectedRoute><CreateProduct /></ProtectedRoute>} />
+      <Route path="/product/:id/edit" element={<ProtectedRoute><EditProduct /></ProtectedRoute>} />
       <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/my-products" element={<ProtectedRoute><MyProducts /></ProtectedRoute>} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/favorites" element={<Favorites />} />
       <Route path="/login" element={<Login />} />

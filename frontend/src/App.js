@@ -66,6 +66,10 @@ export default function App() {
             <Link to="/cart">Giỏ hàng</Link>
             <Link to="/assistant">Trợ lý AI</Link>
             <Link to="/support">Hỗ trợ</Link>
+            {isAuthenticated && !adminRole && !staffRole && <>
+              <Link to="/product/create">Đăng tin</Link>
+              <Link to="/my-products">Tin của tôi</Link>
+            </>}
             {isAuthenticated && <>
               <Link to="/chat">Tin nhắn</Link>
               <Link to="/profile">Hồ sơ</Link>

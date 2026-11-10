@@ -40,7 +40,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-05-1` | Sellers create and edit validated listings with permitted images and structured locations; reserved or sold listings and restricted sellers cannot perform forbidden operations. | behavioral test, manual review | [TASK-058](../task/TASK-058.md) `[]` |
+| `AC-WEB-05-1` | Sellers create and edit validated listings with permitted images and structured locations; reserved or sold listings and restricted sellers cannot perform forbidden operations. | behavioral test, manual review | [TASK-058](../task/TASK-058.md) `[!]` |
 
 ### FR-WEB-06 — Web listing detail and favorites
 
