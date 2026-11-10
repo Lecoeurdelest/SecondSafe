@@ -120,7 +120,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-15-1` | Staff search and paginate report/order/review queues, inspect authorized details and execute only server-permitted sanctions or lifecycle actions with validation and refreshed results. | behavioral test, manual review | [TASK-068](../task/TASK-068.md) `[]` |
+| `AC-WEB-15-1` | Staff search and paginate report/order/review queues, inspect authorized details and execute only server-permitted sanctions or lifecycle actions with validation and refreshed results. | behavioral test, manual review | [TASK-068](../task/TASK-068.md) `[!]` |
 
 ### FR-WEB-16 — Web moderator disputes and withdrawals
 

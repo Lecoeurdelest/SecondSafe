@@ -39,6 +39,11 @@ const TopUp = lazy(() => import('../modules/wallet/TopUp'));
 const TopUpResult = lazy(() => import('../modules/wallet/TopUpResult'));
 const VNPaySuccess = lazy(() => import('../modules/wallet/VNPaySuccess'));
 const Withdrawal = lazy(() => import('../modules/wallet/Withdrawal'));
+const ModReportList = lazy(() => import('../modules/moderator/reports/ModReportList'));
+const ModReportDetail = lazy(() => import('../modules/moderator/reports/ModReportDetail'));
+const ModOrderList = lazy(() => import('../modules/moderator/orders/ModOrderList'));
+const ModOrderDetail = lazy(() => import('../modules/moderator/orders/ModOrderDetail'));
+const ModReviewList = lazy(() => import('../modules/moderator/reviews/ModReviewList'));
 
 function DashboardRoute({ role, children }) {
   const session = getSession();
@@ -91,6 +96,11 @@ export default function AppRoutes() {
       <Route path="/moderator" element={<ModeratorRoute><ModeratorLayout /></ModeratorRoute>}>
         <Route index element={<Navigate to="profile" replace />} />
         <Route path="profile" element={<ModProfile />} />
+        <Route path="reports" element={<ModReportList />} />
+        <Route path="reports/:id" element={<ModReportDetail />} />
+        <Route path="orders" element={<ModOrderList />} />
+        <Route path="orders/:id" element={<ModOrderDetail />} />
+        <Route path="reviews" element={<ModReviewList />} />
       </Route>
       <Route path="/assistant" element={<Assistant />} />
       <Route path="/assistant/reports/:reportId" element={<DashboardRoute role="moderator"><Assistant moderation /></DashboardRoute>} />
