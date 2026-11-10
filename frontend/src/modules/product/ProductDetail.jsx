@@ -5,6 +5,7 @@ import favoriteService from '../../services/favorite.service';
 import cartService from '../../services/cart.service';
 import chatService from '../../services/chat.service';
 import PurchaseRequest from '../order/PurchaseRequest';
+import ReportProduct from '../report/ReportProduct';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import './ProductDetail.css';
 
@@ -52,6 +53,7 @@ export default function ProductDetail() {
   const [noticeDestination, setNoticeDestination] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -261,8 +263,16 @@ export default function ProductDetail() {
           <section className="product-detail__seller">
             <h2>Người bán</h2>
             <p>{sellerId ? <Link to={`/user/${sellerId}`}>{sellerName}</Link> : sellerName}</p>
-            {isOwner && (
+            {isOwner ? (
               <p><Link to={`/product/${product._id}/edit`}>Chỉnh sửa tin đăng</Link> · <Link to="/my-products">Quản lý tin của tôi</Link></p>
+            ) : (
+              <button
+                type="button"
+                className="product-detail__report"
+                onClick={() => { if (requireSession()) setReportOpen(true); }}
+              >
+                Báo cáo tin đăng này
+              </button>
             )}
           </section>
         </section>
@@ -280,6 +290,18 @@ export default function ProductDetail() {
               : 'Đã tạo đơn hàng thành công.');
             setNoticeDestination('');
           }}
+        />
+      )}
+      {reportOpen && (
+        <ReportProduct
+          product={product}
+          onSuccess={() => {
+            setReportOpen(false);
+            setActionError('');
+            setNotice('Báo cáo đã được gửi. Chúng tôi sẽ xem xét trong thời gian sớm nhất.');
+            setNoticeDestination('');
+          }}
+          onCancel={() => setReportOpen(false)}
         />
       )}
     </article>

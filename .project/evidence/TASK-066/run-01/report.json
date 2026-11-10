@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-066",
+  "spec_hash": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+  "source_hash": "1f329ba96897fc90e77cc066f8c9bbecb7fce8d60141aa6ce2ec2b78423bc15e",
+  "outcome": "fail",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-13-1",
+      "status": "fail",
+      "observed_behavioral_status": "fail",
+      "observation": "No automated test. Evidence files are still served from a public path (TASK-009), so \"private assets are not exposed publicly\" is not met",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-066/run-01/frontend-test.txt",
+            ".project/evidence/TASK-066/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "fail",
+          "artifacts": [
+            ".project/evidence/TASK-066/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

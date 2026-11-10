@@ -1122,16 +1122,28 @@
       }
     },
     "TASK-066": {
-      "execution": "todo",
+      "execution": "in_progress",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Report dialog and dispute form wired and building; uploaded evidence is still publicly reachable, so the privacy part of AC-WEB-13-1 is not met",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Report dialog and dispute form wired and building; uploaded evidence is still publicly reachable, so the privacy part of AC-WEB-13-1 is not met"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-066/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-066.md",
+      "criteria": {
+        "AC-WEB-13-1": "fail"
+      }
     },
     "TASK-067": {
       "execution": "todo",
