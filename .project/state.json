@@ -1382,16 +1382,33 @@
       }
     },
     "TASK-076": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-063, TASK-075",
+      "detail": "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration",
       "history": [
         {
           "date": "2026-11-10",
           "execution": "todo",
           "note": "Abandoned checkout requested on 2026-11-10; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement the abandoned checkout request"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-076/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-076.md",
+      "criteria": {
+        "AC-WEB-21-1": "inconclusive"
+      }
     }
   }
 }

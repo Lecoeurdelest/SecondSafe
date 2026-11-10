@@ -12,6 +12,7 @@ import dashboardService from './services/dashboard.service';
 import { signInWithPopup } from 'firebase/auth';
 import { AuthProvider } from './context/AuthContext';
 import notificationService from './services/notification.service';
+import abandonedCheckoutService from './services/abandonedCheckout.service';
 
 jest.mock('firebase/auth', () => ({ GoogleAuthProvider: jest.fn(), signInWithPopup: jest.fn() }));
 jest.mock('./config/firebase', () => ({ auth: {} }));
@@ -72,6 +73,10 @@ jest.mock('./services/auth.service', () => {
 jest.mock('./services/notification.service', () => ({
   __esModule: true, default: { getNotifications: jest.fn(), getUnreadCount: jest.fn() }
 }));
+jest.mock('./services/abandonedCheckout.service', () => ({
+  __esModule: true,
+  default: { getMine: jest.fn(), dismiss: jest.fn(), getSummary: jest.fn() }
+}));
 jest.mock('./modules/order/OrderPayment', () => function OrderPayment() {
   return <h1>Thanh toán đơn hàng</h1>;
 });
@@ -85,6 +90,8 @@ beforeEach(() => {
   window.localStorage.removeItem('secondsafe:role');
   window.localStorage.removeItem('user');
   jest.clearAllMocks();
+  abandonedCheckoutService.getMine.mockResolvedValue([]);
+  abandonedCheckoutService.getSummary.mockRejectedValue(new Error('Không có quyền'));
 });
 
 test('renders the Vietnamese catalog and accessible navigation', async () => {
@@ -578,4 +585,37 @@ test('a failed screen shows recovery copy without internal details', () => {
   } finally {
     errorOutput.mockRestore();
   }
+});
+
+test('the cart page offers the buyer their unfinished checkouts and lets them dismiss one', async () => {
+  window.localStorage.setItem('token', 'test-token');
+  cartService.getCart.mockResolvedValue({ items: [], page: 1, totalPages: 0, total: 0, limit: 20 });
+  abandonedCheckoutService.getMine.mockResolvedValue([
+    { _id: 'checkout-1', source: 'order', status: 'at_risk', action: 'resume_payment', amount: 50000, orderId: 'order-9', paymentDeadline: '2026-11-10T10:03:00Z', product: { _id: 'product-9', title: 'Sách đang chờ thanh toán', images: [] } },
+    { _id: 'checkout-2', source: 'cart', status: 'open', action: 'buy_again', amount: 70000, orderId: null, product: { _id: 'product-8', title: 'Đèn bàn bỏ quên', images: [] } }
+  ]);
+  abandonedCheckoutService.dismiss.mockResolvedValue({ _id: 'checkout-2', status: 'dismissed' });
+  window.history.replaceState({}, '', '/cart');
+  render(<App />);
+
+  const section = await screen.findByRole('region', { name: 'Thanh toán dang dở' });
+  expect(within(section).getByRole('link', { name: 'Tiếp tục thanh toán' })).toHaveAttribute('href', '/orders/order-9/pay');
+  expect(within(section).getByRole('link', { name: 'Mua lại' })).toHaveAttribute('href', '/product/product-8');
+
+  fireEvent.click(within(section).getAllByRole('button', { name: 'Bỏ qua' })[1]);
+  await waitFor(() => expect(screen.queryByText('Đèn bàn bỏ quên')).not.toBeInTheDocument());
+  expect(abandonedCheckoutService.dismiss).toHaveBeenCalledWith('checkout-2');
+});
+
+test('staff dashboards show the abandoned checkout recovery summary', async () => {
+  window.localStorage.setItem('token', 'mod-token');
+  window.localStorage.setItem('secondsafe:role', 'moderator');
+  dashboardService.getStaffDashboard.mockResolvedValue({ openDisputes: 0, pendingPurchaseRequests: 0, openOrders: 0, activeDeliveries: 0, recentQueue: [] });
+  const bucket = { total: 2, recovered: 1, lost: 0, active: 1, recoveredAmount: 50000, lostAmount: 0, activeAmount: 70000, recoveryRate: 100 };
+  abandonedCheckoutService.getSummary.mockResolvedValue({ ...bucket, bySource: { order: bucket, cart: { ...bucket, total: 0 } } });
+  window.history.replaceState({}, '', '/moderator/dashboard');
+  render(<App />);
+
+  expect(await screen.findByRole('heading', { name: 'Thanh toán dang dở' })).toBeInTheDocument();
+  expect(screen.getByText('Tỷ lệ khôi phục 100%')).toBeInTheDocument();
 });

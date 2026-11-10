@@ -1,7 +1,7 @@
 ---
 id: TASK-076
 title: Web abandoned checkout recovery
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-063, TASK-075]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-076 — Web abandoned checkout recovery
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

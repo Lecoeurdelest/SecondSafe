@@ -168,4 +168,4 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 13. Checkout re
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-21-1` | Buyers see their unfinished checkouts above the order list and the cart with resume-payment, buy-again and dismiss actions; admin and staff dashboards show the recovery summary; a failed summary or list request never hides the page it sits on. | behavioral test, manual review | [TASK-076](../task/TASK-076.md) `[]` |
+| `AC-WEB-21-1` | Buyers see their unfinished checkouts above the order list and the cart with resume-payment, buy-again and dismiss actions; admin and staff dashboards show the recovery summary; a failed summary or list request never hides the page it sits on. | behavioral test, manual review | [TASK-076](../task/TASK-076.md) `[!]` |

@@ -34,6 +34,7 @@ const OrderPayment = lazy(() => import('../modules/order/OrderPayment'));
 const SEPayOrderSuccess = lazy(() => import('../modules/order/SEPayOrderSuccess'));
 const PurchaseRequests = lazy(() => import('../modules/order/PurchaseRequests'));
 const SellerOrders = lazy(() => import('../modules/order/SellerOrders'));
+const AbandonedCheckouts = lazy(() => import('../modules/order/AbandonedCheckouts'));
 const Wallet = lazy(() => import('../modules/wallet/Wallet'));
 const TopUp = lazy(() => import('../modules/wallet/TopUp'));
 const TopUpResult = lazy(() => import('../modules/wallet/TopUpResult'));
@@ -74,8 +75,8 @@ export default function AppRoutes() {
       <Route path="/product/:id/edit" element={<ProtectedRoute><EditProduct /></ProtectedRoute>} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/my-products" element={<ProtectedRoute><MyProducts /></ProtectedRoute>} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+      <Route path="/cart" element={<><AbandonedCheckouts /><Cart /></>} />
+      <Route path="/orders" element={<ProtectedRoute><AbandonedCheckouts /><Orders /></ProtectedRoute>} />
       <Route path="/orders/sepay-success" element={<ProtectedRoute><SEPayOrderSuccess /></ProtectedRoute>} />
       <Route path="/orders/sepay-result" element={<ProtectedRoute><SEPayOrderSuccess /></ProtectedRoute>} />
       <Route path="/orders/:id/pay" element={<ProtectedRoute><OrderPayment /></ProtectedRoute>} />

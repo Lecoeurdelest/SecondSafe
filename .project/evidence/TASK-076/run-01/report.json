@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-076",
+  "spec_hash": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+  "source_hash": "f1389aed1054ca86bae60dd4effe8a3d43746b63bb463240453f59687cfa534a",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-21-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "App tests \"the cart page offers the buyer their unfinished checkouts and lets them dismiss one\" and \"staff dashboards show the abandoned checkout recovery summary\" pass; the other dashboard tests run with a failing summary request and still render",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-076/run-01/frontend-test.txt",
+            ".project/evidence/TASK-076/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-076/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
