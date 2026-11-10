@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-065",
+  "spec_hash": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+  "source_hash": "d31ef41dd80ef60dfefe1acd215cdb1443cdd0d8f53fb67aa1bc081ca559da6b",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-12-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "not_observed",
+      "observation": "No automated test; the dialog is opened from the order detail, which is routed in TASK-063",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": false,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-065/run-01/frontend-test.txt",
+            ".project/evidence/TASK-065/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-065/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
