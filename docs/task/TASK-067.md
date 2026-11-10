@@ -1,7 +1,7 @@
 ---
 id: TASK-067
 title: Web moderator shell, dashboard and profile
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-055, TASK-039]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-067 — Web moderator shell, dashboard and profile
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser
 
 ## Traceability
 
