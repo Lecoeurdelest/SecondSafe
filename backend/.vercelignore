@@ -1,0 +1,6 @@
+.env
+.env.*
+*.env
+tests
+uploads
+node_modules
