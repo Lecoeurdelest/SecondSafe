@@ -1338,10 +1338,16 @@
           "date": "2026-11-10",
           "execution": "verifying",
           "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Re-verified with a clean install after the manifest was reduced to the recharts line and the lockfile was regenerated with npm 10; run-01 used a lockfile the CI npm could not install"
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-072/run-01/report.json"
+        ".project/evidence/TASK-072/run-01/report.json",
+        ".project/evidence/TASK-072/run-02/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-072.md",
       "criteria": {
@@ -1412,10 +1418,16 @@
           "date": "2026-11-10",
           "execution": "verifying",
           "note": "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Re-verified after the corrected web lockfile from TASK-072 was merged into this branch"
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-076/run-01/report.json"
+        ".project/evidence/TASK-076/run-01/report.json",
+        ".project/evidence/TASK-076/run-02/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-076.md",
       "criteria": {
