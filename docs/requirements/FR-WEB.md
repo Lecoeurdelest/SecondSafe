@@ -128,7 +128,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-16-1` | Staff inspect dispute evidence and resolve cases or approve/reject withdrawals through the shared API; repeat submissions and server failures do not fabricate success. | behavioral test, manual review | [TASK-069](../task/TASK-069.md) `[]` |
+| `AC-WEB-16-1` | Staff inspect dispute evidence and resolve cases or approve/reject withdrawals through the shared API; repeat submissions and server failures do not fabricate success. | behavioral test, manual review | [TASK-069](../task/TASK-069.md) `[!]` |
 
 ### FR-WEB-17 — Web admin shell, dashboard and user management
 

@@ -4,7 +4,8 @@ import {
   FlagOutlined,
   ShoppingOutlined,
   StarOutlined,
-  SafetyCertificateOutlined
+  SafetyCertificateOutlined,
+  WalletOutlined
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -23,6 +24,7 @@ const ModeratorSidebar = ({ onNavigate }) => {
     if (location.pathname.startsWith("/moderator/orders")) return "/moderator/orders";
     if (location.pathname.startsWith("/moderator/reviews")) return "/moderator/reviews";
     if (location.pathname.startsWith("/moderator/disputes")) return "/moderator/disputes";
+    if (location.pathname.startsWith("/moderator/withdrawals")) return "/moderator/withdrawals";
     return "/moderator/dashboard";
   };
 
@@ -72,6 +74,11 @@ const ModeratorSidebar = ({ onNavigate }) => {
             key: "/moderator/disputes",
             icon: <SafetyCertificateOutlined />,
             label: "Giải quyết Tranh chấp",
+          },
+          {
+            key: "/moderator/withdrawals",
+            icon: <WalletOutlined />,
+            label: "Yêu cầu Rút tiền",
           },
         ]}
       />
