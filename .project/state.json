@@ -987,16 +987,33 @@
       }
     },
     "TASK-059": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-059/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-059.md",
+      "criteria": {
+        "AC-WEB-06-1": "inconclusive"
+      }
     },
     "TASK-060": {
       "execution": "todo",

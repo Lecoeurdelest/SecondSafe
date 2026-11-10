@@ -31,6 +31,15 @@ function hasSession() {
   }
 }
 
+function currentUserId() {
+  try {
+    const user = JSON.parse(window.localStorage.getItem('user'));
+    return user?._id || user?.id || null;
+  } catch {
+    return null;
+  }
+}
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -165,6 +174,8 @@ export default function ProductDetail() {
   }
 
   const sellerName = product.seller?.fullName || 'Người bán SecondSafe';
+  const sellerId = product.seller?._id;
+  const isOwner = Boolean(sellerId) && String(currentUserId()) === String(sellerId);
 
   return (
     <article className="product-detail container">
@@ -249,7 +260,10 @@ export default function ProductDetail() {
           </section>
           <section className="product-detail__seller">
             <h2>Người bán</h2>
-            <p>{sellerName}</p>
+            <p>{sellerId ? <Link to={`/user/${sellerId}`}>{sellerName}</Link> : sellerName}</p>
+            {isOwner && (
+              <p><Link to={`/product/${product._id}/edit`}>Chỉnh sửa tin đăng</Link> · <Link to="/my-products">Quản lý tin của tôi</Link></p>
+            )}
           </section>
         </section>
       </div>
