@@ -1406,10 +1406,16 @@
           "date": "2026-11-10",
           "execution": "verifying",
           "note": "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Re-verified after the corrected web lockfile from TASK-072 was merged into this branch"
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-076/run-01/report.json"
+        ".project/evidence/TASK-076/run-01/report.json",
+        ".project/evidence/TASK-076/run-02/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-076.md",
       "criteria": {

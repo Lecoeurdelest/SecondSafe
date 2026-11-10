@@ -22,9 +22,9 @@ A checked box means the behaviour was observed in the recorded runs. No criterio
 
 | Kind | Location or result |
 |---|---|
-| Web tests | 50 tests in 6 suites pass (`.project/evidence/TASK-076/run-01/frontend-test.txt`). |
-| Build | Production build with `CI=true` (warnings are errors) compiles (`.project/evidence/TASK-076/run-01/frontend-build.txt`). |
-| Manual observation | `.project/evidence/TASK-076/run-01/manual-review.md`. |
+| Web tests | 50 tests in 6 suites pass (`.project/evidence/TASK-076/run-02/frontend-test.txt`). |
+| Build | Production build with `CI=true` (warnings are errors) compiles (`.project/evidence/TASK-076/run-02/frontend-build.txt`). |
+| Manual observation | `.project/evidence/TASK-076/run-02/manual-review.md`. |
 | Static analysis | ESLint (react-app) runs inside the build; the backend complexity limits are not applied to migrated React pages. |
 | Model checks | Model validation, preservation audit, task-status audit, migration index and generated-view checks pass. |
 
@@ -58,5 +58,5 @@ Vietnamese product copy and the existing API paths are kept.
 - `frontend/src/routes/index.js`
 - `frontend/src/services/abandonedCheckout.service.js`
 - `docs/implement/IMPL-TASK-076.md`
-- `.project/evidence/TASK-076/run-01/`
+- `.project/evidence/TASK-076/run-02/`
 - `.project/state.json and generated views`
