@@ -157,7 +157,8 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/46"
     },
     "TASK-046": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/47"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/47",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/123"
     },
     "TASK-047": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/48"
