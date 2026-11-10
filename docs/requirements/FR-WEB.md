@@ -161,3 +161,11 @@ Risk: `critical` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-20-1` | A disposable replica-set environment passes buyer/seller/staff end-to-end journeys, existing backend criteria, frontend tests/build and privacy checks; every task PR and new commit has the sole authorized author; remaining provider credentials and manual sandbox checks are explicitly reported. | behavioral test, manual review | [TASK-073](../task/TASK-073.md) `[]` |
+
+### FR-WEB-21 — Web abandoned checkout recovery
+
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 13. Checkout recovery amendment (2026-11-10)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-WEB-21-1` | Buyers see their unfinished checkouts above the order list and the cart with resume-payment, buy-again and dismiss actions; admin and staff dashboards show the recovery summary; a failed summary or list request never hides the page it sits on. | behavioral test, manual review | [TASK-076](../task/TASK-076.md) `[]` |

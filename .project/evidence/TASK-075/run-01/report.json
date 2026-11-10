@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-075",
+  "spec_hash": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+  "source_hash": "a7124f11b31d6d3898a9881d38df6b13a1a33f9fcac61ebba3c914d6edc90663",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-ORD-13-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/abandoned-checkout.test.js (one reminder inside the lead time); tests/cron-service.test.js (every 30 seconds); integration section abandoned-checkout",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-075/run-01/jest.txt",
+            ".project/evidence/TASK-075/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-ORD-13-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/abandoned-checkout.test.js and tests/order-jobs.test.js; integration section abandoned-checkout (open checkout, buy-again action, both notifications)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-075/run-01/jest.txt",
+            ".project/evidence/TASK-075/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-ORD-13-3",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/abandoned-checkout.test.js; integration section abandoned-checkout (fresh item ignored, old item reminded once)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-075/run-01/jest.txt",
+            ".project/evidence/TASK-075/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-ORD-13-4",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/abandoned-checkout.test.js (recovered, listing gone, cart emptied, lifetime passed); integration section abandoned-checkout (bought again; cart item removed)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-075/run-01/jest.txt",
+            ".project/evidence/TASK-075/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-ORD-13-5",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/abandoned-checkout.test.js; integration section abandoned-checkout (other buyer sees nothing and cannot dismiss; summary and list refuse users)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-075/run-01/jest.txt",
+            ".project/evidence/TASK-075/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

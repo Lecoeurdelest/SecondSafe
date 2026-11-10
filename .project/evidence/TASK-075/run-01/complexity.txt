@@ -1,0 +1,3 @@
+Command: node $VERIFIER/node_modules/eslint/bin/eslint.js --no-eslintrc --env node,es2022 --parser-options {"ecmaVersion":2022} --plugin sonarjs --resolve-plugins-relative-to $VERIFIER --rule "complexity: [error, 10]" --rule "max-depth: [error, 3]" --rule "sonarjs/cognitive-complexity: [error, 15]" backend/src/modules/orders/abandoned-checkout.service.js backend/src/modules/orders/abandoned-checkout.controller.js backend/src/modules/orders/abandoned-checkout.route.js backend/src/modules/orders/abandoned-checkout.model.js backend/src/services/order-jobs.service.js backend/src/services/cron.service.js
+
+exit_code=0

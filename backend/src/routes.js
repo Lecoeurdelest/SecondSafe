@@ -24,6 +24,7 @@ const userRoutes = require('./modules/users/user.route');
 const deliveryRoutes = require('./modules/delivery/delivery.route');
 const favoriteRoutes = require('./modules/users/favorite.route');
 const cartRoutes = require('./modules/users/cart.route');
+const abandonedCheckoutRoutes = require('./modules/orders/abandoned-checkout.route');
 const moderatorRoutes = require("./modules/moderator/moderator.route");
 const notificationRoutes = require('./modules/notifications/notification.route');
 const sepayRoutes = require('./modules/payments/sepay.route');
@@ -46,6 +47,7 @@ router.use('/users', userRoutes);
 router.use('/delivery', deliveryRoutes);
 router.use('/favorites', favoriteRoutes);
 router.use('/cart', cartRoutes);
+router.use('/abandoned-checkouts', abandonedCheckoutRoutes);
 router.use("/moderator", moderatorRoutes);
 router.use('/notifications', notificationRoutes);
 // API info endpoint
@@ -63,6 +65,7 @@ router.get('/', (req, res) => {
       payments: '/api/payments',
       orders: '/api/orders',
       cart: '/api/cart',
+      abandonedCheckouts: '/api/abandoned-checkouts',
       favorites: '/api/favorites',
       chat: '/api/chat',
       support: '/api/support',

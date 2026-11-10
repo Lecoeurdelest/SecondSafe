@@ -32,7 +32,8 @@ MILESTONES = [('M0', 'Scaffold', 1, 2), ('M1', 'Platform and identity', 3, 16), 
               ('M3', 'Money and orders', 24, 36), ('M4', 'Trust and moderation', 37, 43),
               ('M5', 'Administration and operations', 44, 52),
               ('M6', 'Migration control', 53, 53), ('M7', 'Web client', 54, 72),
-              ('M8', 'Full-stack integration', 73, 73)]
+              ('M8', 'Full-stack integration', 73, 73),
+              ('M9', 'Checkout recovery', 75, 76)]
 FR_GROUPS = OrderedDict([
     ('AUTH', 'Identity and access'), ('PROF', 'Profiles'), ('PROD', 'Listings'), ('BROW', 'Browse and search'),
     ('FAV', 'Favorites'), ('CHAT', 'Chat and negotiation'), ('ORD', 'Orders'), ('PAY', 'Wallet, payments and escrow'),

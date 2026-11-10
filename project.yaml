@@ -1118,6 +1118,40 @@ requirements:
       - id: AC-ORD-12-2
         statement: The revenue report computes fees from the same configuration source.
         verification: *id001
+  - id: FR-ORD-13
+    title: Abandoned checkout tracking and recovery
+    kind: functional
+    risk: standard
+    component: CMP-ORDERS
+    source:
+      file: plan.md
+      section: 4.14 Checkout recovery
+    acceptance:
+      - id: AC-ORD-13-1
+        statement: A buyer whose order awaits payment is reminded exactly once when the payment deadline is within the
+          configured lead time (default 60 seconds), and the order is tracked as at risk.
+        verification:
+          - behavioral_test
+      - id: AC-ORD-13-2
+        statement: An order cancelled by the payment timeout is recorded as an open abandoned checkout with a recovery
+          deadline (default 7 days), and the buyer is told the listing is on sale again.
+        verification:
+          - behavioral_test
+      - id: AC-ORD-13-3
+        statement: A cart item older than the configured age (default 24 hours) whose listing is still on sale produces
+          one reminder for as long as the item stays in the cart.
+        verification:
+          - behavioral_test
+      - id: AC-ORD-13-4
+        statement: A tracked checkout becomes recovered when the same buyer pays for the listing, and expired when the
+          recovery deadline passes, the listing stops being available or the cart item is removed.
+        verification:
+          - behavioral_test
+      - id: AC-ORD-13-5
+        statement: A buyer lists and dismisses only their own unfinished checkouts; only moderators and admins read the
+          recovery summary (counts, integer VND amounts and recovery rate by source) and the full list.
+        verification:
+          - behavioral_test
   - id: FR-PAY-01
     title: View wallet
     kind: functional
@@ -2846,6 +2880,22 @@ requirements:
       statement: A disposable replica-set environment passes buyer/seller/staff end-to-end journeys, existing backend
         criteria, frontend tests/build and privacy checks; every task PR and new commit has the sole authorized author;
         remaining provider credentials and manual sandbox checks are explicitly reported.
+      verification:
+      - behavioral_test
+      - manual_review
+  - id: FR-WEB-21
+    title: Web abandoned checkout recovery
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 13. Checkout recovery amendment (2026-11-10)
+    acceptance:
+    - id: AC-WEB-21-1
+      statement: Buyers see their unfinished checkouts above the order list and the cart with resume-payment, buy-again
+        and dismiss actions; admin and staff dashboards show the recovery summary; a failed summary or list request
+        never hides the page it sits on.
       verification:
       - behavioral_test
       - manual_review
@@ -6496,6 +6546,111 @@ tasks:
       splitting after inspection. Backend integration evidence is required before marking a feature task done.
     baseline_refs:
     - WDP@1cea2b7:frontend/e2e/
+  - id: TASK-075
+    title: Abandoned checkout tracking and recovery
+    requirement_ids:
+    - FR-ORD-13
+    component_ids:
+    - CMP-ORDERS
+    - CMP-JOBS
+    decision_ids:
+    - D-001
+    - D-003
+    - D-009
+    depends_on:
+    - TASK-010
+    - TASK-032
+    - TASK-046
+    acceptance_ids:
+    - AC-ORD-13-1
+    - AC-ORD-13-2
+    - AC-ORD-13-3
+    - AC-ORD-13-4
+    - AC-ORD-13-5
+    objective: Unpaid orders and forgotten cart items are tracked as abandoned checkouts; each buyer is reminded once,
+      can resume or buy again, and staff can read how many checkouts were recovered.
+    in_scope:
+    - New additive collection abandonedcheckouts with its indexes and migration note
+    - Pre-deadline payment reminder, abandonment record on payment timeout, forgotten-cart reminder, reconciliation
+    - Buyer list and dismiss endpoints; staff summary and list endpoints
+    - Reminder lead, cart age and recovery lifetime as business configuration
+    out_of_scope:
+    - Email or SMS reminders
+    - Discounts or other incentives to return
+    - Changes to existing collections
+    inputs:
+    - plan.md#4.14 Checkout recovery
+    - docs/technical/abandoned-checkout.md
+    - docs/technical/architecture.md
+    - docs/technical/order-lifecycle.md
+    - TASK-046 evidence
+    outputs:
+    - backend/src/modules/orders/abandoned-checkout.*.js
+    - backend/src/services/cron.service.js
+    - backend/src/services/order-jobs.service.js
+    - backend/src/config/business.js
+    - docs/technical/abandoned-checkout.md
+    invariants:
+    - INV-05
+    - INV-07
+    - INV-08
+    verification_commands:
+    - cd backend && npm test
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Keep one tracking document per order and one per cart item lifetime so every reminder is sent
+      once. Notifications are best effort and never fail an order update. This task is the explicit schema task for
+      the new collection (D-003); it adds no field to an existing schema.
+  - id: TASK-076
+    title: Web abandoned checkout recovery
+    requirement_ids:
+    - FR-WEB-21
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on:
+    - TASK-063
+    - TASK-075
+    acceptance_ids:
+    - AC-WEB-21-1
+    objective: Buyers see their unfinished checkouts where they shop and pay, and staff dashboards show the recovery
+      summary.
+    in_scope:
+    - frontend/src/modules/order/AbandonedCheckouts.jsx
+    - frontend/src/services/abandonedCheckout.service.js
+    - frontend/src/modules/dashboard/Dashboard.jsx
+    - Associated styles and tests; observable loading, empty and failure states
+    out_of_scope:
+    - Unrelated modules
+    - Schema or business-rule changes outside an explicit task
+    inputs:
+    - plan.md#13. Checkout recovery amendment (2026-11-10)
+    - docs/technical/abandoned-checkout.md
+    - docs/technical/gitflow.md
+    - TASK-063 evidence
+    - TASK-075 evidence
+    outputs:
+    - frontend/src/modules/order/AbandonedCheckouts.jsx
+    - frontend/src/modules/order/AbandonedCheckouts.css
+    - frontend/src/services/abandonedCheckout.service.js
+    - frontend/src/modules/dashboard/Dashboard.jsx
+    - frontend/src/routes/index.js
+    invariants:
+    - INV-05
+    - INV-08
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - A needed schema change has no approved schema-change task (D-003)
+    - Verification cannot run or produces no original output
+    technical_approach: Load the checkout list and the summary on their own so a failure never blocks the order list,
+      the cart or the dashboard. Backend integration evidence is required before marking the task done.
 verification:
   thresholds:
     standard: 0.95
