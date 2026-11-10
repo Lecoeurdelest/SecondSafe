@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-036",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "8e00469d91b841ca67d5541cea8d195f40b57ee330fd14f42bdd1cdd701871e0",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-REV-01-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reviews.test.js (buyer of a completed order, once, rating and comment bounds, evidence count and origin); integration section reviews",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-036/run-01/jest.txt",
+            ".project/evidence/TASK-036/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-REV-01-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reviews.test.js; integration section reviews (before and after completion)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-036/run-01/jest.txt",
+            ".project/evidence/TASK-036/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-REV-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "integration section reviews (public list and star distribution without a session)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-036/run-01/jest.txt",
+            ".project/evidence/TASK-036/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-REV-03-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reviews.test.js; integration section reviews (author only; removal hides)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-036/run-01/jest.txt",
+            ".project/evidence/TASK-036/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-REV-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "integration section reviews (my-reviews resolves before :reviewId)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-036/run-01/jest.txt",
+            ".project/evidence/TASK-036/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-REV-05-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "integration section reviews (rating and count after create, edit and removal). Recalculation after a moderator hides a review is delivered with TASK-041",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-036/run-01/jest.txt",
+            ".project/evidence/TASK-036/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}
