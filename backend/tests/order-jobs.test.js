@@ -1,9 +1,10 @@
-jest.mock('../src/modules/orders/order.model', () => ({ find: jest.fn(), findOneAndUpdate: jest.fn() }));
-jest.mock('../src/modules/products/product.model', () => ({ updateOne: jest.fn() }));
+jest.mock('../src/modules/orders/order.model', () => ({ find: jest.fn(), findOneAndUpdate: jest.fn(), distinct: jest.fn() }));
+jest.mock('../src/modules/products/product.model', () => ({ updateOne: jest.fn(), updateMany: jest.fn() }));
 jest.mock('../src/modules/reports/dispute.model', () => ({ distinct: jest.fn() }));
 jest.mock('../src/modules/payments/escrow.service', () => ({ releaseFunds: jest.fn(), refundFunds: jest.fn() }));
 jest.mock('../src/modules/orders/abandoned-checkout.service', () => ({ recordAbandonedOrder: jest.fn() }));
 jest.mock('../src/modules/notifications/notification.service', () => ({ createNotification: jest.fn() }));
+jest.mock('../src/modules/products/product-management.service', () => ({ ACTIVE_ORDER_STATUSES: ['awaiting_payment', 'paid'] }));
 
 const Order = require('../src/modules/orders/order.model');
 const Product = require('../src/modules/products/product.model');
@@ -80,4 +81,15 @@ test('paid orders not shipped within the configured window are refunded and canc
 
   expect(Order.find).toHaveBeenCalledWith({ status: 'paid', paidAt: { $lte: new Date(now.getTime() - business.shippingWindowMs) } });
   expect(escrowService.refundFunds).toHaveBeenCalledWith('late', expect.any(String));
+});
+
+test('active listings past the configured age are soft-expired, except those reserved by an open order (AC-SYS-04-1)', async () => {
+  Order.distinct.mockResolvedValue(['reserved-product']);
+  Product.updateMany.mockResolvedValue({ modifiedCount: 4 });
+
+  expect(await jobs.expireOldListings(now)).toBe(4);
+  expect(Product.updateMany).toHaveBeenCalledWith(
+    { _id: { $nin: ['reserved-product'] }, status: 'active', createdAt: { $lte: new Date(now.getTime() - business.listingMaxAgeMs) } },
+    { $set: { status: 'expired', updatedAt: now } }
+  );
 });

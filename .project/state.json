@@ -801,14 +801,26 @@
     "TASK-047": {
       "execution": "blocked",
       "relevance": "current",
-      "detail": "Awaiting decision D-107 (proposed)",
+      "detail": "Awaiting decision D-107 (proposed). A daily 03:00 job that soft-expires old listings is implemented and evidenced for review",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-107"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "blocked",
+          "note": "Implementation prepared for review in the task PR; the decision that blocks this task is still proposed"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-047/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-047.md",
+      "criteria": {
+        "AC-SYS-04-1": "inconclusive"
+      }
     },
     "TASK-048": {
       "execution": "blocked",
