@@ -72,7 +72,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-09-1` | Buyers create purchase requests or quick buys and sellers accept or reject them; integer VND totals and unavailable listings are handled without duplicate submission. | behavioral test, manual review | [TASK-062](../task/TASK-062.md) `[]` |
+| `AC-WEB-09-1` | Buyers create purchase requests or quick buys and sellers accept or reject them; integer VND totals and unavailable listings are handled without duplicate submission. | behavioral test, manual review | [TASK-062](../task/TASK-062.md) `[!]` |
 
 ### FR-WEB-10 — Web order lists, payment and fulfilment
 
