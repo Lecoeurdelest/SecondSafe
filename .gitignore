@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+*-credentials.env
+.vercel
 
 # Dependencies
 node_modules/
