@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-071",
+  "spec_hash": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+  "source_hash": "44bb92c10499aae60d89a5a9513524879a132352ca933399801c4bfe69ee5a3e",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-18-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "not_observed",
+      "observation": "No automated test exercises these pages",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": false,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-071/run-01/frontend-test.txt",
+            ".project/evidence/TASK-071/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-071/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

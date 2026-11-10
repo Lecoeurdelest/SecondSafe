@@ -47,6 +47,11 @@ const ModReviewList = lazy(() => import('../modules/moderator/reviews/ModReviewL
 const ModDisputeList = lazy(() => import('../modules/moderator/disputes/ModDisputeList'));
 const ModDisputeDetail = lazy(() => import('../modules/moderator/disputes/ModDisputeDetail'));
 const ModWithdrawalList = lazy(() => import('../modules/moderator/withdrawals/ModWithdrawalList'));
+const AdminReportList = lazy(() => import('../modules/admin/reports/AdminReportList'));
+const AdminReportDetail = lazy(() => import('../modules/admin/reports/AdminReportDetail'));
+const AdminOrderList = lazy(() => import('../modules/admin/orders/AdminOrderList'));
+const AdminOrderDetail = lazy(() => import('../modules/admin/orders/AdminOrderDetail'));
+const AdminReviewList = lazy(() => import('../modules/admin/reviews/AdminReviewList'));
 
 function DashboardRoute({ role, children }) {
   const session = getSession();
@@ -91,8 +96,13 @@ export default function AppRoutes() {
       <Route path="/user/:userId/reviews" element={<UserReviews />} />
       <Route path="/admin" element={<DashboardRoute role="admin"><Dashboard role="admin" /></DashboardRoute>} />
       <Route path="/admin/dashboard" element={<DashboardRoute role="admin"><Dashboard role="admin" /></DashboardRoute>} />
-      <Route path="/admin/users" element={<AdminRoute><AdminLayout /></AdminRoute>}>
-        <Route index element={<UserManagement />} />
+      <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
+        <Route path="/admin/users" element={<UserManagement />} />
+        <Route path="/admin/reports" element={<AdminReportList />} />
+        <Route path="/admin/reports/:id" element={<AdminReportDetail />} />
+        <Route path="/admin/orders" element={<AdminOrderList />} />
+        <Route path="/admin/orders/:id" element={<AdminOrderDetail />} />
+        <Route path="/admin/reviews" element={<AdminReviewList />} />
       </Route>
       <Route path="/staff" element={<DashboardRoute role="moderator"><Dashboard role="moderator" /></DashboardRoute>} />
       <Route path="/moderator/dashboard" element={<DashboardRoute role="moderator"><Dashboard role="moderator" /></DashboardRoute>} />
