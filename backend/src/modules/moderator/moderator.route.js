@@ -12,4 +12,10 @@ router.use(authenticate, requireRole('moderator'));
 router.get('/dashboard', dashboardController.getDashboard);
 router.get('/revenue-report', controller.getRevenueReport);
 
+router.post('/users/:id/ban', controller.banUser);
+
+router.get('/reports', controller.getReports);
+router.get('/reports/:reportId', controller.getReportById);
+router.put('/reports/:reportId/resolve', controller.resolveReport);
+
 module.exports = router;

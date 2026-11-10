@@ -20,9 +20,9 @@ Baseline: `GET /api/moderator/reports`, `GET /api/moderator/reports/:reportId`, 
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-02-1` | Moderators list, filter and open reports with reporter and target violation statistics. | behavioral test | [TASK-040](../task/TASK-040.md) `[]` |
-| `AC-MOD-02-2` | Resolution sets status resolved or dismissed with decision remove_content, warn_user, ban_user or reply_feedback; dismissal allows only reply_feedback, remove_content applies only to listing reports, and processed reports cannot be resolved again. | behavioral test | [TASK-040](../task/TASK-040.md) `[]` |
-| `AC-MOD-02-3` | Resolution notifies the reporter and the reported user, and both baseline resolve paths share one handler. | behavioral test | [TASK-040](../task/TASK-040.md) `[]` |
+| `AC-MOD-02-1` | Moderators list, filter and open reports with reporter and target violation statistics. | behavioral test | [TASK-040](../task/TASK-040.md) `[!]` |
+| `AC-MOD-02-2` | Resolution sets status resolved or dismissed with decision remove_content, warn_user, ban_user or reply_feedback; dismissal allows only reply_feedback, remove_content applies only to listing reports, and processed reports cannot be resolved again. | behavioral test | [TASK-040](../task/TASK-040.md) `[!]` |
+| `AC-MOD-02-3` | Resolution notifies the reporter and the reported user, and both baseline resolve paths share one handler. | behavioral test | [TASK-040](../task/TASK-040.md) `[!]` |
 
 ### FR-MOD-03 — Apply sanctions
 
@@ -32,8 +32,8 @@ Baseline: `report.service.js resolveReport, getReportWarningPenalty`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-03-1` | warn_user increments the violation count and applies a selling restriction of 24 hours, 1 week or 1 year at 3, 6 and 9 warnings. | static flow review, behavioral test | [TASK-040](../task/TASK-040.md) `[]` |
-| `AC-MOD-03-2` | A listing with three resolved warn_user reports is removed, remove_content removes the listing, ban_user applies an indefinite selling restriction, and admins are never sanctioned. | static flow review, behavioral test | [TASK-040](../task/TASK-040.md) `[]` |
+| `AC-MOD-03-1` | warn_user increments the violation count and applies a selling restriction of 24 hours, 1 week or 1 year at 3, 6 and 9 warnings. | static flow review, behavioral test | [TASK-040](../task/TASK-040.md) `[!]` |
+| `AC-MOD-03-2` | A listing with three resolved warn_user reports is removed, remove_content removes the listing, ban_user applies an indefinite selling restriction, and admins are never sanctioned. | static flow review, behavioral test | [TASK-040](../task/TASK-040.md) `[!]` |
 
 ### FR-MOD-04 — Moderate orders
 
@@ -77,7 +77,7 @@ Baseline: `POST /api/moderator/users/:id/ban`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-07-1` | A moderator can suspend a non-admin user with a reason. | behavioral test | [TASK-040](../task/TASK-040.md) `[]` |
+| `AC-MOD-07-1` | A moderator can suspend a non-admin user with a reason. | behavioral test | [TASK-040](../task/TASK-040.md) `[!]` |
 
 ### FR-MOD-08 — Revenue report
 

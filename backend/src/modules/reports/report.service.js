@@ -10,6 +10,7 @@ const business = require('../../config/business');
 
 const EVIDENCE_PATH = /^\/uploads\/evidence\/[\w-]+\/[\w.-]+\.(png|jpe?g|mp4)$/i;
 const MAX_EVIDENCE_PER_SUBMISSION = 5;
+const SANCTION_LABELS = ['24 giờ', '1 tuần', '1 năm'];
 
 // Evidence must reference files stored by the evidence upload endpoint.
 function normalizeEvidence(files) {
@@ -31,6 +32,10 @@ function requireText(value, message) {
   return text;
 }
 
+// Nguong canh bao de xu ly manh tay voi bai dang.
+const PRODUCT_WARN_THRESHOLD = 3;
+const RESOLUTION_STATUSES = ['resolved', 'dismissed'];
+const MODERATION_DECISIONS = ['remove_content', 'warn_user', 'ban_user', 'reply_feedback'];
 const MAX_EVIDENCE_PER_SIDE = 10;
 const USER_AUTO_SUSPEND_REPORT_THRESHOLD = business.reportRestrictionThreshold;
 
@@ -60,6 +65,30 @@ async function tryAutoSuspendByReportThreshold(reportedUserId) {
   });
 
   return true;
+}
+
+// Tinh muc phat theo moc 3/6/9 canh bao.
+function getReportWarningPenalty(nextWarningCount) {
+  const count = Math.max(0, nextWarningCount);
+  const step = business.sanctionThresholds[0];
+  const level = Math.min(Math.floor(count / step), business.sanctionDurationsMs.length);
+  const shouldSuspendNow = count > 0 && count % step === 0;
+  return {
+    shouldSuspendNow,
+    level,
+    durationMs: shouldSuspendNow ? business.sanctionDurationsMs[level - 1] : 0,
+    label: shouldSuspendNow ? SANCTION_LABELS[level - 1] : ''
+  };
+}
+
+async function pushReportNotification(userId, title, message, reportId) {
+  if (!userId) return;
+  await notificationService.createNotification(userId, {
+    type: 'report_update',
+    title,
+    message,
+    reportId
+  });
 }
 
 // Gui thong bao cap nhat tranh chap.
@@ -516,6 +545,186 @@ async function getUserDisputes(userId, pagination = {}) {
 }
 
 /**
+ * Lay toan bo bao cao (dung cho moderator/admin).
+ */
+async function getAllReports(filters = {}, pagination = {}) {
+  const page = parseInt(pagination.page) || 1;
+  const limit = parseInt(pagination.limit) || 20;
+  const skip = (page - 1) * limit;
+
+  // Loai bo filter rong de query gon hon.
+  Object.keys(filters).forEach(key => filters[key] === undefined && delete filters[key]);
+
+  const reports = await Report.find(filters)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate('reporterId', 'fullName email avatar')
+    .populate('reportedUserId', 'fullName email avatar')
+    .populate('productId', 'title images');
+
+  const total = await Report.countDocuments(filters);
+
+  return {
+    reports,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+}
+
+function requireFeedback(reply, replyToReportedUser) {
+  if (!String(reply || '').trim() && !String(replyToReportedUser || '').trim()) {
+    throw new Error('Quyết định trả lời phản hồi cần ít nhất 1 nội dung phản hồi cho người báo cáo hoặc người bị báo cáo');
+  }
+}
+
+function requireSanctionTarget(report, decision) {
+  if (decision === 'remove_content' && report.reportType !== 'product') {
+    throw new Error('Quyết định gỡ nội dung chỉ áp dụng cho báo cáo sản phẩm');
+  }
+  if (decision === 'remove_content' && !report.productId) {
+    throw new Error('Không tìm thấy sản phẩm để thực hiện gỡ nội dung');
+  }
+  if (['warn_user', 'ban_user'].includes(decision) && !report.reportedUserId) {
+    throw new Error('Không tìm thấy người dùng bị báo cáo để áp dụng quyết định');
+  }
+}
+
+function validateModerationDecision(report, status, decision, reply, replyToReportedUser) {
+  if (!RESOLUTION_STATUSES.includes(status)) {
+    throw new Error('Trạng thái xử lý báo cáo không hợp lệ');
+  }
+  if (!MODERATION_DECISIONS.includes(decision)) {
+    throw new Error('Quyết định xử lý báo cáo không hợp lệ');
+  }
+  if (status === 'dismissed' && decision !== 'reply_feedback') {
+    throw new Error('Khi bỏ qua báo cáo chỉ được dùng quyết định trả lời phản hồi');
+  }
+  if (decision === 'reply_feedback') requireFeedback(reply, replyToReportedUser);
+  if (status === 'resolved') requireSanctionTarget(report, decision);
+}
+
+// remove_content: the listing leaves the catalog.
+async function removeReportedListing(report) {
+  const product = await Product.findById(report.productId);
+  if (product) {
+    product.status = 'rejected';
+    await product.save();
+  }
+}
+
+// AC-MOD-03-1: every warning counts; a selling restriction starts at each configured threshold.
+async function recordWarning(user) {
+  const nextWarningCount = Number(user.violationCount || 0) + 1;
+  const penalty = getReportWarningPenalty(nextWarningCount);
+  user.violationCount = nextWarningCount;
+  if (!penalty.shouldSuspendNow) {
+    await user.save();
+    return;
+  }
+  await applySellingRestrictionToUser(user, {
+    durationMs: penalty.durationMs,
+    reason: `Tài khoản bị hạn chế quyền bán do vi phạm từ báo cáo ở mốc ${nextWarningCount} cảnh báo (mức ${penalty.level}) trong ${penalty.label}.`,
+    source: 'report_warning'
+  });
+}
+
+// AC-MOD-03-2: the third resolved warning against one listing removes it. The report being
+// resolved is not saved yet, so it is counted explicitly.
+async function removeListingAfterRepeatedWarnings(report) {
+  const earlierWarnings = await Report.countDocuments({
+    _id: { $ne: report._id },
+    productId: report.productId,
+    status: 'resolved',
+    moderatorDecision: 'warn_user'
+  });
+  if (earlierWarnings + 1 < PRODUCT_WARN_THRESHOLD) return;
+  const product = await Product.findById(report.productId);
+  if (product && !['rejected', 'hidden', 'deleted'].includes(product.status)) {
+    product.status = 'rejected';
+    await product.save();
+  }
+}
+
+// INV-04: an admin is never warned into a restriction.
+async function warnReportedUser(report) {
+  const user = await User.findById(report.reportedUserId);
+  if (user && user.role !== 'admin') await recordWarning(user);
+  if (report.productId) await removeListingAfterRepeatedWarnings(report);
+}
+
+async function banReportedUser(report, notes) {
+  const user = await User.findById(report.reportedUserId);
+  if (!user) return;
+  if (user.role === 'admin') {
+    throw new Error('Không thể khóa tài khoản admin');
+  }
+  await applySellingRestrictionToUser(user, {
+    reason: notes || 'Tài khoản bị hạn chế quyền bán trực tiếp theo quyết định ban_user của moderator.',
+    source: 'report_ban'
+  });
+}
+
+const SANCTIONS = { remove_content: removeReportedListing, warn_user: warnReportedUser, ban_user: banReportedUser };
+
+async function notifyReportParties(report, reply, replyToReportedUser) {
+  await pushReportNotification(
+    report.reporterId,
+    'Cập nhật báo cáo',
+    reply || 'Báo cáo của bạn đã được moderator xử lý.',
+    report._id
+  );
+  await pushReportNotification(
+    report.reportedUserId,
+    'Thông báo xử lý báo cáo',
+    replyToReportedUser || 'Bạn có cập nhật mới liên quan đến một báo cáo vi phạm.',
+    report._id
+  );
+}
+
+/**
+ * Xu ly bao cao (moderator/admin). Mot bao cao chi duoc xu ly mot lan.
+ */
+async function resolveReport(
+  reportId,
+  moderatorId,
+  status,
+  decision,
+  notes,
+  reply = '',
+  replyToReportedUser = ''
+) {
+  const report = await Report.findById(reportId);
+  if (!report) {
+    throw new Error('Báo cáo không tồn tại');
+  }
+  if (RESOLUTION_STATUSES.includes(report.status)) {
+    throw new Error('Báo cáo này đã được xử lý trước đó rồi');
+  }
+  validateModerationDecision(report, status, decision, reply, replyToReportedUser);
+
+  report.status = status;
+  report.moderatorDecision = decision;
+  report.moderatorNotes = notes;
+  report.moderatorReply = reply;
+  report.moderatorReplyToReportedUser = replyToReportedUser;
+  report.moderatorId = moderatorId;
+  report.resolvedAt = new Date();
+
+  if (status === 'resolved' && SANCTIONS[decision]) {
+    await SANCTIONS[decision](report, notes);
+  }
+  await report.save();
+  await notifyReportParties(report, reply, replyToReportedUser);
+
+  return report;
+}
+
+/**
  * Lay tranh chap theo orderId, kem kiem tra quyen truy cap.
  */
 async function getDisputeByOrderId(orderId, userId) {
@@ -577,5 +786,7 @@ module.exports = {
   addBuyerFollowUp,
   confirmSellerReturn,
   getUserReports,
-  getUserDisputes
+  getUserDisputes,
+  getAllReports,
+  resolveReport
 };

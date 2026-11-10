@@ -1,0 +1,75 @@
+{
+  "task_id": "TASK-040",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Report queue, resolution and graded sanctions implemented with unit and real-MongoDB evidence; AC-MOD-07-1 needs the owner's reading of \"suspend\"; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue",
+    "report-moderation"
+  ],
+  "complexity": [
+    "backend/src/modules/moderator/moderator.service.js",
+    "backend/src/modules/moderator/moderator.controller.js",
+    "backend/src/modules/reports/report.service.js",
+    "backend/src/modules/reports/report.controller.js"
+  ],
+  "flow": "AC-MOD-03-1 and AC-MOD-03-2. Inspected `resolveReport`, `validateModerationDecision`, `warnReportedUser`, `recordWarning`, `removeListingAfterRepeatedWarnings`, `removeReportedListing` and `banReportedUser` in `backend/src/modules/reports/report.service.js`, and `getReportWarningPenalty`. A processed report is refused before anything changes. The decision is validated first; the sanction for the decision runs before the report is saved, so a refused sanction (an admin target of `ban_user`) leaves the report pending. `recordWarning` increments `violationCount` for every warning and applies a restriction only when the new count is a multiple of the first configured threshold, with the duration taken from `sanctionDurationsMs` (24 hours, 1 week, 1 year). `warnReportedUser` and `banReportedUser` skip or refuse admins (INV-04). The repeated-warning rule counts earlier resolved `warn_user` reports for the listing and adds the one being resolved, because that report is not saved yet; at three the listing is set to `rejected`. The moderator endpoint and `PUT /api/reports/:id/resolve` both call `reportService.resolveReport`.",
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Report queue, resolution and graded sanctions implemented with unit and real-MongoDB evidence; AC-MOD-07-1 needs the owner's reading of \"suspend\"; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-MOD-02-1": {
+      "observed": "pass",
+      "note": "tests/report-moderation.test.js (filters, literal keyword search); integration section report-moderation",
+      "checks": {}
+    },
+    "AC-MOD-02-2": {
+      "observed": "pass",
+      "note": "tests/report-moderation.test.js; integration section report-moderation",
+      "checks": {}
+    },
+    "AC-MOD-02-3": {
+      "observed": "pass",
+      "note": "tests/report-moderation.test.js (both parties notified; the moderator path delegates to the report service); integration section report-moderation (two notifications; /api/reports/:id/resolve also resolves)",
+      "checks": {}
+    },
+    "AC-MOD-03-1": {
+      "observed": "pass",
+      "note": "tests/report-moderation.test.js (warnings 1, 3, 6 and 9 with configured durations); flow-review.md; integration section report-moderation",
+      "checks": {}
+    },
+    "AC-MOD-03-2": {
+      "observed": "pass",
+      "note": "tests/report-moderation.test.js (third warning removes the listing, remove_content, ban_user, admins exempt); flow-review.md; integration section report-moderation",
+      "checks": {}
+    },
+    "AC-MOD-07-1": {
+      "observed": "not_observed",
+      "note": "POST /api/moderator/users/:id/ban applies an indefinite selling restriction with a reason and refuses admins (tests/report-moderation.test.js, integration). The baseline endpoint restricts selling; it does not suspend the account, so whether this satisfies \"suspend\" is left to the owner",
+      "checks": {
+        "behavioral_test": "inconclusive"
+      }
+    }
+  }
+}
