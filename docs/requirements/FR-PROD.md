@@ -10,10 +10,10 @@ Baseline: `POST /api/products`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-01-1` | Title (≤200 characters), description (≤2000), price (integer VND ≥0), at least one category, condition (new, like-new, good, fair, poor), at least one image, city and district are required; violations return 400. | behavioral test | [TASK-018](../task/TASK-018.md) `[]` |
-| `AC-PROD-01-2` | An optional other-category label is limited to 100 characters. | behavioral test | [TASK-018](../task/TASK-018.md) `[]` |
-| `AC-PROD-01-3` | A seller under selling restriction receives 403. | behavioral test | [TASK-018](../task/TASK-018.md) `[]` |
-| `AC-PROD-01-4` | A valid listing is published with status active (unless decision D-103 introduces pre-publication moderation). | behavioral test | [TASK-018](../task/TASK-018.md) `[]` |
+| `AC-PROD-01-1` | Title (≤200 characters), description (≤2000), price (integer VND ≥0), at least one category, condition (new, like-new, good, fair, poor), at least one image, city and district are required; violations return 400. | behavioral test | [TASK-018](../task/TASK-018.md) `[!]` |
+| `AC-PROD-01-2` | An optional other-category label is limited to 100 characters. | behavioral test | [TASK-018](../task/TASK-018.md) `[!]` |
+| `AC-PROD-01-3` | A seller under selling restriction receives 403. | behavioral test | [TASK-018](../task/TASK-018.md) `[!]` |
+| `AC-PROD-01-4` | A valid listing is published with status active (unless decision D-103 introduces pre-publication moderation). | behavioral test | [TASK-018](../task/TASK-018.md) `[!]` |
 
 ### FR-PROD-02 — Upload listing images
 
@@ -33,7 +33,7 @@ Baseline: `PUT /api/products/:id`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-03-1` | Only the owner can edit; a sold listing, a reserved listing or a listing linked to an active order cannot be edited. | behavioral test | [TASK-018](../task/TASK-018.md) `[]` |
+| `AC-PROD-03-1` | Only the owner can edit; a sold listing, a reserved listing or a listing linked to an active order cannot be edited. | behavioral test | [TASK-018](../task/TASK-018.md) `[!]` |
 
 ### FR-PROD-04 — Delete a listing
 
@@ -43,7 +43,7 @@ Baseline: `DELETE /api/products/:id`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-04-1` | Only the owner can delete, under the same state rules as editing; deletion sets status deleted instead of removing the document. | behavioral test | [TASK-018](../task/TASK-018.md) `[]` |
+| `AC-PROD-04-1` | Only the owner can delete, under the same state rules as editing; deletion sets status deleted instead of removing the document. | behavioral test | [TASK-018](../task/TASK-018.md) `[!]` |
 
 ### FR-PROD-05 — Hide or show a listing
 
@@ -53,7 +53,7 @@ Baseline: `PATCH /api/products/:id/visibility`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-05-1` | The owner toggles active and hidden; a restricted seller cannot re-activate; deleted, sold and reserved listings cannot change visibility. | behavioral test | [TASK-018](../task/TASK-018.md) `[]` |
+| `AC-PROD-05-1` | The owner toggles active and hidden; a restricted seller cannot re-activate; deleted, sold and reserved listings cannot change visibility. | behavioral test | [TASK-018](../task/TASK-018.md) `[!]` |
 
 ### FR-PROD-06 — List my listings
 

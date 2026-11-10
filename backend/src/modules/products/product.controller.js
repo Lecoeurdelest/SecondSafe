@@ -1,4 +1,6 @@
 const productService = require('./product.service');
+const managementService = require('./product-management.service');
+const { createNotification } = require('../notifications/notification.service');
 const logger = require('../../common/utils/logger.util');
 const { sendSuccess, sendError } = require('../../common/utils/response.util');
 
@@ -7,6 +9,7 @@ function respondError(res, error, operation) {
   if (Number.isInteger(statusCode) && statusCode >= 400 && statusCode < 500) {
     return sendError(res, statusCode, error.message);
   }
+  if (error.name === 'ValidationError') return sendError(res, 400, 'Dữ liệu sản phẩm không hợp lệ');
   logger.error(operation, { error: error.message });
   return sendError(res, 500, 'Lỗi hệ thống, vui lòng thử lại sau');
 }
@@ -38,4 +41,54 @@ async function getById(req, res) {
   }
 }
 
-module.exports = { list, search, getById };
+async function notifyListingCreated(userId, product) {
+  try {
+    await createNotification(userId, {
+      type: 'system',
+      productId: product._id,
+      title: 'Đăng tin thành công',
+      message: `Tin đăng "${product.title}" đã được đăng thành công.`
+    });
+  } catch (error) {
+    logger.error('Listing notification failed', { error: error.message });
+  }
+}
+
+async function create(req, res) {
+  try {
+    const product = await managementService.createProduct(req.user.userId, req.body);
+    await notifyListingCreated(req.user.userId, product);
+    return sendSuccess(res, 201, product, 'Sản phẩm đã được tạo thành công');
+  } catch (error) {
+    return respondError(res, error, 'Creating product failed');
+  }
+}
+
+async function update(req, res) {
+  try {
+    const product = await managementService.updateProduct(req.params.id, req.user.userId, req.body);
+    return sendSuccess(res, 200, product, 'Sản phẩm đã được cập nhật thành công');
+  } catch (error) {
+    return respondError(res, error, 'Updating product failed');
+  }
+}
+
+async function remove(req, res) {
+  try {
+    const product = await managementService.deleteProduct(req.params.id, req.user.userId);
+    return sendSuccess(res, 200, product, 'Sản phẩm đã được xóa thành công');
+  } catch (error) {
+    return respondError(res, error, 'Deleting product failed');
+  }
+}
+
+async function updateVisibility(req, res) {
+  try {
+    const product = await managementService.setProductVisibility(req.params.id, req.user.userId, req.body?.status);
+    return sendSuccess(res, 200, product, 'Trạng thái hiển thị đã được cập nhật');
+  } catch (error) {
+    return respondError(res, error, 'Updating product visibility failed');
+  }
+}
+
+module.exports = { list, search, getById, create, update, remove, updateVisibility };

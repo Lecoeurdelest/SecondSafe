@@ -1,0 +1,19 @@
+Command: npm test
+
+> secondsafe-backend@0.1.0 test
+> jest --runInBand
+
+{"timestamp":"2026-11-10T02:56:59.712Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/missing","error":"Error"}]}
+{"timestamp":"2026-11-10T02:56:59.713Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/inactive","error":"Error"}]}
+{"timestamp":"2026-11-10T02:56:59.714Z","level":"error","message":"HTTP request failed","context":[{"status":500,"method":"GET","path":"/api/categories/books","error":"Error"}]}
+{"timestamp":"2026-11-10T02:56:59.974Z","level":"error","message":"HTTP request failed","context":[{"status":401,"method":"GET","path":"/api/users/admin/dashboard","error":"Error"}]}
+{"timestamp":"2026-11-10T02:56:59.975Z","level":"error","message":"HTTP request failed","context":[{"status":401,"method":"GET","path":"/api/moderator/dashboard","error":"Error"}]}
+{"timestamp":"2026-11-10T02:57:00.687Z","level":"error","message":"HTTP request failed","context":[{"status":503,"method":"POST","path":"/send","error":"Error"}]}
+
+Test Suites: 28 passed, 28 total
+Tests:       234 passed, 234 total
+Snapshots:   0 total
+Time:        7.325 s, estimated 8 s
+Ran all test suites.
+
+exit_code=0
