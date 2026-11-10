@@ -52,6 +52,10 @@ const AdminReportDetail = lazy(() => import('../modules/admin/reports/AdminRepor
 const AdminOrderList = lazy(() => import('../modules/admin/orders/AdminOrderList'));
 const AdminOrderDetail = lazy(() => import('../modules/admin/orders/AdminOrderDetail'));
 const AdminReviewList = lazy(() => import('../modules/admin/reviews/AdminReviewList'));
+const AdminWithdrawalList = lazy(() => import('../modules/admin/withdrawals/AdminWithdrawalList'));
+const AdminDisputeList = lazy(() => import('../modules/admin/disputes/AdminDisputeList'));
+const AdminDisputeDetail = lazy(() => import('../modules/admin/disputes/AdminDisputeDetail'));
+const AdminRevenueReport = lazy(() => import('../modules/admin/revenue/AdminRevenueReport'));
 
 function DashboardRoute({ role, children }) {
   const session = getSession();
@@ -103,6 +107,10 @@ export default function AppRoutes() {
         <Route path="/admin/orders" element={<AdminOrderList />} />
         <Route path="/admin/orders/:id" element={<AdminOrderDetail />} />
         <Route path="/admin/reviews" element={<AdminReviewList />} />
+        <Route path="/admin/withdrawals" element={<AdminWithdrawalList />} />
+        <Route path="/admin/disputes" element={<AdminDisputeList />} />
+        <Route path="/admin/disputes/:id" element={<AdminDisputeDetail />} />
+        <Route path="/admin/revenue" element={<AdminRevenueReport />} />
       </Route>
       <Route path="/staff" element={<DashboardRoute role="moderator"><Dashboard role="moderator" /></DashboardRoute>} />
       <Route path="/moderator/dashboard" element={<DashboardRoute role="moderator"><Dashboard role="moderator" /></DashboardRoute>} />
