@@ -1,7 +1,7 @@
 ---
 id: TASK-039
 title: Moderator dashboard and revenue report
-execution_status: todo
+execution_status: in_progress
 relevance: current
 depends_on: [TASK-004, TASK-005, TASK-033]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-039 — Moderator dashboard and revenue report
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `in_progress` — Revenue report implemented with unit and real-MongoDB evidence; the dashboard criterion AC-MOD-01-1 was not verified against the existing dashboard in this run
 
 ## Traceability
 

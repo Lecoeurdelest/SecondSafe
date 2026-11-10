@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-039",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "661cf8aed8bfc8e86f4b5bf7bcf0fed2a0bb7263f303211ddf5c38f96308f1fd",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-ORD-12-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/revenue-report.test.js (aggregation and per-order fallback use business.feeRate, rounded to integer VND); integration section revenue",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-039/run-01/jest.txt",
+            ".project/evidence/TASK-039/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-MOD-01-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "not_observed",
+      "observation": "The moderator dashboard endpoint already existed before this task and is not changed here; its counts and five latest reports were not compared with the criterion",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": false,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-039/run-01/jest.txt",
+            ".project/evidence/TASK-039/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-MOD-08-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/revenue-report.test.js (requested range, default last 12 months, grouped by month over completed orders); integration section revenue",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-039/run-01/jest.txt",
+            ".project/evidence/TASK-039/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}
