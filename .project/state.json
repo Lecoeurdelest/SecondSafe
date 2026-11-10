@@ -1326,10 +1326,16 @@
           "date": "2026-11-10",
           "execution": "verifying",
           "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Re-verified with a clean install after the manifest was reduced to the recharts line and the lockfile was regenerated with npm 10; run-01 used a lockfile the CI npm could not install"
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-072/run-01/report.json"
+        ".project/evidence/TASK-072/run-01/report.json",
+        ".project/evidence/TASK-072/run-02/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-072.md",
       "criteria": {

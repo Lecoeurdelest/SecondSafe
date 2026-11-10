@@ -1,0 +1,34 @@
+{
+  "task_id": "TASK-072",
+  "run": "run-02",
+  "date": "2026-11-10",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
+  "sections": null,
+  "complexity": null,
+  "clean_install": "10.9.2",
+  "flow": null,
+  "manual": "Observed on 2026-11-10 in Chrome against a local API and a disposable MongoDB, on the combined working tree before it was split into task branches. The revenue page rendered its date range, four totals and charts with no completed orders; the dispute queue rendered empty. The withdrawal page and every action were not exercised.",
+  "history": [
+    [
+      "verifying",
+      "Re-verified with a clean install after the manifest was reduced to the recharts line and the lockfile was regenerated with npm 10; run-01 used a lockfile the CI npm could not install"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": {
+    "AC-WEB-19-1": {
+      "observed": "not_observed",
+      "note": "No automated test exercises these pages",
+      "checks": {
+        "behavioral_test": "inconclusive",
+        "manual_review": "inconclusive"
+      }
+    }
+  }
+}
