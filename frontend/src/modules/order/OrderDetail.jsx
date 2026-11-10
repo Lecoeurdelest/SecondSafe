@@ -247,6 +247,7 @@ const OrderDetail = () => {
 
   useEffect(() => {
     fetchOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -256,6 +257,7 @@ const OrderDetail = () => {
         fetchDispute();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
   useEffect(() => {
@@ -278,6 +280,7 @@ const OrderDetail = () => {
     if (action === 'confirm-receipt') {
       setShowReceiptModal(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, user, location.search]);
 
   useEffect(() => {
@@ -290,6 +293,7 @@ const OrderDetail = () => {
     if (action === 'rate' && canReview && !existingReview) {
       setShowRatingModal(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, user, location.search, canReview, existingReview]);
 
   useEffect(() => {
@@ -313,6 +317,7 @@ const OrderDetail = () => {
         { replace: true }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, user, dispute, location.search, navigate, location.pathname]);
 
   useEffect(() => {
@@ -325,6 +330,7 @@ const OrderDetail = () => {
     if (action === 'seller-evidence' && dispute.status !== 'resolved' && dispute.reason !== 'return_request') {
       setShowSellerResponseModal(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, user, dispute, location.search]);
 
   const fetchDispute = async () => {

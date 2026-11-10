@@ -23,6 +23,7 @@ const OrderPayment = () => {
 
   useEffect(() => {
     fetchOrderAndBalance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchOrderAndBalance = async () => {
@@ -163,7 +164,6 @@ const OrderPayment = () => {
     );
   }
 
-  const isInsufficientBalance = balance < order.totalAmount;
 
   return (
     <div className="order-payment-container">

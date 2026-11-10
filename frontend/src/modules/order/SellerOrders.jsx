@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getOrdersAsSeller, confirmOrderBySeller } from '../../services/order.service';
+import { getOrdersAsSeller } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './SellerOrders.css';
 
@@ -11,7 +11,6 @@ const SellerOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('pending'); // pending, confirmed, completed
-  const [actionLoading, setActionLoading] = useState({});
 
   const getOrderStatus = (order) => {
     return order.status;
