@@ -4,7 +4,7 @@
   "inputs": {
     "project.yaml": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
     ".project/state.json": "fdcd7301f502f8039c48542f704ff63994ebbcc8919d4b190e6373ac082bd788",
-    ".project/delivery.json": "d5d1f3082827a8da626d11fbc6dfb007d5d3cd2759840f313be296ef28fe72c4",
+    ".project/delivery.json": "a995ba0aea87fac8518cdc39851180ffe179a387fd74960649cf667fa0545faa",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
     "backend/src/modules/delivery/delivery.model.js": "90056fcdd26eb2d4eb7b76cda3796abb641d53d5ab1e4ae33b1fd12445e1301d",
@@ -104,7 +104,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "08c033ccc80f8c4bf7bca786a5c350559286fb3e669091eb4a9f2301556f90b2"
+      "sha256": "2bcfa4a12443a0c9a00872d2537564a3dc0fbdf543f112b9a4f2705340d9716b"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
