@@ -18,4 +18,14 @@ router.get('/reports', controller.getReports);
 router.get('/reports/:reportId', controller.getReportById);
 router.put('/reports/:reportId/resolve', controller.resolveReport);
 
+router.get('/orders', controller.getOrders);
+router.get('/orders/:id', controller.getOrderById);
+router.post('/orders/:id/force-cancel', controller.forceCancelOrder);
+router.patch('/orders/:id/status', controller.updateOrderStatus);
+
+router.get('/reviews', controller.getReviews);
+router.patch('/reviews/:reviewId/hide', controller.hideReview);
+router.patch('/reviews/:reviewId/mark-bad', controller.markSellerBadByReview);
+router.patch('/reviews/:reviewId/mark-good', controller.markSellerGoodByReview);
+
 module.exports = router;

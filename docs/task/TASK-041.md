@@ -1,7 +1,7 @@
 ---
 id: TASK-041
 title: Order and review moderation
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-033, TASK-036]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-041 — Order and review moderation
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Order corrections through escrow and review moderation implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

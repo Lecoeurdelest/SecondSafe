@@ -1,0 +1,111 @@
+Command: node .project/evidence/TASK-041/run-01/integration-runner.js backend upload,listing,seller-listings,reviews,reports,disputes,revenue,report-moderation,order-review-moderation
+MongoDB 7.0.24; sections: upload, listing, seller-listings, reviews, reports, disputes, revenue, report-moderation, order-review-moderation
+# upload
+  ok   png image accepted with a random stored name
+  ok   a path as upload target falls back to the temp folder
+  ok   an executable is rejected
+  ok   text renamed to .png is rejected by its signature
+  ok   upload without a session is rejected
+  ok   evidence image accepted
+  ok   gif is not accepted as evidence
+# listing
+  ok   listing created active
+  ok   fractional price rejected
+  ok   free listing accepted (integer VND >= 0)
+  ok   listing without an image rejected
+  ok   non-owner edit refused
+  ok   owner edit changes only editable fields
+  ok   owner hides the listing
+  ok   hidden listing is not public
+  ok   listing tied to an open order is read-only
+  ok   listing tied to an open order cannot be deleted
+  ok   delete is a soft delete
+  ok   restricted seller cannot publish
+# seller-listings
+  ok   my-products lists only the caller listings
+  ok   my-products filters by status
+  ok   owner opens their hidden listing
+  ok   another user cannot open it
+  ok   public list narrows to one seller
+  ok   detail carries a seller summary without contact data
+  ok   listing of a suspended seller is not found
+# reviews
+  ok   cannot review before completion
+  ok   can review after completion
+  ok   someone else cannot review the order
+  ok   rating outside 1-5 rejected
+  ok   buyer reviews with evidence
+  ok   one review per order
+  ok   public rating statistics
+  ok   seller rating recalculated
+  ok   public review list
+  ok   my-reviews resolves before :reviewId
+  ok   only the author edits
+  ok   author edit recalculates the rating
+  ok   author removal hides the review and recalculates
+# reports
+  ok   listing report created
+  ok   unknown reason rejected
+  ok   short description rejected
+  ok   description over 1000 characters rejected
+  ok   own listing cannot be reported
+  ok   same listing cannot be reported twice
+  ok   self report rejected
+  ok   reporter reads the report
+  ok   reported user gets a view without the reporter
+  ok   unrelated user is refused
+  ok   users cannot list every report
+  ok   reporter lists own reports
+  ok   two open reports do not restrict yet
+  ok   third open report restricts the seller automatically
+# disputes
+  ok   evidence from elsewhere rejected
+  ok   seller cannot open a dispute
+  ok   buyer opens a dispute
+  ok   order moved to disputed
+  ok   one dispute per order
+  ok   unrelated user cannot read the dispute
+  ok   seller reads the dispute
+  ok   seller cannot respond before investigation
+  ok   seller responds during investigation
+  ok   buyer follow-up needs a note or a file
+  ok   buyer adds a note
+  ok   return confirmation only for return requests
+  ok   seller sees the dispute in their list
+  ok   conversation recorded for both sides
+# revenue
+  ok   revenue report over completed orders
+  ok   payout equals gross minus fee
+  ok   report grouped by month
+  ok   reversed range rejected
+  ok   users cannot read the revenue report
+# report-moderation
+  ok   keyword with regex characters is searched literally
+  ok   moderator lists pending reports with target statistics
+  ok   moderator opens a report
+  ok   users cannot use the moderator console
+  ok   dismissal cannot sanction
+  ok   warn_user resolves the report and counts a warning
+  ok   a processed report cannot be resolved again
+  ok   reporter and reported user were notified
+  ok   the report endpoint resolves through the same handler; remove_content removes the listing
+  ok   moderator restricts a user with a reason
+  ok   an admin cannot be sanctioned
+# order-review-moderation
+  ok   moderator lists paid orders
+  ok   order detail lists the allowed next statuses
+  ok   a jump outside the matrix is refused
+  ok   cancellation needs a note
+  ok   moderator cancellation refunds escrow to the buyer
+  ok   listing reopened after cancellation
+  ok   moderator completion pays the seller minus the fee
+  ok   force-cancel refunds a paid order
+  ok   a completed order cannot be force-cancelled
+  ok   only reviews below four stars wait for judgement
+  ok   bad review counted against the seller
+  ok   a review is judged once
+  ok   hiding a review recalculates the seller rating
+
+96 checks, 0 failed
+
+exit_code=0
