@@ -1,0 +1,23 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py gate project.yaml .project/evidence/TASK-009/run-01/report.json --task TASK-009 --source-hash 5e4015e8b91e83ae41d4fadff9438f58d664d5e4a0bc11a5b00fcb2af633e70b
+{
+  "status": "fail",
+  "task_id": "TASK-009",
+  "failures": [
+    "AC-NFR-SEC-09-2: confirmed criterion failure.",
+    "AC-NFR-SEC-09-2/behavioral_test: failed check."
+  ],
+  "blockers": [
+    "Applicable validated calibration is unavailable.",
+    "AC-PROD-02-1: criterion did not pass.",
+    "AC-PROD-02-1: finite measured confidence is unavailable.",
+    "AC-RPT-05-1: criterion did not pass.",
+    "AC-RPT-05-1: finite measured confidence is unavailable.",
+    "AC-NFR-SEC-09-1: criterion did not pass.",
+    "AC-NFR-SEC-09-1: finite measured confidence is unavailable.",
+    "AC-NFR-SEC-09-2: finite measured confidence is unavailable."
+  ],
+  "minimum_criterion_confidence": null,
+  "scope": "Supplied metadata only; independently verify artifacts, calibration, and dependency state."
+}
+
+exit_code=1

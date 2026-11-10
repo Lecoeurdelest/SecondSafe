@@ -1,0 +1,51 @@
+{
+  "task_id": "TASK-009",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "in_progress",
+  "detail": "Image and evidence uploads validated by extension and file signature; evidence is still served from the public uploads path (AC-NFR-SEC-09-2 not met)",
+  "sections": [
+    "upload"
+  ],
+  "complexity": [
+    "backend/src/common/middlewares/upload.middleware.js",
+    "backend/src/modules/products/upload.controller.js",
+    "backend/src/modules/products/upload.route.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Image and evidence uploads validated by extension and file signature; evidence is still served from the public uploads path (AC-NFR-SEC-09-2 not met)"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-PROD-02-1": {
+      "observed": "pass",
+      "note": "tests/upload.test.js (formats, five-file limit, 5 MB limit, random names); integration section upload",
+      "checks": {}
+    },
+    "AC-RPT-05-1": {
+      "observed": "pass",
+      "note": "tests/upload.test.js (evidence formats). The 100 MB and five-file limits are the same multer limits exercised at 5 MB for images; a 100 MB file was not uploaded",
+      "checks": {}
+    },
+    "AC-NFR-SEC-09-1": {
+      "observed": "pass",
+      "note": "tests/upload.test.js (content that does not match the extension is rejected and removed); integration section upload",
+      "checks": {}
+    },
+    "AC-NFR-SEC-09-2": {
+      "observed": "fail",
+      "note": "Not implemented: evidence files are stored under uploads/evidence and served by the public static route in app.js",
+      "checks": {}
+    }
+  }
+}

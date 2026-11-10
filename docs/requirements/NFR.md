@@ -79,8 +79,8 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-09-1` | Uploads are checked by file signature as well as extension and respect the size limits of each bucket. | behavioral test | [TASK-009](../task/TASK-009.md) `[]` |
-| `AC-NFR-SEC-09-2` | Dispute and report evidence is served only to the related parties, moderators and admins. | behavioral test | [TASK-009](../task/TASK-009.md) `[]` |
+| `AC-NFR-SEC-09-1` | Uploads are checked by file signature as well as extension and respect the size limits of each bucket. | behavioral test | [TASK-009](../task/TASK-009.md) `[!]` |
+| `AC-NFR-SEC-09-2` | Dispute and report evidence is served only to the related parties, moderators and admins. | behavioral test | [TASK-009](../task/TASK-009.md) `[!]` |
 
 ### NFR-SEC-10 — No account enumeration
 

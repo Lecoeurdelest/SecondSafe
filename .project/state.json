@@ -288,10 +288,26 @@
       }
     },
     "TASK-009": {
-      "execution": "todo",
+      "execution": "in_progress",
       "relevance": "current",
-      "detail": "Waiting for TASK-005",
-      "history": []
+      "detail": "Image and evidence uploads validated by extension and file signature; evidence is still served from the public uploads path (AC-NFR-SEC-09-2 not met)",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Image and evidence uploads validated by extension and file signature; evidence is still served from the public uploads path (AC-NFR-SEC-09-2 not met)"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-009/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-009.md",
+      "criteria": {
+        "AC-PROD-02-1": "inconclusive",
+        "AC-RPT-05-1": "inconclusive",
+        "AC-NFR-SEC-09-1": "inconclusive",
+        "AC-NFR-SEC-09-2": "fail"
+      }
     },
     "TASK-010": {
       "execution": "todo",
