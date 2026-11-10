@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-105 (proposed)
+**Current state:** `blocked` — Awaiting decision D-105 (proposed). A single approval flow for admins and moderators is implemented and evidenced for review
 
 ## Traceability
 

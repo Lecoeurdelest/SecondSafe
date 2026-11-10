@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-029",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "blocked",
+  "detail": "Awaiting decision D-105 (proposed). A single approval flow for admins and moderators is implemented and evidenced for review",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue",
+    "report-moderation",
+    "order-review-moderation",
+    "dispute-resolution",
+    "withdrawals"
+  ],
+  "complexity": [
+    "backend/src/modules/payments/withdrawal.service.js",
+    "backend/src/modules/moderator/moderator.service.js",
+    "backend/src/modules/moderator/moderator.controller.js"
+  ],
+  "flow": "AC-PAY-06-1 and AC-PAY-06-2. Inspected `approveWithdrawal`, `rejectWithdrawal` and `requirePendingWithdrawal` in `backend/src/modules/payments/withdrawal.service.js`, `approveWithdrawal` and `rejectWithdrawal` in `backend/src/modules/payments/wallet.controller.js`, and `updateWithdrawalStatus` in `backend/src/modules/moderator/moderator.service.js`. Both the admin routes under `/api/wallets/admin/withdrawals` and the moderator route `/api/moderator/withdrawals/:id/status` call the same service; no other code changes a withdrawal. Approval runs in `session.withTransaction`: the transaction is re-read as pending inside the session, the wallet balance is checked and reduced, and the withdrawal is completed with the balance before and after, so the debit and its ledger record commit together (INV-01). Rejection never reads the wallet. A request that is not pending is refused with 400 in both paths. Which role owns approval is decision D-105; the implementation follows its recommendation (admins and moderators) and is not accepted yet.",
+  "manual": null,
+  "history": [
+    [
+      "blocked",
+      "Implementation prepared for review in the task PR; the decision that blocks this task is still proposed"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-PAY-06-1": {
+      "observed": "not_observed",
+      "note": "flow-review.md shows one approval flow used by the admin routes and the moderator routes. The owning role depends on D-105, which is still proposed",
+      "checks": {
+        "static_flow": "inconclusive"
+      }
+    },
+    "AC-PAY-06-2": {
+      "observed": "pass",
+      "note": "tests/withdrawal.test.js and tests/moderator-withdrawals.test.js; flow-review.md; integration section withdrawals (debit once, repeated approval refused, rejection records the reason without a debit)",
+      "checks": {}
+    }
+  }
+}

@@ -499,14 +499,27 @@
     "TASK-029": {
       "execution": "blocked",
       "relevance": "current",
-      "detail": "Awaiting decision D-105 (proposed)",
+      "detail": "Awaiting decision D-105 (proposed). A single approval flow for admins and moderators is implemented and evidenced for review",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-105"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "blocked",
+          "note": "Implementation prepared for review in the task PR; the decision that blocks this task is still proposed"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-029/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-029.md",
+      "criteria": {
+        "AC-PAY-06-1": "inconclusive",
+        "AC-PAY-06-2": "inconclusive"
+      }
     },
     "TASK-030": {
       "execution": "todo",
