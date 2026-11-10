@@ -1,0 +1,18 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py gate project.yaml .project/evidence/TASK-064/run-01/report.json --task TASK-064 --source-hash 202fdc590212b589d837266f43290c4dcd966bcac3a91de38826b2c8808ea3ed
+{
+  "status": "inconclusive",
+  "task_id": "TASK-064",
+  "failures": [],
+  "blockers": [
+    "Applicable validated calibration is unavailable.",
+    "AC-WEB-11-1: criterion did not pass.",
+    "AC-WEB-11-1: analysis is incomplete.",
+    "AC-WEB-11-1: finite measured confidence is unavailable.",
+    "AC-WEB-11-1/behavioral_test: check did not pass.",
+    "AC-WEB-11-1/manual_review: check did not pass."
+  ],
+  "minimum_criterion_confidence": null,
+  "scope": "Supplied metadata only; independently verify artifacts, calibration, and dependency state."
+}
+
+exit_code=2

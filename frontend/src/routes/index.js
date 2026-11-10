@@ -34,6 +34,11 @@ const OrderPayment = lazy(() => import('../modules/order/OrderPayment'));
 const SEPayOrderSuccess = lazy(() => import('../modules/order/SEPayOrderSuccess'));
 const PurchaseRequests = lazy(() => import('../modules/order/PurchaseRequests'));
 const SellerOrders = lazy(() => import('../modules/order/SellerOrders'));
+const Wallet = lazy(() => import('../modules/wallet/Wallet'));
+const TopUp = lazy(() => import('../modules/wallet/TopUp'));
+const TopUpResult = lazy(() => import('../modules/wallet/TopUpResult'));
+const VNPaySuccess = lazy(() => import('../modules/wallet/VNPaySuccess'));
+const Withdrawal = lazy(() => import('../modules/wallet/Withdrawal'));
 
 function DashboardRoute({ role, children }) {
   const session = getSession();
@@ -61,6 +66,11 @@ export default function AppRoutes() {
       <Route path="/order-detail/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
       <Route path="/purchase-requests" element={<ProtectedRoute><PurchaseRequests /></ProtectedRoute>} />
       <Route path="/seller-orders" element={<ProtectedRoute><SellerOrders /></ProtectedRoute>} />
+      <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
+      <Route path="/wallet/topup" element={<ProtectedRoute><TopUp /></ProtectedRoute>} />
+      <Route path="/wallet/topup-success" element={<ProtectedRoute><VNPaySuccess /></ProtectedRoute>} />
+      <Route path="/wallet/topup-result" element={<ProtectedRoute><TopUpResult /></ProtectedRoute>} />
+      <Route path="/wallet/withdraw" element={<ProtectedRoute><Withdrawal /></ProtectedRoute>} />
       <Route path="/favorites" element={<Favorites />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

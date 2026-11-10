@@ -71,6 +71,7 @@ export default function App() {
               <Link to="/my-products">Tin của tôi</Link>
               <Link to="/orders">Đơn mua</Link>
               <Link to="/seller-orders">Đơn bán</Link>
+              <Link to="/wallet">Ví</Link>
             </>}
             {isAuthenticated && <>
               <Link to="/chat">Tin nhắn</Link>

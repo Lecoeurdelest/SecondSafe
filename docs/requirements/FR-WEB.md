@@ -88,7 +88,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-11-1` | Wallet balances and ledger entries come from the API; top-ups and withdrawals validate configured integer VND bounds and handle pending, failed and confirmed outcomes. | behavioral test, manual review | [TASK-064](../task/TASK-064.md) `[]` |
+| `AC-WEB-11-1` | Wallet balances and ledger entries come from the API; top-ups and withdrawals validate configured integer VND bounds and handle pending, failed and confirmed outcomes. | behavioral test, manual review | [TASK-064](../task/TASK-064.md) `[!]` |
 
 ### FR-WEB-12 — Web seller reviews and ratings
 
