@@ -141,7 +141,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-REL-03-1` | A failure on one record does not stop a job, and a lock ensures only one instance runs each job at a time. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[]` |
+| `AC-NFR-REL-03-1` | A failure on one record does not stop a job, and a lock ensures only one instance runs each job at a time. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[!]` |
 
 ### NFR-REL-04 — No critical state in process memory
 

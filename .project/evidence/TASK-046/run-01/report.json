@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-046",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "db4c149961795495b914da7d2a2fc8051bdade778257a1dc1f345340589789a9",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-SYS-01-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/order-jobs.test.js and tests/cron-service.test.js (every minute); flow-review.md; integration section jobs",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/complexity.txt",
+            ".project/evidence/TASK-046/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/jest.txt",
+            ".project/evidence/TASK-046/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-SYS-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/order-jobs.test.js and tests/cron-service.test.js (hourly, configured window, disputed orders skipped); flow-review.md; integration section jobs (seller paid once; second run releases nothing)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/complexity.txt",
+            ".project/evidence/TASK-046/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/jest.txt",
+            ".project/evidence/TASK-046/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-SYS-03-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/order-jobs.test.js and tests/cron-service.test.js; flow-review.md; integration section jobs (buyer refunded, order cancelled)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/complexity.txt",
+            ".project/evidence/TASK-046/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/jest.txt",
+            ".project/evidence/TASK-046/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-REL-03-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "not_observed",
+      "observation": "Per-record isolation is observed (tests/order-jobs.test.js). The lock is an in-process guard (tests/cron-service.test.js): it stops overlapping runs in one server process but not across several instances, which D-108 (proposed) leaves to a later shared store",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": false,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/complexity.txt",
+            ".project/evidence/TASK-046/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-046/run-01/jest.txt",
+            ".project/evidence/TASK-046/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

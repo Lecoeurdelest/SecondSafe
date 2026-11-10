@@ -10,7 +10,7 @@ Baseline: `cron.service.js startPaymentTimeoutCron`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-SYS-01-1` | A job running every minute cancels orders awaiting payment past their deadline and returns the listing to active. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[]` |
+| `AC-SYS-01-1` | A job running every minute cancels orders awaiting payment past their deadline and returns the listing to active. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[!]` |
 
 ### FR-SYS-02 — Complete delivered orders automatically
 
@@ -20,7 +20,7 @@ Baseline: `cron.service.js startAutoCompleteDeliveredCron`, `escrow.service.js g
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-SYS-02-1` | An hourly job completes delivered, undisputed orders older than the configured window (default 5 days) and releases escrow exactly once. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[]` |
+| `AC-SYS-02-1` | An hourly job completes delivered, undisputed orders older than the configured window (default 5 days) and releases escrow exactly once. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[!]` |
 
 ### FR-SYS-03 — Refund orders not shipped in time
 
@@ -30,7 +30,7 @@ Baseline: `cron.service.js startLateShippingRefundCron`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-SYS-03-1` | An hourly job refunds and cancels paid orders not shipped within the configured window (default 24 hours). | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[]` |
+| `AC-SYS-03-1` | An hourly job refunds and cancels paid orders not shipped within the configured window (default 24 hours). | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[!]` |
 
 ### FR-SYS-04 — Expire old listings
 

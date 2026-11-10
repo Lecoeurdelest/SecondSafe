@@ -1,0 +1,68 @@
+{
+  "task_id": "TASK-046",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Payment timeout, automatic completion and late-shipping refund jobs implemented with unit and real-MongoDB evidence; the job lock is per process; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue",
+    "report-moderation",
+    "order-review-moderation",
+    "dispute-resolution",
+    "withdrawals",
+    "jobs"
+  ],
+  "complexity": [
+    "backend/src/services/order-jobs.service.js",
+    "backend/src/services/cron.service.js"
+  ],
+  "flow": "AC-SYS-01-1, AC-SYS-02-1, AC-SYS-03-1, AC-NFR-REL-03-1. Inspected `cancelUnpaidOrders`, `cancelUnpaidOrder`, `completeDeliveredOrders`, `refundUnshippedOrders` and `forEachSafely` in `backend/src/services/order-jobs.service.js`, and `runJob`, `schedule` and `JOBS` in `backend/src/services/cron.service.js`. The timeout job selects orders awaiting payment past their deadline and cancels each with a filtered update (`status: awaiting_payment`), so a payment that lands at the same moment wins and the job skips the order; the listing returns to `active` only if it is still reserved. Completion selects delivered orders older than `autoCompletionWindowMs`, drops any that have a dispute, and calls `escrowService.releaseFunds(..., true)`, which pays the seller, completes the order and marks the listing sold in one transaction and refuses a hold that is no longer held. The refund job selects paid orders older than `shippingWindowMs` and calls `escrowService.refundFunds`. `forEachSafely` catches and logs each failure and continues. `runJob` skips a job that is still running and catches every error; this guard lives in process memory, so two server instances would each run the jobs. Payment deadlines now come from `PAYMENT_WINDOW_MS` instead of an inline three minutes.",
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Payment timeout, automatic completion and late-shipping refund jobs implemented with unit and real-MongoDB evidence; the job lock is per process; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-SYS-01-1": {
+      "observed": "pass",
+      "note": "tests/order-jobs.test.js and tests/cron-service.test.js (every minute); flow-review.md; integration section jobs",
+      "checks": {}
+    },
+    "AC-SYS-02-1": {
+      "observed": "pass",
+      "note": "tests/order-jobs.test.js and tests/cron-service.test.js (hourly, configured window, disputed orders skipped); flow-review.md; integration section jobs (seller paid once; second run releases nothing)",
+      "checks": {}
+    },
+    "AC-SYS-03-1": {
+      "observed": "pass",
+      "note": "tests/order-jobs.test.js and tests/cron-service.test.js; flow-review.md; integration section jobs (buyer refunded, order cancelled)",
+      "checks": {}
+    },
+    "AC-NFR-REL-03-1": {
+      "observed": "not_observed",
+      "note": "Per-record isolation is observed (tests/order-jobs.test.js). The lock is an in-process guard (tests/cron-service.test.js): it stops overlapping runs in one server process but not across several instances, which D-108 (proposed) leaves to a later shared store",
+      "checks": {
+        "behavioral_test": "inconclusive",
+        "static_flow": "inconclusive"
+      }
+    }
+  }
+}
