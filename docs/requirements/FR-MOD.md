@@ -65,9 +65,9 @@ Baseline: `GET /api/moderator/disputes`, `GET /api/moderator/disputes/:disputeId
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-06-1` | Disputes move pending to investigating to resolved, and moderators can post in the dispute conversation. | behavioral test | [TASK-042](../task/TASK-042.md) `[]` |
-| `AC-MOD-06-2` | Refund returns escrow to the buyer; release pays the seller, completes the order and marks the listing sold; a resolved dispute cannot be resolved again. | static flow review, behavioral test | [TASK-042](../task/TASK-042.md) `[]` |
-| `AC-MOD-06-3` | A party reaching 3 dispute violations receives a 30-day selling restriction. | behavioral test | [TASK-042](../task/TASK-042.md) `[]` |
+| `AC-MOD-06-1` | Disputes move pending to investigating to resolved, and moderators can post in the dispute conversation. | behavioral test | [TASK-042](../task/TASK-042.md) `[!]` |
+| `AC-MOD-06-2` | Refund returns escrow to the buyer; release pays the seller, completes the order and marks the listing sold; a resolved dispute cannot be resolved again. | static flow review, behavioral test | [TASK-042](../task/TASK-042.md) `[!]` |
+| `AC-MOD-06-3` | A party reaching 3 dispute violations receives a 30-day selling restriction. | behavioral test | [TASK-042](../task/TASK-042.md) `[!]` |
 
 ### FR-MOD-07 — Suspend a user
 

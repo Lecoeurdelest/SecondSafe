@@ -5,6 +5,7 @@ const User = require("../users/user.model");
 const Report = require("../reports/report.model");
 const Order = require("../orders/order.model");
 const Review = require("../reports/review.model");
+const Dispute = require("../reports/dispute.model");
 const reviewService = require("../reports/review.service");
 const reportService = require("../reports/report.service");
 const orderService = require("../orders/order.service");
@@ -782,6 +783,251 @@ async function markSellerGoodByReview(reviewId, moderatorId, note = '') {
   };
 }
 
+const DISPUTE_QUEUE_ORDER = ["pending", "investigating", "resolved"];
+
+function populateDisputes(query) {
+  return query
+    .populate("orderId", "agreedAmount totalToPay status")
+    .populate("buyerId", "fullName email avatar violationCount isSuspended isSellingRestricted sellingRestrictedUntil")
+    .populate("sellerId", "fullName email avatar violationCount isSuspended isSellingRestricted sellingRestrictedUntil")
+    .populate("productId", "title images")
+    .populate("moderatorId", "fullName email");
+}
+
+// The default queue shows pending, then investigating, then resolved, each newest first.
+async function pageDisputeQueue(skip, limit) {
+  const disputes = [];
+  let offset = skip;
+  for (const status of DISPUTE_QUEUE_ORDER) {
+    if (disputes.length >= limit) break;
+    const count = await Dispute.countDocuments({ status });
+    if (offset >= count) {
+      offset -= count;
+      continue;
+    }
+    const page = await populateDisputes(
+      Dispute.find({ status }).sort({ createdAt: -1 }).skip(offset).limit(limit - disputes.length)
+    );
+    disputes.push(...page);
+    offset = 0;
+  }
+  return disputes;
+}
+
+async function getDisputes(filters = {}, pagination = {}) {
+  const { page, limit, skip } = parsePagination(pagination);
+  const query = filters.status ? { status: filters.status } : {};
+  const [disputes, total] = await Promise.all([
+    filters.status
+      ? populateDisputes(Dispute.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit))
+      : pageDisputeQueue(skip, limit),
+    Dispute.countDocuments(query)
+  ]);
+
+  return {
+    disputes,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+}
+
+async function getDisputeById(disputeId) {
+  const dispute = await Dispute.findById(disputeId)
+    .populate("orderId", "agreedAmount totalToPay status paymentStatus")
+    .populate("buyerId", "fullName email avatar violationCount isSuspended isSellingRestricted sellingRestrictedUntil")
+    .populate("sellerId", "fullName email avatar violationCount isSuspended isSellingRestricted sellingRestrictedUntil")
+    .populate("productId", "title images price")
+    .populate("moderatorId", "fullName email")
+    .populate("moderatorUpdates.moderatorId", "fullName email")
+    .populate("disputeConversation.senderId", "fullName email avatar");
+
+  if (!dispute) {
+    throw new Error("Khiếu nại không tồn tại");
+  }
+
+  return dispute;
+}
+
+// Moderator gui cap nhat trong dispute: chi luu vao dien bien tranh chap + thong bao 2 ben.
+async function sendDisputeModeratorMessage(disputeId, moderatorId, content) {
+  const dispute = await Dispute.findById(disputeId);
+  if (!dispute) {
+    throw new Error('Khiếu nại không tồn tại');
+  }
+
+  const normalizedContent = String(content || '').trim();
+  if (!normalizedContent) {
+    throw new Error('Nội dung tin nhắn không được để trống');
+  }
+
+  dispute.moderatorUpdates = [
+    ...(dispute.moderatorUpdates || []),
+    {
+      moderatorId,
+      content: normalizedContent,
+      createdAt: new Date()
+    }
+  ];
+
+  dispute.disputeConversation = [
+    ...(dispute.disputeConversation || []),
+    {
+      senderRole: 'moderator',
+      senderId: moderatorId,
+      content: normalizedContent,
+      evidenceFiles: [],
+      createdAt: new Date()
+    }
+  ];
+  await dispute.save();
+
+  await Promise.all([
+    pushDisputeNotification(dispute.buyerId, 'Moderator có cập nhật mới', 'Moderator vừa gửi cập nhật mới trong khiếu nại. Vui lòng kiểm tra và phản hồi.', disputeId),
+    pushDisputeNotification(dispute.sellerId, 'Moderator có cập nhật mới', 'Moderator vừa gửi cập nhật mới trong khiếu nại. Vui lòng kiểm tra và phản hồi.', disputeId)
+  ]);
+
+  const updatedDispute = await getDisputeById(disputeId);
+
+  return {
+    message: {
+      type: 'moderator_update',
+      content: normalizedContent,
+      createdAt: new Date()
+    },
+    dispute: updatedDispute
+  };
+}
+
+async function increaseViolationAndMaybeSuspend(userId) {
+  const user = await User.findById(userId);
+  if (!user || user.role === "admin") return null;
+
+  user.violationCount = (user.violationCount || 0) + 1;
+  if (user.violationCount >= business.disputeRestrictionThreshold) {
+    await applySellingRestrictionToUser(user, {
+      durationMs: business.disputeRestrictionDurationMs,
+      reason: 'Tài khoản bị hạn chế quyền bán do vi phạm nhiều lần trong xử lý khiếu nại.',
+      source: 'dispute_violation'
+    });
+    return user;
+  }
+
+  await user.save();
+  return user;
+}
+
+// AC-MOD-06-2: refund returns the escrow hold to the buyer.
+async function refundDisputedOrder(orderId, escrowHold) {
+  if (escrowHold.status === "released") {
+    throw new Error("Tiền đã nhả cho người bán, không thể hoàn tiền cho người mua");
+  }
+  if (escrowHold.status === "held") {
+    await escrowService.refundFunds(orderId, "Tranh chấp đã xử lý: Hoàn tiền cho người mua");
+  }
+}
+
+// AC-MOD-06-2: release pays the seller, completes the order and marks the listing sold.
+async function releaseDisputedOrder(orderId, escrowHold) {
+  if (escrowHold.status === "refunded") {
+    throw new Error("Tiền đã hoàn cho người mua, không thể nhả lại cho người bán");
+  }
+  if (escrowHold.status === "held") {
+    await escrowService.releaseFunds(orderId, "Tranh chấp đã xử lý: Nhả tiền cho người bán", false);
+  }
+  await completeReleasedOrder(orderId);
+}
+
+const DISPUTE_SETTLEMENTS = { refund: refundDisputedOrder, release: releaseDisputedOrder };
+
+async function resolveDispute(disputeId, moderatorId, payload) {
+  const { resolution, moderatorNotes } = payload;
+  const dispute = await Dispute.findById(disputeId);
+  if (!dispute) {
+    throw new Error("Khiếu nại không tồn tại");
+  }
+  if (dispute.status === "resolved") {
+    throw new Error("Khiếu nại đã được xử lý trước đó");
+  }
+  // AC-MOD-06-1: a dispute is settled only after it has been investigated.
+  if (dispute.status !== "investigating") {
+    throw new Error("Cần chuyển khiếu nại sang trạng thái điều tra trước khi xử lý");
+  }
+  if (!DISPUTE_SETTLEMENTS[resolution]) {
+    throw new Error("Hướng xử lý khiếu nại không hợp lệ");
+  }
+
+  const orderId = dispute.orderId.toString();
+  const escrowHold = await EscrowHold.findOne({ orderId });
+  if (!escrowHold) {
+    throw new Error("Không tìm thấy tiền ký quỹ cho đơn hàng này");
+  }
+  await DISPUTE_SETTLEMENTS[resolution](orderId, escrowHold);
+
+  // AC-MOD-06-3: the party the decision goes against records a dispute violation.
+  await increaseViolationAndMaybeSuspend(resolution === "refund" ? dispute.sellerId : dispute.buyerId);
+
+  dispute.status = "resolved";
+  dispute.resolution = resolution;
+  dispute.moderatorNotes = moderatorNotes || "";
+  dispute.moderatorId = moderatorId;
+  dispute.resolvedAt = new Date();
+  await dispute.save();
+
+  return getDisputeById(disputeId);
+}
+
+async function pushDisputeNotification(userId, title, msg, disputeId) {
+  // Ham dung chung de day thong bao cap nhat tranh chap.
+  if (!userId) return;
+  await notificationService.createNotification(userId, {
+    type: 'dispute_update',
+    title,
+    message: msg,
+    disputeId
+  });
+}
+
+// Chuyen tranh chap sang "investigating" de mo pha dieu tra trung gian.
+async function markDisputeInvestigating(disputeId, moderatorId, note = "") {
+  const dispute = await Dispute.findById(disputeId);
+
+  if (!dispute) {
+    throw new Error("Khiếu nại không tồn tại");
+  }
+
+  if (dispute.status === "resolved") {
+    throw new Error("Khiếu nại đã được xử lý, không thể chuyển investigating");
+  }
+
+  dispute.status = "investigating";
+  dispute.moderatorId = moderatorId;
+  if (String(note || "").trim()) {
+    dispute.moderatorNotes = String(note).trim();
+  }
+
+  await dispute.save();
+
+  // Gui thong bao cho hai ben de cap nhat hanh dong tiep theo.
+  const isReturn = dispute.reason === 'return_request';
+  const buyerMsg = isReturn
+    ? 'Yêu cầu hoàn hàng của bạn đang được điều tra. Vui lòng gửi hàng lại cho người bán.'
+    : 'Khiếu nại của bạn đang được điều tra. Vui lòng cung cấp thêm bằng chứng nếu có.';
+  const sellerMsg = isReturn
+    ? 'Người mua yêu cầu hoàn hàng. Chuẩn bị nhận lại hàng và xác nhận khi đã nhận được.'
+    : 'Đơn hàng đang bị khiếu nại. Vui lòng cung cấp bằng chứng phản hồi trong hệ thống.';
+
+  await Promise.all([
+    pushDisputeNotification(dispute.buyerId, 'Tranh chấp đang điều tra', buyerMsg, disputeId),
+    pushDisputeNotification(dispute.sellerId, 'Tranh chấp đang điều tra', sellerMsg, disputeId)
+  ]);
+
+  return getDisputeById(disputeId);
+}
+
 function isValidObjectId(value) {
   return mongoose.Types.ObjectId.isValid(value);
 }
@@ -800,5 +1046,10 @@ module.exports = {
   getReviews,
   hideReview,
   markSellerBadByReview,
-  markSellerGoodByReview
+  markSellerGoodByReview,
+  getDisputes,
+  getDisputeById,
+  resolveDispute,
+  markDisputeInvestigating,
+  sendDisputeModeratorMessage
 };

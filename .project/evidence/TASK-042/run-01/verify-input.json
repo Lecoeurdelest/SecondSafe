@@ -1,0 +1,58 @@
+{
+  "task_id": "TASK-042",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Investigation, conversation, refund and release settlement and dispute violations implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue",
+    "report-moderation",
+    "order-review-moderation",
+    "dispute-resolution"
+  ],
+  "complexity": [
+    "backend/src/modules/moderator/moderator.service.js",
+    "backend/src/modules/moderator/moderator.controller.js"
+  ],
+  "flow": "AC-MOD-06-2. Inspected `resolveDispute`, `refundDisputedOrder`, `releaseDisputedOrder`, `completeReleasedOrder` and `increaseViolationAndMaybeSuspend` in `backend/src/modules/moderator/moderator.service.js`. A resolved dispute is refused first, then a dispute that is not under investigation, then a resolution other than `refund` or `release`, then a missing escrow hold; nothing has changed at that point. Refund calls `escrowService.refundFunds` when the hold is `held` and refuses when it was already released. Release calls `escrowService.releaseFunds` when the hold is `held`, refuses when it was already refunded, then completes the order and marks the listing sold. Only after the money step succeeds is the losing party's violation recorded and the dispute saved as `resolved`, so a failed settlement leaves the dispute open. The escrow service itself refuses a hold that is not `held`, which makes a repeated settlement harmless.",
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Investigation, conversation, refund and release settlement and dispute violations implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-MOD-06-1": {
+      "observed": "pass",
+      "note": "tests/dispute-resolution.test.js; integration section dispute-resolution (pending cannot be settled; investigating; message; resolved)",
+      "checks": {}
+    },
+    "AC-MOD-06-2": {
+      "observed": "pass",
+      "note": "tests/dispute-resolution.test.js; flow-review.md; integration section dispute-resolution (buyer refunded in full; seller paid minus the fee; order and listing states; second settlement refused)",
+      "checks": {}
+    },
+    "AC-MOD-06-3": {
+      "observed": "pass",
+      "note": "tests/dispute-resolution.test.js; integration section dispute-resolution (third violation restricts selling for 30 days)",
+      "checks": {}
+    }
+  }
+}

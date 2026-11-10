@@ -1,7 +1,7 @@
 ---
 id: TASK-042
 title: Dispute resolution
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-025, TASK-038]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-042 — Dispute resolution
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Investigation, conversation, refund and release settlement and dispute violations implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 
