@@ -41,6 +41,14 @@ async function categoryFilter(value) {
   return id ? { $or: [{ category: id }, { categories: id }] } : { $or: [] };
 }
 
+// Narrows the eligible sellers to one seller when a public profile asks for that seller's listings.
+async function sellerFilter(sellerId) {
+  const sellerIds = await getEligibleSellerIds();
+  if (sellerId === undefined || sellerId === '') return sellerIds;
+  if (typeof sellerId !== 'string' || !mongoose.Types.ObjectId.isValid(sellerId)) return [];
+  return sellerIds.filter(id => String(id) === sellerId);
+}
+
 async function listProducts(query = {}) {
   const { page, limit, skip } = pagination(query);
   const minPrice = parsePrice(query.minPrice, 'tối thiểu');
@@ -71,7 +79,7 @@ async function listProducts(query = {}) {
   const search = typeof query.search === 'string' ? query.search.trim() : '';
   if (search) productFilter.$text = { $search: search };
 
-  const sellerIds = await getEligibleSellerIds();
+  const sellerIds = await sellerFilter(query.seller);
   if (!sellerIds.length) return { products: [], total: 0, page, totalPages: 0, limit };
   productFilter.seller = { $in: sellerIds };
 
@@ -99,28 +107,29 @@ async function listProducts(query = {}) {
   };
 }
 
-async function getProductById(id) {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw Object.assign(new Error('Không tìm thấy sản phẩm'), { statusCode: 404 });
+async function findProduct(filter) {
+  return Product.findOne(filter)
+    .populate('category', 'name slug')
+    .populate('categories', 'name slug')
+    .populate('seller', 'fullName avatar rating')
+    .lean();
+}
+
+// The owner can open their own hidden or reserved listing; everyone else only sees active listings of eligible sellers.
+async function getProductById(id, viewerId) {
+  const notFound = Object.assign(new Error('Không tìm thấy sản phẩm'), { statusCode: 404 });
+  if (!mongoose.Types.ObjectId.isValid(id)) throw notFound;
+
+  if (viewerId) {
+    const own = await findProduct({ _id: id, seller: viewerId, status: { $ne: 'deleted' } });
+    if (own) return own;
   }
 
   const sellerIds = await getEligibleSellerIds();
-  if (!sellerIds.length) {
-    throw Object.assign(new Error('Không tìm thấy sản phẩm'), { statusCode: 404 });
-  }
-
-  const product = await Product.findOne({
-    _id: id,
-    status: 'active',
-    seller: { $in: sellerIds }
-  })
-    .populate('category', 'name slug')
-    .populate('seller', 'fullName avatar rating')
-    .lean();
-
-  if (!product) {
-    throw Object.assign(new Error('Không tìm thấy sản phẩm'), { statusCode: 404 });
-  }
+  const product = sellerIds.length
+    ? await findProduct({ _id: id, status: 'active', seller: { $in: sellerIds } })
+    : null;
+  if (!product) throw notFound;
   return product;
 }
 

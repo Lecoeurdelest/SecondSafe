@@ -412,10 +412,29 @@
       }
     },
     "TASK-019": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-018",
-      "history": []
+      "detail": "My-listings, owner detail view and the public seller filter implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "My-listings, owner detail view and the public seller filter implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-019/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-019.md",
+      "criteria": {
+        "AC-PROD-06-1": "inconclusive",
+        "AC-PROD-07-1": "inconclusive"
+      }
     },
     "TASK-020": {
       "execution": "todo",

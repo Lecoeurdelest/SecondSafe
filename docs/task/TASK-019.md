@@ -1,7 +1,7 @@
 ---
 id: TASK-019
 title: Listing detail and seller listings
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-018]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-019 — Listing detail and seller listings
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — My-listings, owner detail view and the public seller filter implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

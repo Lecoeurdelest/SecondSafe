@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-019",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "f5b1f582b70e6aa78c1332c46ffc36abe511aa0e77b89b91052bf5f8be138457",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-PROD-06-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/seller-listings.test.js (status filter, default 20, maximum 100); integration section seller-listings",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-019/run-01/jest.txt",
+            ".project/evidence/TASK-019/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PROD-07-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/seller-listings.test.js and tests/products.test.js (seller summary, 404 for a suspended or missing seller); integration section seller-listings",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-019/run-01/jest.txt",
+            ".project/evidence/TASK-019/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}
