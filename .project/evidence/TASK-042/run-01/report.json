@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-042",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "aebe8930d45abfd0e3eebc88e3d850e92030a4a847415ab0bc194c2b338be7db",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-MOD-06-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/dispute-resolution.test.js; integration section dispute-resolution (pending cannot be settled; investigating; message; resolved)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-042/run-01/jest.txt",
+            ".project/evidence/TASK-042/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-MOD-06-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/dispute-resolution.test.js; flow-review.md; integration section dispute-resolution (buyer refunded in full; seller paid minus the fee; order and listing states; second settlement refused)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-042/run-01/complexity.txt",
+            ".project/evidence/TASK-042/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-042/run-01/jest.txt",
+            ".project/evidence/TASK-042/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-MOD-06-3",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/dispute-resolution.test.js; integration section dispute-resolution (third violation restricts selling for 30 days)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-042/run-01/jest.txt",
+            ".project/evidence/TASK-042/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

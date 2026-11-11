@@ -1,0 +1,18 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py gate project.yaml .project/evidence/TASK-066/run-01/report.json --task TASK-066 --source-hash 1f329ba96897fc90e77cc066f8c9bbecb7fce8d60141aa6ce2ec2b78423bc15e
+{
+  "status": "fail",
+  "task_id": "TASK-066",
+  "failures": [
+    "AC-WEB-13-1: confirmed criterion failure.",
+    "AC-WEB-13-1/manual_review: failed check."
+  ],
+  "blockers": [
+    "Applicable validated calibration is unavailable.",
+    "AC-WEB-13-1: finite measured confidence is unavailable.",
+    "AC-WEB-13-1/behavioral_test: check did not pass."
+  ],
+  "minimum_criterion_confidence": null,
+  "scope": "Supplied metadata only; independently verify artifacts, calibration, and dependency state."
+}
+
+exit_code=1

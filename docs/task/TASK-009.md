@@ -1,7 +1,7 @@
 ---
 id: TASK-009
 title: Media upload pipeline
-execution_status: todo
+execution_status: in_progress
 relevance: current
 depends_on: [TASK-005]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-009 — Media upload pipeline
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `in_progress` — Image and evidence uploads validated by extension and file signature; evidence is still served from the public uploads path (AC-NFR-SEC-09-2 not met)
 
 ## Traceability
 

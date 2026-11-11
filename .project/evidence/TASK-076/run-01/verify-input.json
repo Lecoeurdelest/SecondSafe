@@ -1,0 +1,37 @@
+{
+  "task_id": "TASK-076",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-10 in Chrome against a local API and a disposable MongoDB, on the combined working tree before it was split into task branches. After the payment window of a quick-buy order passed, the order list showed \"Thanh toán dang dở\" above it with the listing, the amount, a buy-again link and a dismiss button; the admin dashboard showed the recovery panel. The cart placement and the resume-payment link were covered by the App test, not in the browser.",
+  "history": [
+    [
+      "in_progress",
+      "Implement the abandoned checkout request"
+    ],
+    [
+      "verifying",
+      "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": {
+    "AC-WEB-21-1": {
+      "observed": "pass",
+      "note": "App tests \"the cart page offers the buyer their unfinished checkouts and lets them dismiss one\" and \"staff dashboards show the abandoned checkout recovery summary\" pass; the other dashboard tests run with a failing summary request and still render",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

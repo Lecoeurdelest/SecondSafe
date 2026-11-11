@@ -1,7 +1,7 @@
 ---
 id: TASK-063
 title: Web order lists, payment and fulfilment
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-062, TASK-032, TASK-033, TASK-034, TASK-035]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-063 — Web order lists, payment and fulfilment
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser
 
 ## Traceability
 

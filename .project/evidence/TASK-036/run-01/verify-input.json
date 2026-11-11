@@ -1,0 +1,68 @@
+{
+  "task_id": "TASK-036",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Review creation, lists, statistics, edit and removal implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews"
+  ],
+  "complexity": [
+    "backend/src/modules/reports/review.service.js",
+    "backend/src/modules/reports/review.controller.js",
+    "backend/src/modules/reports/review.route.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Review creation, lists, statistics, edit and removal implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-REV-01-1": {
+      "observed": "pass",
+      "note": "tests/reviews.test.js (buyer of a completed order, once, rating and comment bounds, evidence count and origin); integration section reviews",
+      "checks": {}
+    },
+    "AC-REV-01-2": {
+      "observed": "pass",
+      "note": "tests/reviews.test.js; integration section reviews (before and after completion)",
+      "checks": {}
+    },
+    "AC-REV-02-1": {
+      "observed": "pass",
+      "note": "integration section reviews (public list and star distribution without a session)",
+      "checks": {}
+    },
+    "AC-REV-03-1": {
+      "observed": "pass",
+      "note": "tests/reviews.test.js; integration section reviews (author only; removal hides)",
+      "checks": {}
+    },
+    "AC-REV-04-1": {
+      "observed": "pass",
+      "note": "integration section reviews (my-reviews resolves before :reviewId)",
+      "checks": {}
+    },
+    "AC-REV-05-1": {
+      "observed": "pass",
+      "note": "integration section reviews (rating and count after create, edit and removal). Recalculation after a moderator hides a review is delivered with TASK-041",
+      "checks": {}
+    }
+  }
+}

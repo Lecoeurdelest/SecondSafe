@@ -1,0 +1,75 @@
+{
+  "task_id": "TASK-075",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Payment reminder, abandonment tracking, cart reminder, reconciliation and the buyer and staff endpoints implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue",
+    "report-moderation",
+    "order-review-moderation",
+    "dispute-resolution",
+    "withdrawals",
+    "jobs",
+    "abandoned-checkout"
+  ],
+  "complexity": [
+    "backend/src/modules/orders/abandoned-checkout.service.js",
+    "backend/src/modules/orders/abandoned-checkout.controller.js",
+    "backend/src/modules/orders/abandoned-checkout.route.js",
+    "backend/src/modules/orders/abandoned-checkout.model.js",
+    "backend/src/services/order-jobs.service.js",
+    "backend/src/services/cron.service.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement the abandoned checkout request"
+    ],
+    [
+      "verifying",
+      "Payment reminder, abandonment tracking, cart reminder, reconciliation and the buyer and staff endpoints implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-ORD-13-1": {
+      "observed": "pass",
+      "note": "tests/abandoned-checkout.test.js (one reminder inside the lead time); tests/cron-service.test.js (every 30 seconds); integration section abandoned-checkout",
+      "checks": {}
+    },
+    "AC-ORD-13-2": {
+      "observed": "pass",
+      "note": "tests/abandoned-checkout.test.js and tests/order-jobs.test.js; integration section abandoned-checkout (open checkout, buy-again action, both notifications)",
+      "checks": {}
+    },
+    "AC-ORD-13-3": {
+      "observed": "pass",
+      "note": "tests/abandoned-checkout.test.js; integration section abandoned-checkout (fresh item ignored, old item reminded once)",
+      "checks": {}
+    },
+    "AC-ORD-13-4": {
+      "observed": "pass",
+      "note": "tests/abandoned-checkout.test.js (recovered, listing gone, cart emptied, lifetime passed); integration section abandoned-checkout (bought again; cart item removed)",
+      "checks": {}
+    },
+    "AC-ORD-13-5": {
+      "observed": "pass",
+      "note": "tests/abandoned-checkout.test.js; integration section abandoned-checkout (other buyer sees nothing and cannot dismiss; summary and list refuse users)",
+      "checks": {}
+    }
+  }
+}

@@ -1,0 +1,19 @@
+Command: npm test -- --watchAll=false --runInBand
+
+> secondsafe-frontend@1.0.0 test
+> react-scripts test --watchAll=false --runInBand
+
+PASS src/App.test.jsx
+PASS src/modules/chat/Chat.test.jsx
+PASS src/modules/support/Support.test.jsx
+PASS src/services/api.test.js
+PASS src/modules/assistant/Assistant.test.jsx
+PASS src/utils/imageHelper.test.js
+
+Test Suites: 6 passed, 6 total
+Tests:       48 passed, 48 total
+Snapshots:   0 total
+Time:        1.46 s, estimated 2 s
+Ran all test suites.
+
+exit_code=0

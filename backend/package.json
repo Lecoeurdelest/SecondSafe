@@ -17,7 +17,10 @@
     "seed:verify": "node verify-seed-data.js",
     "db:indexes": "node create-indexes.js",
     "create-admin": "node create-admin.js",
-    "db:migrate": "node migrate-data-consistency.js"
+    "db:migrate": "node migrate-data-consistency.js",
+    "create:platform-accounts": "node create-platform-accounts.js",
+    "import:demo-data": "node import-demo-dashboard-data.js",
+    "create:demo-accounts": "node create-demo-accounts.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -27,15 +30,23 @@
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.0.0",
-    "nodemailer": "^10.0.16"
+    "multer": "^2.0.2",
+    "nodemailer": "^10.2.1",
+    "sepay-pg-node": "^1.0.0",
+    "socket.io": "^4.8.4",
+    "firebase-admin": "^13.7.0"
   },
   "devDependencies": {
     "jest": "^30.2.0",
     "nodemon": "^3.0.1",
+    "socket.io-client": "^4.8.1",
     "supertest": "^7.2.2"
   },
   "jest": {
     "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/tests/setup-env.js"
+    ],
     "testMatch": [
       "**/tests/**/*.test.js"
     ]

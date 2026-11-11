@@ -1,0 +1,19 @@
+Command: npm ls --depth=0   (npm 10.9.2, same directory)
+secondsafe-frontend@1.0.0 /private/var/folders/m5/t5pwwfy96h9f6jnh8k5rn4mw0000gn/T/tmppsjhwfbn
+├── @ant-design/icons@6.3.4
+├── @testing-library/jest-dom@6.9.1
+├── @testing-library/react@16.3.3
+├── @testing-library/user-event@14.6.7
+├── antd@6.6.8
+├── axios@1.20.0
+├── dayjs@1.11.23
+├── firebase@12.19.0
+├── react-dom@18.3.1
+├── react-router-dom@6.30.6
+├── react-scripts@5.0.1
+├── react@18.3.1
+├── recharts@3.10.1
+└── socket.io-client@4.8.1
+
+
+exit_code=0

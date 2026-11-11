@@ -34,7 +34,8 @@
       "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/98"
     },
     "TASK-009": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/10"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/10",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/112"
     },
     "TASK-010": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/11"
@@ -62,10 +63,12 @@
       "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/97"
     },
     "TASK-018": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/19"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/19",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/113"
     },
     "TASK-019": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/20"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/20",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/114"
     },
     "TASK-020": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/21"
@@ -95,7 +98,8 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/29"
     },
     "TASK-029": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/30"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/30",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/122"
     },
     "TASK-030": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/31"
@@ -116,25 +120,32 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/36"
     },
     "TASK-036": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/37"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/37",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/115"
     },
     "TASK-037": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/38"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/38",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/116"
     },
     "TASK-038": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/39"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/39",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/117"
     },
     "TASK-039": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/40"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/40",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/118"
     },
     "TASK-040": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/41"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/41",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/119"
     },
     "TASK-041": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/42"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/42",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/120"
     },
     "TASK-042": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/43"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/43",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/121"
     },
     "TASK-043": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/44"
@@ -146,10 +157,12 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/46"
     },
     "TASK-046": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/47"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/47",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/123"
     },
     "TASK-047": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/48"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/48",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/140"
     },
     "TASK-048": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/49"
@@ -170,7 +183,8 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/54",
       "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/88",
       "supporting_prs": [
-        "https://github.com/Lecoeurdelest/SecondSafe/pull/99"
+        "https://github.com/Lecoeurdelest/SecondSafe/pull/99",
+        "https://github.com/Lecoeurdelest/SecondSafe/pull/103"
       ]
     },
     "TASK-054": {
@@ -191,10 +205,12 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/58"
     },
     "TASK-058": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/59"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/59",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/127"
     },
     "TASK-059": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/60"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/60",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/128"
     },
     "TASK-060": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/61"
@@ -203,40 +219,58 @@
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/62"
     },
     "TASK-062": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/63"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/63",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/129"
     },
     "TASK-063": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/64"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/64",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/132"
     },
     "TASK-064": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/65"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/65",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/133"
     },
     "TASK-065": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/66"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/66",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/130"
     },
     "TASK-066": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/67"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/67",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/131"
     },
     "TASK-067": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/68"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/68",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/134"
     },
     "TASK-068": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/69"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/69",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/135"
     },
     "TASK-069": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/70"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/70",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/136"
     },
     "TASK-070": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/71"
     },
     "TASK-071": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/72"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/72",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/137"
     },
     "TASK-072": {
-      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/73"
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/73",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/138"
     },
     "TASK-073": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/74"
+    },
+    "TASK-075": {
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/124",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/126"
+    },
+    "TASK-076": {
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/125",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/139"
     }
   }
 }

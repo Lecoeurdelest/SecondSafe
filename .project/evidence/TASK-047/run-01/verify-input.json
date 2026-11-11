@@ -1,0 +1,50 @@
+{
+  "task_id": "TASK-047",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "blocked",
+  "detail": "Awaiting decision D-107 (proposed). A daily 03:00 job that soft-expires old listings is implemented and evidenced for review",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue",
+    "report-moderation",
+    "order-review-moderation",
+    "dispute-resolution",
+    "withdrawals",
+    "jobs",
+    "abandoned-checkout",
+    "listing-expiry"
+  ],
+  "complexity": [
+    "backend/src/services/order-jobs.service.js",
+    "backend/src/services/cron.service.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "blocked",
+      "Implementation prepared for review in the task PR; the decision that blocks this task is still proposed"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-SYS-04-1": {
+      "observed": "not_observed",
+      "note": "The job runs daily at 03:00 local time on listings older than the configured age (tests/cron-service.test.js, tests/order-jobs.test.js, integration section listing-expiry). It sets status expired, the recommended option of D-107, which is still proposed; the open PR #103 proposes the baseline deletion instead",
+      "checks": {
+        "behavioral_test": "inconclusive"
+      }
+    }
+  }
+}

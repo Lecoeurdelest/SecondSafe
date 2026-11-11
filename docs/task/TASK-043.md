@@ -1,8 +1,8 @@
 ---
 id: TASK-043
 title: Partial refunds in disputes
-execution_status: blocked
-relevance: current
+execution_status: todo
+relevance: retired
 depends_on: [TASK-042]
 supersedes: []
 superseded_by: null
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-106 (proposed)
+**Current state:** `todo` — Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund enum under D-003; do not add split settlement.
 
 ## Traceability
 
@@ -21,7 +21,7 @@ superseded_by: null
 | Requirements | [FR-MOD-10](../requirements/FR-MOD.md#fr-mod-10--partial-refund-in-dispute-resolution) |
 | Acceptance criteria | `AC-MOD-10-1` |
 | Components | `CMP-MODERATION`, `CMP-WALLET` |
-| Decisions | `D-106` (proposed) |
+| Decisions | `D-106` (accepted), `D-012` (accepted) |
 | Milestone | M4 Trust and moderation |
 | Baseline references | — |
 

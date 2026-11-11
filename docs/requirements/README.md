@@ -12,7 +12,7 @@ IDs come from the Project Tracking workbook (BASE-TRACKING) and are never renumb
 | [FR-BROW.md](FR-BROW.md) | Browse and search | 3 | 3 |
 | [FR-FAV.md](FR-FAV.md) | Favorites | 2 | 2 |
 | [FR-CHAT.md](FR-CHAT.md) | Chat and negotiation | 5 | 10 |
-| [FR-ORD.md](FR-ORD.md) | Orders | 12 | 26 |
+| [FR-ORD.md](FR-ORD.md) | Orders | 13 | 31 |
 | [FR-PAY.md](FR-PAY.md) | Wallet, payments and escrow | 7 | 11 |
 | [FR-SHIP.md](FR-SHIP.md) | Delivery | 3 | 3 |
 | [FR-REV.md](FR-REV.md) | Reviews | 5 | 6 |
@@ -22,5 +22,5 @@ IDs come from the Project Tracking workbook (BASE-TRACKING) and are never renumb
 | [FR-MOD.md](FR-MOD.md) | Moderation | 10 | 17 |
 | [FR-ADM.md](FR-ADM.md) | Administration | 8 | 8 |
 | [FR-SYS.md](FR-SYS.md) | Scheduled jobs and data operations | 6 | 8 |
-| [FR-WEB.md](FR-WEB.md) | Web client migration | 20 | 20 |
+| [FR-WEB.md](FR-WEB.md) | Web client migration | 21 | 21 |
 | [NFR.md](NFR.md) | Quality requirements | 39 | 58 |

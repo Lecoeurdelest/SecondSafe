@@ -1,0 +1,75 @@
+.abandoned-checkouts {
+  margin: 24px auto 0;
+  padding: 16px;
+  border: 1px solid #f5c26b;
+  border-radius: 12px;
+  background: #fffaf0;
+}
+
+.abandoned-checkouts h2 {
+  margin: 0 0 12px;
+  font-size: 1.125rem;
+}
+
+.abandoned-checkouts__error {
+  color: #b42318;
+}
+
+.abandoned-checkouts__list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.abandoned-checkouts__item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.abandoned-checkouts__item img {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.abandoned-checkouts__body {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.abandoned-checkouts__body p {
+  margin: 4px 0 0;
+  color: #555;
+  font-size: 0.875rem;
+}
+
+.abandoned-checkouts__body strong {
+  display: block;
+}
+
+.abandoned-checkouts__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.abandoned-checkouts__primary {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #1f6feb;
+  color: #fff;
+  text-decoration: none;
+}
+
+.abandoned-checkouts__actions button {
+  padding: 8px 12px;
+  border: 1px solid #c9c9c9;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}

@@ -8,6 +8,7 @@ Generated from the Mongoose schemas by `tools/pdd/schema-dump.js` and `tools/pdd
 | [Message](#message) | `messages` | `backend/src/modules/chat/message.model.js` | 10 | 5 |
 | [Delivery](#delivery) | `deliveries` | `backend/src/modules/delivery/delivery.model.js` | 18 | 3 |
 | [Notification](#notification) | `notifications` | `backend/src/modules/notifications/notification.model.js` | 15 | 4 |
+| [AbandonedCheckout](#abandonedcheckout) | `abandonedcheckouts` | `backend/src/modules/orders/abandoned-checkout.model.js` | 16 | 5 |
 | [Order](#order) | `orders` | `backend/src/modules/orders/order.model.js` | 29 | 9 |
 | [PurchaseRequest](#purchaserequest) | `purchaserequests` | `backend/src/modules/orders/purchase-request.model.js` | 13 | 8 |
 | [EscrowHold](#escrowhold) | `escrowholds` | `backend/src/modules/payments/escrow-hold.model.js` | 13 | 3 |
@@ -18,6 +19,9 @@ Generated from the Mongoose schemas by `tools/pdd/schema-dump.js` and `tools/pdd
 | [Dispute](#dispute) | `disputes` | `backend/src/modules/reports/dispute.model.js` | 26 | 4 |
 | [Report](#report) | `reports` | `backend/src/modules/reports/report.model.js` | 18 | 6 |
 | [Review](#review) | `reviews` | `backend/src/modules/reports/review.model.js` | 19 | 6 |
+| [SupportConversation](#supportconversation) | `supportconversations` | `backend/src/modules/support/support-conversation.model.js` | 11 | 6 |
+| [SupportMessage](#supportmessage) | `supportmessages` | `backend/src/modules/support/support-message.model.js` | 9 | 4 |
+| [CartItem](#cartitem) | `cartitems` | `backend/src/modules/users/cart-item.model.js` | 4 | 3 |
 | [Favorite](#favorite) | `favorites` | `backend/src/modules/users/favorite.model.js` | 4 | 3 |
 | [User](#user) | `users` | `backend/src/modules/users/user.model.js` | 29 | 1 |
 
@@ -132,6 +136,37 @@ Collection `notifications` · `backend/src/modules/notifications/notification.mo
 | `{"recipientId": 1, "isRead": 1, "createdAt": -1}` | — |
 | `{"recipientId": 1, "type": 1}` | — |
 | `{"recipientId": 1, "productId": 1, "createdAt": -1}` | — |
+
+## AbandonedCheckout
+
+Collection `abandonedcheckouts` · `backend/src/modules/orders/abandoned-checkout.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `buyerId` | ObjectId | yes | ref → `User` |
+| `sellerId` | ObjectId |  | ref → `User` |
+| `productId` | ObjectId | yes | ref → `Product` |
+| `orderId` | ObjectId |  | ref → `Order` |
+| `source` | String | yes | enum: `order`, `cart` |
+| `status` | String | yes | enum: `at_risk`, `open`, `recovered`, `dismissed`, `expired`; default `"open"` |
+| `amount` | Number | yes | min 0 |
+| `abandonedAt` | Date |  |  |
+| `remindedAt` | Date |  |  |
+| `reminderCount` | Number |  | min 0; default `0` |
+| `recoveredAt` | Date |  |  |
+| `recoveredOrderId` | ObjectId |  | ref → `Order` |
+| `expiresAt` | Date |  |  |
+| `_id` | ObjectId |  |  |
+| `createdAt` | Date |  |  |
+| `updatedAt` | Date |  |  |
+
+| Index | Options |
+|---|---|
+| `{"buyerId": 1}` | — |
+| `{"orderId": 1}` | unique: true, partialFilterExpression: {"orderId": {"$exists": true}} |
+| `{"buyerId": 1, "productId": 1, "source": 1, "createdAt": -1}` | — |
+| `{"status": 1, "expiresAt": 1}` | — |
+| `{"createdAt": -1}` | — |
 
 ## Order
 
@@ -461,6 +496,73 @@ Collection `reviews` · `backend/src/modules/reports/review.model.js`
 | `{"reviewedUserId": 1, "status": 1, "createdAt": -1}` | — |
 | `{"reviewerId": 1, "createdAt": -1}` | — |
 | `{"rating": 1}` | — |
+
+## SupportConversation
+
+Collection `supportconversations` · `backend/src/modules/support/support-conversation.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `customerId` | ObjectId | yes | ref → `User` |
+| `assignedStaffId` | ObjectId |  | ref → `User`; default `null` |
+| `subject` | String | yes | maxlength 120 |
+| `status` | String |  | enum: `open`, `closed`; default `"open"` |
+| `lastMessage` | String |  | maxlength 4000 |
+| `lastMessageAt` | Date |  |  |
+| `customerUnreadCount` | Number |  | min 0; default `0` |
+| `staffUnreadCount` | Number |  | min 0; default `0` |
+| `_id` | ObjectId |  |  |
+| `createdAt` | Date |  |  |
+| `updatedAt` | Date |  |  |
+
+| Index | Options |
+|---|---|
+| `{"customerId": 1}` | — |
+| `{"assignedStaffId": 1}` | — |
+| `{"status": 1}` | — |
+| `{"lastMessageAt": 1}` | — |
+| `{"status": 1, "lastMessageAt": -1}` | — |
+| `{"customerId": 1, "lastMessageAt": -1}` | — |
+
+## SupportMessage
+
+Collection `supportmessages` · `backend/src/modules/support/support-message.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `conversationId` | ObjectId | yes | ref → `SupportConversation` |
+| `senderId` | ObjectId | yes | ref → `User` |
+| `senderRole` | String | yes | enum: `user`, `moderator`, `admin` |
+| `content` | String | yes | maxlength 6000 |
+| `isRead` | Boolean |  | default `false` |
+| `readAt` | Date |  |  |
+| `_id` | ObjectId |  |  |
+| `createdAt` | Date |  |  |
+| `updatedAt` | Date |  |  |
+
+| Index | Options |
+|---|---|
+| `{"conversationId": 1}` | — |
+| `{"senderId": 1}` | — |
+| `{"isRead": 1}` | — |
+| `{"conversationId": 1, "createdAt": -1}` | — |
+
+## CartItem
+
+Collection `cartitems` · `backend/src/modules/users/cart-item.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `user` | ObjectId | yes | ref → `User` |
+| `product` | ObjectId | yes | ref → `Product` |
+| `createdAt` | Date |  |  |
+| `_id` | ObjectId |  |  |
+
+| Index | Options |
+|---|---|
+| `{"user": 1}` | — |
+| `{"product": 1}` | — |
+| `{"user": 1, "product": 1}` | unique: true |
 
 ## Favorite
 

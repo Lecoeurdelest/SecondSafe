@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-053",
+  "spec_hash": "2bc2a21a100788b56065c16f37689ca23f2c36caf238a9c8aaf3ce46c9f9a204",
+  "source_hash": "1b6363b5c0f5ca50cef96e991fd22412632ee77a14aaefa698a879c9ad0aa6f4",
+  "outcome": "pass",
+  "completion_policy": "Manual documentation completion on original baseline inspection, preservation checks and structural checks; no domain confidence claim",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "applicable": false
+  },
+  "criteria": [
+    {
+      "id": "AC-MIG-01-1",
+      "status": "pass",
+      "confidence": null,
+      "confidence_reason": "Documentation scope; no domain calibration applies",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "document_check",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-053/run-06-baseline-parity/source-review.json",
+            ".project/evidence/TASK-053/run-06-baseline-parity/backend.txt",
+            ".project/evidence/TASK-053/run-06-baseline-parity/validate.json",
+            ".project/evidence/TASK-053/run-06-baseline-parity/preservation.txt.gz",
+            ".project/evidence/TASK-053/run-06-baseline-parity/task-status.json.gz",
+            ".project/evidence/TASK-053/run-06-baseline-parity/migration.txt",
+            ".project/evidence/TASK-053/run-06-baseline-parity/render.txt",
+            ".project/evidence/TASK-053/run-06-baseline-parity/commands.json",
+            ".project/evidence/TASK-053/run-06-baseline-parity/source-manifest.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

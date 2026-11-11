@@ -12,6 +12,9 @@ async function requestUser(req) {
   if (!user || !['user', 'moderator', 'admin'].includes(user.role)) {
     throw Object.assign(new Error('Thông tin xác thực không hợp lệ'), { statusCode: 401 });
   }
+  if (user.role !== 'admin' && user.isSuspended && (!user.suspendedUntil || new Date(user.suspendedUntil) > new Date())) {
+    throw Object.assign(new Error('Tài khoản đang bị khóa'), { statusCode: 403 });
+  }
   return {
     userId: user._id, email: user.email, fullName: user.fullName, role: user.role,
     isSellingRestricted: Boolean(user.isSellingRestricted), sellingRestrictedUntil: user.sellingRestrictedUntil || null

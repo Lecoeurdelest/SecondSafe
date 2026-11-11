@@ -1,7 +1,7 @@
 ---
 id: TASK-046
 title: Order lifecycle jobs
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-025, TASK-033]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-046 — Order lifecycle jobs
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Payment timeout, automatic completion and late-shipping refund jobs implemented with unit and real-MongoDB evidence; the job lock is per process; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

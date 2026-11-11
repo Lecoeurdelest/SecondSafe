@@ -40,7 +40,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-05-1` | Sellers create and edit validated listings with permitted images and structured locations; reserved or sold listings and restricted sellers cannot perform forbidden operations. | behavioral test, manual review | [TASK-058](../task/TASK-058.md) `[]` |
+| `AC-WEB-05-1` | Sellers create and edit validated listings with permitted images and structured locations; reserved or sold listings and restricted sellers cannot perform forbidden operations. | behavioral test, manual review | [TASK-058](../task/TASK-058.md) `[!]` |
 
 ### FR-WEB-06 — Web listing detail and favorites
 
@@ -48,7 +48,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-06-1` | Listing details link to the seller and allowed purchase/chat actions; authenticated users add and remove favorites with consistent visible state and missing-listing handling. | behavioral test, manual review | [TASK-059](../task/TASK-059.md) `[]` |
+| `AC-WEB-06-1` | Listing details link to the seller and allowed purchase/chat actions; authenticated users add and remove favorites with consistent visible state and missing-listing handling. | behavioral test, manual review | [TASK-059](../task/TASK-059.md) `[!]` |
 
 ### FR-WEB-07 — Web notification inbox
 
@@ -72,7 +72,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-09-1` | Buyers create purchase requests or quick buys and sellers accept or reject them; integer VND totals and unavailable listings are handled without duplicate submission. | behavioral test, manual review | [TASK-062](../task/TASK-062.md) `[]` |
+| `AC-WEB-09-1` | Buyers create purchase requests or quick buys and sellers accept or reject them; integer VND totals and unavailable listings are handled without duplicate submission. | behavioral test, manual review | [TASK-062](../task/TASK-062.md) `[!]` |
 
 ### FR-WEB-10 — Web order lists, payment and fulfilment
 
@@ -80,7 +80,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-10-1` | Order parties see only their orders and allowed lifecycle actions; payment results are confirmed through the API; shipping, cancellation and receipt states refresh correctly. | behavioral test, manual review | [TASK-063](../task/TASK-063.md) `[]` |
+| `AC-WEB-10-1` | Order parties see only their orders and allowed lifecycle actions; payment results are confirmed through the API; shipping, cancellation and receipt states refresh correctly. | behavioral test, manual review | [TASK-063](../task/TASK-063.md) `[!]` |
 
 ### FR-WEB-11 — Web wallet, top-up and withdrawal
 
@@ -88,7 +88,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-11-1` | Wallet balances and ledger entries come from the API; top-ups and withdrawals validate configured integer VND bounds and handle pending, failed and confirmed outcomes. | behavioral test, manual review | [TASK-064](../task/TASK-064.md) `[]` |
+| `AC-WEB-11-1` | Wallet balances and ledger entries come from the API; top-ups and withdrawals validate configured integer VND bounds and handle pending, failed and confirmed outcomes. | behavioral test, manual review | [TASK-064](../task/TASK-064.md) `[!]` |
 
 ### FR-WEB-12 — Web seller reviews and ratings
 
@@ -96,7 +96,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-12-1` | Only an eligible completed-order buyer can submit a review; public ratings and paginated reviews render with optional evidence and duplicate/error handling. | behavioral test, manual review | [TASK-065](../task/TASK-065.md) `[]` |
+| `AC-WEB-12-1` | Only an eligible completed-order buyer can submit a review; public ratings and paginated reviews render with optional evidence and duplicate/error handling. | behavioral test, manual review | [TASK-065](../task/TASK-065.md) `[!]` |
 
 ### FR-WEB-13 — Web violation reports and disputes
 
@@ -104,7 +104,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-13-1` | Users submit validated reports and eligible order disputes, upload private evidence and view authorized case state; server denials remain visible and private assets are not exposed publicly. | behavioral test, manual review | [TASK-066](../task/TASK-066.md) `[]` |
+| `AC-WEB-13-1` | Users submit validated reports and eligible order disputes, upload private evidence and view authorized case state; server denials remain visible and private assets are not exposed publicly. | behavioral test, manual review | [TASK-066](../task/TASK-066.md) `[!]` |
 
 ### FR-WEB-14 — Web moderator shell, dashboard and profile
 
@@ -112,7 +112,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-14-1` | Moderator and admin roles can navigate the responsive console and load dashboard/profile data; regular users cannot enter and locked moderators are denied. | behavioral test, manual review | [TASK-067](../task/TASK-067.md) `[]` |
+| `AC-WEB-14-1` | Moderator and admin roles can navigate the responsive console and load dashboard/profile data; regular users cannot enter and locked moderators are denied. | behavioral test, manual review | [TASK-067](../task/TASK-067.md) `[!]` |
 
 ### FR-WEB-15 — Web moderator report, order and review queues
 
@@ -120,7 +120,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-15-1` | Staff search and paginate report/order/review queues, inspect authorized details and execute only server-permitted sanctions or lifecycle actions with validation and refreshed results. | behavioral test, manual review | [TASK-068](../task/TASK-068.md) `[]` |
+| `AC-WEB-15-1` | Staff search and paginate report/order/review queues, inspect authorized details and execute only server-permitted sanctions or lifecycle actions with validation and refreshed results. | behavioral test, manual review | [TASK-068](../task/TASK-068.md) `[!]` |
 
 ### FR-WEB-16 — Web moderator disputes and withdrawals
 
@@ -128,7 +128,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-16-1` | Staff inspect dispute evidence and resolve cases or approve/reject withdrawals through the shared API; repeat submissions and server failures do not fabricate success. | behavioral test, manual review | [TASK-069](../task/TASK-069.md) `[]` |
+| `AC-WEB-16-1` | Staff inspect dispute evidence and resolve cases or approve/reject withdrawals through the shared API; repeat submissions and server failures do not fabricate success. | behavioral test, manual review | [TASK-069](../task/TASK-069.md) `[!]` |
 
 ### FR-WEB-17 — Web admin shell, dashboard and user management
 
@@ -144,7 +144,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-18-1` | Admin queues and detail pages use paginated authorized APIs and show valid action results and failures without bypassing lifecycle or sanction rules. | behavioral test, manual review | [TASK-071](../task/TASK-071.md) `[]` |
+| `AC-WEB-18-1` | Admin queues and detail pages use paginated authorized APIs and show valid action results and failures without bypassing lifecycle or sanction rules. | behavioral test, manual review | [TASK-071](../task/TASK-071.md) `[!]` |
 
 ### FR-WEB-19 — Web admin disputes, withdrawals and revenue
 
@@ -152,7 +152,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-19-1` | Admin dispute settlement, withdrawal approval and revenue views use the shared backend flows and accurate integer VND totals with visible pending and failure states. | behavioral test, manual review | [TASK-072](../task/TASK-072.md) `[]` |
+| `AC-WEB-19-1` | Admin dispute settlement, withdrawal approval and revenue views use the shared backend flows and accurate integer VND totals with visible pending and failure states. | behavioral test, manual review | [TASK-072](../task/TASK-072.md) `[!]` |
 
 ### FR-WEB-20 — Full-stack migration integration and release checks
 
@@ -161,3 +161,11 @@ Risk: `critical` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-20-1` | A disposable replica-set environment passes buyer/seller/staff end-to-end journeys, existing backend criteria, frontend tests/build and privacy checks; every task PR and new commit has the sole authorized author; remaining provider credentials and manual sandbox checks are explicitly reported. | behavioral test, manual review | [TASK-073](../task/TASK-073.md) `[]` |
+
+### FR-WEB-21 — Web abandoned checkout recovery
+
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 13. Checkout recovery amendment (2026-11-10)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-WEB-21-1` | Buyers see their unfinished checkouts above the order list and the cart with resume-payment, buy-again and dismiss actions; admin and staff dashboards show the recovery summary; a failed summary or list request never hides the page it sits on. | behavioral test, manual review | [TASK-076](../task/TASK-076.md) `[!]` |

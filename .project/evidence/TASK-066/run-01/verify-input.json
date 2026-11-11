@@ -1,0 +1,33 @@
+{
+  "task_id": "TASK-066",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "frontend",
+  "execution": "in_progress",
+  "detail": "Report dialog and dispute form wired and building; uploaded evidence is still publicly reachable, so the privacy part of AC-WEB-13-1 is not met",
+  "sections": null,
+  "complexity": null,
+  "flow": null,
+  "manual": "Not observed in a browser beyond the \"report this listing\" button appearing on the listing detail for a non-owner.",
+  "history": [
+    [
+      "in_progress",
+      "Report dialog and dispute form wired and building; uploaded evidence is still publicly reachable, so the privacy part of AC-WEB-13-1 is not met"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": {
+    "AC-WEB-13-1": {
+      "observed": "fail",
+      "note": "No automated test. Evidence files are still served from a public path (TASK-009), so \"private assets are not exposed publicly\" is not met",
+      "checks": {
+        "behavioral_test": "inconclusive",
+        "manual_review": "fail"
+      }
+    }
+  }
+}

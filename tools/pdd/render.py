@@ -32,7 +32,8 @@ MILESTONES = [('M0', 'Scaffold', 1, 2), ('M1', 'Platform and identity', 3, 16), 
               ('M3', 'Money and orders', 24, 36), ('M4', 'Trust and moderation', 37, 43),
               ('M5', 'Administration and operations', 44, 52),
               ('M6', 'Migration control', 53, 53), ('M7', 'Web client', 54, 72),
-              ('M8', 'Full-stack integration', 73, 73)]
+              ('M8', 'Full-stack integration', 73, 73),
+              ('M9', 'Checkout recovery', 75, 76)]
 FR_GROUPS = OrderedDict([
     ('AUTH', 'Identity and access'), ('PROF', 'Profiles'), ('PROD', 'Listings'), ('BROW', 'Browse and search'),
     ('FAV', 'Favorites'), ('CHAT', 'Chat and negotiation'), ('ORD', 'Orders'), ('PAY', 'Wallet, payments and escrow'),
@@ -195,7 +196,7 @@ def render_task_spec(model, state, task):
              f"supersedes: [{', '.join(record.get('supersedes', []))}]", f"superseded_by: {record.get('superseded_by') or 'null'}", '---', '']
     lines = front + [f"# {task['id']} — {task['title']}", '',
                      '> Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.', '']
-    if record['execution'] != 'todo' and record.get('detail'):
+    if record.get('detail') and (record['execution'] != 'todo' or record.get('relevance') != 'current'):
         lines += [f"**Current state:** `{record['execution']}` — {record['detail']}", '']
     lines += ['## Traceability', '', '| Field | Value |', '|---|---|',
               '| Requirements | ' + ', '.join(f"[{r}](../requirements/{requirement_file(r)}#{anchor(model, r)})" for r in task['requirement_ids']) + ' |',

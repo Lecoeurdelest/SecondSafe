@@ -1,0 +1,71 @@
+{
+  "task_id": "TASK-018",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Create, edit, soft delete and visibility implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing"
+  ],
+  "complexity": [
+    "backend/src/modules/products/product-management.service.js",
+    "backend/src/modules/products/product.controller.js",
+    "backend/src/modules/products/product.route.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Create, edit, soft delete and visibility implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-PROD-01-1": {
+      "observed": "pass",
+      "note": "tests/listing-management.test.js (each required field and bound); integration section listing",
+      "checks": {}
+    },
+    "AC-PROD-01-2": {
+      "observed": "pass",
+      "note": "tests/listing-management.test.js (101 characters rejected, 100 accepted)",
+      "checks": {}
+    },
+    "AC-PROD-01-3": {
+      "observed": "pass",
+      "note": "tests/listing-management.test.js; integration section listing (restricted seller receives 403)",
+      "checks": {}
+    },
+    "AC-PROD-01-4": {
+      "observed": "pass",
+      "note": "tests/listing-management.test.js; integration section listing (status active, caller-supplied status ignored)",
+      "checks": {}
+    },
+    "AC-PROD-03-1": {
+      "observed": "pass",
+      "note": "tests/listing-management.test.js (owner only; sold, reserved and order-linked listings read-only); integration section listing",
+      "checks": {}
+    },
+    "AC-PROD-04-1": {
+      "observed": "pass",
+      "note": "tests/listing-management.test.js; integration section listing (document kept with status deleted)",
+      "checks": {}
+    },
+    "AC-PROD-05-1": {
+      "observed": "pass",
+      "note": "tests/listing-management.test.js (toggle, restricted seller cannot re-activate, sold/reserved/deleted refused)",
+      "checks": {}
+    }
+  }
+}

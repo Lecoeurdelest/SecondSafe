@@ -1,0 +1,8 @@
+{
+  "status": "valid",
+  "errors": [],
+  "warnings": [
+    "TASK-001: decision D-002 is not accepted.",
+    "FR-SYS-05: no task mapping; confirm explicit deferral or ownership."
+  ]
+}

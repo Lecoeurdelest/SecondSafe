@@ -26,10 +26,13 @@ function createMailer({ env = process.env, transport, timeoutMs = 10000 } = {}) 
     let timer;
     try {
       sender ||= nodemailer.createTransport(smtpOptions(env, timeoutMs));
+      const expiry = lifetimeMs
+        ? `Hiệu lực: ${Math.ceil(lifetimeMs / 60000)} phút. Không chia sẻ mã này với bất kỳ ai.`
+        : 'Hãy đổi mật khẩu ngay sau khi đăng nhập và không chia sẻ với bất kỳ ai.';
       const mail = {
         from: { name: 'SecondSafe', address: env.SMTP_USER || env.EMAIL_USER }, to, subject,
-        text: `${title}\n${description}\n${code}\nHiệu lực: ${Math.ceil(lifetimeMs / 60000)} phút. Không chia sẻ mã này với bất kỳ ai.`,
-        html: `<h2>${escapeHtml(title)}</h2><p>${escapeHtml(description)}</p><p><strong>${escapeHtml(code)}</strong></p><p>Hiệu lực: ${Math.ceil(lifetimeMs / 60000)} phút. Không chia sẻ mã này với bất kỳ ai.</p>`
+        text: `${title}\n${description}\n${code}\n${expiry}`,
+        html: `<h2>${escapeHtml(title)}</h2><p>${escapeHtml(description)}</p><p><strong>${escapeHtml(code)}</strong></p><p>${expiry}</p>`
       };
       const deadline = new Promise((resolve, reject) => { timer = setTimeout(() => reject(deliveryError()), timeoutMs); });
       const result = await Promise.race([sender.sendMail(mail), deadline]);
@@ -43,6 +46,7 @@ function createMailer({ env = process.env, transport, timeoutMs = 10000 } = {}) 
   }
 
   return {
+    sendTempPasswordEmail: (to, code) => sendCode(to, code, { subject: 'Mật khẩu tạm thời', title: 'Khôi phục tài khoản', description: 'Sử dụng mật khẩu dưới đây để đăng nhập và đổi mật khẩu.' }),
     sendRegisterOtpEmail: (to, code) => sendCode(to, code, { subject: 'Mã xác thực đăng ký tài khoản', title: 'Xác thực tài khoản', description: 'Sử dụng mã dưới đây để hoàn tất đăng ký SecondSafe.', lifetimeMs: business.otpTtlMs }),
     sendLogin2faOtpEmail: (to, code) => sendCode(to, code, { subject: 'Mã xác thực đăng nhập 2FA', title: 'Xác thực đăng nhập', description: 'Sử dụng mã dưới đây để hoàn tất đăng nhập SecondSafe.', lifetimeMs: business.otpTtlMs }),
     sendRecoveryEmail: (to, code) => sendCode(to, code, { subject: 'Khôi phục mật khẩu SecondSafe', title: 'Khôi phục mật khẩu', description: 'Sử dụng mã khôi phục dưới đây để đặt mật khẩu mới.', lifetimeMs: business.resetCredentialTtlMs })

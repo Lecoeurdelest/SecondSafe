@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-037",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "8313da0cbe636b31310550dfdc2351cfeae07fe218d0df32375627a65e82d8a6",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-RPT-01-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reports.test.js; integration section reports (reason list, 10 and 1000 character bounds, optional evidence)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-037/run-01/jest.txt",
+            ".project/evidence/TASK-037/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-RPT-01-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reports.test.js; integration section reports",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-037/run-01/jest.txt",
+            ".project/evidence/TASK-037/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-RPT-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reports.test.js; integration section reports",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-037/run-01/jest.txt",
+            ".project/evidence/TASK-037/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-RPT-03-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reports.test.js; integration section reports",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-037/run-01/jest.txt",
+            ".project/evidence/TASK-037/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-RPT-03-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reports.test.js; integration section reports (reporter and staff full view, reported user without reporter identity, others 403)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-037/run-01/jest.txt",
+            ".project/evidence/TASK-037/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-RPT-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/reports.test.js; integration section reports (third open report restricts; admins never)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-037/run-01/jest.txt",
+            ".project/evidence/TASK-037/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

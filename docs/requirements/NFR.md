@@ -55,7 +55,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-NFR-SEC-06-1` | Webhook secrets are never logged and are accepted only from headers. | static flow review | [TASK-026](../task/TASK-026.md) `[]` |
-| `AC-NFR-SEC-06-2` | VNPay responses are accepted only with a valid signature. | behavioral test | [TASK-027](../task/TASK-027.md) `[!]` |
+| `AC-NFR-SEC-06-2` | VNPay responses are accepted only with a valid signature. | behavioral test | [TASK-027](../task/TASK-027.md) `[]` |
 
 ### NFR-SEC-07 — Chat encryption at rest
 
@@ -79,8 +79,8 @@ Risk: `standard` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-SEC-09-1` | Uploads are checked by file signature as well as extension and respect the size limits of each bucket. | behavioral test | [TASK-009](../task/TASK-009.md) `[]` |
-| `AC-NFR-SEC-09-2` | Dispute and report evidence is served only to the related parties, moderators and admins. | behavioral test | [TASK-009](../task/TASK-009.md) `[]` |
+| `AC-NFR-SEC-09-1` | Uploads are checked by file signature as well as extension and respect the size limits of each bucket. | behavioral test | [TASK-009](../task/TASK-009.md) `[!]` |
+| `AC-NFR-SEC-09-2` | Dispute and report evidence is served only to the related parties, moderators and admins. | behavioral test | [TASK-009](../task/TASK-009.md) `[!]` |
 
 ### NFR-SEC-10 — No account enumeration
 
@@ -141,7 +141,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-REL-03-1` | A failure on one record does not stop a job, and a lock ensures only one instance runs each job at a time. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[]` |
+| `AC-NFR-REL-03-1` | A failure on one record does not stop a job, and a lock ensures only one instance runs each job at a time. | static flow review, behavioral test | [TASK-046](../task/TASK-046.md) `[!]` |
 
 ### NFR-REL-04 — No critical state in process memory
 

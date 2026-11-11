@@ -1,4 +1,5 @@
 const logger = require('../../common/utils/logger.util');
+const business = require('../../config/business');
 const Order = require('./order.model');
 const PurchaseRequest = require('./purchase-request.model');
 const Product = require('../products/product.model');
@@ -133,7 +134,7 @@ async function createPurchaseRequest(buyerId, listingId, message, agreedPrice) {
         paymentStatus: 'unpaid',
         confirmedBySeller: true,
         confirmedBySellerAt: new Date(),
-      paymentDeadline: new Date(Date.now() + 3 * 60 * 1000), // 3 minutes
+      paymentDeadline: new Date(Date.now() + business.paymentWindowMs),
         shippingRecipientName: String(buyer.fullName || '').trim(),
         shippingPhone: buyerPhone,
         shippingAddress: buyerAddress
@@ -395,7 +396,7 @@ async function acceptPurchaseRequest(requestId, sellerId) {
       confirmedBySellerAt: skipSellerConfirmation ? new Date() : null,
       paymentStatus: 'unpaid',
       paymentDeadline: skipSellerConfirmation
-        ? new Date(Date.now() + 3 * 60 * 1000) // 3 minutes — only start timer if buyer-initiated (skips seller confirm)
+        ? new Date(Date.now() + business.paymentWindowMs) // only start the timer if buyer-initiated (skips seller confirm)
         : null, // Will be set when seller confirms
       shippingRecipientName: String(buyer.fullName || '').trim(),
       shippingPhone: buyerPhone,
@@ -1021,47 +1022,64 @@ async function getAllOrders(filters = {}, pagination = {}) {
   };
 }
 
+// Tells both parties about a staff cancellation; a delivery failure never undoes the cancellation.
+async function notifyForceCancelled(order, moderatorId, reason) {
+  try {
+    const product = order.productId ? await Product.findById(order.productId, 'title') : null;
+    const payload = {
+      type: 'system',
+      orderId: order._id,
+      senderId: moderatorId,
+      title: 'Đơn hàng đã bị hủy',
+      message: `Đơn hàng ${product?.title ? `"${product.title}" ` : ''}đã bị hủy bởi quản trị viên. Lý do: ${reason}`
+    };
+    await Promise.all([
+      notificationService.createNotification(order.buyerId, payload),
+      notificationService.createNotification(order.sellerId, payload)
+    ]);
+  } catch (notificationError) {
+    logger.error('Error sending force-cancel notifications:', notificationError);
+  }
+}
+
 /**
  * Ép hủy đơn hàng (Dành cho Moderator/Admin)
  * Chú ý: Có sử dụng Transaction để đảm bảo tính toàn vẹn dữ liệu tiền bạc
  */
 async function forceCancelOrder(orderId, moderatorId, reason) {
-  // Bắt đầu một session để đảm bảo nếu lỗi thì rollback lại toàn bộ
+  const existing = await Order.findById(orderId);
+  if (!existing) {
+    throw new Error('Đơn hàng không tồn tại');
+  }
+  if (existing.status === 'completed') {
+    throw new Error('Không thể hủy đơn hàng đã hoàn thành');
+  }
+  if (existing.status === 'cancelled') {
+    throw new Error('Đơn hàng đã ở trạng thái hủy');
+  }
+
+  if (existing.paymentStatus === 'paid') {
+    // The refund cancels the order and reopens the listing inside its own transaction (INV-01),
+    // so it must not run inside a second transaction that writes the same documents.
+    const escrowService = require('../payments/escrow.service');
+    await escrowService.refundFunds(orderId, `Hủy bởi quản trị viên. Lý do: ${reason}`);
+    const refunded = await Order.findById(orderId);
+    await notifyForceCancelled(refunded, moderatorId, reason);
+    return refunded;
+  }
+
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
     const order = await Order.findById(orderId).session(session);
-
-    if (!order) {
-      throw new Error('Đơn hàng không tồn tại');
+    if (!order || ['completed', 'cancelled'].includes(order.status) || order.paymentStatus === 'paid') {
+      throw new Error('Đơn hàng vừa thay đổi trạng thái, vui lòng thử lại');
     }
 
-    // Không thể hủy đơn đã hoàn thành hoặc đã hủy
-    if (order.status === 'completed' || order.status === 'cancelled') {
-      if (order.status === 'completed') {
-        throw new Error('Không thể hủy đơn hàng đã hoàn thành');
-      }
-      throw new Error('Đơn hàng đã ở trạng thái hủy');
-    }
-
-    // QUAN TRỌNG: Nếu đơn hàng ĐÃ THANH TOÁN (Tiền đang nằm trong Escrow)
-    // Thì phải hoàn tiền lại cho người mua (Buyer)
-    if (order.paymentStatus === 'paid') {
-      const escrowService = require('../payments/escrow.service');
-      await escrowService.refundFunds(
-        orderId,
-        `Hủy bởi quản trị viên. Lý do: ${reason}`
-      );
-    }
-
-    // Cập nhật trạng thái đơn thành "Đã hủy"
     order.status = 'cancelled';
-    
-    // Nếu Model Order của bạn có trường ghi chú hủy đơn thì lưu lại
-    if (order.schema.paths.cancelReason !== undefined) {
-      order.cancelReason = reason;
-    }
+    order.cancelledAt = new Date();
+    order.cancellationReason = reason;
 
     if (order.productId) {
       const product = await Product.findById(order.productId).session(session);
@@ -1072,34 +1090,11 @@ async function forceCancelOrder(orderId, moderatorId, reason) {
     }
 
     await order.save({ session });
-    
+
     // Lưu thành công toàn bộ thay đổi
     await session.commitTransaction();
 
-    try {
-      const product = order.productId
-        ? await Product.findById(order.productId, 'title')
-        : null;
-
-      await Promise.all([
-        notificationService.createNotification(order.buyerId, {
-          type: 'system',
-          orderId: order._id,
-          senderId: moderatorId,
-          title: 'Đơn hàng đã bị hủy',
-          message: `Đơn hàng ${product?.title ? `"${product.title}" ` : ''}đã bị hủy bởi quản trị viên. Lý do: ${reason}`
-        }),
-        notificationService.createNotification(order.sellerId, {
-          type: 'system',
-          orderId: order._id,
-          senderId: moderatorId,
-          title: 'Đơn hàng đã bị hủy',
-          message: `Đơn hàng ${product?.title ? `"${product.title}" ` : ''}đã bị hủy bởi quản trị viên. Lý do: ${reason}`
-        })
-      ]);
-    } catch (notificationError) {
-      logger.error('Error sending force-cancel notifications:', notificationError);
-    }
+    await notifyForceCancelled(order, moderatorId, reason);
 
     return order;
   } catch (error) {
@@ -1135,7 +1130,7 @@ async function confirmOrderBySeller(orderId, sellerId) {
   order.status = 'awaiting_payment';
   order.confirmedBySeller = true;
   order.confirmedBySellerAt = new Date();
-  order.paymentDeadline = new Date(Date.now() + 3 * 60 * 1000); // Start 3-min timer NOW when seller confirms
+  order.paymentDeadline = new Date(Date.now() + business.paymentWindowMs); // the payment window starts when the seller confirms
   await order.save();
 
   try {

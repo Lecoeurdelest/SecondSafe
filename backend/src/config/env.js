@@ -11,8 +11,8 @@ const config = {
     expiresIn: business.jwtTtlSeconds,
   },
   chat: {
-    // Uu tien khoa rieng cho chat; fallback JWT_SECRET de khong vo moi truong cu.
-    encryptionKey: process.env.CHAT_ENCRYPTION_KEY || process.env.JWT_SECRET,
+    // Khoa rieng bat buoc cho chat (NFR-SEC-07): khong dung chung JWT_SECRET.
+    encryptionKey: process.env.CHAT_ENCRYPTION_KEY,
   },
   server: {
     port: process.env.PORT || 5000,
@@ -24,7 +24,7 @@ const config = {
 
 // Kiem tra cac bien moi truong bat buoc
 const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
-const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+const missingEnvVars = requiredEnvVars.filter(envVar => !String(process.env[envVar] || '').trim());
 
 if (missingEnvVars.length > 0) {
   logger.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);

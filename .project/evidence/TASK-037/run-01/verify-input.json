@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-037",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Report creation, own-report list, redacted detail and automatic restriction implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports"
+  ],
+  "complexity": [
+    "backend/src/modules/reports/report.service.js",
+    "backend/src/modules/reports/report.controller.js",
+    "backend/src/modules/reports/report.route.js",
+    "backend/src/common/utils/service-error.util.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Report creation, own-report list, redacted detail and automatic restriction implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-RPT-01-1": {
+      "observed": "pass",
+      "note": "tests/reports.test.js; integration section reports (reason list, 10 and 1000 character bounds, optional evidence)",
+      "checks": {}
+    },
+    "AC-RPT-01-2": {
+      "observed": "pass",
+      "note": "tests/reports.test.js; integration section reports",
+      "checks": {}
+    },
+    "AC-RPT-02-1": {
+      "observed": "pass",
+      "note": "tests/reports.test.js; integration section reports",
+      "checks": {}
+    },
+    "AC-RPT-03-1": {
+      "observed": "pass",
+      "note": "tests/reports.test.js; integration section reports",
+      "checks": {}
+    },
+    "AC-RPT-03-2": {
+      "observed": "pass",
+      "note": "tests/reports.test.js; integration section reports (reporter and staff full view, reported user without reporter identity, others 403)",
+      "checks": {}
+    },
+    "AC-RPT-04-1": {
+      "observed": "pass",
+      "note": "tests/reports.test.js; integration section reports (third open report restricts; admins never)",
+      "checks": {}
+    }
+  }
+}

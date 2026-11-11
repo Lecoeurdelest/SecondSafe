@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-009",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "5e4015e8b91e83ae41d4fadff9438f58d664d5e4a0bc11a5b00fcb2af633e70b",
+  "outcome": "fail",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-PROD-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/upload.test.js (formats, five-file limit, 5 MB limit, random names); integration section upload",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-009/run-01/jest.txt",
+            ".project/evidence/TASK-009/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-RPT-05-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/upload.test.js (evidence formats). The 100 MB and five-file limits are the same multer limits exercised at 5 MB for images; a 100 MB file was not uploaded",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-009/run-01/jest.txt",
+            ".project/evidence/TASK-009/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-SEC-09-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/upload.test.js (content that does not match the extension is rejected and removed); integration section upload",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-009/run-01/jest.txt",
+            ".project/evidence/TASK-009/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-NFR-SEC-09-2",
+      "status": "fail",
+      "observed_behavioral_status": "fail",
+      "observation": "Not implemented: evidence files are stored under uploads/evidence and served by the public static route in app.js",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "fail",
+          "artifacts": [
+            ".project/evidence/TASK-009/run-01/jest.txt",
+            ".project/evidence/TASK-009/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

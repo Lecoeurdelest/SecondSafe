@@ -66,6 +66,17 @@ test('role guards reject missing authentication state', async () => {
   expect((await request(app()).get('/unguarded-role')).status).toBe(401);
 });
 
+test.each([
+  ['user', null, 403],
+  ['user', new Date(Date.now() + 60000), 403],
+  ['user', new Date(Date.now() - 60000), 200],
+  ['admin', null, 200]
+])('suspension is enforced for %s until %s', async (role, suspendedUntil, status) => {
+  lean.mockResolvedValue({ _id: userId, role, isSuspended: true, suspendedUntil });
+  const result = await request(app()).get('/protected').set('Authorization', `Bearer ${generateJWT({ userId })}`);
+  expect(result.status).toBe(status);
+});
+
 test('JWT expiry, signature, algorithm and subject are enforced', () => {
   expect(() => verifyToken(generateJWT({ userId }, -1))).toThrow('Token đã hết hạn');
   expect(() => verifyToken(jwt.sign({ userId }, 'wrong-secret'))).toThrow('Token không hợp lệ');

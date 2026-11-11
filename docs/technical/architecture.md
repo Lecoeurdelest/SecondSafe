@@ -52,9 +52,12 @@ tools/                plan-driven-development (submodule), pdd render helpers
 | `/api` (reports, disputes) | modules/reports/report.route.js |
 | `/api/users` | modules/users/user.route.js |
 | `/api/delivery` | modules/delivery/delivery.route.js |
+| `/api/cart` | modules/users/cart.route.js |
 | `/api/favorites` | modules/users/favorite.route.js |
 | `/api/moderator` | modules/moderator/moderator.route.js |
 | `/api/notifications` | modules/notifications/notification.route.js |
+
+Cart entries are stored per user and listing in the additive `CartItem` collection, with a unique `(user, product)` index. No legacy-data migration is needed; create the index with `npm run db:indexes` when deploying the backend update.
 
 Route order matters. Literal paths (`/all`, `/my-reviews`, `/my-disputes`) are declared before parameterised paths; the baseline got this wrong (DEF-01, DEF-02).
 

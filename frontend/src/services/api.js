@@ -29,7 +29,11 @@ export function createApiClient({ storage = browserStorage(), onUnauthorized, ad
   client.interceptors.response.use(response => response, error => {
     if (axios.isCancel(error)) return Promise.reject(error);
     if (error.response?.status === 401 && !error.config?.url?.startsWith('/auth/')) {
-      try { storage.removeItem('token'); } catch { /* Storage can be unavailable in private browsing. */ }
+      try {
+        storage.removeItem('token');
+        storage.removeItem('secondsafe:role');
+        storage.removeItem('user');
+      } catch { /* Storage can be unavailable in private browsing. */ }
       expired();
     }
     const failure = new Error(errorMessage(error));

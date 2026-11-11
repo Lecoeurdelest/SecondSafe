@@ -288,10 +288,26 @@
       }
     },
     "TASK-009": {
-      "execution": "todo",
+      "execution": "in_progress",
       "relevance": "current",
-      "detail": "Waiting for TASK-005",
-      "history": []
+      "detail": "Image and evidence uploads validated by extension and file signature; evidence is still served from the public uploads path (AC-NFR-SEC-09-2 not met)",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Image and evidence uploads validated by extension and file signature; evidence is still served from the public uploads path (AC-NFR-SEC-09-2 not met)"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-009/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-009.md",
+      "criteria": {
+        "AC-PROD-02-1": "inconclusive",
+        "AC-RPT-05-1": "inconclusive",
+        "AC-NFR-SEC-09-1": "inconclusive",
+        "AC-NFR-SEC-09-2": "fail"
+      }
     },
     "TASK-010": {
       "execution": "todo",
@@ -324,16 +340,23 @@
       "history": []
     },
     "TASK-015": {
-      "execution": "blocked",
-      "relevance": "current",
-      "detail": "Awaiting decision D-101 (proposed)",
+      "execution": "todo",
+      "relevance": "retired",
+      "detail": "Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor setting. Preserve dormant compatibility code and schemas; do not add a new opt-in feature.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-101"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "retired",
+          "note": "Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor setting. Preserve dormant compatibility code and schemas; do not add a new opt-in feature."
         }
-      ]
+      ],
+      "retirement_decision": "D-012"
     },
     "TASK-016": {
       "execution": "todo",
@@ -366,16 +389,59 @@
       }
     },
     "TASK-018": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-006, TASK-009, TASK-017",
-      "history": []
+      "detail": "Create, edit, soft delete and visibility implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Create, edit, soft delete and visibility implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-018/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-018.md",
+      "criteria": {
+        "AC-PROD-01-1": "inconclusive",
+        "AC-PROD-01-2": "inconclusive",
+        "AC-PROD-01-3": "inconclusive",
+        "AC-PROD-01-4": "inconclusive",
+        "AC-PROD-03-1": "inconclusive",
+        "AC-PROD-04-1": "inconclusive",
+        "AC-PROD-05-1": "inconclusive"
+      }
     },
     "TASK-019": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-018",
-      "history": []
+      "detail": "My-listings, owner detail view and the public seller filter implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "My-listings, owner detail view and the public seller filter implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-019/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-019.md",
+      "criteria": {
+        "AC-PROD-06-1": "inconclusive",
+        "AC-PROD-07-1": "inconclusive"
+      }
     },
     "TASK-020": {
       "execution": "todo",
@@ -420,14 +486,20 @@
       "history": []
     },
     "TASK-027": {
-      "execution": "blocked",
+      "execution": "todo",
       "relevance": "current",
-      "detail": "Awaiting decision D-102 (proposed)",
+      "detail": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-102"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "current",
+          "note": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies."
         }
       ]
     },
@@ -438,16 +510,41 @@
       "history": []
     },
     "TASK-029": {
-      "execution": "blocked",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Awaiting decision D-105 (proposed)",
+      "detail": "Decision D-105 accepted under D-012. A single approval flow for admins and moderators is implemented and evidenced; criteria are inconclusive, so acceptance review is pending",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-105"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "current",
+          "note": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies."
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "blocked",
+          "note": "Implementation prepared for review in the task PR; the decision that blocks this task is still proposed"
+        },
+        {
+          "date": "2026-11-11",
+          "execution": "verifying",
+          "relevance": "current",
+          "note": "Decision D-105 is accepted under D-012; the implementation and evidence from the task PR now await acceptance review"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-029/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-029.md",
+      "criteria": {
+        "AC-PAY-06-1": "inconclusive",
+        "AC-PAY-06-2": "inconclusive"
+      }
     },
     "TASK-030": {
       "execution": "todo",
@@ -486,58 +583,213 @@
       "history": []
     },
     "TASK-036": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-009, TASK-033",
-      "history": []
+      "detail": "Review creation, lists, statistics, edit and removal implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Review creation, lists, statistics, edit and removal implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-036/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-036.md",
+      "criteria": {
+        "AC-REV-01-1": "inconclusive",
+        "AC-REV-01-2": "inconclusive",
+        "AC-REV-02-1": "inconclusive",
+        "AC-REV-03-1": "inconclusive",
+        "AC-REV-04-1": "inconclusive",
+        "AC-REV-05-1": "inconclusive"
+      }
     },
     "TASK-037": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-006, TASK-009, TASK-010",
-      "history": []
+      "detail": "Report creation, own-report list, redacted detail and automatic restriction implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Report creation, own-report list, redacted detail and automatic restriction implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-037/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-037.md",
+      "criteria": {
+        "AC-RPT-01-1": "inconclusive",
+        "AC-RPT-01-2": "inconclusive",
+        "AC-RPT-02-1": "inconclusive",
+        "AC-RPT-03-1": "inconclusive",
+        "AC-RPT-03-2": "inconclusive",
+        "AC-RPT-04-1": "inconclusive"
+      }
     },
     "TASK-038": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-009, TASK-010, TASK-033",
-      "history": []
+      "detail": "Dispute opening, responses, follow-ups, return confirmation, lists and detail implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Dispute opening, responses, follow-ups, return confirmation, lists and detail implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-038/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-038.md",
+      "criteria": {
+        "AC-DSP-01-1": "inconclusive",
+        "AC-DSP-01-2": "inconclusive",
+        "AC-DSP-02-1": "inconclusive",
+        "AC-DSP-03-1": "inconclusive",
+        "AC-DSP-04-1": "inconclusive",
+        "AC-DSP-05-1": "inconclusive"
+      }
     },
     "TASK-039": {
-      "execution": "todo",
+      "execution": "in_progress",
       "relevance": "current",
-      "detail": "Waiting for TASK-004, TASK-005, TASK-033",
-      "history": []
+      "detail": "Revenue report implemented with unit and real-MongoDB evidence; the dashboard criterion AC-MOD-01-1 was not verified against the existing dashboard in this run",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Revenue report implemented with unit and real-MongoDB evidence; the dashboard criterion AC-MOD-01-1 was not verified against the existing dashboard in this run"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-039/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-039.md",
+      "criteria": {
+        "AC-ORD-12-2": "inconclusive",
+        "AC-MOD-01-1": "inconclusive",
+        "AC-MOD-08-1": "inconclusive"
+      }
     },
     "TASK-040": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-006, TASK-037",
-      "history": []
+      "detail": "Report queue, resolution and graded sanctions implemented with unit and real-MongoDB evidence; AC-MOD-07-1 needs the owner's reading of \"suspend\"; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Report queue, resolution and graded sanctions implemented with unit and real-MongoDB evidence; AC-MOD-07-1 needs the owner's reading of \"suspend\"; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-040/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-040.md",
+      "criteria": {
+        "AC-MOD-02-1": "inconclusive",
+        "AC-MOD-02-2": "inconclusive",
+        "AC-MOD-02-3": "inconclusive",
+        "AC-MOD-03-1": "inconclusive",
+        "AC-MOD-03-2": "inconclusive",
+        "AC-MOD-07-1": "inconclusive"
+      }
     },
     "TASK-041": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-033, TASK-036",
-      "history": []
+      "detail": "Order corrections through escrow and review moderation implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Order corrections through escrow and review moderation implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-041/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-041.md",
+      "criteria": {
+        "AC-MOD-04-1": "inconclusive",
+        "AC-MOD-04-2": "inconclusive",
+        "AC-MOD-05-1": "inconclusive",
+        "AC-MOD-05-2": "inconclusive"
+      }
     },
     "TASK-042": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-025, TASK-038",
-      "history": []
+      "detail": "Investigation, conversation, refund and release settlement and dispute violations implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Investigation, conversation, refund and release settlement and dispute violations implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-042/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-042.md",
+      "criteria": {
+        "AC-MOD-06-1": "inconclusive",
+        "AC-MOD-06-2": "inconclusive",
+        "AC-MOD-06-3": "inconclusive"
+      }
     },
     "TASK-043": {
-      "execution": "blocked",
-      "relevance": "current",
-      "detail": "Awaiting decision D-106 (proposed)",
+      "execution": "todo",
+      "relevance": "retired",
+      "detail": "Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund enum under D-003; do not add split settlement.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-106"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "retired",
+          "note": "Retired under D-012: WDP staff UI and controller accept only refund/release. Keep the dormant partial_refund enum under D-003; do not add split settlement."
         }
-      ]
+      ],
+      "retirement_decision": "D-012"
     },
     "TASK-044": {
       "execution": "todo",
@@ -552,34 +804,86 @@
       "history": []
     },
     "TASK-046": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-025, TASK-033",
-      "history": []
+      "detail": "Payment timeout, automatic completion and late-shipping refund jobs implemented with unit and real-MongoDB evidence; the job lock is per process; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Payment timeout, automatic completion and late-shipping refund jobs implemented with unit and real-MongoDB evidence; the job lock is per process; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-046/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-046.md",
+      "criteria": {
+        "AC-SYS-01-1": "inconclusive",
+        "AC-SYS-02-1": "inconclusive",
+        "AC-SYS-03-1": "inconclusive",
+        "AC-NFR-REL-03-1": "inconclusive"
+      }
     },
     "TASK-047": {
-      "execution": "blocked",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Awaiting decision D-107 (proposed)",
+      "detail": "Decision D-107 accepted under D-012. A daily 03:00 job that soft-expires old listings is implemented and evidenced; criteria are inconclusive, so acceptance review is pending",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-107"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "current",
+          "note": "Business decision accepted from pinned WDP under D-012; awaiting the existing implementation dependencies."
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "blocked",
+          "note": "Implementation prepared for review in the task PR; the decision that blocks this task is still proposed"
+        },
+        {
+          "date": "2026-11-11",
+          "execution": "verifying",
+          "relevance": "current",
+          "note": "Decision D-107 is accepted under D-012; the implementation and evidence from the task PR now await acceptance review"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-047/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-047.md",
+      "criteria": {
+        "AC-SYS-04-1": "inconclusive"
+      }
     },
     "TASK-048": {
-      "execution": "blocked",
-      "relevance": "current",
-      "detail": "Awaiting decision D-103 (proposed)",
+      "execution": "todo",
+      "relevance": "retired",
+      "detail": "Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication queue is part of baseline migration.",
       "history": [
         {
           "date": "2026-09-24",
           "execution": "blocked",
           "note": "Depends on proposed decision D-103"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "todo",
+          "relevance": "retired",
+          "note": "Retired under D-012: WDP publishes listings immediately with active/approved status. No pre-publication queue is part of baseline migration."
         }
-      ]
+      ],
+      "retirement_decision": "D-012"
     },
     "TASK-049": {
       "execution": "todo",
@@ -608,7 +912,7 @@
     "TASK-053": {
       "execution": "done",
       "relevance": "current",
-      "detail": "Direct Gitflow branch names, installed hooks and all 12 PR routes/task scopes/authors verified; PR replacement mapping retains review slices and original history",
+      "detail": "D-012 pins WDP parity: nine product choices accepted, three unshipped extensions retired, original criteria/IDs preserved; 110 backend tests and structural checks pass.",
       "history": [
         {
           "date": "2026-10-09",
@@ -634,12 +938,29 @@
           "date": "2026-10-09",
           "execution": "done",
           "note": "User removes branch namespace; renamed 12 task branches, replaced GitHub PR heads, synchronized delivery links/CI filters and verified direct Gitflow naming"
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "in_progress",
+          "note": "Applying the user-authorized baseline parity amendment and reconciling retired extensions; original evidence retained."
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "done",
+          "note": "D-012 pins WDP parity: nine product choices accepted, three unshipped extensions retired, original criteria/IDs preserved; 110 backend tests and structural checks pass."
+        },
+        {
+          "date": "2026-10-11",
+          "execution": "done",
+          "note": "Verified PR #103 authorship and develop target; retained canonical PR #88 and appended the parity follow-up to delivery links."
         }
       ],
       "evidence": [
         ".project/evidence/TASK-053/run-03/report.json",
         ".project/evidence/TASK-053/run-04-gitflow/report.json",
-        ".project/evidence/TASK-053/run-05-branch-names/report.json"
+        ".project/evidence/TASK-053/run-05-branch-names/report.json",
+        ".project/evidence/TASK-053/run-06-baseline-parity/report.json",
+        ".project/evidence/TASK-053/run-07-parity-delivery/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-053.md",
       "criteria": {
@@ -717,28 +1038,62 @@
       ]
     },
     "TASK-058": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-058/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-058.md",
+      "criteria": {
+        "AC-WEB-05-1": "inconclusive"
+      }
     },
     "TASK-059": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-059/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-059.md",
+      "criteria": {
+        "AC-WEB-06-1": "inconclusive"
+      }
     },
     "TASK-060": {
       "execution": "todo",
@@ -765,100 +1120,231 @@
       ]
     },
     "TASK-062": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-062/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-062.md",
+      "criteria": {
+        "AC-WEB-09-1": "inconclusive"
+      }
     },
     "TASK-063": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-063/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-063.md",
+      "criteria": {
+        "AC-WEB-10-1": "inconclusive"
+      }
     },
     "TASK-064": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-064/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-064.md",
+      "criteria": {
+        "AC-WEB-11-1": "inconclusive"
+      }
     },
     "TASK-065": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-065/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-065.md",
+      "criteria": {
+        "AC-WEB-12-1": "inconclusive"
+      }
     },
     "TASK-066": {
-      "execution": "todo",
+      "execution": "in_progress",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Report dialog and dispute form wired and building; uploaded evidence is still publicly reachable, so the privacy part of AC-WEB-13-1 is not met",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Report dialog and dispute form wired and building; uploaded evidence is still publicly reachable, so the privacy part of AC-WEB-13-1 is not met"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-066/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-066.md",
+      "criteria": {
+        "AC-WEB-13-1": "fail"
+      }
     },
     "TASK-067": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-067/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-067.md",
+      "criteria": {
+        "AC-WEB-14-1": "inconclusive"
+      }
     },
     "TASK-068": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-068/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-068.md",
+      "criteria": {
+        "AC-WEB-15-1": "inconclusive"
+      }
     },
     "TASK-069": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-069/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-069.md",
+      "criteria": {
+        "AC-WEB-16-1": "inconclusive"
+      }
     },
     "TASK-070": {
       "execution": "todo",
@@ -873,28 +1359,68 @@
       ]
     },
     "TASK-071": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-071/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-071.md",
+      "criteria": {
+        "AC-WEB-18-1": "inconclusive"
+      }
     },
     "TASK-072": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for dependencies and feature integration evidence",
+      "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
       "history": [
         {
           "date": "2026-10-09",
           "execution": "todo",
           "note": "Full-stack migration requested; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Re-verified with a clean install after the manifest was reduced to the recharts line and the lockfile was regenerated with npm 10; run-01 used a lockfile the CI npm could not install"
         }
-      ]
+      ],
+      "evidence": [
+        ".project/evidence/TASK-072/run-01/report.json",
+        ".project/evidence/TASK-072/run-02/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-072.md",
+      "criteria": {
+        "AC-WEB-19-1": "inconclusive"
+      }
     },
     "TASK-073": {
       "execution": "todo",
@@ -907,6 +1433,74 @@
           "note": "Full-stack migration requested; implementation has not yet been verified"
         }
       ]
+    },
+    "TASK-075": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "Payment reminder, abandonment tracking, cart reminder, reconciliation and the buyer and staff endpoints implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "todo",
+          "note": "Abandoned checkout requested on 2026-11-10; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement the abandoned checkout request"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Payment reminder, abandonment tracking, cart reminder, reconciliation and the buyer and staff endpoints implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-075/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-075.md",
+      "criteria": {
+        "AC-ORD-13-1": "inconclusive",
+        "AC-ORD-13-2": "inconclusive",
+        "AC-ORD-13-3": "inconclusive",
+        "AC-ORD-13-4": "inconclusive",
+        "AC-ORD-13-5": "inconclusive"
+      }
+    },
+    "TASK-076": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "todo",
+          "note": "Abandoned checkout requested on 2026-11-10; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement the abandoned checkout request"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Buyer list and staff recovery panel implemented with App tests and a browser observation; automatic completion remains inconclusive without applicable calibration"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Re-verified after the corrected web lockfile from TASK-072 was merged into this branch"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-076/run-01/report.json",
+        ".project/evidence/TASK-076/run-02/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-076.md",
+      "criteria": {
+        "AC-WEB-21-1": "inconclusive"
+      }
     }
   }
 }

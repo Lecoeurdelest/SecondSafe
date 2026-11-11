@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const config = require('../../config/env');
 
 // Dinh danh phien ban payload ma hoa de ho tro nang cap sau nay.
 const ENCRYPTION_PREFIX = 'enc:v1';
@@ -7,10 +6,14 @@ const ENCRYPTION_PREFIX = 'enc:v1';
 const IV_LENGTH_BYTES = 12;
 
 function buildCipherKey() {
-  const rawKey = String(config.chat?.encryptionKey || '').trim();
+  // Doc khoa luc goi (giong jwt.util) va khong fallback sang JWT_SECRET (NFR-SEC-07).
+  const rawKey = String(process.env.CHAT_ENCRYPTION_KEY || '').trim();
 
   if (!rawKey) {
-    throw new Error('Thiếu khóa mã hóa chat');
+    throw Object.assign(new Error('Thiếu CHAT_ENCRYPTION_KEY. Hãy cấu hình lại khóa mã hóa chat hiện tại trong backend/.env rồi khởi động lại backend.'), {
+      statusCode: 503,
+      expose: true
+    });
   }
 
   // Chuan hoa khoa ve 32 byte on dinh de dung cho AES-256.
