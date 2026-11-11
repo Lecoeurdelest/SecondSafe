@@ -41,14 +41,16 @@ Baseline: `POST /api/auth/google`
 
 ### FR-AUTH-04 — Two-factor login (optional)
 
-Risk: `standard` · Component: `CMP-AUTH` · Source: `plan.md` § 4.1 Identity and access
+Risk: `standard` · Component: `CMP-AUTH` · Source: `plan.md` § 4.1 Identity and access · Status: **retired**
+
+> Retired under D-012: the pinned WDP login returns a JWT directly and exposes no per-user two-factor setting. Preserve dormant compatibility code and schemas; do not add a new opt-in feature.
 
 Baseline: `POST /api/auth/login/verify-2fa`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-AUTH-04-1` | For a user with two-factor login enabled, a correct password returns requires2FA and emails a 6-digit code instead of a token. | behavioral test | [TASK-015](../task/TASK-015.md) `[!]` |
-| `AC-AUTH-04-2` | POST /api/auth/login/verify-2fa issues the token only for a valid, unexpired code with purpose login_2fa. | behavioral test | [TASK-015](../task/TASK-015.md) `[!]` |
+| `AC-AUTH-04-1` | For a user with two-factor login enabled, a correct password returns requires2FA and emails a 6-digit code instead of a token. | behavioral test | [TASK-015](../task/TASK-015.md) `[]` |
+| `AC-AUTH-04-2` | POST /api/auth/login/verify-2fa issues the token only for a valid, unexpired code with purpose login_2fa. | behavioral test | [TASK-015](../task/TASK-015.md) `[]` |
 
 ### FR-AUTH-05 — Recover a forgotten password
 

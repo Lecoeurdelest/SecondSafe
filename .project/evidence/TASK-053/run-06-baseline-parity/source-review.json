@@ -1,0 +1,148 @@
+{
+  "baseline_revision": "1cea2b7fc673619f19e9bf76eb745e0e44cc50c1",
+  "decisions": [
+    {
+      "decision": "D-101",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/modules/auth/auth.service.js",
+        "backend/src/modules/users/user.model.js"
+      ]
+    },
+    {
+      "decision": "D-102",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/modules/payments/payment.route.js"
+      ]
+    },
+    {
+      "decision": "D-103",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/modules/products/product.service.js"
+      ]
+    },
+    {
+      "decision": "D-104",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/modules/orders/order.service.js"
+      ]
+    },
+    {
+      "decision": "D-105",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/modules/payments/wallet.route.js",
+        "backend/src/modules/moderator/moderator.route.js"
+      ]
+    },
+    {
+      "decision": "D-106",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/modules/moderator/moderator.controller.js",
+        "frontend/src/modules/admin/disputes/AdminDisputeDetail.jsx",
+        "frontend/src/modules/moderator/disputes/ModDisputeDetail.jsx"
+      ]
+    },
+    {
+      "decision": "D-107",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/services/cron.service.js"
+      ]
+    },
+    {
+      "decision": "D-108",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/common/utils/otp.manager.js"
+      ]
+    },
+    {
+      "decision": "D-109",
+      "status": "pass",
+      "source_paths": [
+        "backend/src/common/utils/jwt.util.js",
+        "frontend/src/context/AuthContext.jsx"
+      ]
+    }
+  ],
+  "preservation": {
+    "original_task_ids": 73,
+    "original_requirement_criteria": "unchanged",
+    "runtime_files": "unchanged",
+    "retired_tasks": [
+      "TASK-015",
+      "TASK-043",
+      "TASK-048"
+    ],
+    "retirement_claims_code_completion": false,
+    "code_acceptance_policy": "unchanged",
+    "current_tasks_depend_on_retired_tasks": false
+  },
+  "source_files": [
+    {
+      "path": "backend/src/modules/auth/auth.service.js",
+      "sha256": "6f599e751fac1a361a549ae2f2859e887e116d783cd4aa19dc597530a11191e6"
+    },
+    {
+      "path": "backend/src/modules/users/user.model.js",
+      "sha256": "5647f83ecdf39bbc7011c3079f931239a1588694aa7d654015872fa9d9373901"
+    },
+    {
+      "path": "backend/src/modules/payments/payment.route.js",
+      "sha256": "e012c5d3666471e10e7ff7aaa4fea91ad63bd3a1225fe530174ff57495bcffa2"
+    },
+    {
+      "path": "backend/src/modules/products/product.service.js",
+      "sha256": "a48568c1a5b666af4f3ae2b012888e9ba23e60151ca2410d5634cfb315cd9445"
+    },
+    {
+      "path": "backend/src/modules/orders/order.service.js",
+      "sha256": "c25c3a3ff26409e363956443dca98970f3a3ce43520f48c4704a2cb1bae8862c"
+    },
+    {
+      "path": "backend/src/modules/payments/wallet.route.js",
+      "sha256": "071137e59a7abf52ae0458c0e3c6bb37415a2fe6f459b4e09ff0a16e42b66665"
+    },
+    {
+      "path": "backend/src/modules/moderator/moderator.route.js",
+      "sha256": "1f536dfdc603dc223e9d3639c94092e1f2758e1ea3f9a9562b88a0c5b771ca4f"
+    },
+    {
+      "path": "backend/src/modules/moderator/moderator.controller.js",
+      "sha256": "15907d3f1956d7a259a0d72ca1223da329020249c5d319900791c1993fdcd027"
+    },
+    {
+      "path": "backend/src/modules/reports/dispute.model.js",
+      "sha256": "9f17b296a3e1c4bee2dbf2707ee66ad96b23b5be55e5caab2cdf01ae5c72f6f4"
+    },
+    {
+      "path": "backend/src/services/cron.service.js",
+      "sha256": "5bc91c3c782e8773e100824abb571743c7060b70682677128777e96f16a2ea3b"
+    },
+    {
+      "path": "backend/src/common/utils/otp.manager.js",
+      "sha256": "f16dec1e2028828f439affd098d2dd85cfb2d009d7f3b04a0f27e8712d735205"
+    },
+    {
+      "path": "backend/src/common/utils/jwt.util.js",
+      "sha256": "26a9dc34aa85a24a7546ce48aef34b3c84cd01480fcbe9802e21bf86053bb34c"
+    },
+    {
+      "path": "frontend/src/context/AuthContext.jsx",
+      "sha256": "6bc9e9b7a876ab1fcf31a473e7c72aeea0610a32ad4d6f9838b9bbb16ae8fabd"
+    },
+    {
+      "path": "frontend/src/modules/admin/disputes/AdminDisputeDetail.jsx",
+      "sha256": "342beed23a1d09c41ecce4aef5ee0890f8219ff33bf4297950f3ca85e0c2d2fd"
+    },
+    {
+      "path": "frontend/src/modules/moderator/disputes/ModDisputeDetail.jsx",
+      "sha256": "dfe89a2b846c4d870273e57105ccf8c1571a07217a26cf6a6f18871ae09c15de"
+    }
+  ]
+}

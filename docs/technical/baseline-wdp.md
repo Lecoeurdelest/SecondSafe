@@ -26,7 +26,7 @@
 
 | Baseline item | Reason |
 |---|---|
-| `frontend/` | Out of scope (D-002) |
+| `frontend/` | Historically excluded by D-002; restored through D-009/TASK-054 … TASK-072 |
 | `src/services/auto-release.service.js` | Dead code (DEF-14); FR-SYS-05 retired |
 | `src/modules/payments/payment.controller.js`, `payment.service.js` | Re-export wrappers only |
 | `src/config/firebase.js`, `src/config/vnpay.js` | Integration config; returns with TASK-013 and TASK-027 |
@@ -46,10 +46,10 @@
 | DEF-07 | SePay IPN logs the secret; secret accepted in query string | FR-PAY-03, NFR-SEC-06 → TASK-026 |
 | DEF-08 | Hardcoded admin credentials | Fixed in TASK-001 (`create-admin.js`) |
 | DEF-09 | Inconsistent password policy | NFR-SEC-02 → TASK-001, TASK-011, TASK-014, TASK-044 |
-| DEF-10 | Two-factor login never triggers | FR-AUTH-04 → TASK-015 (D-101) |
+| DEF-10 | Two-factor login never triggers | D-101/D-012 retain direct login; FR-AUTH-04/TASK-015 retired, dormant compatibility code retained |
 | DEF-11 | Reset endpoint without a token issuer | FR-AUTH-06 → TASK-014 |
-| DEF-12 | `partial_refund` not implemented | FR-MOD-10 → TASK-043 (D-106) |
-| DEF-13 | Expired listings hard-deleted | FR-SYS-04 → TASK-047 (D-107) |
+| DEF-12 | `partial_refund` not implemented | D-106/D-012 retain refund/release only; FR-MOD-10/TASK-043 retired, enum retained |
+| DEF-13 | Expired listings hard-deleted | D-107/D-012 explicitly accept baseline deletion; FR-SYS-04 → TASK-047 |
 | DEF-14 | Auto-release service never started | Not carried; FR-SYS-05 retired |
 | DEF-15 | Admin UI locks moderators through the restriction endpoint | FR-ADM-07 → TASK-045 |
 | DEF-16 | Quick buy detected from message text | FR-ORD-02 → TASK-030 |
@@ -58,12 +58,14 @@
 | DEF-19 | Duplicate SePay mounts and CORS setup | Skeleton mounts once; NFR-SEC-11 → TASK-003 |
 | DEF-20 | Test media and `.lnk` file committed | Not carried; `.gitignore` excludes uploads |
 | DEF-21 | Two withdrawal approval flows | FR-PAY-06 → TASK-029 (D-105) |
-| DEF-22 | Moderator ban API without UI | FR-MOD-07 → TASK-040 (API only; frontend out of scope) |
+| DEF-22 | Moderator ban API without UI | FR-MOD-07 → TASK-040; restored frontend scope includes TASK-068 |
 | DEF-23 | `seed-all` stopped after categories because each seed called `process.exit` | Fixed in TASK-001 |
 
 ## Known schema-level gaps (kept as-is under D-003)
 
 - `Order.isEligibleForAutoRelease` still uses the retired 10-day shipped rule. Jobs must use the configured auto-completion window instead.
-- `Product.moderationStatus` exists but is unused until D-103 is decided.
-- `Dispute.resolution` includes `partial_refund` pending D-106.
+- `Product.moderationStatus` stays in the schema; D-103/D-012 retain immediate `active`/`approved` publication and retire the pre-publication extension.
+- `Dispute.resolution` includes the dormant `partial_refund`; D-106/D-012 retain refund/release only without removing schema values.
 - `verify-seed-data.js` prints `isVerified`, which is not a schema field.
+
+The 2026-10-11 parity amendment resolves earlier product proposals from inspected working behavior. See [baseline-choices.md](baseline-choices.md). Original defect findings remain historical facts; unsupported extensions are retired rather than reported as implemented. Hard deletion of old active listings is explicitly selected under D-107; task implementation must still satisfy applicable invariants.
