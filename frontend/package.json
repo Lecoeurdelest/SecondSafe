@@ -12,7 +12,8 @@
     "@ant-design/icons": "^6.1.0",
     "antd": "^6.3.2",
     "firebase": "^12.11.0",
-    "dayjs": "^1.11.13"
+    "dayjs": "^1.11.13",
+    "recharts": "^3.8.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -152,7 +152,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-19-1` | Admin dispute settlement, withdrawal approval and revenue views use the shared backend flows and accurate integer VND totals with visible pending and failure states. | behavioral test, manual review | [TASK-072](../task/TASK-072.md) `[]` |
+| `AC-WEB-19-1` | Admin dispute settlement, withdrawal approval and revenue views use the shared backend flows and accurate integer VND totals with visible pending and failure states. | behavioral test, manual review | [TASK-072](../task/TASK-072.md) `[!]` |
 
 ### FR-WEB-20 — Full-stack migration integration and release checks
 

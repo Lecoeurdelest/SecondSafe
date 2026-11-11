@@ -3,8 +3,8 @@
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
     "project.yaml": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
-    ".project/state.json": "5197e0e76a4d5ca3a57fe10e5e2f4cbf781c229f1f7130fe9287568e1533cecc",
-    ".project/delivery.json": "197b58fa21a41e70e739e22725203c735fdec28f636a7d2c6e430271ec319518",
+    ".project/state.json": "11c13c19251f16b9ffc3e0e04e070dd6c950505f28e788a58fb7a5dc95494872",
+    ".project/delivery.json": "a83628d283e8dd66e1b40ab7351e491dfbbd1f63b6e9670742e654224c4c8531",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
     "backend/src/modules/delivery/delivery.model.js": "90056fcdd26eb2d4eb7b76cda3796abb641d53d5ab1e4ae33b1fd12445e1301d",
@@ -93,7 +93,7 @@
     },
     "docs/requirements/FR-WEB.md": {
       "ownership": "generated",
-      "sha256": "c73acf627aebdf67f6b75930db2872220e8828b6f44dc12f6fa4b2ac6124187c"
+      "sha256": "890d43e043571f6a94aa8077dc3ce84be0ca1ae46320fbe915aecc677521f658"
     },
     "docs/requirements/NFR.md": {
       "ownership": "generated",
@@ -105,7 +105,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "78df38416e19d73e705dfacf19150d27b70e7806776ef11819a7890af447a678"
+      "sha256": "a73e34e2b5abc9b76e303348c3fbe007c4ad80bfbd0484bd37e0b6fbcd584804"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -393,7 +393,7 @@
     },
     "docs/task/TASK-072.md": {
       "ownership": "generated",
-      "sha256": "34c5ce3f46a872fbc05b269f89764cb96a06e60f140707fd39ae2e596e637202"
+      "sha256": "f0a6d61f4700590bf264252dce96d51b53f6b4884732fb1133469b73ccb2010e"
     },
     "docs/task/TASK-073.md": {
       "ownership": "generated",
@@ -419,7 +419,7 @@
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "41a6fa9cc5417b73dfa30aa87ba9299a19e6c255349770f86fe82cfe3fb15865"
+      "sha256": "7e6eb5bdbbe84c28aaa08122fc2146b6b830b7548442d33d067f1ee38e8e5893"
     }
   }
 }
