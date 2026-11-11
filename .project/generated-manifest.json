@@ -3,8 +3,8 @@
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
     "project.yaml": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
-    ".project/state.json": "11c13c19251f16b9ffc3e0e04e070dd6c950505f28e788a58fb7a5dc95494872",
-    ".project/delivery.json": "a83628d283e8dd66e1b40ab7351e491dfbbd1f63b6e9670742e654224c4c8531",
+    ".project/state.json": "72dbb49f7fe829592503c170840cf2bdab5ec4de6798ca936f9544d161dd04ae",
+    ".project/delivery.json": "37129c840f9013d13cbbaa7bf915ca118bf84181264d9ed0f8ce0a0cda6c6e37",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
     "backend/src/modules/delivery/delivery.model.js": "90056fcdd26eb2d4eb7b76cda3796abb641d53d5ab1e4ae33b1fd12445e1301d",
@@ -93,7 +93,7 @@
     },
     "docs/requirements/FR-WEB.md": {
       "ownership": "generated",
-      "sha256": "890d43e043571f6a94aa8077dc3ce84be0ca1ae46320fbe915aecc677521f658"
+      "sha256": "b58e41918b234d1398f5494fe2a8f47f00f948c5cec60e16253eb8c21613b5db"
     },
     "docs/requirements/NFR.md": {
       "ownership": "generated",
@@ -105,7 +105,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "a73e34e2b5abc9b76e303348c3fbe007c4ad80bfbd0484bd37e0b6fbcd584804"
+      "sha256": "4613ec35748d8e77c2e82c193104c3b6c5a9f1baa86ba3362b44b3911ad4f193"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -405,7 +405,7 @@
     },
     "docs/task/TASK-076.md": {
       "ownership": "generated",
-      "sha256": "a54da9edda43761ceb0fcb8b43f8c8b7d6ebcae3970f3160684fb4ec78e8ec56"
+      "sha256": "7410d43c047d7c8a764e282a4e30ce421441327e25c3147925dcfe8d229c9558"
     },
     "docs/technical/data-model.md": {
       "ownership": "generated",
@@ -419,7 +419,7 @@
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "7e6eb5bdbbe84c28aaa08122fc2146b6b830b7548442d33d067f1ee38e8e5893"
+      "sha256": "671ab786d4ece607a79a3d98bcbc2fa2b50e9d495a6e5d6eadef6a41bec9bf4e"
     }
   }
 }

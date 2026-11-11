@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardLayout from './DashboardLayout';
 import dashboardService from '../../services/dashboard.service';
+import abandonedCheckoutService from '../../services/abandonedCheckout.service';
 import './Dashboard.css';
 
 function formatNumber(value) {
@@ -107,6 +108,38 @@ function AdminOverview({ data }) {
   );
 }
 
+// Loaded on its own so a failure here never hides the main dashboard.
+function AbandonedCheckoutPanel() {
+  const [summary, setSummary] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    abandonedCheckoutService.getSummary()
+      .then(result => { if (active) setSummary(result); })
+      .catch(() => { if (active) setSummary(null); });
+    return () => { active = false; };
+  }, []);
+
+  if (!summary) return null;
+  return (
+    <section className="dashboard-panel dashboard-panel--wide" aria-labelledby="abandoned-checkout-heading">
+      <div className="dashboard-panel__heading">
+        <div><h2 id="abandoned-checkout-heading">Thanh toán dang dở</h2><p>Đơn quá hạn thanh toán và giỏ hàng bị bỏ quên</p></div>
+        <span className="dashboard-panel__tag">Tỷ lệ khôi phục {summary.recoveryRate}%</span>
+      </div>
+      <Bars items={[
+        { label: 'Đã khôi phục', count: summary.recovered },
+        { label: 'Đang chờ người mua', count: summary.active },
+        { label: 'Đã mất', count: summary.lost }
+      ]} />
+      <p className="dashboard-footnote">
+        Giá trị khôi phục {formatVnd(summary.recoveredAmount)} · đang chờ {formatVnd(summary.activeAmount)} · đã mất {formatVnd(summary.lostAmount)}.
+        Từ đơn hàng: {formatNumber(summary.bySource.order.total)} · từ giỏ hàng: {formatNumber(summary.bySource.cart.total)}.
+      </p>
+    </section>
+  );
+}
+
 function StaffOverview({ data }) {
   const queue = data.recentQueue || [];
   return (
@@ -169,6 +202,7 @@ export default function Dashboard({ role }) {
         </div>
       )}
       {!loading && !error && data && (isAdmin ? <AdminOverview data={data} /> : <StaffOverview data={data} />)}
+      {!loading && !error && data && <AbandonedCheckoutPanel />}
     </DashboardLayout>
   );
 }
