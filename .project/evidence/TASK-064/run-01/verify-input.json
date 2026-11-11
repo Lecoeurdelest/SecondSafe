@@ -1,0 +1,37 @@
+{
+  "task_id": "TASK-064",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser",
+  "sections": null,
+  "complexity": null,
+  "flow": null,
+  "manual": "Not observed in a browser.",
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Browser observations were made once, by hand, on the combined working tree before it was split into task branches"
+  ],
+  "criteria": {
+    "AC-WEB-11-1": {
+      "observed": "not_observed",
+      "note": "No automated test exercises the wallet pages",
+      "checks": {
+        "behavioral_test": "inconclusive",
+        "manual_review": "inconclusive"
+      }
+    }
+  }
+}

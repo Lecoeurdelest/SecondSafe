@@ -386,7 +386,6 @@ const Withdrawal = () => {
                 {validWithdrawals.map((item) => {
                   const statusMeta = getStatusMeta(item.status);
                   const isFailed = item.status === 'failed';
-                  const isSuccess = item.status === 'completed';
                   const isPending = item.status === 'pending';
                   const amountAbs = Math.abs(Number(item.amount || 0));
                   
