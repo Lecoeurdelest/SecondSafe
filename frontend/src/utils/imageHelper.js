@@ -8,6 +8,7 @@ import { NETWORK_CONFIG } from '../services/network.config';
 const API_URL = NETWORK_CONFIG.API_ORIGIN;
 const PRODUCT_PLACEHOLDER = '/images/placeholders/product-placeholder.svg';
 const AVATAR_PLACEHOLDER = '/images/placeholders/avatar-placeholder.svg';
+const LOCAL_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0'];
 const CATEGORY_IMAGES = {
   books: '/images/products/books.jpg', fashion: '/images/products/fashion.jpg',
   electronics: '/images/products/electronics.jpg', home: '/images/products/home.jpg',
@@ -38,8 +39,16 @@ export const getImageUrl = (path, type = 'product') => {
     return normalizedRawPath;
   }
   
-  // Nếu đã là URL đầy đủ thì trả về luôn.
-  if (normalizedRawPath.startsWith('http://') || normalizedRawPath.startsWith('https://')) {
+  // URL đầy đủ được giữ nguyên, trừ URL upload cũ trỏ về localhost: đổi sang origin API hiện tại.
+  if (/^(https?:)?\/\//i.test(normalizedRawPath)) {
+    try {
+      const url = new URL(normalizedRawPath, API_URL);
+      if (LOCAL_HOSTS.includes(url.hostname) && url.pathname.startsWith('/uploads/')) {
+        return `${API_URL}${url.pathname}${url.search}${url.hash}`;
+      }
+    } catch {
+      return normalizedRawPath;
+    }
     return normalizedRawPath;
   }
 

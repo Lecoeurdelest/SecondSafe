@@ -1,7 +1,7 @@
 ---
 id: TASK-027
 title: VNPay top-up
-execution_status: blocked
+execution_status: todo
 relevance: current
 depends_on: [TASK-024]
 supersedes: []
@@ -12,8 +12,6 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-102 (proposed)
-
 ## Traceability
 
 | Field | Value |
@@ -21,7 +19,7 @@ superseded_by: null
 | Requirements | [FR-PAY-04](../requirements/FR-PAY.md#fr-pay-04--top-up-through-vnpay), [NFR-SEC-06](../requirements/NFR.md#nfr-sec-06--payment-webhook-security) |
 | Acceptance criteria | `AC-PAY-04-1`, `AC-NFR-SEC-06-2` |
 | Components | `CMP-WALLET` |
-| Decisions | `D-102` (proposed) |
+| Decisions | `D-102` (accepted) |
 | Milestone | M3 Money and orders |
 | Baseline references | `WDP@1cea2b7:backend/src/modules/payments/vnpay.service.js` |
 

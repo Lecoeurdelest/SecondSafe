@@ -29,7 +29,7 @@ jest.mock('../../services/chat.service', () => ({
 
 const conversation = {
   _id: 'support-1',
-  subject: 'Cần trợ giúp đơn hàng',
+  subject: 'Đơn hàng và thanh toán',
   status: 'open',
   lastMessageAt: '2026-10-27T00:00:00.000Z'
 };
@@ -73,6 +73,7 @@ function renderSupport(path) {
 
 test('customers can create a support request', async () => {
   renderSupport('/support');
+  expect(document.querySelectorAll('#support-subject-suggestions option')).toHaveLength(7);
   fireEvent.change(screen.getByLabelText('Chủ đề hỗ trợ'), {
     target: { value: conversation.subject }
   });
@@ -87,6 +88,22 @@ test('customers can create a support request', async () => {
   }));
   await waitFor(() => expect(supportService.getMessages).toHaveBeenCalledWith(conversation._id));
   expect(await screen.findByLabelText('Tin nhắn hỗ trợ')).toBeInTheDocument();
+});
+
+test('customers can enter a custom support subject', async () => {
+  renderSupport('/support');
+  fireEvent.change(screen.getByLabelText('Chủ đề hỗ trợ'), {
+    target: { value: 'Tôi cần hỗ trợ về vấn đề khác' }
+  });
+  fireEvent.change(screen.getByLabelText('Mô tả vấn đề'), {
+    target: { value: 'Vui lòng liên hệ với tôi.' }
+  });
+  fireEvent.click(screen.getByRole('button', { name: 'Tạo yêu cầu hỗ trợ' }));
+
+  await waitFor(() => expect(supportService.createConversation).toHaveBeenCalledWith({
+    subject: 'Tôi cần hỗ trợ về vấn đề khác',
+    message: 'Vui lòng liên hệ với tôi.'
+  }));
 });
 
 test('customers can send a reply in an existing support conversation', async () => {

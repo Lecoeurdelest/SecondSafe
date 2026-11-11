@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "python3",
+      "tools/plan-driven-development/scripts/check_project.py",
+      "validate",
+      "project.yaml"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-07-parity-delivery/validate.json"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/plan-driven-development/scripts/check_project.py",
+      "audit-preservation",
+      "project.yaml",
+      "--root",
+      "."
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-07-parity-delivery/preservation.txt.gz"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/plan-driven-development/scripts/check_project.py",
+      "audit-task-status",
+      "docs/task/README.md"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-07-parity-delivery/task-status.json.gz"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/pdd/check-migration.py"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-07-parity-delivery/migration.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/pdd/render.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-07-parity-delivery/render.txt"
+  }
+]

@@ -42,7 +42,7 @@ Baseline: `POST /api/payments/vnpay/create`, `GET /api/payments/vnpay/callback`,
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PAY-04-1` | VNPay payment URLs are signed, callbacks and returns are accepted only with a valid HMAC signature, and each payment credits the wallet at most once. | static flow review, behavioral test | [TASK-027](../task/TASK-027.md) `[!]` |
+| `AC-PAY-04-1` | VNPay payment URLs are signed, callbacks and returns are accepted only with a valid HMAC signature, and each payment credits the wallet at most once. | static flow review, behavioral test | [TASK-027](../task/TASK-027.md) `[]` |
 
 ### FR-PAY-05 — Request a withdrawal
 

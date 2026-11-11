@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import assistantService from '../../services/assistant.service';
-import { getProductImageUrl } from '../../utils/imageHelper';
+import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import './Assistant.css';
 
 function isSignedIn() {
@@ -110,7 +110,11 @@ export default function Assistant({ moderation = false }) {
         <div className="assistant-page__products">
           {products.map(product => (
             <Link to={`/product/${product.id}`} className="assistant-page__product" key={product.id}>
-              <img src={getProductImageUrl({ images: product.image ? [product.image] : [] })} alt="" />
+              <img
+                src={getProductImageUrl({ images: product.image ? [product.image] : [] })}
+                alt=""
+                onError={event => handleImageError(event, 'product')}
+              />
               <span><strong>{product.title}</strong><small>{product.category} · {product.condition}</small><b>{formatPrice(product.priceVnd)}</b></span>
             </Link>
           ))}

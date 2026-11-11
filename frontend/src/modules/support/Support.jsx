@@ -4,6 +4,16 @@ import { connectChatSocket } from '../../services/chat.service';
 import supportService from '../../services/support.service';
 import './Support.css';
 
+const SUPPORT_SUBJECT_SUGGESTIONS = [
+  'Đơn hàng và thanh toán',
+  'Giao hàng và nhận hàng',
+  'Đổi trả và hoàn tiền',
+  'Sản phẩm và tình trạng sản phẩm',
+  'Tài khoản và bảo mật',
+  'Đăng bán và quản lý sản phẩm',
+  'Khiếu nại hoặc tranh chấp'
+];
+
 function getToken() {
   try { return window.localStorage.getItem('token'); } catch { return null; }
 }
@@ -218,7 +228,12 @@ export default function Support() {
           {!isStaff && (
             <form className="support-new" onSubmit={createConversation}>
               <label htmlFor="support-subject">Chủ đề hỗ trợ</label>
-              <input id="support-subject" value={subject} maxLength={120} required onChange={event => setSubject(event.target.value)} placeholder="Ví dụ: Cần trợ giúp về đơn hàng" />
+              <input id="support-subject" list="support-subject-suggestions" value={subject} maxLength={120} required onChange={event => setSubject(event.target.value)} placeholder="Chọn hoặc nhập chủ đề hỗ trợ" />
+              <datalist id="support-subject-suggestions">
+                {SUPPORT_SUBJECT_SUGGESTIONS.map(suggestion => (
+                  <option key={suggestion} value={suggestion} />
+                ))}
+              </datalist>
               <label htmlFor="support-initial-message">Mô tả vấn đề</label>
               <textarea id="support-initial-message" value={initialMessage} maxLength={2000} required onChange={event => setInitialMessage(event.target.value)} placeholder="Không nhập mật khẩu, OTP hay thông tin ngân hàng." />
               <button type="submit" disabled={loading}>{loading ? 'Đang gửi...' : 'Tạo yêu cầu hỗ trợ'}</button>

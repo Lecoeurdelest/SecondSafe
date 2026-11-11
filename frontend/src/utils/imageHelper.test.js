@@ -26,6 +26,17 @@ test('keeps uploaded images and falls back for unknown categories', () => {
   })).toBe('/images/placeholders/product-placeholder.svg');
 });
 
+test('rebases legacy localhost upload URLs to the configured API origin', () => {
+  expect(getImageUrl('http://localhost:3001/uploads/products/user/photo.jpg'))
+    .toBe('http://localhost:5000/uploads/products/user/photo.jpg');
+  expect(getImageUrl('http://127.0.0.1:5000/uploads/products/user/photo.jpg?size=small'))
+    .toBe('http://localhost:5000/uploads/products/user/photo.jpg?size=small');
+  expect(getImageUrl(' //localhost:5000/uploads/products/user/photo.jpg '))
+    .toBe('http://localhost:5000/uploads/products/user/photo.jpg');
+  expect(getImageUrl('https://cdn.example.test/photo.jpg'))
+    .toBe('https://cdn.example.test/photo.jpg');
+});
+
 test('uses the appropriate placeholder for missing images', () => {
   expect(getImageUrl(null, 'avatar')).toBe('/images/placeholders/avatar-placeholder.svg');
   expect(getImageUrl(null)).toBe('/images/placeholders/product-placeholder.svg');

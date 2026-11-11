@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "python3",
+      "tools/plan-driven-development/scripts/check_project.py",
+      "validate",
+      "project.yaml"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-06-baseline-parity/validate.json"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/plan-driven-development/scripts/check_project.py",
+      "audit-preservation",
+      "project.yaml",
+      "--root",
+      "."
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-06-baseline-parity/preservation.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/plan-driven-development/scripts/check_project.py",
+      "audit-task-status",
+      "docs/task/README.md"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-06-baseline-parity/task-status.json"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/pdd/check-migration.py"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-06-baseline-parity/migration.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "tools/pdd/render.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "artifact": ".project/evidence/TASK-053/run-06-baseline-parity/render.txt"
+  }
+]

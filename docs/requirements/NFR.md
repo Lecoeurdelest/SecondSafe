@@ -55,7 +55,7 @@ Risk: `critical` · Component: `CMP-PLATFORM` · Source: `plan.md` § 5. Quality
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-NFR-SEC-06-1` | Webhook secrets are never logged and are accepted only from headers. | static flow review | [TASK-026](../task/TASK-026.md) `[]` |
-| `AC-NFR-SEC-06-2` | VNPay responses are accepted only with a valid signature. | behavioral test | [TASK-027](../task/TASK-027.md) `[!]` |
+| `AC-NFR-SEC-06-2` | VNPay responses are accepted only with a valid signature. | behavioral test | [TASK-027](../task/TASK-027.md) `[]` |
 
 ### NFR-SEC-07 — Chat encryption at rest
 
