@@ -271,6 +271,7 @@ test('admin role sees the admin dashboard and loads live platform metrics', asyn
   expect(await screen.findByText('15.000 ₫')).toBeInTheDocument();
   expect(screen.getByText('Sách')).toBeInTheDocument();
   expect(screen.getByText('Quản trị', { selector: 'strong' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Quản lý sản phẩm' })).toHaveAttribute('href', '/admin/products');
   expect(screen.queryByText('Hệ thống demo')).not.toBeInTheDocument();
   expect(document.querySelector('.dashboard-sidebar__brand-mark')).toBeInTheDocument();
   expect(dashboardService.getAdminDashboard).toHaveBeenCalledTimes(1);

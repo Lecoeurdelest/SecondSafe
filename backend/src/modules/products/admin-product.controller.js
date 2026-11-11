@@ -18,4 +18,13 @@ async function updateVisibility(req, res, next) {
   }
 }
 
-module.exports = { listProducts, updateVisibility };
+async function updateContent(req, res, next) {
+  try {
+    const product = await adminProductService.updateContent(req.params.id, req.body);
+    return sendSuccess(res, 200, product, 'Đã cập nhật thông tin sản phẩm.');
+  } catch (error) {
+    return next(error);
+  }
+}
+
+module.exports = { listProducts, updateVisibility, updateContent };

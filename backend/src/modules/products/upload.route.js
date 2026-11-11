@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const { authenticate } = require('../../common/middlewares/auth.middleware');
+const { requireAdmin } = require('../../common/middlewares/admin.middleware');
 const { requireSellerCanSell } = require('../../common/middlewares/seller-restriction.middleware');
 const { sendSuccess, sendError } = require('../../common/utils/response.util');
 
@@ -40,6 +41,12 @@ function uploadProductImages(req, res, next) {
 }
 
 const router = express.Router();
+router.post('/admin-product', authenticate, requireAdmin, uploadProductImages, (req, res) => {
+  if (!req.files?.length) return sendError(res, 400, 'Vui lòng chọn ít nhất một ảnh');
+  return sendSuccess(res, 200, {
+    imageUrls: req.files.map(file => `/uploads/products/${req.user.userId}/${file.filename}`)
+  }, 'Upload ảnh sản phẩm thành công');
+});
 router.post('/product', authenticate, requireSellerCanSell, uploadProductImages, (req, res) => {
   if (!req.files?.length) return sendError(res, 400, 'Vui lòng chọn ít nhất một ảnh');
   return sendSuccess(res, 200, {

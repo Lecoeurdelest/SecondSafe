@@ -10,6 +10,7 @@ const router = express.Router();
 router.get('/search', controller.search);
 router.get('/my-products', authenticate, controller.listMine);
 router.get('/admin', authenticate, requireAdmin, adminProductController.listProducts);
+router.put('/admin/:id', authenticate, requireAdmin, adminProductController.updateContent);
 router.patch('/admin/:id/status', authenticate, requireAdmin, adminProductController.updateVisibility);
 router.post('/', authenticate, requireSellerCanSell, controller.create);
 router.put('/:id', authenticate, requireSellerCanSell, controller.update);

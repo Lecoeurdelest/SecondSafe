@@ -138,11 +138,16 @@ async function requireActiveSeller(sellerId) {
   return seller;
 }
 
-async function assertMutableProduct(product, sellerId) {
-  if (!product || String(product.seller) !== String(sellerId)) throw httpError(404, 'Không tìm thấy tin đăng của bạn');
+async function assertProductEditable(product) {
+  if (!product) throw httpError(404, 'Không tìm thấy sản phẩm.');
   if (['sold', 'deleted', 'expired'].includes(product.status)) throw httpError(409, 'Tin đăng đã kết thúc không thể chỉnh sửa');
   const activeOrder = await Order.exists({ productId: product._id, status: { $nin: ['cancelled', 'completed'] } });
   if (activeOrder) throw httpError(409, 'Tin đăng đang có giao dịch không thể chỉnh sửa');
+}
+
+async function assertMutableProduct(product, sellerId) {
+  if (!product || String(product.seller) !== String(sellerId)) throw httpError(404, 'Không tìm thấy tin đăng của bạn');
+  await assertProductEditable(product);
 }
 
 function validateListingPayload(payload) {
@@ -199,6 +204,20 @@ async function updateProduct(id, sellerId, payload) {
   return product;
 }
 
+async function updateProductAsAdmin(id, payload) {
+  if (!mongoose.Types.ObjectId.isValid(String(id || ''))) throw httpError(400, 'Mã sản phẩm không hợp lệ.');
+  const product = await Product.findById(id);
+  await assertProductEditable(product);
+  const data = validateListingPayload(payload);
+  const category = await Category.findOne({ _id: data.category, isActive: true }).select('_id');
+  if (!category && String(data.category) !== String(product.category)) {
+    throw httpError(400, 'Danh mục sản phẩm không hợp lệ');
+  }
+  Object.assign(product, data, { category: category?._id || product.category, updatedAt: new Date() });
+  await product.save();
+  return product;
+}
+
 async function deleteProduct(id, sellerId) {
   await requireActiveSeller(sellerId);
   const product = await Product.findById(id);
@@ -218,4 +237,13 @@ async function updateProductVisibility(id, sellerId, status) {
   return product;
 }
 
-module.exports = { listProducts, getProductById, createProduct, getMyProducts, updateProduct, deleteProduct, updateProductVisibility };
+module.exports = {
+  listProducts,
+  getProductById,
+  createProduct,
+  getMyProducts,
+  updateProduct,
+  updateProductAsAdmin,
+  deleteProduct,
+  updateProductVisibility
+};

@@ -7,7 +7,8 @@ jest.mock('../src/common/middlewares/auth.middleware', () => ({
 }));
 jest.mock('../src/modules/products/admin-product.service', () => ({
   listProducts: jest.fn(),
-  updateVisibility: jest.fn()
+  updateVisibility: jest.fn(),
+  updateContent: jest.fn()
 }));
 
 const express = require('express');
@@ -62,4 +63,20 @@ test('only admins can change product visibility', async () => {
 
   expect(response.status).toBe(200);
   expect(adminProductService.updateVisibility).toHaveBeenCalledWith('507f1f77bcf86cd799439012', 'hidden');
+});
+
+test('only admins can edit product content', async () => {
+  const productId = '507f1f77bcf86cd799439012';
+  const payload = { title: 'Sách đã sửa', price: 60000 };
+  mockRole = 'moderator';
+  expect((await request(app()).put(`/api/products/admin/${productId}`).send(payload)).status).toBe(403);
+  expect(adminProductService.updateContent).not.toHaveBeenCalled();
+
+  mockRole = 'admin';
+  adminProductService.updateContent.mockResolvedValue({ _id: productId, title: payload.title });
+  const response = await request(app()).put(`/api/products/admin/${productId}`).send(payload);
+
+  expect(response.status).toBe(200);
+  expect(response.body.data.title).toBe(payload.title);
+  expect(adminProductService.updateContent).toHaveBeenCalledWith(productId, payload);
 });

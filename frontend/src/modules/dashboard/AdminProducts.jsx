@@ -17,6 +17,17 @@ const STATUS_OPTIONS = [
 ];
 
 const STATUS_LABELS = Object.fromEntries(STATUS_OPTIONS);
+const CONDITION_OPTIONS = [
+  ['new', 'Mới'],
+  ['like-new', 'Như mới'],
+  ['good', 'Tốt'],
+  ['fair', 'Khá'],
+  ['poor', 'Đã qua sử dụng']
+];
+
+function categoryId(category) {
+  return typeof category === 'string' ? category : category?._id || '';
+}
 
 function formatPrice(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value || 0);
@@ -33,6 +44,12 @@ export default function AdminProducts() {
   const [busyId, setBusyId] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [editForm, setEditForm] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [editFiles, setEditFiles] = useState([]);
+  const [editError, setEditError] = useState('');
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
@@ -71,6 +88,87 @@ export default function AdminProducts() {
       setError(failure.message || 'Không thể cập nhật sản phẩm.');
     } finally {
       setBusyId('');
+    }
+  }
+
+  async function startEditing(product) {
+    setEditingProduct(product);
+    setEditForm({
+      title: product.title || '',
+      description: product.description || '',
+      price: String(product.price ?? ''),
+      category: categoryId(product.category),
+      otherCategory: product.otherCategory || '',
+      condition: product.condition || 'good',
+      city: product.location?.city || '',
+      district: product.location?.district || '',
+      images: Array.isArray(product.images) ? product.images.filter(Boolean) : []
+    });
+    setEditFiles([]);
+    setEditError('');
+    try {
+      setCategories(await dashboardService.getAdminProductCategories());
+    } catch (failure) {
+      setEditError(failure.message || 'Không thể tải danh mục sản phẩm.');
+    }
+  }
+
+  function closeEditor() {
+    if (savingEdit) return;
+    setEditingProduct(null);
+    setEditForm(null);
+    setEditFiles([]);
+    setEditError('');
+  }
+
+  function updateEditField(event) {
+    const { name, value } = event.target;
+    setEditForm(current => ({ ...current, [name]: value }));
+  }
+
+  function chooseEditImages(event) {
+    const files = Array.from(event.target.files || []);
+    if (files.length + editForm.images.length > 6) {
+      setEditError('Mỗi sản phẩm được đăng tối đa 6 ảnh.');
+      event.target.value = '';
+      return;
+    }
+    setEditError('');
+    setEditFiles(files);
+  }
+
+  async function saveProduct(event) {
+    event.preventDefault();
+    if (!editingProduct || !editForm) return;
+    if (!editForm.images.length && !editFiles.length) {
+      setEditError('Sản phẩm cần có ít nhất một ảnh.');
+      return;
+    }
+
+    setSavingEdit(true);
+    setEditError('');
+    setError('');
+    setNotice('');
+    try {
+      const uploadedImages = editFiles.length
+        ? await dashboardService.uploadAdminProductImages(editFiles)
+        : [];
+      const { city, district, ...fields } = editForm;
+      await dashboardService.updateAdminProduct(editingProduct._id, {
+        ...fields,
+        price: Number(fields.price),
+        images: [...fields.images, ...uploadedImages],
+        location: { city, district }
+      });
+      setNotice('Đã cập nhật thông tin sản phẩm.');
+      setEditingProduct(null);
+      setEditForm(null);
+      setEditFiles([]);
+      await loadProducts();
+    } catch (failure) {
+      setEditError(failure.message || 'Không thể cập nhật sản phẩm.');
+    } finally {
+      setSavingEdit(false);
     }
   }
 
@@ -132,6 +230,16 @@ export default function AdminProducts() {
                     <td>{formatPrice(product.price)}</td>
                     <td>{STATUS_LABELS[product.status] || product.status}</td>
                     <td>
+                      {!['sold', 'expired', 'deleted'].includes(product.status) && (
+                        <button
+                          type="button"
+                          className="admin-products__action admin-products__action--edit"
+                          disabled={busyId === String(product._id)}
+                          onClick={() => startEditing(product)}
+                        >
+                          Chỉnh sửa
+                        </button>
+                      )}
                       {['active', 'hidden'].includes(product.status) && (
                         <button
                           type="button"
@@ -158,6 +266,102 @@ export default function AdminProducts() {
           </nav>
         )}
       </section>
+      {editingProduct && editForm && (
+        <div className="admin-products__editor-backdrop">
+          <section
+            className="admin-products__editor"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="admin-product-editor-title"
+          >
+            <h2 id="admin-product-editor-title">Chỉnh sửa sản phẩm</h2>
+            <p className="admin-products__editor-note">
+              Không thể chỉnh sửa sản phẩm đã bán, hết hạn, đã xóa hoặc đang có giao dịch.
+            </p>
+            {editError && <p className="admin-products__feedback admin-products__feedback--error" role="alert">{editError}</p>}
+            <form className="admin-products__edit-form" onSubmit={saveProduct}>
+              <label>
+                Tên sản phẩm
+                <input name="title" value={editForm.title} maxLength={200} required onChange={updateEditField} />
+              </label>
+              <label className="admin-products__edit-wide">
+                Mô tả
+                <textarea name="description" value={editForm.description} maxLength={2000} rows={4} required onChange={updateEditField} />
+              </label>
+              <label>
+                Giá (VND)
+                <input name="price" type="number" min="0" step="1" value={editForm.price} required onChange={updateEditField} />
+              </label>
+              <label>
+                Danh mục
+                <select name="category" value={editForm.category} required onChange={updateEditField}>
+                  <option value="">Chọn danh mục</option>
+                  {[
+                    ...categories,
+                    ...(editingProduct.category && !categories.some(item => item._id === categoryId(editingProduct.category))
+                      ? [editingProduct.category]
+                      : [])
+                  ].map(category => (
+                    <option key={category._id} value={category._id}>{category.name}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Tình trạng
+                <select name="condition" value={editForm.condition} onChange={updateEditField}>
+                  {CONDITION_OPTIONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                </select>
+              </label>
+              <label>
+                Danh mục khác
+                <input name="otherCategory" value={editForm.otherCategory} maxLength={100} onChange={updateEditField} />
+              </label>
+              <label>
+                Tỉnh/thành phố
+                <input name="city" value={editForm.city} maxLength={100} required onChange={updateEditField} />
+              </label>
+              <label>
+                Quận/huyện
+                <input name="district" value={editForm.district} maxLength={100} required onChange={updateEditField} />
+              </label>
+              <fieldset className="admin-products__edit-wide admin-products__edit-images">
+                <legend>Hình ảnh ({editForm.images.length + editFiles.length}/6)</legend>
+                <div className="admin-products__edit-image-list">
+                  {editForm.images.map((image, index) => (
+                    <div className="admin-products__edit-image" key={`${image}-${index}`}>
+                      <img src={getProductImageUrl({ images: [image] })} alt={`Ảnh sản phẩm ${index + 1}`} onError={event => handleImageError(event, 'product')} />
+                      <button
+                        type="button"
+                        aria-label={`Xóa ảnh ${index + 1}`}
+                        onClick={() => setEditForm(current => ({
+                          ...current,
+                          images: current.images.filter((_, imageIndex) => imageIndex !== index)
+                        }))}
+                      >
+                        Xóa ảnh
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  multiple
+                  aria-label="Thêm ảnh sản phẩm"
+                  onChange={chooseEditImages}
+                />
+                {editFiles.length > 0 && <small>{editFiles.map(file => file.name).join(', ')}</small>}
+              </fieldset>
+              <div className="admin-products__edit-actions admin-products__edit-wide">
+                <button type="button" className="admin-products__edit-cancel" disabled={savingEdit} onClick={closeEditor}>Hủy</button>
+                <button type="submit" disabled={savingEdit || Boolean(editError && !categories.length)}>
+                  {savingEdit ? 'Đang lưu...' : 'Lưu thay đổi'}
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      )}
     </DashboardLayout>
   );
 }

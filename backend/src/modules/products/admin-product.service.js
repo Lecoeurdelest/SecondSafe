@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Product = require('./product.model');
+const productService = require('./product.service');
 const { pagination } = require('../../common/utils/pagination.util');
 
 const ADMIN_PRODUCT_STATUSES = new Set([
@@ -68,4 +69,8 @@ async function updateVisibility(productId, status) {
   return product;
 }
 
-module.exports = { listProducts, updateVisibility };
+async function updateContent(productId, payload) {
+  return productService.updateProductAsAdmin(productId, payload);
+}
+
+module.exports = { listProducts, updateVisibility, updateContent };
