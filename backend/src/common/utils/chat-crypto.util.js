@@ -10,7 +10,10 @@ function buildCipherKey() {
   const rawKey = String(process.env.CHAT_ENCRYPTION_KEY || '').trim();
 
   if (!rawKey) {
-    throw new Error('Thiếu khóa mã hóa chat');
+    throw Object.assign(new Error('Thiếu CHAT_ENCRYPTION_KEY. Hãy cấu hình lại khóa mã hóa chat hiện tại trong backend/.env rồi khởi động lại backend.'), {
+      statusCode: 503,
+      expose: true
+    });
   }
 
   // Chuan hoa khoa ve 32 byte on dinh de dung cho AES-256.
