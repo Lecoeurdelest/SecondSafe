@@ -1,7 +1,7 @@
 ---
 id: TASK-059
 title: Web listing detail and favorites
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-055, TASK-057, TASK-019, TASK-021]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-059 — Web listing detail and favorites
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser
 
 ## Traceability
 

@@ -48,7 +48,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-06-1` | Listing details link to the seller and allowed purchase/chat actions; authenticated users add and remove favorites with consistent visible state and missing-listing handling. | behavioral test, manual review | [TASK-059](../task/TASK-059.md) `[]` |
+| `AC-WEB-06-1` | Listing details link to the seller and allowed purchase/chat actions; authenticated users add and remove favorites with consistent visible state and missing-listing handling. | behavioral test, manual review | [TASK-059](../task/TASK-059.md) `[!]` |
 
 ### FR-WEB-07 — Web notification inbox
 
