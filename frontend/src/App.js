@@ -19,6 +19,7 @@ const Register = lazy(() => import('./modules/auth/Register'));
 const ForgotPassword = lazy(() => import('./modules/auth/ForgotPassword'));
 const ChangePassword = lazy(() => import('./modules/auth/ChangePassword'));
 const Dashboard = lazy(() => import('./modules/dashboard/Dashboard'));
+const AdminProducts = lazy(() => import('./modules/dashboard/AdminProducts'));
 
 function NotFound() {
   return <section className="welcome"><h1>Không tìm thấy trang</h1><p>Trang bạn đang tìm không tồn tại.</p><Link to="/">Về trang chủ</Link></section>;
@@ -136,6 +137,7 @@ export default function App() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/change-password" element={<ChangePassword />} />
               <Route path="/admin" element={<DashboardRoute role="admin"><Dashboard role="admin" /></DashboardRoute>} />
+              <Route path="/admin/products" element={<DashboardRoute role="admin"><AdminProducts /></DashboardRoute>} />
               <Route path="/staff" element={<DashboardRoute role="moderator"><Dashboard role="moderator" /></DashboardRoute>} />
               <Route path="/assistant" element={<Assistant />} />
               <Route path="/assistant/reports/:reportId" element={<DashboardRoute role="moderator"><Assistant moderation /></DashboardRoute>} />
