@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
 import { getReceivedPurchaseRequests, acceptPurchaseRequest, rejectPurchaseRequest } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './PurchaseRequests.css';
 
 const PurchaseRequests = () => {
-  const { user } = useAuth();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
