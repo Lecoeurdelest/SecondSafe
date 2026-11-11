@@ -1,11 +1,15 @@
 const express = require('express');
 const controller = require('./product.controller');
 const { authenticate, optionalAuthenticate } = require('../../common/middlewares/auth.middleware');
+const adminProductController = require('./admin-product.controller');
+const { requireAdmin } = require('../../common/middlewares/admin.middleware');
 
 const router = express.Router();
 
 router.get('/search', controller.search);
 router.get('/my-products', authenticate, controller.listMine);
+router.get('/admin', authenticate, requireAdmin, adminProductController.listProducts);
+router.patch('/admin/:id/status', authenticate, requireAdmin, adminProductController.updateVisibility);
 router.get('/', controller.list);
 router.post('/', authenticate, controller.create);
 router.put('/:id', authenticate, controller.update);

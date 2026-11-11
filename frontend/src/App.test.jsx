@@ -88,7 +88,12 @@ jest.mock('./modules/order/OrderPayment', () => function OrderPayment() {
 });
 jest.mock('./services/dashboard.service', () => ({
   __esModule: true,
-  default: { getAdminDashboard: jest.fn(), getStaffDashboard: jest.fn() }
+  default: {
+    getAdminDashboard: jest.fn(),
+    getStaffDashboard: jest.fn(),
+    getAdminProducts: jest.fn(),
+    updateAdminProductVisibility: jest.fn()
+  }
 }));
 
 beforeEach(() => {

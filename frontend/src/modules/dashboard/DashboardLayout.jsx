@@ -1,9 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Dashboard.css';
 
 export default function DashboardLayout({ role, title, description, children }) {
   const isAdmin = role === 'admin';
+  const { pathname } = useLocation();
+  const isProductsPage = pathname === '/admin/products';
   return (
     <div className={`dashboard-shell ${isAdmin ? 'dashboard-shell--admin' : 'dashboard-shell--staff'}`}>
       <aside className="dashboard-sidebar">
@@ -12,10 +14,16 @@ export default function DashboardLayout({ role, title, description, children }) 
           <span className="dashboard-sidebar__brand-name">SecondSafe<small>Quản trị &amp; vận hành</small></span>
         </Link>
         <div className="dashboard-sidebar__label">KHÔNG GIAN LÀM VIỆC</div>
-        <Link className="dashboard-sidebar__item dashboard-sidebar__item--active" to={isAdmin ? '/admin' : '/staff'}>
+        <Link className={`dashboard-sidebar__item${!isProductsPage ? ' dashboard-sidebar__item--active' : ''}`} to={isAdmin ? '/admin' : '/staff'}>
           <span className="dashboard-sidebar__item-icon" aria-hidden="true">▦</span>
           <span>Tổng quan</span>
         </Link>
+        {isAdmin && (
+          <Link className={`dashboard-sidebar__item${isProductsPage ? ' dashboard-sidebar__item--active' : ''}`} to="/admin/products">
+            <span className="dashboard-sidebar__item-icon" aria-hidden="true">◇</span>
+            <span>Quản lý sản phẩm</span>
+          </Link>
+        )}
         <div className="dashboard-sidebar__label dashboard-sidebar__label--secondary">TRUY CẬP NHANH</div>
         <Link className="dashboard-sidebar__item" to="/">
           <span className="dashboard-sidebar__item-icon" aria-hidden="true">↗</span>
