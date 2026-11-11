@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import favoriteService from '../../services/favorite.service';
-import { getImageUrl, handleImageError } from '../../utils/imageHelper';
+import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import './Favorites.css';
 
 function hasSession() {
@@ -132,7 +132,7 @@ const Favorites = () => {
               const p = fav.product;
               if (!p) return null;
 
-              const productImage = getImageUrl(p.images?.[0]) || '/images/placeholders/product-placeholder.svg';
+              const productImage = getProductImageUrl(p);
 
               return (
                 <div key={fav._id} className="favorite-card">
