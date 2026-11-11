@@ -9,7 +9,9 @@ const NotificationPanel = lazy(() => import('./components/NotificationPanel'));
 
 function PageContent() {
   const { pathname } = useLocation();
-  const hasInnerMain = pathname === '/admin/users' || pathname === '/moderator' || pathname === '/moderator/profile';
+  // Staff layouts render their own <main>; the standalone dashboards do not.
+  const staffArea = /^\/(admin|moderator)(\/|$)/.test(pathname);
+  const hasInnerMain = staffArea && !['/admin', '/admin/dashboard', '/moderator/dashboard'].includes(pathname);
   const Content = hasInnerMain ? 'div' : 'main';
   return <Content id="main-content" tabIndex="-1">
     <Suspense fallback={<p role="status">Đang tải...</p>}><AppRoutes /></Suspense>

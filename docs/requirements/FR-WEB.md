@@ -112,7 +112,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-14-1` | Moderator and admin roles can navigate the responsive console and load dashboard/profile data; regular users cannot enter and locked moderators are denied. | behavioral test, manual review | [TASK-067](../task/TASK-067.md) `[]` |
+| `AC-WEB-14-1` | Moderator and admin roles can navigate the responsive console and load dashboard/profile data; regular users cannot enter and locked moderators are denied. | behavioral test, manual review | [TASK-067](../task/TASK-067.md) `[!]` |
 
 ### FR-WEB-15 — Web moderator report, order and review queues
 
