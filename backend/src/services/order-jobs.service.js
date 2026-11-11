@@ -4,6 +4,7 @@ const Dispute = require('../modules/reports/dispute.model');
 const escrowService = require('../modules/payments/escrow.service');
 const abandonedCheckoutService = require('../modules/orders/abandoned-checkout.service');
 const { createNotification } = require('../modules/notifications/notification.service');
+const { ACTIVE_ORDER_STATUSES } = require('../modules/products/product-management.service');
 const business = require('../config/business');
 const logger = require('../common/utils/logger.util');
 
@@ -78,4 +79,18 @@ async function refundUnshippedOrders(now = new Date()) {
   ));
 }
 
-module.exports = { cancelUnpaidOrders, completeDeliveredOrders, refundUnshippedOrders };
+// D-107 (recommended option): listings past the maximum age are soft-expired, never deleted.
+async function expireOldListings(now = new Date()) {
+  const reserved = await Order.distinct('productId', { status: { $in: ACTIVE_ORDER_STATUSES } });
+  const result = await Product.updateMany(
+    {
+      _id: { $nin: reserved },
+      status: 'active',
+      createdAt: { $lte: new Date(now.getTime() - business.listingMaxAgeMs) }
+    },
+    { $set: { status: 'expired', updatedAt: now } }
+  );
+  return result.modifiedCount || 0;
+}
+
+module.exports = { cancelUnpaidOrders, completeDeliveredOrders, refundUnshippedOrders, expireOldListings };

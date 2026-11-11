@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-047",
+  "spec_hash": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+  "source_hash": "f5b0d94c1ce64b93f97190380ff1c173dd12fff41cc930a6c9924bd7cb570d14",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-SYS-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "not_observed",
+      "observation": "The job runs daily at 03:00 local time on listings older than the configured age (tests/cron-service.test.js, tests/order-jobs.test.js, integration section listing-expiry). It sets status expired, the recommended option of D-107, which is still proposed; the open PR #103 proposes the baseline deletion instead",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": false,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-047/run-01/jest.txt",
+            ".project/evidence/TASK-047/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

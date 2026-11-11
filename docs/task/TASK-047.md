@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `blocked` — Awaiting decision D-107 (proposed)
+**Current state:** `blocked` — Awaiting decision D-107 (proposed). A daily 03:00 job that soft-expires old listings is implemented and evidenced for review
 
 ## Traceability
 
