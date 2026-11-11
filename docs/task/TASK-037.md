@@ -1,7 +1,7 @@
 ---
 id: TASK-037
 title: Violation reports
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-006, TASK-009, TASK-010]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-037 — Violation reports
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Report creation, own-report list, redacted detail and automatic restriction implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

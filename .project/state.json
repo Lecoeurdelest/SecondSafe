@@ -574,10 +574,33 @@
       }
     },
     "TASK-037": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-006, TASK-009, TASK-010",
-      "history": []
+      "detail": "Report creation, own-report list, redacted detail and automatic restriction implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Report creation, own-report list, redacted detail and automatic restriction implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-037/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-037.md",
+      "criteria": {
+        "AC-RPT-01-1": "inconclusive",
+        "AC-RPT-01-2": "inconclusive",
+        "AC-RPT-02-1": "inconclusive",
+        "AC-RPT-03-1": "inconclusive",
+        "AC-RPT-03-2": "inconclusive",
+        "AC-RPT-04-1": "inconclusive"
+      }
     },
     "TASK-038": {
       "execution": "todo",
