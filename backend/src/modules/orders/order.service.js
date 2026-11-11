@@ -1,4 +1,5 @@
 const logger = require('../../common/utils/logger.util');
+const business = require('../../config/business');
 const Order = require('./order.model');
 const PurchaseRequest = require('./purchase-request.model');
 const Product = require('../products/product.model');
@@ -133,7 +134,7 @@ async function createPurchaseRequest(buyerId, listingId, message, agreedPrice) {
         paymentStatus: 'unpaid',
         confirmedBySeller: true,
         confirmedBySellerAt: new Date(),
-      paymentDeadline: new Date(Date.now() + 3 * 60 * 1000), // 3 minutes
+      paymentDeadline: new Date(Date.now() + business.paymentWindowMs),
         shippingRecipientName: String(buyer.fullName || '').trim(),
         shippingPhone: buyerPhone,
         shippingAddress: buyerAddress
@@ -395,7 +396,7 @@ async function acceptPurchaseRequest(requestId, sellerId) {
       confirmedBySellerAt: skipSellerConfirmation ? new Date() : null,
       paymentStatus: 'unpaid',
       paymentDeadline: skipSellerConfirmation
-        ? new Date(Date.now() + 3 * 60 * 1000) // 3 minutes — only start timer if buyer-initiated (skips seller confirm)
+        ? new Date(Date.now() + business.paymentWindowMs) // only start the timer if buyer-initiated (skips seller confirm)
         : null, // Will be set when seller confirms
       shippingRecipientName: String(buyer.fullName || '').trim(),
       shippingPhone: buyerPhone,
@@ -1129,7 +1130,7 @@ async function confirmOrderBySeller(orderId, sellerId) {
   order.status = 'awaiting_payment';
   order.confirmedBySeller = true;
   order.confirmedBySellerAt = new Date();
-  order.paymentDeadline = new Date(Date.now() + 3 * 60 * 1000); // Start 3-min timer NOW when seller confirms
+  order.paymentDeadline = new Date(Date.now() + business.paymentWindowMs); // the payment window starts when the seller confirms
   await order.save();
 
   try {

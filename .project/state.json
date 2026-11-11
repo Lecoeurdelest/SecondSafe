@@ -772,10 +772,31 @@
       "history": []
     },
     "TASK-046": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-025, TASK-033",
-      "history": []
+      "detail": "Payment timeout, automatic completion and late-shipping refund jobs implemented with unit and real-MongoDB evidence; the job lock is per process; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Payment timeout, automatic completion and late-shipping refund jobs implemented with unit and real-MongoDB evidence; the job lock is per process; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-046/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-046.md",
+      "criteria": {
+        "AC-SYS-01-1": "inconclusive",
+        "AC-SYS-02-1": "inconclusive",
+        "AC-SYS-03-1": "inconclusive",
+        "AC-NFR-REL-03-1": "inconclusive"
+      }
     },
     "TASK-047": {
       "execution": "blocked",
