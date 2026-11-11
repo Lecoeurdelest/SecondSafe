@@ -382,10 +382,34 @@
       }
     },
     "TASK-018": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-006, TASK-009, TASK-017",
-      "history": []
+      "detail": "Create, edit, soft delete and visibility implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Create, edit, soft delete and visibility implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-018/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-018.md",
+      "criteria": {
+        "AC-PROD-01-1": "inconclusive",
+        "AC-PROD-01-2": "inconclusive",
+        "AC-PROD-01-3": "inconclusive",
+        "AC-PROD-01-4": "inconclusive",
+        "AC-PROD-03-1": "inconclusive",
+        "AC-PROD-04-1": "inconclusive",
+        "AC-PROD-05-1": "inconclusive"
+      }
     },
     "TASK-019": {
       "execution": "todo",

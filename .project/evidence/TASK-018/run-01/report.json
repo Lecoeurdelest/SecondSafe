@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-018",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "c6d063c6d92d59ad15db70e68c30fc5f1565c61d68663978696e992e17706310",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-PROD-01-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/listing-management.test.js (each required field and bound); integration section listing",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-018/run-01/jest.txt",
+            ".project/evidence/TASK-018/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PROD-01-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/listing-management.test.js (101 characters rejected, 100 accepted)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-018/run-01/jest.txt",
+            ".project/evidence/TASK-018/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PROD-01-3",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/listing-management.test.js; integration section listing (restricted seller receives 403)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-018/run-01/jest.txt",
+            ".project/evidence/TASK-018/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PROD-01-4",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/listing-management.test.js; integration section listing (status active, caller-supplied status ignored)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-018/run-01/jest.txt",
+            ".project/evidence/TASK-018/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PROD-03-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/listing-management.test.js (owner only; sold, reserved and order-linked listings read-only); integration section listing",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-018/run-01/jest.txt",
+            ".project/evidence/TASK-018/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PROD-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/listing-management.test.js; integration section listing (document kept with status deleted)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-018/run-01/jest.txt",
+            ".project/evidence/TASK-018/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PROD-05-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/listing-management.test.js (toggle, restricted seller cannot re-activate, sold/reserved/deleted refused)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-018/run-01/jest.txt",
+            ".project/evidence/TASK-018/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}
