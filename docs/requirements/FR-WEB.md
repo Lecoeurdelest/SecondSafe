@@ -96,7 +96,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-12-1` | Only an eligible completed-order buyer can submit a review; public ratings and paginated reviews render with optional evidence and duplicate/error handling. | behavioral test, manual review | [TASK-065](../task/TASK-065.md) `[]` |
+| `AC-WEB-12-1` | Only an eligible completed-order buyer can submit a review; public ratings and paginated reviews render with optional evidence and duplicate/error handling. | behavioral test, manual review | [TASK-065](../task/TASK-065.md) `[!]` |
 
 ### FR-WEB-13 — Web violation reports and disputes
 
