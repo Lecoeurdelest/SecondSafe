@@ -709,10 +709,30 @@
       }
     },
     "TASK-042": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-025, TASK-038",
-      "history": []
+      "detail": "Investigation, conversation, refund and release settlement and dispute violations implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Investigation, conversation, refund and release settlement and dispute violations implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-042/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-042.md",
+      "criteria": {
+        "AC-MOD-06-1": "inconclusive",
+        "AC-MOD-06-2": "inconclusive",
+        "AC-MOD-06-3": "inconclusive"
+      }
     },
     "TASK-043": {
       "execution": "blocked",

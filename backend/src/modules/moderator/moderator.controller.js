@@ -11,6 +11,9 @@ const ORDER_STATUS_UPDATABLE = ["paid", "shipped", "completed", "cancelled", "di
 const REVIEW_STATUS = ["active", "hidden", "reported"];
 const REVIEW_ASSESSMENT = ["pending", "good", "bad"];
 
+const DISPUTE_STATUS = ["pending", "investigating", "resolved"];
+const DISPUTE_RESOLUTION = ["refund", "release"];
+
 function ensureObjectId(id, fieldName) {
   if (!id || !moderatorService.isValidObjectId(id)) {
     return `${fieldName} không hợp lệ`;
@@ -353,6 +356,114 @@ async function markSellerGoodByReview(req, res) {
   }
 }
 
+async function getDisputes(req, res) {
+  try {
+    const { status, page, limit } = req.query;
+
+    const statusError = ensureInList(status, DISPUTE_STATUS, "Trạng thái khiếu nại");
+    if (statusError) return sendError(res, 400, statusError);
+
+    const result = await moderatorService.getDisputes({ status }, { page, limit });
+    return sendSuccess(res, 200, result);
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+async function getDisputeById(req, res) {
+  try {
+    const { disputeId } = req.params;
+    const idError = ensureObjectId(disputeId, "Mã tranh chấp");
+    if (idError) return sendError(res, 400, idError);
+
+    const dispute = await moderatorService.getDisputeById(disputeId);
+    return sendSuccess(res, 200, dispute);
+  } catch (error) {
+    return sendServiceError(res, error, 404);
+  }
+}
+
+async function resolveDispute(req, res) {
+  try {
+    const { disputeId } = req.params;
+    const { resolution, moderatorNotes } = req.body;
+
+    const idError = ensureObjectId(disputeId, "Mã tranh chấp");
+    if (idError) return sendError(res, 400, idError);
+
+    const resolutionError = ensureInList(resolution, DISPUTE_RESOLUTION, "resolution");
+    if (resolutionError) return sendError(res, 400, resolutionError);
+
+    if (moderatorNotes && String(moderatorNotes).trim().length > 500) {
+      return sendError(res, 400, "moderatorNotes không được vượt quá 500 ký tự");
+    }
+
+    const dispute = await moderatorService.resolveDispute(disputeId, req.user.userId, {
+      resolution,
+      moderatorNotes: String(moderatorNotes || "").trim()
+    });
+
+    return sendSuccess(res, 200, dispute, "Đã xử lý khiếu nại thành công");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+// Thao tác nhận xử lý tranh chấp trước khi đưa ra quyết định cuối cùng.
+async function markDisputeInvestigating(req, res) {
+  try {
+    const { disputeId } = req.params;
+    const { moderatorNotes } = req.body || {};
+
+    const idError = ensureObjectId(disputeId, "Mã tranh chấp");
+    if (idError) return sendError(res, 400, idError);
+
+    if (moderatorNotes && String(moderatorNotes).trim().length > 500) {
+      return sendError(res, 400, "moderatorNotes không được vượt quá 500 ký tự");
+    }
+
+    const dispute = await moderatorService.markDisputeInvestigating(
+      disputeId,
+      req.user.userId,
+      String(moderatorNotes || "").trim()
+    );
+
+    return sendSuccess(res, 200, dispute, "Đã chuyển tranh chấp sang investigating");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+// Moderator gui tin nhan tiep theo trong dispute va dong bo vao dien bien tranh chap.
+async function sendDisputeMessage(req, res) {
+  try {
+    const { disputeId } = req.params;
+    const { content } = req.body || {};
+
+    const idError = ensureObjectId(disputeId, 'Mã tranh chấp');
+    if (idError) return sendError(res, 400, idError);
+
+    const normalizedContent = String(content || '').trim();
+    if (!normalizedContent) {
+      return sendError(res, 400, 'Vui lòng nhập nội dung tin nhắn');
+    }
+
+    if (normalizedContent.length > 1000) {
+      return sendError(res, 400, 'Nội dung tin nhắn không được vượt quá 1000 ký tự');
+    }
+
+    const result = await moderatorService.sendDisputeModeratorMessage(
+      disputeId,
+      req.user.userId,
+      normalizedContent
+    );
+
+    return sendSuccess(res, 200, result, 'Đã gửi cập nhật cho hai bên');
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
 module.exports = {
   getRevenueReport,
   banUser,
@@ -366,5 +477,10 @@ module.exports = {
   getReviews,
   hideReview,
   markSellerBadByReview,
-  markSellerGoodByReview
+  markSellerGoodByReview,
+  getDisputes,
+  getDisputeById,
+  resolveDispute,
+  markDisputeInvestigating,
+  sendDisputeMessage
 };

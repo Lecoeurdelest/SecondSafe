@@ -28,4 +28,10 @@ router.patch('/reviews/:reviewId/hide', controller.hideReview);
 router.patch('/reviews/:reviewId/mark-bad', controller.markSellerBadByReview);
 router.patch('/reviews/:reviewId/mark-good', controller.markSellerGoodByReview);
 
+router.get('/disputes', controller.getDisputes);
+router.get('/disputes/:disputeId', controller.getDisputeById);
+router.patch('/disputes/:disputeId/investigating', controller.markDisputeInvestigating);
+router.post('/disputes/:disputeId/message', controller.sendDisputeMessage);
+router.put('/disputes/:disputeId/resolve', controller.resolveDispute);
+
 module.exports = router;
