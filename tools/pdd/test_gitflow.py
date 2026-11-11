@@ -1,5 +1,6 @@
 import importlib.util
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,12 +16,12 @@ class RouteTests(unittest.TestCase):
     def test_allowed_integration_routes(self):
         for head, base in [(FEATURE, 'develop'), ('release/1.0.0', 'main'),
                            ('release/1.0.0', 'develop'), ('hotfix/login', 'main'),
-                           ('hotfix/login', 'develop'), ('main', 'develop')]:
+                           ('hotfix/login', 'develop'), ('main', 'develop'), (FEATURE, 'main')]:
             with self.subTest(head=head, base=base):
                 gitflow.validate_route(head, base)
 
     def test_invalid_routes(self):
-        for head, base in [(FEATURE, 'main'), ('develop', 'main'), ('main', 'main'),
+        for head, base in [('develop', 'main'), ('main', 'main'),
                            ('codex/' + FEATURE, 'develop'), ('codex/release/1.0.0', 'main'),
                            ('codex/hotfix/login', 'main'), (FEATURE, 'codex/' + OTHER),
                            ('release/', 'main'),
@@ -51,7 +52,7 @@ class HookTests(unittest.TestCase):
             run('git', 'init', '-b', 'main')
             run('git', 'config', 'user.name', 'Lecoeurdelest')
             run('git', 'config', 'user.email', '116455158+Lecoeurdelest@users.noreply.github.com')
-            run('python3', str(root / 'tools/pdd/install-gitflow-hooks.py'))
+            run(sys.executable, str(root / 'tools/pdd/install-gitflow-hooks.py'))
             blocked = run('git', 'commit', '--allow-empty', '-m', 'Direct stable commit', check=False)
             self.assertNotEqual(blocked.returncode, 0)
             run('git', 'switch', '-c', 'codex/' + FEATURE)
@@ -70,7 +71,7 @@ class HookTests(unittest.TestCase):
             run('git', 'switch', FEATURE)
             base = run('git', 'rev-parse', 'HEAD').stdout.strip()
             run('git', 'commit', '--allow-empty', '-m', 'Follow-up (TASK-053)')
-            command = ('python3', str(root / 'tools/pdd/check-gitflow.py'), '--head-branch', FEATURE,
+            command = (sys.executable, str(root / 'tools/pdd/check-gitflow.py'), '--head-branch', FEATURE,
                        '--base-branch', 'develop', '--base', base)
             run(*command)
             run('git', 'commit', '--allow-empty', '--no-verify', '-m', 'Mixed scope (TASK-054)')
@@ -79,7 +80,7 @@ class HookTests(unittest.TestCase):
             blocked = run('git', 'commit', '--allow-empty', '-m', 'Wrong author (TASK-053)', check=False)
             self.assertNotEqual(blocked.returncode, 0)
             run('git', 'config', 'core.hooksPath', '/existing/custom/hooks')
-            blocked = run('python3', str(root / 'tools/pdd/install-gitflow-hooks.py'), check=False)
+            blocked = run(sys.executable, str(root / 'tools/pdd/install-gitflow-hooks.py'), check=False)
             self.assertNotEqual(blocked.returncode, 0)
             self.assertEqual(run('git', 'config', '--get', 'core.hooksPath').stdout.strip(),
                              '/existing/custom/hooks')

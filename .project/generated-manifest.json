@@ -2,25 +2,28 @@
   "generator": "tools/pdd/render.py",
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
-    "project.yaml": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
-    ".project/state.json": "639948eaa8eee35598bc75fbda22bea3f5b551c24e5ad64f75ad48544b9c25ad",
-    ".project/delivery.json": "bf46dd3ebbba64b3c70ff45870d5cd4e5d233bbfef03d6a31cdce4b6ef2de123",
-    "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
-    "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
-    "backend/src/modules/delivery/delivery.model.js": "90056fcdd26eb2d4eb7b76cda3796abb641d53d5ab1e4ae33b1fd12445e1301d",
-    "backend/src/modules/notifications/notification.model.js": "f1bf6316f3d546e15067bd0608233a1cd348ed5c25aebcbf2def4ad69b01c877",
-    "backend/src/modules/orders/order.model.js": "a1761b2aec62ccb5089f98c7ebc7fbc655c8d9c7e662301b2df0ac425f27d04f",
-    "backend/src/modules/orders/purchase-request.model.js": "cbbc3527e82404d7bdd02587c7132b2d00907e4032bf5fd0ec74bfef3fcab95f",
-    "backend/src/modules/payments/escrow-hold.model.js": "c7fa215129c6f7ff7f0cea6c2f7df2a88e846f467082cd94b517b0e949600845",
-    "backend/src/modules/payments/transaction.model.js": "ad74d579aab5d4db26a74bac1b03ae3430b8aaed85154a7030720cef85539f79",
-    "backend/src/modules/payments/wallet.model.js": "29dfb4558d943a8c72b740929f06c5632bab72fca01cb6b6cca12bb3cea714c5",
-    "backend/src/modules/products/category.model.js": "f5b11f7e73be0eb3cbfe5bb2cf53cf8d401aaf9df3129d0cc18566d6c8e588d3",
-    "backend/src/modules/products/product.model.js": "cdb493cbaf495500864624857053a366bda0ef0aa458814d4cf84aae574144c7",
-    "backend/src/modules/reports/dispute.model.js": "9f17b296a3e1c4bee2dbf2707ee66ad96b23b5be55e5caab2cdf01ae5c72f6f4",
-    "backend/src/modules/reports/report.model.js": "f8da726e13dc3fc22222a7c2bf55e941f91e433da79e3ca218047874ec8814f0",
-    "backend/src/modules/reports/review.model.js": "ba22a1c9d6f98c657c9b37b2e3b944721975e497e8e0ead75788d6bebb3dbe17",
-    "backend/src/modules/users/favorite.model.js": "de893fad8098bbedeae50a54612aa9cfdc93f6198107d7c7f23962b3b6f5795f",
-    "backend/src/modules/users/user.model.js": "5647f83ecdf39bbc7011c3079f931239a1588694aa7d654015872fa9d9373901"
+    "project.yaml": "1d370637a237814bc023320bc9107db882390c8011c4c3fa260e039a227240f3",
+    ".project/state.json": "65a69c532747faab4a4af1a87be508efb1714cbc1742701c2d1fc7a9f669edc5",
+    ".project/delivery.json": "92cdc64d25e774e0211711441c16101b824ed97048512a8c8990b2e402f4cdd2",
+    "backend\\src\\modules\\chat\\conversation.model.js": "82c713e380bc8ab2e64d16da46ddba9cdecf5a3c28617718afb1e23a7d040dd2",
+    "backend\\src\\modules\\chat\\message.model.js": "ee008425d9c32a1424143aa38e5da14a219d0a530d16f17b0531101effc32a29",
+    "backend\\src\\modules\\delivery\\delivery.model.js": "18071087dcf08bbfb643a47a36d7c01d9f7fbc193432e42481dfcab4fc95a16b",
+    "backend\\src\\modules\\notifications\\notification.model.js": "e5754b0f32d1bd57d66765581cbfa4602eaddf4b791e53845eca1004551a2da9",
+    "backend\\src\\modules\\orders\\order.model.js": "7e16b16e0456b7dc1abb9432eaedc9454c34681d6dfd1c8ebb0e51511be9710e",
+    "backend\\src\\modules\\orders\\purchase-request.model.js": "ffb2e783eee2b49b75303b2d720621676a07b2a34b6556b47dfdc5b950e3e93a",
+    "backend\\src\\modules\\payments\\escrow-hold.model.js": "d9ab1c94026d658f2a62f157b08303186b4fa35d60623add66db29a76718333e",
+    "backend\\src\\modules\\payments\\transaction.model.js": "c984f45baa3152f05280df7fdb7003bf5785236ac396e8ebea9cb1f260f0126d",
+    "backend\\src\\modules\\payments\\wallet.model.js": "4e1c1b8e9b912052029ba03ea1076fd289718414089cbf71d2a48454c9bbb81d",
+    "backend\\src\\modules\\products\\category.model.js": "743bad5f0d088af90d7dca90fda618a4a98a8cc1d3771d24cbe4fe0680df8455",
+    "backend\\src\\modules\\products\\product.model.js": "63ba414a65c9b9ae84c2b6e509387282cff1dd93a652bd06c38bca18815b8ff0",
+    "backend\\src\\modules\\reports\\dispute.model.js": "dabcfada548e64405ccaf8d8d7ef67069d2a1dee2a70700c5a64b25b3a77d75c",
+    "backend\\src\\modules\\reports\\report.model.js": "ae06601f611374891a91ae1e50036b148ac3eaa0caf41514e3726b08d4975e6c",
+    "backend\\src\\modules\\reports\\review.model.js": "ff43b1edbe46dadc47aaff46df3d41b3a54b06c7f78a1678c79c870b2254b683",
+    "backend\\src\\modules\\support\\support-conversation.model.js": "6e4791b5f57534bfcf2ba3c73031d66fb3da86dadb13e070faa7ff4282c94cd1",
+    "backend\\src\\modules\\support\\support-message.model.js": "b05df4f7438828682a16e724f68c4591eef6509588d2ab2eef3c6cfd606d2bc8",
+    "backend\\src\\modules\\users\\cart-item.model.js": "a90e3bcd546034e284c2f0583438a4455c4bbaf78bf29b1a2ffbf6f1307612d7",
+    "backend\\src\\modules\\users\\favorite.model.js": "07ffa91e276c017093f9ec430777787d66a2264c416203b8edb17063a2640503",
+    "backend\\src\\modules\\users\\user.model.js": "3db6d153b4fe6e01dd2082f75614c0f6b49fc1f4bc46038ae4cb1d57edb2f6cc"
   },
   "outputs": {
     "docs/requirements/FR-AUTH.md": {
@@ -397,7 +400,7 @@
     },
     "docs/technical/data-model.md": {
       "ownership": "generated",
-      "sha256": "509916a313b6542c13ca84f8f1c930d2641a487447bf1a75f80bf6845480b55c"
+      "sha256": "9c4bdf459cde7010c21adb69cca3786c7104befb50a74db12bce6b63d1d9c09b"
     },
     ".agent/index.json": {
       "ownership": "generated",

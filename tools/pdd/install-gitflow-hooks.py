@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """Install Gitflow hooks in this repository's shared Git directory."""
 
+import os
+import shlex
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 git_dir = Path(subprocess.check_output(
-    ['git', 'rev-parse', '--path-format=absolute', '--git-common-dir'], text=True).strip())
+    ['git', 'rev-parse', '--git-common-dir'], text=True).strip())
+if not git_dir.is_absolute():
+    git_dir = Path.cwd() / git_dir
 destination = git_dir / 'gitflow-hooks'
 existing = subprocess.run(['git', 'config', '--get', 'core.hooksPath'], capture_output=True, text=True)
 if existing.returncode not in (0, 1):
@@ -19,9 +24,10 @@ if not existing.stdout.strip() and any((hooks / name).exists() for name in ('pre
     raise SystemExit('Existing commit hooks found; preserve them and integrate the Gitflow checks manually.')
 destination.mkdir(exist_ok=True)
 shutil.copyfile(ROOT / 'tools/pdd/check-gitflow.py', destination / 'check-gitflow.py')
+python = 'py -3' if os.name == 'nt' else shlex.quote(sys.executable)
 for name, arguments in (('pre-commit', '--local'), ('commit-msg', '--local --message-file "$1"')):
     path = destination / name
-    path.write_text('#!/bin/sh\nexec python3 "$(dirname "$0")/check-gitflow.py" ' + arguments + '\n')
+    path.write_text('#!/bin/sh\nexec ' + python + ' "$(dirname "$0")/check-gitflow.py" ' + arguments + '\n')
     path.chmod(0o755)
 subprocess.run(['git', 'config', '--local', 'core.hooksPath', str(destination)], check=True)
 print(f'PASS: Gitflow hooks installed at {destination}')

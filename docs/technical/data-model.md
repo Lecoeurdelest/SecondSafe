@@ -18,6 +18,9 @@ Generated from the Mongoose schemas by `tools/pdd/schema-dump.js` and `tools/pdd
 | [Dispute](#dispute) | `disputes` | `backend/src/modules/reports/dispute.model.js` | 26 | 4 |
 | [Report](#report) | `reports` | `backend/src/modules/reports/report.model.js` | 18 | 6 |
 | [Review](#review) | `reviews` | `backend/src/modules/reports/review.model.js` | 19 | 6 |
+| [SupportConversation](#supportconversation) | `supportconversations` | `backend/src/modules/support/support-conversation.model.js` | 11 | 6 |
+| [SupportMessage](#supportmessage) | `supportmessages` | `backend/src/modules/support/support-message.model.js` | 9 | 4 |
+| [CartItem](#cartitem) | `cartitems` | `backend/src/modules/users/cart-item.model.js` | 4 | 3 |
 | [Favorite](#favorite) | `favorites` | `backend/src/modules/users/favorite.model.js` | 4 | 3 |
 | [User](#user) | `users` | `backend/src/modules/users/user.model.js` | 29 | 1 |
 
@@ -461,6 +464,73 @@ Collection `reviews` · `backend/src/modules/reports/review.model.js`
 | `{"reviewedUserId": 1, "status": 1, "createdAt": -1}` | — |
 | `{"reviewerId": 1, "createdAt": -1}` | — |
 | `{"rating": 1}` | — |
+
+## SupportConversation
+
+Collection `supportconversations` · `backend/src/modules/support/support-conversation.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `customerId` | ObjectId | yes | ref → `User` |
+| `assignedStaffId` | ObjectId |  | ref → `User`; default `null` |
+| `subject` | String | yes | maxlength 120 |
+| `status` | String |  | enum: `open`, `closed`; default `"open"` |
+| `lastMessage` | String |  | maxlength 4000 |
+| `lastMessageAt` | Date |  |  |
+| `customerUnreadCount` | Number |  | min 0; default `0` |
+| `staffUnreadCount` | Number |  | min 0; default `0` |
+| `_id` | ObjectId |  |  |
+| `createdAt` | Date |  |  |
+| `updatedAt` | Date |  |  |
+
+| Index | Options |
+|---|---|
+| `{"customerId": 1}` | — |
+| `{"assignedStaffId": 1}` | — |
+| `{"status": 1}` | — |
+| `{"lastMessageAt": 1}` | — |
+| `{"status": 1, "lastMessageAt": -1}` | — |
+| `{"customerId": 1, "lastMessageAt": -1}` | — |
+
+## SupportMessage
+
+Collection `supportmessages` · `backend/src/modules/support/support-message.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `conversationId` | ObjectId | yes | ref → `SupportConversation` |
+| `senderId` | ObjectId | yes | ref → `User` |
+| `senderRole` | String | yes | enum: `user`, `moderator`, `admin` |
+| `content` | String | yes | maxlength 6000 |
+| `isRead` | Boolean |  | default `false` |
+| `readAt` | Date |  |  |
+| `_id` | ObjectId |  |  |
+| `createdAt` | Date |  |  |
+| `updatedAt` | Date |  |  |
+
+| Index | Options |
+|---|---|
+| `{"conversationId": 1}` | — |
+| `{"senderId": 1}` | — |
+| `{"isRead": 1}` | — |
+| `{"conversationId": 1, "createdAt": -1}` | — |
+
+## CartItem
+
+Collection `cartitems` · `backend/src/modules/users/cart-item.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `user` | ObjectId | yes | ref → `User` |
+| `product` | ObjectId | yes | ref → `Product` |
+| `createdAt` | Date |  |  |
+| `_id` | ObjectId |  |  |
+
+| Index | Options |
+|---|---|
+| `{"user": 1}` | — |
+| `{"product": 1}` | — |
+| `{"user": 1, "product": 1}` | unique: true |
 
 ## Favorite
 
