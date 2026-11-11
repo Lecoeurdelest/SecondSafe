@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 6/73 tasks done (6 done, 2 in_progress, 13 verifying, 6 blocked, 46 todo). 156 active requirements, 231 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 6/75 tasks done (6 done, 2 in_progress, 14 verifying, 6 blocked, 47 todo). 158 active requirements, 237 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
@@ -88,6 +88,10 @@ Admins manage accounts, create moderators, restrict sellers, lock moderators and
 ### 4.13 Scheduled jobs and data operations
 
 Jobs cancel unpaid orders, refund unshipped orders, complete delivered orders and expire old listings (D-107). Scripts seed, verify, index, migrate and create the first admin. Requirements: FR-SYS-01 … FR-SYS-06 (FR-SYS-05 retired).
+
+### 4.14 Checkout recovery
+
+A checkout is abandoned when a buyer starts paying and does not finish. A buyer whose order is about to pass its payment deadline is reminded once; an order cancelled by the payment timeout, or a cart item left for a day, becomes an open abandoned checkout that the buyer can resume, buy again or dismiss. Staff read how many checkouts were recovered and what they were worth. Requirements: FR-ORD-13, FR-WEB-21. Details: `docs/technical/abandoned-checkout.md`.
 
 ## 5. Quality requirements
 
@@ -180,3 +184,7 @@ Every new commit author, committer and PR author is Lecoeurdelest, with no co-au
 Gitflow enforcement amendment (2026-10-09): every new commit and PR, including documentation, tooling and review slices, follows the branch and integration rules in `docs/technical/gitflow.md`. Local hooks reject direct stable/integration commits, detached work and incorrect task scope or identity. CI checks every PR target, rejects feature-to-main delivery and verifies task scope. Temporary review stacks preserve small diffs until prerequisites merge, then integrate into `develop`; no merge or history rewrite is authorized by this amendment.
 
 The initial destination inspection finds an app-start regression: the merged orders routes call authentication and seller guards that are still stubs. TASK-001 is marked `needs_revalidation` with historical evidence retained. TASK-003 restores fail-closed HTTP startup while TASK-005/TASK-006 supply the guards. The repair must never expose orders without authentication.
+
+## 13. Checkout recovery amendment (2026-11-10)
+
+The user requests abandoned checkout features on top of the WDP migration. The scope in section 4.14 is the conventional reading of that request: detect unfinished checkouts, remind the buyer once, let them recover, and report the recovery rate. It is not part of the WDP baseline, so it has no baseline reference. TASK-075 delivers the backend and is the explicit schema task (D-003) for the new additive `abandonedcheckouts` collection; TASK-076 delivers the web client. The identifier TASK-074 is left unused because a `task-074` branch name already exists in the repository history outside this model. Existing task IDs, criteria and evidence are unchanged.

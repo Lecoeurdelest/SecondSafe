@@ -10,7 +10,7 @@ const app = require('../src/app');
 
 const MODULES_DIR = path.join(__dirname, '..', 'src', 'modules');
 const EXPECTED_MODELS = [
-  'CartItem', 'Category', 'Conversation', 'Delivery', 'Dispute', 'EscrowHold', 'Favorite', 'Message', 'Notification',
+  'AbandonedCheckout', 'CartItem', 'Category', 'Conversation', 'Delivery', 'Dispute', 'EscrowHold', 'Favorite', 'Message', 'Notification',
   'Order', 'Product', 'PurchaseRequest', 'Report', 'Review', 'SupportConversation', 'SupportMessage', 'Transaction', 'User', 'Wallet'
 ];
 

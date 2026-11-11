@@ -2,6 +2,7 @@ const Order = require('../modules/orders/order.model');
 const Product = require('../modules/products/product.model');
 const Dispute = require('../modules/reports/dispute.model');
 const escrowService = require('../modules/payments/escrow.service');
+const abandonedCheckoutService = require('../modules/orders/abandoned-checkout.service');
 const { createNotification } = require('../modules/notifications/notification.service');
 const business = require('../config/business');
 const logger = require('../common/utils/logger.util');
@@ -44,6 +45,7 @@ async function cancelUnpaidOrder(order, now) {
   );
   if (!cancelled) return;
   await Product.updateOne({ _id: cancelled.productId, status: 'pending' }, { $set: { status: 'active' } });
+  await abandonedCheckoutService.recordAbandonedOrder(cancelled, now);
   await notifySeller(cancelled);
 }
 

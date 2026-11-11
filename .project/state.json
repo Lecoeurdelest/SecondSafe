@@ -1148,6 +1148,51 @@
           "note": "Full-stack migration requested; implementation has not yet been verified"
         }
       ]
+    },
+    "TASK-075": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "Payment reminder, abandonment tracking, cart reminder, reconciliation and the buyer and staff endpoints implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "todo",
+          "note": "Abandoned checkout requested on 2026-11-10; implementation has not yet been verified"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement the abandoned checkout request"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Payment reminder, abandonment tracking, cart reminder, reconciliation and the buyer and staff endpoints implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-075/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-075.md",
+      "criteria": {
+        "AC-ORD-13-1": "inconclusive",
+        "AC-ORD-13-2": "inconclusive",
+        "AC-ORD-13-3": "inconclusive",
+        "AC-ORD-13-4": "inconclusive",
+        "AC-ORD-13-5": "inconclusive"
+      }
+    },
+    "TASK-076": {
+      "execution": "todo",
+      "relevance": "current",
+      "detail": "Waiting for TASK-063, TASK-075",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "todo",
+          "note": "Abandoned checkout requested on 2026-11-10; implementation has not yet been verified"
+        }
+      ]
     }
   }
 }

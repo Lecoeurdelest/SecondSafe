@@ -108,6 +108,8 @@
     "docs/task/TASK-071.md",
     "docs/task/TASK-072.md",
     "docs/task/TASK-073.md",
+    "docs/task/TASK-075.md",
+    "docs/task/TASK-076.md",
     "docs/technical/data-model.md",
     "plan.md#progress"
   ],
@@ -184,6 +186,8 @@
     "TASK-070": "docs/task/TASK-070.md",
     "TASK-071": "docs/task/TASK-071.md",
     "TASK-072": "docs/task/TASK-072.md",
-    "TASK-073": "docs/task/TASK-073.md"
+    "TASK-073": "docs/task/TASK-073.md",
+    "TASK-075": "docs/task/TASK-075.md",
+    "TASK-076": "docs/task/TASK-076.md"
   }
 }

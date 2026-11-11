@@ -2,12 +2,14 @@ jest.mock('../src/modules/orders/order.model', () => ({ find: jest.fn(), findOne
 jest.mock('../src/modules/products/product.model', () => ({ updateOne: jest.fn() }));
 jest.mock('../src/modules/reports/dispute.model', () => ({ distinct: jest.fn() }));
 jest.mock('../src/modules/payments/escrow.service', () => ({ releaseFunds: jest.fn(), refundFunds: jest.fn() }));
+jest.mock('../src/modules/orders/abandoned-checkout.service', () => ({ recordAbandonedOrder: jest.fn() }));
 jest.mock('../src/modules/notifications/notification.service', () => ({ createNotification: jest.fn() }));
 
 const Order = require('../src/modules/orders/order.model');
 const Product = require('../src/modules/products/product.model');
 const Dispute = require('../src/modules/reports/dispute.model');
 const escrowService = require('../src/modules/payments/escrow.service');
+const abandonedCheckoutService = require('../src/modules/orders/abandoned-checkout.service');
 const { createNotification } = require('../src/modules/notifications/notification.service');
 const logger = require('../src/common/utils/logger.util');
 const business = require('../src/config/business');
@@ -21,7 +23,7 @@ beforeEach(() => {
   jest.spyOn(logger, 'error').mockImplementation(() => {});
 });
 
-test('an unpaid order past its deadline is cancelled, its listing reopened and the seller told (AC-SYS-01-1)', async () => {
+test('an unpaid order past its deadline is cancelled, its listing reopened and the checkout recorded as abandoned (AC-SYS-01-1)', async () => {
   const order = { _id: 'order-1', productId: 'product-1', buyerId: 'buyer', sellerId: 'seller' };
   Order.find.mockReturnValue(limited([order]));
   Order.findOneAndUpdate.mockResolvedValue({ ...order, status: 'cancelled' });
@@ -35,6 +37,7 @@ test('an unpaid order past its deadline is cancelled, its listing reopened and t
     { new: true }
   );
   expect(Product.updateOne).toHaveBeenCalledWith({ _id: 'product-1', status: 'pending' }, { $set: { status: 'active' } });
+  expect(abandonedCheckoutService.recordAbandonedOrder).toHaveBeenCalledWith(expect.objectContaining({ _id: 'order-1' }), now);
   expect(createNotification).toHaveBeenCalledWith('seller', expect.objectContaining({ orderId: 'order-1' }));
 });
 
@@ -45,7 +48,7 @@ test('an order paid while the job runs is left alone', async () => {
   await jobs.cancelUnpaidOrders(now);
 
   expect(Product.updateOne).not.toHaveBeenCalled();
-  expect(createNotification).not.toHaveBeenCalled();
+  expect(abandonedCheckoutService.recordAbandonedOrder).not.toHaveBeenCalled();
 });
 
 test('delivered, undisputed orders past the configured window are completed through escrow; one failure does not stop the batch (AC-SYS-02-1, AC-NFR-REL-03-1)', async () => {

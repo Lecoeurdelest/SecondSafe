@@ -1,9 +1,13 @@
 jest.mock('../src/services/order-jobs.service', () => ({
   cancelUnpaidOrders: jest.fn(), completeDeliveredOrders: jest.fn(), refundUnshippedOrders: jest.fn()
 }));
+jest.mock('../src/modules/orders/abandoned-checkout.service', () => ({
+  remindExpiringPayments: jest.fn(), reconcile: jest.fn(), detectAbandonedCarts: jest.fn()
+}));
 
 const logger = require('../src/common/utils/logger.util');
 const orderJobs = require('../src/services/order-jobs.service');
+const abandonedCheckoutService = require('../src/modules/orders/abandoned-checkout.service');
 const { startAllCronJobs, stopAllCronJobs, runJob, JOBS } = require('../src/services/cron.service');
 
 beforeEach(() => {
@@ -18,20 +22,22 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-test('schedules every order lifecycle job once', () => {
+test('schedules every order lifecycle and abandoned checkout job once', () => {
   expect(startAllCronJobs()).toBe(JOBS.length);
   expect(startAllCronJobs()).toBe(JOBS.length);
   expect(jest.getTimerCount()).toBe(JOBS.length);
   expect(JOBS.map(job => job.name)).toEqual(expect.arrayContaining([
-    'payment-timeout', 'auto-complete-delivered', 'late-shipping-refund'
+    'payment-timeout', 'auto-complete-delivered', 'late-shipping-refund',
+    'checkout-payment-reminder', 'abandoned-cart-detection', 'abandoned-checkout-reconcile'
   ]));
 });
 
-test('the payment timeout job runs every minute (AC-SYS-01-1)', async () => {
+test('the payment timeout job runs every minute and the payment reminder twice as often (AC-SYS-01-1)', async () => {
   orderJobs.cancelUnpaidOrders.mockResolvedValue(0);
   startAllCronJobs();
   await jest.advanceTimersByTimeAsync(3 * 60 * 1000);
   expect(orderJobs.cancelUnpaidOrders).toHaveBeenCalledTimes(3);
+  expect(abandonedCheckoutService.remindExpiringPayments).toHaveBeenCalledTimes(6);
   expect(orderJobs.completeDeliveredOrders).not.toHaveBeenCalled();
 });
 

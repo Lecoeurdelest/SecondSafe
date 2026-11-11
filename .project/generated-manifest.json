@@ -2,13 +2,14 @@
   "generator": "tools/pdd/render.py",
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
-    "project.yaml": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
-    ".project/state.json": "d372b1536d863c1622adceafe0adf48b50ad8cb05033f0e4e95a97655516b527",
-    ".project/delivery.json": "13fb0ed80bdcfc5799104630c86d9be59c18f271b4967b9d7257d2389ed53c49",
+    "project.yaml": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+    ".project/state.json": "3e4518d285cff8659574523d4a892fa6527da8be6fd3f641b00eb6069ea53c4d",
+    ".project/delivery.json": "312a33a25346d11461b7728a13fb3e82a04f6b47e9ea8d3e563a12ecf3b4fb7f",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
     "backend/src/modules/delivery/delivery.model.js": "90056fcdd26eb2d4eb7b76cda3796abb641d53d5ab1e4ae33b1fd12445e1301d",
     "backend/src/modules/notifications/notification.model.js": "f1bf6316f3d546e15067bd0608233a1cd348ed5c25aebcbf2def4ad69b01c877",
+    "backend/src/modules/orders/abandoned-checkout.model.js": "f0c95d1d5d2ded350e1c463c3af47aaabeccc25ca1d2256c1383cc06530bef93",
     "backend/src/modules/orders/order.model.js": "a1761b2aec62ccb5089f98c7ebc7fbc655c8d9c7e662301b2df0ac425f27d04f",
     "backend/src/modules/orders/purchase-request.model.js": "cbbc3527e82404d7bdd02587c7132b2d00907e4032bf5fd0ec74bfef3fcab95f",
     "backend/src/modules/payments/escrow-hold.model.js": "c7fa215129c6f7ff7f0cea6c2f7df2a88e846f467082cd94b517b0e949600845",
@@ -52,7 +53,7 @@
     },
     "docs/requirements/FR-ORD.md": {
       "ownership": "generated",
-      "sha256": "cef08b9f6ba16296144727cb6e05418d0c1b0c384517293429dbd54e37ade4ff"
+      "sha256": "5ac0bf96453954d9a35c78a619385b9eb2378b9dc61bda8ade938a7560036d09"
     },
     "docs/requirements/FR-PAY.md": {
       "ownership": "generated",
@@ -92,7 +93,7 @@
     },
     "docs/requirements/FR-WEB.md": {
       "ownership": "generated",
-      "sha256": "711e15841f2f02b75ffe7daf07c7e2c03d7052a8fadd0735a4803073b49654b8"
+      "sha256": "0d49479fb8de4308d013774c3ff6451d1500bd9267dabad360e5a4fbbbd90484"
     },
     "docs/requirements/NFR.md": {
       "ownership": "generated",
@@ -100,11 +101,11 @@
     },
     "docs/requirements/README.md": {
       "ownership": "generated",
-      "sha256": "24abf52d7aa82c4f45b38ad70199db7351d1218784f5704a39f83748310477bf"
+      "sha256": "990de8a7ab4c338b844ef8fbbcf87eab2a6fc4a274f17506f5feb4e8b24dfcd3"
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "5b0e4f707b316ca71a609813ef390b9a48dec18c1a47457be0b0f79076dfdb3e"
+      "sha256": "626a373e90b28fa1640143ca60682097e194fc1576eb02d6b9594108eb975791"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -398,19 +399,27 @@
       "ownership": "generated",
       "sha256": "b5a87a11cf4cadf2655dd3bc460b3c20c5e31baa03970f453a99b159affa0aa4"
     },
+    "docs/task/TASK-075.md": {
+      "ownership": "generated",
+      "sha256": "1027bd91721de77afc8787f92440404346859a20b979f6b697a36e44b4f8455b"
+    },
+    "docs/task/TASK-076.md": {
+      "ownership": "generated",
+      "sha256": "a54da9edda43761ceb0fcb8b43f8c8b7d6ebcae3970f3160684fb4ec78e8ec56"
+    },
     "docs/technical/data-model.md": {
       "ownership": "generated",
-      "sha256": "9c4bdf459cde7010c21adb69cca3786c7104befb50a74db12bce6b63d1d9c09b"
+      "sha256": "1cd4ec5c017a669bcf11ada63f2aa8034213f1bcef4be3d641e31e226505aadf"
     },
     ".agent/index.json": {
       "ownership": "generated",
-      "sha256": "708b172aecbabda53aecbe5a80aca912672d00151077eac8cff0ffa889bbf38c"
+      "sha256": "93ce82b758b35e97f661b04fb487ed4c0e6af1501fdf34dc86dcdb10359095a8"
     }
   },
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "71bee7207f751b62c9ea587305b59bf8e83aa41e5abba38c0e24492910e4c27a"
+      "sha256": "dca0330a0f5cd354884e0e3e8c83ee8c29dedc22ea69e5c0fc98036e307d3192"
     }
   }
 }

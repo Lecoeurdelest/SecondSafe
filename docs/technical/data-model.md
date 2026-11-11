@@ -8,6 +8,7 @@ Generated from the Mongoose schemas by `tools/pdd/schema-dump.js` and `tools/pdd
 | [Message](#message) | `messages` | `backend/src/modules/chat/message.model.js` | 10 | 5 |
 | [Delivery](#delivery) | `deliveries` | `backend/src/modules/delivery/delivery.model.js` | 18 | 3 |
 | [Notification](#notification) | `notifications` | `backend/src/modules/notifications/notification.model.js` | 15 | 4 |
+| [AbandonedCheckout](#abandonedcheckout) | `abandonedcheckouts` | `backend/src/modules/orders/abandoned-checkout.model.js` | 16 | 5 |
 | [Order](#order) | `orders` | `backend/src/modules/orders/order.model.js` | 29 | 9 |
 | [PurchaseRequest](#purchaserequest) | `purchaserequests` | `backend/src/modules/orders/purchase-request.model.js` | 13 | 8 |
 | [EscrowHold](#escrowhold) | `escrowholds` | `backend/src/modules/payments/escrow-hold.model.js` | 13 | 3 |
@@ -135,6 +136,37 @@ Collection `notifications` · `backend/src/modules/notifications/notification.mo
 | `{"recipientId": 1, "isRead": 1, "createdAt": -1}` | — |
 | `{"recipientId": 1, "type": 1}` | — |
 | `{"recipientId": 1, "productId": 1, "createdAt": -1}` | — |
+
+## AbandonedCheckout
+
+Collection `abandonedcheckouts` · `backend/src/modules/orders/abandoned-checkout.model.js`
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `buyerId` | ObjectId | yes | ref → `User` |
+| `sellerId` | ObjectId |  | ref → `User` |
+| `productId` | ObjectId | yes | ref → `Product` |
+| `orderId` | ObjectId |  | ref → `Order` |
+| `source` | String | yes | enum: `order`, `cart` |
+| `status` | String | yes | enum: `at_risk`, `open`, `recovered`, `dismissed`, `expired`; default `"open"` |
+| `amount` | Number | yes | min 0 |
+| `abandonedAt` | Date |  |  |
+| `remindedAt` | Date |  |  |
+| `reminderCount` | Number |  | min 0; default `0` |
+| `recoveredAt` | Date |  |  |
+| `recoveredOrderId` | ObjectId |  | ref → `Order` |
+| `expiresAt` | Date |  |  |
+| `_id` | ObjectId |  |  |
+| `createdAt` | Date |  |  |
+| `updatedAt` | Date |  |  |
+
+| Index | Options |
+|---|---|
+| `{"buyerId": 1}` | — |
+| `{"orderId": 1}` | unique: true, partialFilterExpression: {"orderId": {"$exists": true}} |
+| `{"buyerId": 1, "productId": 1, "source": 1, "createdAt": -1}` | — |
+| `{"status": 1, "expiresAt": 1}` | — |
+| `{"createdAt": -1}` | — |
 
 ## Order
 

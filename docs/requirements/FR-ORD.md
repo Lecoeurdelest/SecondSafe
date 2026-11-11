@@ -135,3 +135,15 @@ Baseline: `order.service.js calculatePlatformFee`, `escrow.service.js`
 |---|---|---|---|
 | `AC-ORD-12-1` | The fee equals round(agreedAmount × fee rate) with the rate read from configuration (default 5%); the buyer pays agreedAmount, the seller receives agreedAmount minus the fee, and the fee is recorded as a fee transaction. | static flow review, behavioral test | [TASK-025](../task/TASK-025.md) `[]` |
 | `AC-ORD-12-2` | The revenue report computes fees from the same configuration source. | behavioral test | [TASK-039](../task/TASK-039.md) `[!]` |
+
+### FR-ORD-13 — Abandoned checkout tracking and recovery
+
+Risk: `standard` · Component: `CMP-ORDERS` · Source: `plan.md` § 4.14 Checkout recovery
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-ORD-13-1` | A buyer whose order awaits payment is reminded exactly once when the payment deadline is within the configured lead time (default 60 seconds), and the order is tracked as at risk. | behavioral test | [TASK-075](../task/TASK-075.md) `[!]` |
+| `AC-ORD-13-2` | An order cancelled by the payment timeout is recorded as an open abandoned checkout with a recovery deadline (default 7 days), and the buyer is told the listing is on sale again. | behavioral test | [TASK-075](../task/TASK-075.md) `[!]` |
+| `AC-ORD-13-3` | A cart item older than the configured age (default 24 hours) whose listing is still on sale produces one reminder for as long as the item stays in the cart. | behavioral test | [TASK-075](../task/TASK-075.md) `[!]` |
+| `AC-ORD-13-4` | A tracked checkout becomes recovered when the same buyer pays for the listing, and expired when the recovery deadline passes, the listing stops being available or the cart item is removed. | behavioral test | [TASK-075](../task/TASK-075.md) `[!]` |
+| `AC-ORD-13-5` | A buyer lists and dismisses only their own unfinished checkouts; only moderators and admins read the recovery summary (counts, integer VND amounts and recovery rate by source) and the full list. | behavioral test | [TASK-075](../task/TASK-075.md) `[!]` |

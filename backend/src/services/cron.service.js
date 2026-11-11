@@ -1,13 +1,18 @@
 const orderJobs = require('./order-jobs.service');
+const abandonedCheckoutService = require('../modules/orders/abandoned-checkout.service');
 const logger = require('../common/utils/logger.util');
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
 
 const JOBS = Object.freeze([
+  // Ticks faster than the reminder lead time so a reminder always lands well before the deadline.
+  { name: 'checkout-payment-reminder', everyMs: MINUTE / 2, run: now => abandonedCheckoutService.remindExpiringPayments(now) },
   { name: 'payment-timeout', everyMs: MINUTE, run: now => orderJobs.cancelUnpaidOrders(now) },
+  { name: 'abandoned-checkout-reconcile', everyMs: 5 * MINUTE, run: now => abandonedCheckoutService.reconcile(now) },
   { name: 'auto-complete-delivered', everyMs: HOUR, run: now => orderJobs.completeDeliveredOrders(now) },
-  { name: 'late-shipping-refund', everyMs: HOUR, run: now => orderJobs.refundUnshippedOrders(now) }
+  { name: 'late-shipping-refund', everyMs: HOUR, run: now => orderJobs.refundUnshippedOrders(now) },
+  { name: 'abandoned-cart-detection', everyMs: HOUR, run: now => abandonedCheckoutService.detectAbandonedCarts(now) }
 ]);
 
 const running = new Set();

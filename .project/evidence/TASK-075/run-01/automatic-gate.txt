@@ -1,0 +1,23 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py gate project.yaml .project/evidence/TASK-075/run-01/report.json --task TASK-075 --source-hash a7124f11b31d6d3898a9881d38df6b13a1a33f9fcac61ebba3c914d6edc90663
+{
+  "status": "inconclusive",
+  "task_id": "TASK-075",
+  "failures": [],
+  "blockers": [
+    "Applicable validated calibration is unavailable.",
+    "AC-ORD-13-1: criterion did not pass.",
+    "AC-ORD-13-1: finite measured confidence is unavailable.",
+    "AC-ORD-13-2: criterion did not pass.",
+    "AC-ORD-13-2: finite measured confidence is unavailable.",
+    "AC-ORD-13-3: criterion did not pass.",
+    "AC-ORD-13-3: finite measured confidence is unavailable.",
+    "AC-ORD-13-4: criterion did not pass.",
+    "AC-ORD-13-4: finite measured confidence is unavailable.",
+    "AC-ORD-13-5: criterion did not pass.",
+    "AC-ORD-13-5: finite measured confidence is unavailable."
+  ],
+  "minimum_criterion_confidence": null,
+  "scope": "Supplied metadata only; independently verify artifacts, calibration, and dependency state."
+}
+
+exit_code=2

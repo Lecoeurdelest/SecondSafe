@@ -85,6 +85,8 @@ This index is generated from `.project/state.json` and `project.yaml` by `tools/
 | [] | [TASK-071](TASK-071.md) | Web admin order, review and report queues | `todo` | `current` | M7 | TASK-070, TASK-040, TASK-041 | Waiting for dependencies and feature integration evidence | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/72) |
 | [] | [TASK-072](TASK-072.md) | Web admin disputes, withdrawals and revenue | `todo` | `current` | M7 | TASK-070, TASK-029, TASK-039, TASK-042 | Waiting for dependencies and feature integration evidence | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/73) |
 | [] | [TASK-073](TASK-073.md) | Full-stack migration integration and release checks | `todo` | `current` | M8 | TASK-002, TASK-049, TASK-050, TASK-051, TASK-052, TASK-055, TASK-056, TASK-057, TASK-058, TASK-059, TASK-060, TASK-061, TASK-062, TASK-063, TASK-064, TASK-065, TASK-066, TASK-067, TASK-068, TASK-069, TASK-070, TASK-071, TASK-072 | Waiting for dependencies and feature integration evidence | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/74) |
+| [!] | [TASK-075](TASK-075.md) | Abandoned checkout tracking and recovery | `verifying` | `current` | M9 | TASK-010, TASK-032, TASK-046 | Payment reminder, abandonment tracking, cart reminder, reconciliation and the buyer and staff endpoints implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration | [run-01](../../.project/evidence/TASK-075/run-01/report.json) | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/124), [PR](https://github.com/Lecoeurdelest/SecondSafe/pull/126) |
+| [] | [TASK-076](TASK-076.md) | Web abandoned checkout recovery | `todo` | `current` | M9 | TASK-063, TASK-075 | Waiting for TASK-063, TASK-075 | — | [ISSUE](https://github.com/Lecoeurdelest/SecondSafe/issues/125) |
 
 ## Milestones
 
@@ -99,6 +101,7 @@ This index is generated from `.project/state.json` and `project.yaml` by `tools/
 | M6 Migration control | TASK-053 … TASK-053 | 1/1 |
 | M7 Web client | TASK-054 … TASK-072 | 1/19 |
 | M8 Full-stack integration | TASK-073 … TASK-073 | 0/1 |
+| M9 Checkout recovery | TASK-075 … TASK-076 | 0/2 |
 
 ## Open decisions
 

@@ -249,6 +249,13 @@
     },
     "TASK-073": {
       "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/74"
+    },
+    "TASK-075": {
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/124",
+      "pr": "https://github.com/Lecoeurdelest/SecondSafe/pull/126"
+    },
+    "TASK-076": {
+      "issue": "https://github.com/Lecoeurdelest/SecondSafe/issues/125"
     }
   }
 }
