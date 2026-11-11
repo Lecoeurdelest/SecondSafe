@@ -10,7 +10,8 @@ const ORDER_STATUS = ["awaiting_seller_confirmation", "awaiting_payment", "paid"
 const ORDER_STATUS_UPDATABLE = ["paid", "shipped", "completed", "cancelled", "disputed"];
 const REVIEW_STATUS = ["active", "hidden", "reported"];
 const REVIEW_ASSESSMENT = ["pending", "good", "bad"];
-
+const WITHDRAWAL_STATUS = ["pending", "completed", "failed", "cancelled"];
+const WITHDRAWAL_RESOLVE_STATUS = ["completed", "failed", "cancelled"];
 const DISPUTE_STATUS = ["pending", "investigating", "resolved"];
 const DISPUTE_RESOLUTION = ["refund", "release"];
 
@@ -356,6 +357,48 @@ async function markSellerGoodByReview(req, res) {
   }
 }
 
+async function getWithdrawals(req, res) {
+  try {
+    const { status, page, limit } = req.query;
+
+    const statusError = ensureInList(status, WITHDRAWAL_STATUS, "Trạng thái rút tiền");
+    if (statusError) return sendError(res, 400, statusError);
+
+    const result = await moderatorService.getWithdrawals({ status }, { page, limit });
+    return sendSuccess(res, 200, result);
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+async function updateWithdrawalStatus(req, res) {
+  try {
+    const { withdrawalId } = req.params;
+    const { status, note } = req.body;
+
+    const idError = ensureObjectId(withdrawalId, "Mã yêu cầu rút tiền");
+    if (idError) return sendError(res, 400, idError);
+
+    if (!WITHDRAWAL_RESOLVE_STATUS.includes(status)) {
+      return sendError(res, 400, "status phải là completed, failed hoặc cancelled");
+    }
+
+    if (["failed", "cancelled"].includes(status) && (!note || String(note).trim().length < 5)) {
+      return sendError(res, 400, "Vui lòng nhập lý do tối thiểu 5 ký tự cho thao tác này");
+    }
+
+    const result = await moderatorService.updateWithdrawalStatus(
+      withdrawalId,
+      status,
+      String(note || "").trim(),
+      req.user.userId
+    );
+    return sendSuccess(res, 200, result, "Đã cập nhật trạng thái yêu cầu rút tiền");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
 async function getDisputes(req, res) {
   try {
     const { status, page, limit } = req.query;
@@ -478,6 +521,8 @@ module.exports = {
   hideReview,
   markSellerBadByReview,
   markSellerGoodByReview,
+  getWithdrawals,
+  updateWithdrawalStatus,
   getDisputes,
   getDisputeById,
   resolveDispute,

@@ -6,11 +6,13 @@ const Report = require("../reports/report.model");
 const Order = require("../orders/order.model");
 const Review = require("../reports/review.model");
 const Dispute = require("../reports/dispute.model");
+const Transaction = require("../payments/transaction.model");
 const reviewService = require("../reports/review.service");
 const reportService = require("../reports/report.service");
 const orderService = require("../orders/order.service");
 const escrowService = require("../payments/escrow.service");
 const EscrowHold = require("../payments/escrow-hold.model");
+const withdrawalService = require("../payments/withdrawal.service");
 const notificationService = require("../notifications/notification.service");
 const {
   applySellingRestrictionToUser
@@ -783,6 +785,37 @@ async function markSellerGoodByReview(reviewId, moderatorId, note = '') {
   };
 }
 
+async function getWithdrawals(filters = {}, pagination = {}) {
+  const query = { type: "withdrawal" };
+  if (filters.status) query.status = filters.status;
+
+  const { page, limit, skip } = parsePagination(pagination);
+  const withdrawals = await Transaction.find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate("userId", "fullName email")
+    .lean();
+
+  const total = await Transaction.countDocuments(query);
+  return {
+    withdrawals,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+}
+
+async function updateWithdrawalStatus(withdrawalId, nextStatus, note = "", moderatorId = null) {
+  if (nextStatus === "completed") {
+    return withdrawalService.approveWithdrawal(withdrawalId, moderatorId);
+  }
+  return withdrawalService.rejectWithdrawal(withdrawalId, moderatorId, note, nextStatus);
+}
+
 const DISPUTE_QUEUE_ORDER = ["pending", "investigating", "resolved"];
 
 function populateDisputes(query) {
@@ -1047,6 +1080,8 @@ module.exports = {
   hideReview,
   markSellerBadByReview,
   markSellerGoodByReview,
+  getWithdrawals,
+  updateWithdrawalStatus,
   getDisputes,
   getDisputeById,
   resolveDispute,

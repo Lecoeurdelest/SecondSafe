@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-029",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "936527f3d0bddb17638d440dadfb7d0cb49ea7d4a515fc6c0bffbae61a9e71c9",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-PAY-06-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "not_observed",
+      "observation": "flow-review.md shows one approval flow used by the admin routes and the moderator routes. The owning role depends on D-105, which is still proposed",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": false,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "inconclusive",
+          "artifacts": [
+            ".project/evidence/TASK-029/run-01/complexity.txt",
+            ".project/evidence/TASK-029/run-01/flow-review.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-PAY-06-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/withdrawal.test.js and tests/moderator-withdrawals.test.js; flow-review.md; integration section withdrawals (debit once, repeated approval refused, rejection records the reason without a debit)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-029/run-01/complexity.txt",
+            ".project/evidence/TASK-029/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-029/run-01/jest.txt",
+            ".project/evidence/TASK-029/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

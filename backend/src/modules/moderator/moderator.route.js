@@ -28,6 +28,9 @@ router.patch('/reviews/:reviewId/hide', controller.hideReview);
 router.patch('/reviews/:reviewId/mark-bad', controller.markSellerBadByReview);
 router.patch('/reviews/:reviewId/mark-good', controller.markSellerGoodByReview);
 
+router.get('/withdrawals', controller.getWithdrawals);
+router.patch('/withdrawals/:withdrawalId/status', controller.updateWithdrawalStatus);
+
 router.get('/disputes', controller.getDisputes);
 router.get('/disputes/:disputeId', controller.getDisputeById);
 router.patch('/disputes/:disputeId/investigating', controller.markDisputeInvestigating);
