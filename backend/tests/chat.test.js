@@ -247,7 +247,25 @@ test('AC-NFR-SEC-07-1 encryption requires CHAT_ENCRYPTION_KEY without falling ba
   const key = process.env.CHAT_ENCRYPTION_KEY;
   delete process.env.CHAT_ENCRYPTION_KEY;
   try {
-    expect(() => encryptChatContent('secret')).toThrow('Thiếu khóa mã hóa chat');
+    expect(() => encryptChatContent('secret')).toThrow('CHAT_ENCRYPTION_KEY');
+  } finally {
+    process.env.CHAT_ENCRYPTION_KEY = key;
+  }
+});
+
+test('chat API returns an actionable error when CHAT_ENCRYPTION_KEY is missing', async () => {
+  const key = process.env.CHAT_ENCRYPTION_KEY;
+  delete process.env.CHAT_ENCRYPTION_KEY;
+  Conversation.findById.mockReturnValue(chain(conversationDoc()));
+
+  try {
+    const response = await request(app).post('/api/chat/messages')
+      .set('Authorization', auth(BUYER))
+      .send({ conversationId: CONVERSATION, content: 'Tin nhắn kiểm tra' });
+
+    expect(response.status).toBe(503);
+    expect(response.body.message).toContain('CHAT_ENCRYPTION_KEY');
+    expect(Message.create).not.toHaveBeenCalled();
   } finally {
     process.env.CHAT_ENCRYPTION_KEY = key;
   }
