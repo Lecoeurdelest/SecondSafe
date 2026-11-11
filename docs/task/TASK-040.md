@@ -1,7 +1,7 @@
 ---
 id: TASK-040
 title: Report moderation and sanctions
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-006, TASK-037]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-040 — Report moderation and sanctions
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Report queue, resolution and graded sanctions implemented with unit and real-MongoDB evidence; AC-MOD-07-1 needs the owner's reading of "suspend"; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

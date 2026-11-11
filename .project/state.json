@@ -653,10 +653,33 @@
       }
     },
     "TASK-040": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-006, TASK-037",
-      "history": []
+      "detail": "Report queue, resolution and graded sanctions implemented with unit and real-MongoDB evidence; AC-MOD-07-1 needs the owner's reading of \"suspend\"; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Report queue, resolution and graded sanctions implemented with unit and real-MongoDB evidence; AC-MOD-07-1 needs the owner's reading of \"suspend\"; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-040/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-040.md",
+      "criteria": {
+        "AC-MOD-02-1": "inconclusive",
+        "AC-MOD-02-2": "inconclusive",
+        "AC-MOD-02-3": "inconclusive",
+        "AC-MOD-03-1": "inconclusive",
+        "AC-MOD-03-2": "inconclusive",
+        "AC-MOD-07-1": "inconclusive"
+      }
     },
     "TASK-041": {
       "execution": "todo",

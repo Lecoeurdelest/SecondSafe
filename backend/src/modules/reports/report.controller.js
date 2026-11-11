@@ -64,6 +64,28 @@ async function createUserReport(req, res) {
 }
 
 /**
+ * Get reports (admin/moderator only)
+ * GET /api/reports
+ */
+async function getReports(req, res) {
+  try {
+    const { status, reportType, page, limit } = req.query;
+    
+    const filters = {};
+    if (status) filters.status = status;
+    if (reportType) filters.reportType = reportType;
+    
+    const pagination = { page, limit };
+    
+    const result = await reportService.getReports(filters, pagination);
+    
+    sendSuccess(res, 200, result);
+  } catch (error) {
+    sendServiceError(res, error, 400);
+  }
+}
+
+/**
  * Get report by ID
  * GET /api/reports/:reportId
  */
@@ -248,6 +270,40 @@ async function getMyDisputes(req, res) {
 }
 
 /**
+ * Xử lý báo cáo (Dành riêng cho Moderator/Admin)
+ * PUT /api/reports/:reportId/resolve
+ */
+async function resolveReport(req, res) {
+  try {
+    const { reportId } = req.params;
+    // Lấy các quyết định từ body của request do Moderator gửi lên
+    const { status, moderatorDecision, moderatorNotes, moderatorReply, moderatorReplyToReportedUser } = req.body;
+    // Lấy ID của Moderator đang thao tác
+    const moderatorId = req.user.userId;
+
+    // Kiểm tra xem Moderator đã gửi đủ thông tin bắt buộc chưa
+    if (!status || !moderatorDecision) {
+      return sendError(res, 400, 'Thiếu thông tin xử lý (status, hoặc moderatorDecision)');
+    }
+
+    // Gọi service để thực hiện việc cập nhật Database
+    const report = await reportService.resolveReport(
+      reportId, 
+      moderatorId, 
+      status, 
+      moderatorDecision, 
+      moderatorNotes,
+      moderatorReply,
+      moderatorReplyToReportedUser
+    );
+
+    sendSuccess(res, 200, report, 'Đã xử lý báo cáo thành công');
+  } catch (error) {
+    sendServiceError(res, error, 400);
+  }
+}
+
+/**
  * Get dispute by order ID (accessible to buyer/seller)
  * GET /api/orders/:orderId/dispute
  */
@@ -280,6 +336,7 @@ async function confirmSellerReturn(req, res) {
 module.exports = {
   createProductReport,
   createUserReport,
+  getReports,
   getReportById,
   createDispute,
   getDisputes,
@@ -289,5 +346,6 @@ module.exports = {
   addBuyerFollowUp,
   confirmSellerReturn,
   getMyReports,
-  getMyDisputes
+  getMyDisputes,
+  resolveReport
 };
