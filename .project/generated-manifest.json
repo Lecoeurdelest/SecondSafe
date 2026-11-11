@@ -2,7 +2,7 @@
   "generator": "tools/pdd/render.py",
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
-    "project.yaml": "58964a310f0a877efc2cec3b530f5158f77d09aa8e90de2b67ba742fe8898835",
+    "project.yaml": "7e7a359afd5abf06168079fd6fa726a0451e534bea77211cb8fe7ef776ffac56",
     ".project/state.json": "8b5d9b1c9ab982aef2b96bf4f8d030807c33e2912a52670228a6a0199e0fb624",
     ".project/delivery.json": "0c4d59e1993cc890f7adc9402955428e73caf025cd2667c958d369a99af00b6b",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",

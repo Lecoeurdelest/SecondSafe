@@ -28,7 +28,7 @@ def role(branch):
 def validate_route(head, base, allow_stacked=False):
     source, target = role(head), role(base)
     allowed = {
-        'main': {'release', 'hotfix'},
+        'main': {'feature', 'release', 'hotfix'},
         'develop': {'feature', 'release', 'hotfix', 'main'},
     }.get(target, set())
     if allow_stacked and target == 'feature':

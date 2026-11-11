@@ -1,8 +1,8 @@
 # Gitflow and task delivery
 
-`main` is the stable branch. `develop` starts at destination baseline `5ed8be5` and is the integration branch. Each task has a final `feature/task-NNN-description` branch and PR, with prerequisite slice branches when needed for reviewability. Release preparation uses `release/<version>` from `develop`; urgent fixes use `hotfix/<description>` from `main` and are integrated back into `develop` after release. Branch names use these Gitflow prefixes directly, without an additional namespace.
+`main` is the stable deployment branch. `develop` is optional integration history. Each task has a final `feature/task-NNN-description` branch and PR, with prerequisite slice branches when needed for reviewability. Release preparation uses `release/<version>` from `main`; urgent fixes use `hotfix/<description>` from `main`. Branch names use these Gitflow prefixes directly, without an additional namespace.
 
-Independent task PRs target `develop`. For prerequisites still under review, dependent branches may start at the prerequisite branch and PRs target that branch so the review contains only the new task. Each PR names its prerequisite and intended final integration into `develop`. Retarget to `develop` once the prerequisite merges. Never merge an unreviewed stack into `main` or open a cumulative PR pretending to contain a single task.
+Independent task PRs target `main`. For prerequisites still under review, dependent branches may start at the prerequisite branch and PRs target that branch so the review contains only the new task. Each PR names its prerequisite and intended final integration into `main`. Retarget to `main` once the prerequisite merges. Never merge an unreviewed stack or open a cumulative PR pretending to contain a single task.
 
 PR creation is authorized by the user request dated 2026-10-09. PRs remain open for user review until merging is separately authorized. No release, deployment, force push, history rewrite or branch-protection change is part of migration delivery.
 
@@ -14,6 +14,6 @@ Keep each review focused on one responsibility. Aim for at most 500 changed line
 
 Every commit and PR is subject to these rules, including tooling, documentation and review slices. Work on a named feature, release or hotfix branch; direct commits on `main`, `develop` and detached HEAD are rejected by the local hooks. Non-merge feature commits reference only the task in the branch name. Gitflow does not impose an additional commit-message prefix convention.
 
-Feature integration targets `develop`. A feature target is allowed only as the documented temporary review stack described above, then retargeted after its prerequisite merges. Only release/hotfix PRs target `main`. Release/hotfix results are also integrated into `develop`, either from their own branch or by a `main`-to-`develop` synchronization PR. No feature PR targets `main`.
+Feature integration targets `main`. A feature target may use the documented temporary review stack described above, then be retargeted after its prerequisite merges. Release/hotfix PRs also target `main`. Changes may be synchronized to `develop` when that integration branch is used.
 
 Enable local checks with `python3 tools/pdd/install-gitflow-hooks.py`. The installer preserves existing hooks and stores its own hooks in the shared Git directory, so they apply to every worktree. Before pushing, run `python3 tools/pdd/check-gitflow.py --head-branch <feature> --base-branch <target> --base <base-sha> --head HEAD`, adding `--allow-stacked` only for a temporary feature review stack. CI runs the same check and the existing authorship check for every PR target. Hooks and CI are checks; repository branch protection remains a separate GitHub setting.

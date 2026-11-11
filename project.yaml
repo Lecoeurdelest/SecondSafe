@@ -286,10 +286,10 @@ decisions:
     status: accepted
     source: User migration request 2026-10-09; preserves D-003 schemas and existing criteria
   - id: D-011
-    title: Gitflow delivery uses main, develop and task-scoped feature branches and review slices; all new authors and
+    title: Gitflow delivery uses main for approved feature delivery, plus task-scoped feature branches and review slices; all new authors and
       committers are Lecoeurdelest
     status: accepted
-    source: 'User request 2026-10-09: Gitflow, self-service PR creation, sole user authorship'
+    source: 'User requests 2026-10-09 and 2026-11-09: Gitflow, feature-to-main merging, self-service PR creation, sole user authorship'
 invariants:
   - id: INV-01
     statement: 'Money is never created or lost: every balance change writes a transaction with balance before and after, and
