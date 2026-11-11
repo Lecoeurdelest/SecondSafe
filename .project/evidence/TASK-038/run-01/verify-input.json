@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-038",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Dispute opening, responses, follow-ups, return confirmation, lists and detail implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes"
+  ],
+  "complexity": [
+    "backend/src/modules/reports/report.service.js",
+    "backend/src/modules/reports/report.controller.js",
+    "backend/src/modules/reports/report.route.js"
+  ],
+  "flow": "AC-DSP-01-2. Inspected `createDispute` and `openDispute` in `backend/src/modules/reports/report.service.js`. Input validation finishes before a session starts. `openDispute` runs inside `session.withTransaction`: the order is read with the session, the buyer, the order status and the absence of an earlier dispute are checked, the dispute is created with `{ session }`, and the order is saved as `disputed` with the same session. Any throw aborts the transaction, so the dispute and the status change commit together or not at all. `tests/disputes.test.js` asserts the shared session and that a failed dispute write leaves the order unsaved. Once the order is `disputed` it no longer matches the `delivered` filter of the automatic completion job (delivered with TASK-046).",
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Dispute opening, responses, follow-ups, return confirmation, lists and detail implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-DSP-01-1": {
+      "observed": "pass",
+      "note": "tests/disputes.test.js; integration section disputes",
+      "checks": {}
+    },
+    "AC-DSP-01-2": {
+      "observed": "pass",
+      "note": "tests/disputes.test.js (dispute and order saved with the same session; a failed write leaves the order untouched); flow-review.md; integration section disputes",
+      "checks": {}
+    },
+    "AC-DSP-02-1": {
+      "observed": "pass",
+      "note": "tests/disputes.test.js; integration section disputes",
+      "checks": {}
+    },
+    "AC-DSP-03-1": {
+      "observed": "pass",
+      "note": "tests/disputes.test.js; integration section disputes",
+      "checks": {}
+    },
+    "AC-DSP-04-1": {
+      "observed": "pass",
+      "note": "tests/disputes.test.js; integration section disputes (refused for a non-return dispute)",
+      "checks": {}
+    },
+    "AC-DSP-05-1": {
+      "observed": "pass",
+      "note": "tests/disputes.test.js; integration section disputes (seller sees the dispute in their list; unrelated user refused)",
+      "checks": {}
+    }
+  }
+}

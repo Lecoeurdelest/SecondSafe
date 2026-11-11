@@ -1,7 +1,7 @@
 ---
 id: TASK-038
 title: Disputes for buyers and sellers
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-009, TASK-010, TASK-033]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-038 — Disputes for buyers and sellers
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Dispute opening, responses, follow-ups, return confirmation, lists and detail implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

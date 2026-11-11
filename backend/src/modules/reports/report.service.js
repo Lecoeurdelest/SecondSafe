@@ -1,6 +1,10 @@
+const mongoose = require('mongoose');
 const Report = require('./report.model');
+const Dispute = require('./dispute.model');
 const Product = require('../products/product.model');
+const Order = require('../orders/order.model');
 const User = require('../users/user.model');
+const notificationService = require('../notifications/notification.service');
 const { applySellingRestrictionToUser } = require('../../common/utils/seller-restriction.util');
 const business = require('../../config/business');
 
@@ -27,6 +31,7 @@ function requireText(value, message) {
   return text;
 }
 
+const MAX_EVIDENCE_PER_SIDE = 10;
 const USER_AUTO_SUSPEND_REPORT_THRESHOLD = business.reportRestrictionThreshold;
 
 async function tryAutoSuspendByReportThreshold(reportedUserId) {
@@ -55,6 +60,17 @@ async function tryAutoSuspendByReportThreshold(reportedUserId) {
   });
 
   return true;
+}
+
+// Gui thong bao cap nhat tranh chap.
+async function pushDisputeNotification(userId, title, message, disputeId) {
+  if (!userId) return;
+  await notificationService.createNotification(userId, {
+    type: 'dispute_update',
+    title,
+    message,
+    disputeId
+  });
 }
 
 /**
@@ -249,10 +265,303 @@ function reportViewFor(report, requester) {
 }
 
 /**
+ * Tao tranh chap cho don hang.
+ */
+async function createDispute(buyerId, orderId, reason, description, evidenceImages = []) {
+  const evidence = normalizeEvidence(evidenceImages);
+  const text = requireText(description, 'Lý do và mô tả không được để trống');
+  if (!reason) {
+    throw new Error('Lý do và mô tả không được để trống');
+  }
+  if (text.length < 10 || text.length > 1000) {
+    throw new Error('Mô tả phải có từ 10 đến 1000 ký tự');
+  }
+  if (!evidence.length) {
+    throw new Error('Vui lòng cung cấp ít nhất 1 tệp bằng chứng (ảnh hoặc video)');
+  }
+
+  const session = await mongoose.startSession();
+  try {
+    let dispute;
+    await session.withTransaction(async () => {
+      dispute = await openDispute(session, buyerId, orderId, { reason, description: text, evidence });
+    });
+    await dispute.populate([
+      { path: 'orderId', select: 'agreedAmount totalToPay status' },
+      { path: 'buyerId', select: 'fullName email avatar' },
+      { path: 'sellerId', select: 'fullName email avatar' },
+      { path: 'productId', select: 'title price images' }
+    ]);
+    return dispute;
+  } finally {
+    await session.endSession();
+  }
+}
+
+// The dispute and the order's move to `disputed` commit together, so automatic completion
+// can never see a disputed order that still looks delivered (AC-DSP-01-2).
+async function openDispute(session, buyerId, orderId, { reason, description, evidence }) {
+  const order = await Order.findById(orderId).session(session);
+  if (!order) {
+    throw new Error('Đơn hàng không tồn tại');
+  }
+  if (order.buyerId.toString() !== buyerId.toString()) {
+    throw new Error('Bạn không phải người mua của đơn hàng này');
+  }
+  if (!['shipped', 'delivered'].includes(order.status)) {
+    throw new Error('Chỉ có thể khiếu nại đơn hàng đang giao hoặc đã giao đến nơi');
+  }
+  if (await Dispute.findOne({ orderId }).session(session)) {
+    throw new Error('Đơn hàng này đã có khiếu nại rồi');
+  }
+
+  const [dispute] = await Dispute.create([{
+    orderId,
+    buyerId: order.buyerId,
+    sellerId: order.sellerId,
+    productId: order.productId,
+    reason,
+    description,
+    evidenceImages: evidence,
+    status: 'pending',
+    disputeConversation: [{
+      senderRole: 'buyer',
+      senderId: order.buyerId,
+      content: description,
+      evidenceFiles: evidence,
+      createdAt: new Date()
+    }]
+  }], { session });
+
+  order.status = 'disputed';
+  await order.save({ session });
+  return dispute;
+}
+
+/**
+ * Lay danh sach tranh chap theo bo loc + phan trang.
+ */
+async function getDisputes(filters = {}, pagination = {}) {
+  const page = parseInt(pagination.page) || 1;
+  const limit = parseInt(pagination.limit) || 20;
+  const skip = (page - 1) * limit;
+  
+  const query = {};
+  
+  if (filters.status) {
+    query.status = filters.status;
+  }
+  
+  if (filters.buyerId) {
+    query.buyerId = filters.buyerId;
+  }
+  
+  if (filters.sellerId) {
+    query.sellerId = filters.sellerId;
+  }
+
+  if (filters.partyId) {
+    query.$or = [{ buyerId: filters.partyId }, { sellerId: filters.partyId }];
+  }
+  
+  const disputes = await Dispute.find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate('orderId', 'agreedAmount totalToPay status')
+    .populate('buyerId', 'fullName email avatar')
+    .populate('sellerId', 'fullName email avatar')
+    .populate('productId', 'title price images');
+  
+  const total = await Dispute.countDocuments(query);
+  
+  return {
+    disputes,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+}
+
+/**
+ * Lay chi tiet 1 tranh chap, kem kiem tra quyen xem.
+ */
+async function getDisputeById(disputeId, userId) {
+  const dispute = await Dispute.findById(disputeId)
+    .populate('orderId', 'agreedAmount totalToPay status')
+    .populate('buyerId', 'fullName email avatar phone')
+    .populate('sellerId', 'fullName email avatar phone')
+    .populate('productId', 'title price images description')
+    .populate('moderatorId', 'fullName email')
+    .populate('disputeConversation.senderId', 'fullName email avatar');
+  
+  if (!dispute) {
+    throw new Error('Khiếu nại không tồn tại');
+  }
+  
+  // Chi buyer/seller/moderator/admin moi duoc xem.
+  if (userId) {
+    const user = await User.findById(userId);
+    const isAuthorized = 
+      dispute.buyerId._id.toString() === userId.toString() ||
+      dispute.sellerId._id.toString() === userId.toString() ||
+      user.role === 'moderator' ||
+      user.role === 'admin';
+    
+    if (!isAuthorized) {
+      throw new Error('Bạn không có quyền xem khiếu nại này');
+    }
+  }
+  
+  return dispute;
+}
+
+// Loads a dispute for one of its parties while the moderator is investigating it.
+async function requireInvestigatedDispute(disputeId, userId, partyField, messages) {
+  const dispute = await Dispute.findById(disputeId);
+  if (!dispute) {
+    throw new Error('Khiếu nại không tồn tại');
+  }
+  if (dispute[partyField].toString() !== userId.toString()) {
+    throw new Error(messages.notParty);
+  }
+  if (dispute.status === 'pending') {
+    throw new Error(messages.pending);
+  }
+  if (dispute.status === 'resolved') {
+    throw new Error('Khiếu nại này đã được xử lý rồi');
+  }
+  return dispute;
+}
+
+function appendEvidence(existing, added) {
+  return [...(existing || []), ...added].slice(0, MAX_EVIDENCE_PER_SIDE);
+}
+
+function appendToConversation(dispute, senderRole, senderId, content, evidence, createdAt) {
+  dispute.disputeConversation = [
+    ...(dispute.disputeConversation || []),
+    { senderRole, senderId, content, evidenceFiles: evidence, createdAt }
+  ];
+}
+
+/**
+ * Seller gui phan hoi cho tranh chap.
+ */
+async function addSellerResponse(disputeId, sellerId, response, evidenceImages = []) {
+  const evidence = normalizeEvidence(evidenceImages);
+  const text = requireText(response, 'Vui lòng nhập phản hồi');
+  const dispute = await requireInvestigatedDispute(disputeId, sellerId, 'sellerId', {
+    notParty: 'Bạn không phải người bán của đơn hàng này',
+    pending: 'Moderator chưa bắt đầu điều tra khiếu nại. Vui lòng đợi moderator chuyển sang giai đoạn điều tra.'
+  });
+
+  dispute.sellerResponse = text;
+  dispute.sellerEvidenceImages = appendEvidence(dispute.sellerEvidenceImages, evidence);
+  dispute.sellerResponseUpdatedAt = new Date();
+  appendToConversation(dispute, 'seller', sellerId, text, evidence, dispute.sellerResponseUpdatedAt);
+  await dispute.save();
+
+  return dispute;
+}
+
+/**
+ * Buyer bo sung ghi chu/bang chung sau khi da mo tranh chap.
+ * Chi cho bo sung khi moderator da chuyen investigating.
+ */
+async function addBuyerFollowUp(disputeId, buyerId, note = '', evidenceImages = []) {
+  const evidence = normalizeEvidence(evidenceImages);
+  const text = String(note || '').trim();
+  if (!text && !evidence.length) {
+    throw new Error('Vui lòng nhập ghi chú hoặc tải lên ít nhất 1 tệp bằng chứng');
+  }
+  const dispute = await requireInvestigatedDispute(disputeId, buyerId, 'buyerId', {
+    notParty: 'Bạn không phải người mua của đơn hàng này',
+    pending: 'Moderator chưa bắt đầu điều tra. Vui lòng đợi moderator xác nhận để gửi bằng chứng bổ sung.'
+  });
+
+  if (text) {
+    dispute.buyerFollowUpNote = text;
+  }
+  dispute.buyerAdditionalEvidenceImages = appendEvidence(dispute.buyerAdditionalEvidenceImages, evidence);
+  dispute.buyerFollowUpUpdatedAt = new Date();
+  appendToConversation(dispute, 'buyer', buyerId, text || 'Người mua gửi bổ sung bằng chứng', evidence, dispute.buyerFollowUpUpdatedAt);
+  await dispute.save();
+
+  await pushDisputeNotification(
+    dispute.moderatorId,
+    'Người mua bổ sung bằng chứng',
+    'Người mua vừa bổ sung ghi chú hoặc bằng chứng mới cho tranh chấp đang xử lý.',
+    dispute._id
+  );
+
+  return getDisputeById(disputeId, buyerId);
+}
+
+/**
  * Lay bao cao do user hien tai tao.
  */
 async function getUserReports(userId, pagination = {}) {
   return getReports({ reporterId: userId }, pagination);
+}
+
+/**
+ * Lay tranh chap ma user la nguoi mua hoac nguoi ban.
+ */
+async function getUserDisputes(userId, pagination = {}) {
+  return getDisputes({ partyId: userId }, pagination);
+}
+
+/**
+ * Lay tranh chap theo orderId, kem kiem tra quyen truy cap.
+ */
+async function getDisputeByOrderId(orderId, userId) {
+  const dispute = await Dispute.findOne({ orderId })
+    .populate('orderId', 'agreedAmount totalToPay status')
+    .populate('buyerId', 'fullName email avatar phone')
+    .populate('sellerId', 'fullName email avatar phone')
+    .populate('productId', 'title price images description')
+    .populate('moderatorId', 'fullName email');
+
+  if (!dispute) {
+    return null;
+  }
+
+  if (userId) {
+    const user = await User.findById(userId);
+    const isAuthorized =
+      dispute.buyerId._id.toString() === userId.toString() ||
+      dispute.sellerId._id.toString() === userId.toString() ||
+      (user && (user.role === 'moderator' || user.role === 'admin'));
+    if (!isAuthorized) {
+      throw new Error('Bạn không có quyền xem khiếu nại này');
+    }
+  }
+
+  return dispute;
+}
+
+/**
+ * Seller xac nhan da nhan lai hang trong luong return_request.
+ */
+async function confirmSellerReturn(disputeId, sellerId) {
+  const dispute = await Dispute.findById(disputeId);
+  if (!dispute) throw new Error('Khiếu nại không tồn tại');
+  if (dispute.sellerId.toString() !== sellerId.toString())
+    throw new Error('Bạn không phải người bán của đơn hàng này');
+  if (dispute.reason !== 'return_request')
+    throw new Error('Chỉ áp dụng cho yêu cầu hoàn hàng');
+  if (dispute.status !== 'investigating')
+    throw new Error('Chỉ xác nhận khi tranh chấp đang trong giai đoạn điều tra');
+  if (dispute.sellerConfirmedReturnAt)
+    throw new Error('Đã xác nhận nhận lại hàng trước đó');
+
+  dispute.sellerConfirmedReturnAt = new Date();
+  await dispute.save();
+  return dispute;
 }
 
 module.exports = {
@@ -260,5 +569,13 @@ module.exports = {
   createUserReport,
   getReports,
   getReportById,
-  getUserReports
+  createDispute,
+  getDisputes,
+  getDisputeById,
+  getDisputeByOrderId,
+  addSellerResponse,
+  addBuyerFollowUp,
+  confirmSellerReturn,
+  getUserReports,
+  getUserDisputes
 };

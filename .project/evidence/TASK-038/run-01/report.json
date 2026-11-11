@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-038",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "81023ddd77cf6d4787b76bf20f8896a06b2266a6b5c8979da51a6771bf0ce29a",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-DSP-01-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/disputes.test.js; integration section disputes",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-038/run-01/jest.txt",
+            ".project/evidence/TASK-038/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-DSP-01-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/disputes.test.js (dispute and order saved with the same session; a failed write leaves the order untouched); flow-review.md; integration section disputes",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-038/run-01/complexity.txt",
+            ".project/evidence/TASK-038/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-038/run-01/jest.txt",
+            ".project/evidence/TASK-038/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-DSP-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/disputes.test.js; integration section disputes",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-038/run-01/jest.txt",
+            ".project/evidence/TASK-038/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-DSP-03-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/disputes.test.js; integration section disputes",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-038/run-01/jest.txt",
+            ".project/evidence/TASK-038/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-DSP-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/disputes.test.js; integration section disputes (refused for a non-return dispute)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-038/run-01/jest.txt",
+            ".project/evidence/TASK-038/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-DSP-05-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/disputes.test.js; integration section disputes (seller sees the dispute in their list; unrelated user refused)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-038/run-01/jest.txt",
+            ".project/evidence/TASK-038/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

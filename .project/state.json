@@ -603,10 +603,33 @@
       }
     },
     "TASK-038": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-009, TASK-010, TASK-033",
-      "history": []
+      "detail": "Dispute opening, responses, follow-ups, return confirmation, lists and detail implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Dispute opening, responses, follow-ups, return confirmation, lists and detail implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-038/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-038.md",
+      "criteria": {
+        "AC-DSP-01-1": "inconclusive",
+        "AC-DSP-01-2": "inconclusive",
+        "AC-DSP-02-1": "inconclusive",
+        "AC-DSP-03-1": "inconclusive",
+        "AC-DSP-04-1": "inconclusive",
+        "AC-DSP-05-1": "inconclusive"
+      }
     },
     "TASK-039": {
       "execution": "todo",
