@@ -104,7 +104,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-13-1` | Users submit validated reports and eligible order disputes, upload private evidence and view authorized case state; server denials remain visible and private assets are not exposed publicly. | behavioral test, manual review | [TASK-066](../task/TASK-066.md) `[]` |
+| `AC-WEB-13-1` | Users submit validated reports and eligible order disputes, upload private evidence and view authorized case state; server denials remain visible and private assets are not exposed publicly. | behavioral test, manual review | [TASK-066](../task/TASK-066.md) `[!]` |
 
 ### FR-WEB-14 — Web moderator shell, dashboard and profile
 

@@ -132,3 +132,16 @@
     gap: 24px;
   }
 }
+
+.product-detail__report {
+  display: block;
+  margin-top: 8px;
+  text-align: left;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #b42318;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

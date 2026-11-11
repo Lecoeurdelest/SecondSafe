@@ -1,7 +1,7 @@
 ---
 id: TASK-066
 title: Web violation reports and disputes
-execution_status: todo
+execution_status: in_progress
 relevance: current
 depends_on: [TASK-055, TASK-063, TASK-037, TASK-038]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-066 — Web violation reports and disputes
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `in_progress` — Report dialog and dispute form wired and building; uploaded evidence is still publicly reachable, so the privacy part of AC-WEB-13-1 is not met
 
 ## Traceability
 
