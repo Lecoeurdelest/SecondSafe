@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
 import { getOrdersAsBuyer, getOrdersAsSeller, confirmOrderBySeller, cancelOrder } from '../../services/order.service';
 import chatService from '../../services/chat.service';
 import { getImageUrl } from '../../utils/imageHelper';
@@ -10,7 +9,6 @@ import './Orders.css';
 
 const Orders = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
   
   const [activeTab, setActiveTab] = useState('buying');
   const [orders, setOrders] = useState([]);
@@ -57,6 +55,7 @@ const Orders = () => {
 
   useEffect(() => {
     fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, filters]);
 
   const fetchOrders = async () => {

@@ -285,10 +285,8 @@ export default function ProductDetail() {
           onSuccess={result => {
             setPurchaseOpen(false);
             const orderId = result?.data?._id;
-            setNotice(orderId
-              ? `Đã tạo đơn hàng ${orderId}.`
-              : 'Đã tạo đơn hàng thành công.');
-            setNoticeDestination('');
+            // A quick buy starts the payment window immediately, so the buyer goes straight to payment.
+            navigate(orderId ? `/orders/${orderId}/pay` : '/orders');
           }}
         />
       )}

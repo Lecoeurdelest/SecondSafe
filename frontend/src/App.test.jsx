@@ -72,6 +72,9 @@ jest.mock('./services/auth.service', () => {
 jest.mock('./services/notification.service', () => ({
   __esModule: true, default: { getNotifications: jest.fn(), getUnreadCount: jest.fn() }
 }));
+jest.mock('./modules/order/OrderPayment', () => function OrderPayment() {
+  return <h1>Thanh toán đơn hàng</h1>;
+});
 jest.mock('./services/dashboard.service', () => ({
   __esModule: true,
   default: { getAdminDashboard: jest.fn(), getStaffDashboard: jest.fn() }
@@ -499,8 +502,9 @@ test('buyers can open a conversation with the product seller', async () => {
   await waitFor(() => expect(window.location.pathname).toBe('/chat/conversation-id'));
 });
 
-test('buyers can confirm a quick purchase and receive the created order reference', async () => {
+test('buyers who confirm a quick purchase are taken straight to payment for the created order', async () => {
   window.localStorage.setItem('token', 'test-token');
+  authService.getProfile.mockResolvedValue({ _id: '507f1f77bcf86cd799439099', role: 'user', fullName: 'Người mua' });
   favoriteService.checkFavorite.mockResolvedValue({ data: { isFavorite: false } });
   createPurchaseRequest.mockResolvedValue({ success: true, data: { _id: 'order-1' } });
   productService.getProductById.mockResolvedValue({
@@ -511,13 +515,14 @@ test('buyers can confirm a quick purchase and receive the created order referenc
     images: []
   });
   window.history.replaceState({}, '', '/product/507f1f77bcf86cd799439011');
-  render(<App />);
+  render(<AuthProvider><App /></AuthProvider>);
 
   await screen.findByRole('heading', { name: 'Sách đã qua sử dụng' }, { timeout: 5000 });
   fireEvent.click(screen.getByRole('button', { name: 'Mua ngay' }));
   fireEvent.click(screen.getByRole('button', { name: 'Xác nhận mua ngay' }));
 
-  expect(await screen.findByText('Đã tạo đơn hàng order-1.')).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: 'Thanh toán đơn hàng' })).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/orders/order-1/pay');
   expect(createPurchaseRequest).toHaveBeenCalledWith({
     listingId: '507f1f77bcf86cd799439011',
     message: 'Mua ngay',

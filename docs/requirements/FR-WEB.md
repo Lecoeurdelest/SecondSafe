@@ -80,7 +80,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-10-1` | Order parties see only their orders and allowed lifecycle actions; payment results are confirmed through the API; shipping, cancellation and receipt states refresh correctly. | behavioral test, manual review | [TASK-063](../task/TASK-063.md) `[]` |
+| `AC-WEB-10-1` | Order parties see only their orders and allowed lifecycle actions; payment results are confirmed through the API; shipping, cancellation and receipt states refresh correctly. | behavioral test, manual review | [TASK-063](../task/TASK-063.md) `[!]` |
 
 ### FR-WEB-11 — Web wallet, top-up and withdrawal
 

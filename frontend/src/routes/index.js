@@ -28,7 +28,12 @@ const ModProfile = lazy(() => import('../modules/moderator/profile/ModProfile'))
 const CreateProduct = lazy(() => import('../modules/product/CreateProduct'));
 const EditProduct = lazy(() => import('../modules/product/EditProduct'));
 const MyProducts = lazy(() => import('../modules/product/MyProducts'));
+const Orders = lazy(() => import('../modules/order/Orders'));
+const OrderDetail = lazy(() => import('../modules/order/OrderDetail'));
+const OrderPayment = lazy(() => import('../modules/order/OrderPayment'));
+const SEPayOrderSuccess = lazy(() => import('../modules/order/SEPayOrderSuccess'));
 const PurchaseRequests = lazy(() => import('../modules/order/PurchaseRequests'));
+const SellerOrders = lazy(() => import('../modules/order/SellerOrders'));
 
 function DashboardRoute({ role, children }) {
   const session = getSession();
@@ -48,7 +53,14 @@ export default function AppRoutes() {
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/my-products" element={<ProtectedRoute><MyProducts /></ProtectedRoute>} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+      <Route path="/orders/sepay-success" element={<ProtectedRoute><SEPayOrderSuccess /></ProtectedRoute>} />
+      <Route path="/orders/sepay-result" element={<ProtectedRoute><SEPayOrderSuccess /></ProtectedRoute>} />
+      <Route path="/orders/:id/pay" element={<ProtectedRoute><OrderPayment /></ProtectedRoute>} />
+      <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
+      <Route path="/order-detail/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
       <Route path="/purchase-requests" element={<ProtectedRoute><PurchaseRequests /></ProtectedRoute>} />
+      <Route path="/seller-orders" element={<ProtectedRoute><SellerOrders /></ProtectedRoute>} />
       <Route path="/favorites" element={<Favorites />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
