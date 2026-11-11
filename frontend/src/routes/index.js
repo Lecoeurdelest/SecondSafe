@@ -44,6 +44,9 @@ const ModReportDetail = lazy(() => import('../modules/moderator/reports/ModRepor
 const ModOrderList = lazy(() => import('../modules/moderator/orders/ModOrderList'));
 const ModOrderDetail = lazy(() => import('../modules/moderator/orders/ModOrderDetail'));
 const ModReviewList = lazy(() => import('../modules/moderator/reviews/ModReviewList'));
+const ModDisputeList = lazy(() => import('../modules/moderator/disputes/ModDisputeList'));
+const ModDisputeDetail = lazy(() => import('../modules/moderator/disputes/ModDisputeDetail'));
+const ModWithdrawalList = lazy(() => import('../modules/moderator/withdrawals/ModWithdrawalList'));
 
 function DashboardRoute({ role, children }) {
   const session = getSession();
@@ -101,6 +104,9 @@ export default function AppRoutes() {
         <Route path="orders" element={<ModOrderList />} />
         <Route path="orders/:id" element={<ModOrderDetail />} />
         <Route path="reviews" element={<ModReviewList />} />
+        <Route path="disputes" element={<ModDisputeList />} />
+        <Route path="disputes/:id" element={<ModDisputeDetail />} />
+        <Route path="withdrawals" element={<ModWithdrawalList />} />
       </Route>
       <Route path="/assistant" element={<Assistant />} />
       <Route path="/assistant/reports/:reportId" element={<DashboardRoute role="moderator"><Assistant moderation /></DashboardRoute>} />

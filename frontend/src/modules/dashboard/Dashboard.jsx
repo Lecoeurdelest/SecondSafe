@@ -129,7 +129,9 @@ function StaffOverview({ data }) {
             </div>
           ))}
         </div>
-        <p className="dashboard-queue__note">Dashboard này chỉ hiển thị số liệu. Các thao tác xử lý tranh chấp/đơn hàng cần được bật ở các module nghiệp vụ tương ứng.</p>
+        <p className="dashboard-queue__note">
+          Xử lý tại: <Link to="/moderator/reports">Báo cáo</Link> · <Link to="/moderator/disputes">Tranh chấp</Link> · <Link to="/moderator/orders">Đơn hàng</Link> · <Link to="/moderator/reviews">Đánh giá</Link> · <Link to="/moderator/withdrawals">Rút tiền</Link>
+        </p>
       </section>
       <p className="dashboard-footnote">Số liệu được lấy trực tiếp từ cơ sở dữ liệu lúc {dateLabel(data.generatedAt)}. Nhân viên không xem số dư ví hoặc chi tiết giao dịch.</p>
     </>
