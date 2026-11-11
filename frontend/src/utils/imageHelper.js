@@ -17,9 +17,21 @@ export function getImageUrl(image, type = 'product') {
   if (typeof image !== 'string' || !image.trim()) {
     return type === 'avatar' ? AVATAR_PLACEHOLDER : PRODUCT_PLACEHOLDER;
   }
-  if (/^(https?:|data:)/i.test(image)) return image;
-  if (image.startsWith('/images/')) return image;
-  return `${NETWORK_CONFIG.API_ORIGIN}/${image.replace(/^\/+/, '')}`;
+  const source = image.trim();
+  if (/^(data:|blob:)/i.test(source)) return source;
+  if (/^(https?:)?\/\//i.test(source)) {
+    try {
+      const url = new URL(source, NETWORK_CONFIG.API_ORIGIN);
+      if (['localhost', '127.0.0.1', '0.0.0.0'].includes(url.hostname) && url.pathname.startsWith('/uploads/')) {
+        return `${NETWORK_CONFIG.API_ORIGIN}${url.pathname}${url.search}${url.hash}`;
+      }
+    } catch {
+      return source;
+    }
+    return source;
+  }
+  if (source.startsWith('/images/')) return source;
+  return `${NETWORK_CONFIG.API_ORIGIN}/${source.replace(/^\/+/, '')}`;
 }
 
 export function getProductImageUrl(product) {
