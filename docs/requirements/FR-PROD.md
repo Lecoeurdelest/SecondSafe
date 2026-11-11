@@ -23,7 +23,7 @@ Baseline: `POST /api/upload/image`, `POST /api/upload/images`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-02-1` | Image uploads accept jpg, jpeg, png and gif up to 5 MB each and at most 5 files per request, stored under random file names. | behavioral test | [TASK-009](../task/TASK-009.md) `[]` |
+| `AC-PROD-02-1` | Image uploads accept jpg, jpeg, png and gif up to 5 MB each and at most 5 files per request, stored under random file names. | behavioral test | [TASK-009](../task/TASK-009.md) `[!]` |
 
 ### FR-PROD-03 — Edit a listing
 

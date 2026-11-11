@@ -52,4 +52,4 @@ Baseline: `POST /api/upload/evidence`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-RPT-05-1` | Evidence uploads accept jpg, jpeg, png and mp4 up to 100 MB each and at most 5 files per request. | behavioral test | [TASK-009](../task/TASK-009.md) `[]` |
+| `AC-RPT-05-1` | Evidence uploads accept jpg, jpeg, png and mp4 up to 100 MB each and at most 5 files per request. | behavioral test | [TASK-009](../task/TASK-009.md) `[!]` |

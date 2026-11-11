@@ -1,0 +1,14 @@
+Command: node .project/evidence/TASK-009/run-01/integration-runner.js backend upload
+MongoDB 7.0.24; sections: upload
+# upload
+  ok   png image accepted with a random stored name
+  ok   a path as upload target falls back to the temp folder
+  ok   an executable is rejected
+  ok   text renamed to .png is rejected by its signature
+  ok   upload without a session is rejected
+  ok   evidence image accepted
+  ok   gif is not accepted as evidence
+
+7 checks, 0 failed
+
+exit_code=0
