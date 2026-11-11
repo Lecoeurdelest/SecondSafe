@@ -43,8 +43,8 @@ Baseline: `GET /api/moderator/orders`, `GET /api/moderator/orders/:id`, `PATCH /
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-04-1` | Moderators list, filter and open orders. | behavioral test | [TASK-041](../task/TASK-041.md) `[]` |
-| `AC-MOD-04-2` | Status changes follow the moderator transition matrix, cancellation requires a note of at least 10 characters, completed orders cannot be force-cancelled, and money effects run through the escrow service. | static flow review, behavioral test | [TASK-041](../task/TASK-041.md) `[]` |
+| `AC-MOD-04-1` | Moderators list, filter and open orders. | behavioral test | [TASK-041](../task/TASK-041.md) `[!]` |
+| `AC-MOD-04-2` | Status changes follow the moderator transition matrix, cancellation requires a note of at least 10 characters, completed orders cannot be force-cancelled, and money effects run through the escrow service. | static flow review, behavioral test | [TASK-041](../task/TASK-041.md) `[!]` |
 
 ### FR-MOD-05 — Moderate reviews
 
@@ -54,8 +54,8 @@ Baseline: `GET /api/moderator/reviews`, `PATCH /api/moderator/reviews/:reviewId/
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-05-1` | Moderators can hide reviews and mark each review good or bad once; reviews of 4 stars or more are approved automatically. | behavioral test | [TASK-041](../task/TASK-041.md) `[]` |
-| `AC-MOD-05-2` | Marking a review bad increments the seller's bad-review count and applies a selling restriction of 24 hours, 1 week or 1 year at 3, 6 and 9. | behavioral test | [TASK-041](../task/TASK-041.md) `[]` |
+| `AC-MOD-05-1` | Moderators can hide reviews and mark each review good or bad once; reviews of 4 stars or more are approved automatically. | behavioral test | [TASK-041](../task/TASK-041.md) `[!]` |
+| `AC-MOD-05-2` | Marking a review bad increments the seller's bad-review count and applies a selling restriction of 24 hours, 1 week or 1 year at 3, 6 and 9. | behavioral test | [TASK-041](../task/TASK-041.md) `[!]` |
 
 ### FR-MOD-06 — Resolve disputes
 

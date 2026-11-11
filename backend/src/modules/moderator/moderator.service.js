@@ -1,13 +1,53 @@
 const mongoose = require("mongoose");
+
 const Product = require("../products/product.model");
 const User = require("../users/user.model");
 const Report = require("../reports/report.model");
 const Order = require("../orders/order.model");
+const Review = require("../reports/review.model");
+const reviewService = require("../reports/review.service");
 const reportService = require("../reports/report.service");
+const orderService = require("../orders/order.service");
+const escrowService = require("../payments/escrow.service");
+const EscrowHold = require("../payments/escrow-hold.model");
+const notificationService = require("../notifications/notification.service");
 const {
   applySellingRestrictionToUser
 } = require("../../common/utils/seller-restriction.util");
 const business = require("../../config/business");
+const logger = require("../../common/utils/logger.util");
+
+const SANCTION_LABELS = ["24 giờ", "1 tuần", "1 năm"];
+
+function normalizeOrderStatus(status, confirmedBySeller = false) {
+  if (status === "pending") {
+    return confirmedBySeller ? "awaiting_payment" : "awaiting_seller_confirmation";
+  }
+
+  // Legacy status: don da giao thanh cong nhung chua dong bo voi flow moi.
+  if (status === "delivered") {
+    return "shipped";
+  }
+
+  return status;
+}
+
+// Luồng trạng thái đơn hàng cho moderator: chỉ đi tới trước, không cho quay ngược.
+const MODERATOR_ORDER_TRANSITIONS = {
+  awaiting_seller_confirmation: ["cancelled"],
+  pending: ["cancelled"],
+  awaiting_payment: ["cancelled"],
+  paid: ["shipped", "disputed", "cancelled"],
+  delivered: ["completed", "disputed"],
+  shipped: ["completed", "disputed"],
+  disputed: ["completed", "cancelled"],
+  completed: [],
+  cancelled: []
+};
+
+function getAllowedNextStatuses(currentStatus) {
+  return MODERATOR_ORDER_TRANSITIONS[currentStatus] || [];
+}
 
 function parsePagination(pagination = {}) {
   const page = Math.max(1, parseInt(pagination.page, 10) || 1);
@@ -20,6 +60,61 @@ function buildRegexKeyword(keyword) {
   if (!keyword || typeof keyword !== "string") return null;
   const literal = keyword.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return literal ? new RegExp(literal, "i") : null;
+}
+
+async function autoApproveHighRatingReviews() {
+  await Review.updateMany(
+    {
+      rating: { $gte: 4 },
+      "moderatorAssessment.isReviewed": { $ne: true },
+      "moderatorAssessment.isBad": { $ne: true },
+      "moderatorAssessment.verdict": { $nin: ["good", "bad"] }
+    },
+    {
+      $set: {
+        "moderatorAssessment.isReviewed": true,
+        "moderatorAssessment.isBad": false,
+        "moderatorAssessment.verdict": "good",
+        "moderatorAssessment.note": "Tự động duyệt: đánh giá từ 4 sao trở lên",
+        "moderatorAssessment.markedAt": new Date(),
+        "moderatorAssessment.penaltyLevel": 0
+      }
+    }
+  );
+}
+
+function normalizeReviewMediaFields(reviewDoc) {
+  if (!reviewDoc) return reviewDoc;
+
+  const raw = typeof reviewDoc.toObject === 'function'
+    ? reviewDoc.toObject()
+    : reviewDoc;
+
+  const candidates = [
+    raw?.evidenceFiles,
+    raw?.evidenceImages,
+    raw?.media,
+    raw?.attachments,
+    raw?.data?.evidenceFiles,
+    raw?.data?.evidenceImages
+  ];
+
+  const unifiedEvidenceFiles = Array.from(
+    new Set(
+      candidates
+        .filter(Array.isArray)
+        .flat()
+        .map((file) => String(file || '').trim())
+        .filter(Boolean)
+        .filter((file) => /\.(png|jpe?g|mp4)$/i.test(file))
+    )
+  ).slice(0, 5);
+
+  return {
+    ...raw,
+    evidenceFiles: unifiedEvidenceFiles,
+    evidenceImages: unifiedEvidenceFiles
+  };
 }
 
 async function buildReportedUserStatsMap(reportedUserIds = []) {
@@ -355,6 +450,338 @@ async function resolveReport(reportId, moderatorId, payload) {
   );
 }
 
+async function getOrders(filters = {}, pagination = {}) {
+  const query = {};
+  if (filters.status === "awaiting_payment") {
+    query.status = { $in: ["awaiting_payment", "pending"] };
+  } else if (filters.status === "shipped") {
+    query.status = { $in: ["shipped", "delivered"] };
+  } else if (filters.status) {
+    query.status = filters.status;
+  }
+
+  const keywordRegex = buildRegexKeyword(filters.keyword);
+  const { page, limit, skip } = parsePagination(pagination);
+
+  let orders = await Order.find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate("buyerId", "fullName email phone address")
+    .populate("sellerId", "fullName email phone address")
+    .populate("productId", "title images price")
+    .lean();
+
+  if (keywordRegex) {
+    orders = orders.filter((order) => {
+      const buyer = order.buyerId?.fullName || "";
+      const seller = order.sellerId?.fullName || "";
+      const product = order.productId?.title || "";
+      return (
+        keywordRegex.test(String(order._id)) ||
+        keywordRegex.test(buyer) ||
+        keywordRegex.test(seller) ||
+        keywordRegex.test(product)
+      );
+    });
+  }
+
+  const normalizedOrders = orders.map((order) => ({
+    ...order,
+    status: normalizeOrderStatus(order.status, order.confirmedBySeller)
+  }));
+
+  const total = await Order.countDocuments(query);
+  return {
+    orders: normalizedOrders,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+}
+
+async function getOrderById(orderId) {
+  const order = await Order.findById(orderId)
+    .populate("buyerId", "fullName email phone address avatar")
+    .populate("sellerId", "fullName email phone address avatar")
+    .populate("productId", "title images price")
+    .populate("requestId");
+
+  if (!order) {
+    throw new Error("Đơn hàng không tồn tại");
+  }
+
+  const normalizedStatus = normalizeOrderStatus(order.status, order.confirmedBySeller);
+
+  return {
+    ...order.toObject(),
+    status: normalizedStatus,
+    allowedNextStatuses: getAllowedNextStatuses(normalizedStatus)
+  };
+}
+
+async function forceCancelOrder(orderId, moderatorId, reason) {
+  return orderService.forceCancelOrder(orderId, moderatorId, reason);
+}
+
+// Cập nhật trạng thái đơn từ moderator, có kiểm soát chuyển trạng thái để tránh sai luồng.
+async function updateOrderStatusByModerator(orderId, nextStatus, moderatorId, note = "") {
+  const order = await Order.findById(orderId);
+  if (!order) {
+    throw new Error("Đơn hàng không tồn tại");
+  }
+
+  const currentStatus = normalizeOrderStatus(order.status, order.confirmedBySeller);
+  const allowedNextStatuses = getAllowedNextStatuses(currentStatus);
+  if (!allowedNextStatuses.includes(nextStatus)) {
+    throw new Error(
+      `Không thể chuyển từ ${currentStatus} sang ${nextStatus}. Trạng thái hợp lệ tiếp theo: ${allowedNextStatuses.join(", ") || "không có"}`
+    );
+  }
+
+  const reason = String(note || "").trim();
+  if (nextStatus === "cancelled") {
+    if (reason.length < 10) throw new Error("Khi hủy đơn, ghi chú phải có ít nhất 10 ký tự");
+    // Refunds any escrow hold and reopens the listing in one transaction.
+    await orderService.forceCancelOrder(orderId, moderatorId, reason);
+    return getOrderById(orderId);
+  }
+
+  if (nextStatus === "completed") {
+    await completeOrderByModerator(order, reason);
+    return getOrderById(orderId);
+  }
+
+  order.status = nextStatus;
+  if (nextStatus === "shipped") {
+    order.shippedAt = order.shippedAt || new Date();
+  }
+  await order.save();
+  return getOrderById(orderId);
+}
+
+// A manual escrow release pays the seller but leaves the order to its caller.
+async function completeReleasedOrder(orderId) {
+  const order = await Order.findById(orderId);
+  if (!order || order.status === "completed") return;
+  order.status = "completed";
+  order.paymentStatus = "paid";
+  order.completedAt = new Date();
+  await order.save();
+  if (order.productId) {
+    await Product.findByIdAndUpdate(order.productId, { status: "sold" });
+  }
+}
+
+// Completing an order pays the seller from escrow, then completes the order and marks the listing sold.
+async function completeOrderByModerator(order, reason) {
+  const hold = await EscrowHold.findOne({ orderId: order._id });
+  if (!hold || hold.status !== "held") {
+    throw new Error("Không thể hoàn tất đơn hàng khi tiền ký quỹ không còn được giữ");
+  }
+  await escrowService.releaseFunds(
+    String(order._id),
+    reason || "Moderator xác nhận hoàn tất đơn hàng",
+    false
+  );
+  await completeReleasedOrder(order._id);
+}
+
+async function getReviews(filters = {}, pagination = {}) {
+  // Luong mod review: loc theo status va trang thai tham dinh cua moderator.
+  await autoApproveHighRatingReviews();
+
+  const query = {};
+  if (filters.status) query.status = filters.status;
+
+  if (filters.assessment === 'pending') {
+    query['moderatorAssessment.isReviewed'] = { $ne: true };
+    query['moderatorAssessment.isBad'] = { $ne: true };
+    query['moderatorAssessment.verdict'] = { $nin: ['good', 'bad'] };
+  } else if (filters.assessment === 'good') {
+    query['moderatorAssessment.isReviewed'] = true;
+    query['moderatorAssessment.isBad'] = { $ne: true };
+  } else if (filters.assessment === 'bad') {
+    query['moderatorAssessment.isBad'] = true;
+  }
+
+  const keywordRegex = buildRegexKeyword(filters.keyword);
+  if (keywordRegex) {
+    // Tim keyword tren user, product va noi dung comment.
+    const [matchedUsers, matchedProducts] = await Promise.all([
+      User.find({ fullName: keywordRegex }).select('_id').lean(),
+      Product.find({ title: keywordRegex }).select('_id').lean()
+    ]);
+
+    const userIds = matchedUsers.map((user) => user._id);
+    const productIds = matchedProducts.map((product) => product._id);
+    const orFilters = [{ comment: keywordRegex }];
+
+    if (userIds.length) {
+      orFilters.push({ reviewerId: { $in: userIds } });
+      orFilters.push({ reviewedUserId: { $in: userIds } });
+    }
+
+    if (productIds.length) {
+        orFilters.push({ productId: { $in: productIds } });
+    }
+
+    query.$or = orFilters;
+  }
+
+  const { page, limit, skip } = parsePagination(pagination);
+  const reviews = await Review.find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate("reviewerId", "fullName email")
+    .populate("reviewedUserId", "fullName email totalReviews isSuspended suspendedUntil isSellingRestricted sellingRestrictedUntil sellingRestrictedReason modBadReviewCount")
+    .populate("moderatorAssessment.moderatorId", "fullName email")
+    .populate("productId", "title images")
+    .populate("orderId", "status agreedAmount");
+
+  const total = await Review.countDocuments(query);
+  return {
+    reviews: reviews.map(normalizeReviewMediaFields),
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+}
+
+async function hideReview(reviewId) {
+  // An review vi pham va cap nhat lai diem seller.
+  const review = await Review.findById(reviewId);
+  if (!review) throw new Error("Đánh giá không tồn tại");
+  if (review.status === "hidden") throw new Error("Đánh giá đã bị ẩn trước đó");
+
+  review.status = "hidden";
+  await review.save();
+  await reviewService.updateUserRating(review.reviewedUserId);
+  return review;
+}
+
+function getModerationSuspensionConfig(level) {
+  const index = Math.min(Math.max(level, 1), business.sanctionDurationsMs.length) - 1;
+  return { durationMs: business.sanctionDurationsMs[index], label: SANCTION_LABELS[index] };
+}
+
+const MODERATED_REVIEW_POPULATION = [
+  { path: 'reviewerId', select: 'fullName email' },
+  { path: 'reviewedUserId', select: 'fullName email isSuspended suspendedUntil isSellingRestricted sellingRestrictedUntil sellingRestrictedReason modBadReviewCount' },
+  { path: 'moderatorAssessment.moderatorId', select: 'fullName email' },
+  { path: 'productId', select: 'title images' },
+  { path: 'orderId', select: 'status agreedAmount' }
+];
+
+async function requireUnjudgedReview(reviewId) {
+  const review = await Review.findById(reviewId);
+  if (!review) throw new Error('Đánh giá không tồn tại');
+  if (review?.moderatorAssessment?.isReviewed || review?.moderatorAssessment?.isBad) {
+    throw new Error('Đánh giá này đã được moderator xử lý trước đó');
+  }
+  return review;
+}
+
+// AC-MOD-05-2: every bad review counts; a selling restriction starts at each configured threshold.
+async function recordBadReview(seller, note) {
+  const sanctionStep = business.sanctionThresholds[0];
+  const nextCount = Number(seller.modBadReviewCount || 0) + 1;
+  const penaltyLevel = Math.min(Math.floor(nextCount / sanctionStep), business.sanctionDurationsMs.length);
+  const shouldSuspendNow = nextCount % sanctionStep === 0;
+  seller.modBadReviewCount = nextCount;
+  if (!shouldSuspendNow) {
+    await seller.save();
+    return { nextCount, penaltyLevel, shouldSuspendNow, suspensionConfig: null };
+  }
+  const suspensionConfig = getModerationSuspensionConfig(penaltyLevel);
+  await applySellingRestrictionToUser(seller, {
+    durationMs: suspensionConfig.durationMs,
+    reason: `Vi phạm đánh giá do moderator xử lý (mức ${penaltyLevel}/3). ${String(note || '').trim()}`,
+    source: 'review_moderation'
+  });
+  return { nextCount, penaltyLevel, shouldSuspendNow, suspensionConfig };
+}
+
+async function notifySellerOfBadReview(seller, review, moderatorId, note, penalty) {
+  const detailMessage = String(note || '').trim()
+    ? `Nội dung từ moderator: ${String(note).trim()}`
+    : 'Vui lòng rà soát chất lượng sản phẩm và cách phục vụ.';
+  const resultMessage = penalty.suspensionConfig
+    ? `Tài khoản bị hạn chế quyền bán ${penalty.suspensionConfig.label} sau mốc ${penalty.nextCount} đánh giá xấu.`
+    : `Đã ghi nhận ${penalty.nextCount} đánh giá xấu. Tài khoản sẽ bị hạn chế quyền bán khi đạt các mốc 3/6/9.`;
+  try {
+    await notificationService.createNotification(seller._id, {
+      type: 'system',
+      senderId: moderatorId,
+      reviewId: review._id,
+      title: 'Tài khoản bị hạn chế do đánh giá kiểm duyệt',
+      message: `Moderator đã đánh dấu 1 đánh giá xấu cho tài khoản của bạn. ${resultMessage} ${detailMessage}`
+    });
+  } catch (notificationError) {
+    logger.error('Error sending seller moderation notification:', notificationError);
+  }
+}
+
+async function markSellerBadByReview(reviewId, moderatorId, note = '') {
+  const review = await requireUnjudgedReview(reviewId);
+  const seller = await User.findById(review.reviewedUserId);
+  if (!seller) throw new Error('Không tìm thấy người bán để xử lý');
+  if (seller.role === 'admin') throw new Error('Không thể xử phạt tài khoản admin');
+
+  const penalty = await recordBadReview(seller, note);
+  review.moderatorAssessment = {
+    isReviewed: true,
+    isBad: true,
+    verdict: 'bad',
+    moderatorId,
+    note,
+    markedAt: new Date(),
+    penaltyLevel: penalty.penaltyLevel
+  };
+  await review.save();
+  await notifySellerOfBadReview(seller, review, moderatorId, note, penalty);
+  await review.populate(MODERATED_REVIEW_POPULATION);
+
+  return {
+    review,
+    sellerPenalty: {
+      modBadReviewCount: penalty.nextCount,
+      penaltyLevel: penalty.penaltyLevel,
+      isSuspended: Boolean(seller.isSuspended),
+      isSellingRestricted: Boolean(seller.isSellingRestricted),
+      sellingRestrictedUntil: seller.sellingRestrictedUntil || null,
+      suspensionLabel: penalty.suspensionConfig?.label || null,
+      shouldSuspendNow: penalty.shouldSuspendNow
+    }
+  };
+}
+
+async function markSellerGoodByReview(reviewId, moderatorId, note = '') {
+  const review = await requireUnjudgedReview(reviewId);
+  review.moderatorAssessment = {
+    isReviewed: true,
+    isBad: false,
+    verdict: 'good',
+    moderatorId,
+    note,
+    markedAt: new Date(),
+    penaltyLevel: 0
+  };
+  await review.save();
+  await review.populate(MODERATED_REVIEW_POPULATION);
+
+  return {
+    review
+  };
+}
+
 function isValidObjectId(value) {
   return mongoose.Types.ObjectId.isValid(value);
 }
@@ -365,5 +792,13 @@ module.exports = {
   banUser,
   getReports,
   getReportById,
-  resolveReport
+  resolveReport,
+  getOrders,
+  getOrderById,
+  forceCancelOrder,
+  updateOrderStatusByModerator,
+  getReviews,
+  hideReview,
+  markSellerBadByReview,
+  markSellerGoodByReview
 };

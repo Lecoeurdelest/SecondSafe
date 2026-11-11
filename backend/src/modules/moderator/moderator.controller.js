@@ -6,6 +6,10 @@ const REPORT_STATUS = ["pending", "reviewing", "resolved", "dismissed"];
 const REPORT_TYPE = ["product", "user"];
 // Danh sách quyết định xử lý báo cáo được phép từ moderator.
 const REPORT_DECISIONS = ["remove_content", "warn_user", "ban_user", "reply_feedback"];
+const ORDER_STATUS = ["awaiting_seller_confirmation", "awaiting_payment", "paid", "shipped", "completed", "cancelled", "disputed"];
+const ORDER_STATUS_UPDATABLE = ["paid", "shipped", "completed", "cancelled", "disputed"];
+const REVIEW_STATUS = ["active", "hidden", "reported"];
+const REVIEW_ASSESSMENT = ["pending", "good", "bad"];
 
 function ensureObjectId(id, fieldName) {
   if (!id || !moderatorService.isValidObjectId(id)) {
@@ -171,10 +175,196 @@ async function resolveReport(req, res) {
   }
 }
 
+async function getOrders(req, res) {
+  try {
+    const { status, page, limit, keyword } = req.query;
+
+    const statusError = ensureInList(status, ORDER_STATUS, "Trạng thái đơn hàng");
+    if (statusError) return sendError(res, 400, statusError);
+
+    const pageLimitError = ensureValidPageLimit(page, limit);
+    if (pageLimitError) return sendError(res, 400, pageLimitError);
+
+    const keywordError = ensureValidKeyword(keyword);
+    if (keywordError) return sendError(res, 400, keywordError);
+
+    const result = await moderatorService.getOrders({ status, keyword }, { page, limit });
+    return sendSuccess(res, 200, result);
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+async function getOrderById(req, res) {
+  try {
+    const { id } = req.params;
+    const idError = ensureObjectId(id, "Mã đơn hàng");
+    if (idError) return sendError(res, 400, idError);
+
+    const order = await moderatorService.getOrderById(id);
+    return sendSuccess(res, 200, order);
+  } catch (error) {
+    return sendServiceError(res, error, 404);
+  }
+}
+
+async function forceCancelOrder(req, res) {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const idError = ensureObjectId(id, "Mã đơn hàng");
+    if (idError) return sendError(res, 400, idError);
+
+    if (!reason || String(reason).trim().length < 10) {
+      return sendError(res, 400, "Lý do hủy đơn phải có ít nhất 10 ký tự");
+    }
+
+    const order = await moderatorService.forceCancelOrder(
+      id,
+      req.user.userId,
+      String(reason).trim()
+    );
+    return sendSuccess(res, 200, order, "Đã ép hủy đơn hàng thành công");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+// Cập nhật trạng thái đơn hàng theo luồng một chiều để tránh chuyển ngược trạng thái.
+async function updateOrderStatus(req, res) {
+  try {
+    const { id } = req.params;
+    const { nextStatus, note } = req.body || {};
+
+    const idError = ensureObjectId(id, "Mã đơn hàng");
+    if (idError) return sendError(res, 400, idError);
+
+    if (!ORDER_STATUS_UPDATABLE.includes(nextStatus)) {
+      return sendError(res, 400, "nextStatus không hợp lệ");
+    }
+
+    if (String(note || "").trim().length > 500) {
+      return sendError(res, 400, "note không được vượt quá 500 ký tự");
+    }
+
+    const order = await moderatorService.updateOrderStatusByModerator(
+      id,
+      nextStatus,
+      req.user.userId,
+      String(note || "").trim()
+    );
+
+    return sendSuccess(res, 200, order, "Đã cập nhật trạng thái đơn hàng");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+async function getReviews(req, res) {
+  try {
+    const { status, assessment, page, limit, keyword } = req.query;
+
+    const statusError = ensureInList(status, REVIEW_STATUS, "Trạng thái đánh giá");
+    if (statusError) return sendError(res, 400, statusError);
+
+    const assessmentError = ensureInList(assessment, REVIEW_ASSESSMENT, "Trạng thái đánh giá mod");
+    if (assessmentError) return sendError(res, 400, assessmentError);
+
+    const pageLimitError = ensureValidPageLimit(page, limit);
+    if (pageLimitError) return sendError(res, 400, pageLimitError);
+
+    const keywordError = ensureValidKeyword(keyword);
+    if (keywordError) return sendError(res, 400, keywordError);
+
+    const result = await moderatorService.getReviews(
+      { status, assessment, keyword },
+      { page, limit }
+    );
+    return sendSuccess(res, 200, result);
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+async function hideReview(req, res) {
+  try {
+    const { reviewId } = req.params;
+    const idError = ensureObjectId(reviewId, "Mã đánh giá");
+    if (idError) return sendError(res, 400, idError);
+
+    const review = await moderatorService.hideReview(reviewId);
+    return sendSuccess(res, 200, review, "Đã ẩn đánh giá vi phạm");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+async function markSellerBadByReview(req, res) {
+  try {
+    const { reviewId } = req.params;
+    const { note } = req.body || {};
+
+    const idError = ensureObjectId(reviewId, "Mã đánh giá");
+    if (idError) return sendError(res, 400, idError);
+
+    const normalizedNote = String(note || '').trim();
+    if (normalizedNote.length < 10) {
+      return sendError(res, 400, "Vui lòng nhập ghi chú tối thiểu 10 ký tự");
+    }
+    if (normalizedNote.length > 500) {
+      return sendError(res, 400, "Ghi chú không được vượt quá 500 ký tự");
+    }
+
+    const result = await moderatorService.markSellerBadByReview(
+      reviewId,
+      req.user.userId,
+      normalizedNote
+    );
+
+    return sendSuccess(res, 200, result, "Đã đánh giá xấu và áp dụng xử lý cho người bán");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
+async function markSellerGoodByReview(req, res) {
+  try {
+    const { reviewId } = req.params;
+    const { note } = req.body || {};
+
+    const idError = ensureObjectId(reviewId, "Mã đánh giá");
+    if (idError) return sendError(res, 400, idError);
+
+    const normalizedNote = String(note || '').trim();
+    if (normalizedNote.length > 500) {
+      return sendError(res, 400, "Ghi chú không được vượt quá 500 ký tự");
+    }
+
+    const result = await moderatorService.markSellerGoodByReview(
+      reviewId,
+      req.user.userId,
+      normalizedNote
+    );
+
+    return sendSuccess(res, 200, result, "Đã duyệt đánh giá tốt");
+  } catch (error) {
+    return sendServiceError(res, error, 400);
+  }
+}
+
 module.exports = {
   getRevenueReport,
   banUser,
   getReports,
   getReportById,
-  resolveReport
+  resolveReport,
+  getOrders,
+  getOrderById,
+  forceCancelOrder,
+  updateOrderStatus,
+  getReviews,
+  hideReview,
+  markSellerBadByReview,
+  markSellerGoodByReview
 };

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-041",
+  "spec_hash": "955a597339ff99c7282b8af6c556a7966965437a6b47934c17211c26fdc72202",
+  "source_hash": "30455bc173f851e13f176c4ef2f34caabfcb516c37fc68b2155e86652154064e",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": [
+    {
+      "id": "AC-MOD-04-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/order-review-moderation.test.js; integration section order-review-moderation",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-041/run-01/jest.txt",
+            ".project/evidence/TASK-041/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-MOD-04-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/order-review-moderation.test.js (matrix, note length, refund through the cancel flow, release through escrow); flow-review.md; integration section order-review-moderation (balances before and after)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-041/run-01/complexity.txt",
+            ".project/evidence/TASK-041/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-041/run-01/jest.txt",
+            ".project/evidence/TASK-041/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-MOD-05-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/order-review-moderation.test.js; integration section order-review-moderation (four-star reviews never queue; a review is judged once)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-041/run-01/jest.txt",
+            ".project/evidence/TASK-041/run-01/integration.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-MOD-05-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "tests/order-review-moderation.test.js (counts 1, 3, 6 and 9 with configured durations); integration section order-review-moderation (first bad review counted)",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-041/run-01/jest.txt",
+            ".project/evidence/TASK-041/run-01/integration.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

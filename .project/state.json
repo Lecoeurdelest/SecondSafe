@@ -682,10 +682,31 @@
       }
     },
     "TASK-041": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-033, TASK-036",
-      "history": []
+      "detail": "Order corrections through escrow and review moderation implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Order corrections through escrow and review moderation implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-041/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-041.md",
+      "criteria": {
+        "AC-MOD-04-1": "inconclusive",
+        "AC-MOD-04-2": "inconclusive",
+        "AC-MOD-05-1": "inconclusive",
+        "AC-MOD-05-2": "inconclusive"
+      }
     },
     "TASK-042": {
       "execution": "todo",

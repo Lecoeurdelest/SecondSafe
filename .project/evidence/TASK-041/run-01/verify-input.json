@@ -1,0 +1,62 @@
+{
+  "task_id": "TASK-041",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "Order corrections through escrow and review moderation implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue",
+    "report-moderation",
+    "order-review-moderation"
+  ],
+  "complexity": [
+    "backend/src/modules/moderator/moderator.service.js",
+    "backend/src/modules/moderator/moderator.controller.js"
+  ],
+  "flow": "AC-MOD-04-2. Inspected `updateOrderStatusByModerator`, `completeOrderByModerator`, `completeReleasedOrder` and `forceCancelOrder` in `backend/src/modules/moderator/moderator.service.js`, and `forceCancelOrder` in `backend/src/modules/orders/order.service.js`. The requested status is checked against `MODERATOR_ORDER_TRANSITIONS` before anything changes. `cancelled` requires a note of at least ten characters and delegates to the order service: a paid order is refunded by `escrowService.refundFunds`, which refunds, cancels the order and reopens the listing in its own transaction; an unpaid order is cancelled in a transaction of its own. `completed` requires an escrow hold in status `held`, calls `escrowService.releaseFunds`, then completes the order and marks the listing sold. No wallet or transaction document is written outside the escrow service (INV-01). The order service refuses to cancel completed orders. Known limit: a manual release and the order update that follows are two steps, not one transaction.",
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "Order corrections through escrow and review moderation implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-MOD-04-1": {
+      "observed": "pass",
+      "note": "tests/order-review-moderation.test.js; integration section order-review-moderation",
+      "checks": {}
+    },
+    "AC-MOD-04-2": {
+      "observed": "pass",
+      "note": "tests/order-review-moderation.test.js (matrix, note length, refund through the cancel flow, release through escrow); flow-review.md; integration section order-review-moderation (balances before and after)",
+      "checks": {}
+    },
+    "AC-MOD-05-1": {
+      "observed": "pass",
+      "note": "tests/order-review-moderation.test.js; integration section order-review-moderation (four-star reviews never queue; a review is judged once)",
+      "checks": {}
+    },
+    "AC-MOD-05-2": {
+      "observed": "pass",
+      "note": "tests/order-review-moderation.test.js (counts 1, 3, 6 and 9 with configured durations); integration section order-review-moderation (first bad review counted)",
+      "checks": {}
+    }
+  }
+}
