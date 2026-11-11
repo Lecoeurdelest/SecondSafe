@@ -86,7 +86,7 @@ export default function App() {
               </div>
             </>}
             {adminRole && <><Link to="/admin">Dashboard</Link><Link to="/admin/users">Quản lý người dùng</Link></>}
-            {staffRole && <Link to="/staff">Dashboard nhân viên</Link>}
+            {staffRole && <><Link to="/staff">Dashboard nhân viên</Link><Link to="/moderator/reports">Kiểm duyệt</Link></>}
             {isAuthenticated ? (
               <>
                 <Link to="/change-password">Đổi mật khẩu</Link>

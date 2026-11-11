@@ -1,7 +1,7 @@
 ---
 id: TASK-068
 title: Web moderator report, order and review queues
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-067, TASK-040, TASK-041]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-068 — Web moderator report, order and review queues
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser
 
 ## Traceability
 
