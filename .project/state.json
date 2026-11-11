@@ -632,10 +632,25 @@
       }
     },
     "TASK-039": {
-      "execution": "todo",
+      "execution": "in_progress",
       "relevance": "current",
-      "detail": "Waiting for TASK-004, TASK-005, TASK-033",
-      "history": []
+      "detail": "Revenue report implemented with unit and real-MongoDB evidence; the dashboard criterion AC-MOD-01-1 was not verified against the existing dashboard in this run",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Revenue report implemented with unit and real-MongoDB evidence; the dashboard criterion AC-MOD-01-1 was not verified against the existing dashboard in this run"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-039/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-039.md",
+      "criteria": {
+        "AC-ORD-12-2": "inconclusive",
+        "AC-MOD-01-1": "inconclusive",
+        "AC-MOD-08-1": "inconclusive"
+      }
     },
     "TASK-040": {
       "execution": "todo",

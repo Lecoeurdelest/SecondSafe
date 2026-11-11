@@ -1,0 +1,52 @@
+{
+  "task_id": "TASK-039",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "in_progress",
+  "detail": "Revenue report implemented with unit and real-MongoDB evidence; the dashboard criterion AC-MOD-01-1 was not verified against the existing dashboard in this run",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings",
+    "reviews",
+    "reports",
+    "disputes",
+    "revenue"
+  ],
+  "complexity": [
+    "backend/src/modules/moderator/moderator.service.js",
+    "backend/src/modules/moderator/moderator.controller.js",
+    "backend/src/modules/moderator/moderator.route.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Revenue report implemented with unit and real-MongoDB evidence; the dashboard criterion AC-MOD-01-1 was not verified against the existing dashboard in this run"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-ORD-12-2": {
+      "observed": "pass",
+      "note": "tests/revenue-report.test.js (aggregation and per-order fallback use business.feeRate, rounded to integer VND); integration section revenue",
+      "checks": {}
+    },
+    "AC-MOD-01-1": {
+      "observed": "not_observed",
+      "note": "The moderator dashboard endpoint already existed before this task and is not changed here; its counts and five latest reports were not compared with the criterion",
+      "checks": {}
+    },
+    "AC-MOD-08-1": {
+      "observed": "pass",
+      "note": "tests/revenue-report.test.js (requested range, default last 12 months, grouped by month over completed orders); integration section revenue",
+      "checks": {}
+    }
+  }
+}

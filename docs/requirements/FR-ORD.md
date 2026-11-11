@@ -134,4 +134,4 @@ Baseline: `order.service.js calculatePlatformFee`, `escrow.service.js`
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-ORD-12-1` | The fee equals round(agreedAmount × fee rate) with the rate read from configuration (default 5%); the buyer pays agreedAmount, the seller receives agreedAmount minus the fee, and the fee is recorded as a fee transaction. | static flow review, behavioral test | [TASK-025](../task/TASK-025.md) `[]` |
-| `AC-ORD-12-2` | The revenue report computes fees from the same configuration source. | behavioral test | [TASK-039](../task/TASK-039.md) `[]` |
+| `AC-ORD-12-2` | The revenue report computes fees from the same configuration source. | behavioral test | [TASK-039](../task/TASK-039.md) `[!]` |

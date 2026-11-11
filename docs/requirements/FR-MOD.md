@@ -10,7 +10,7 @@ Baseline: `GET /api/moderator/dashboard`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-01-1` | The dashboard returns counts of pending and reviewing reports, pending withdrawals, unreviewed reviews, open orders, suspended users and open disputes, plus the five latest reports. | behavioral test | [TASK-039](../task/TASK-039.md) `[]` |
+| `AC-MOD-01-1` | The dashboard returns counts of pending and reviewing reports, pending withdrawals, unreviewed reviews, open orders, suspended users and open disputes, plus the five latest reports. | behavioral test | [TASK-039](../task/TASK-039.md) `[!]` |
 
 ### FR-MOD-02 — Moderate violation reports
 
@@ -87,7 +87,7 @@ Baseline: `GET /api/moderator/revenue-report`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-MOD-08-1` | The revenue report covers a date range (default the last 12 months), grouped by month over completed orders. | behavioral test | [TASK-039](../task/TASK-039.md) `[]` |
+| `AC-MOD-08-1` | The revenue report covers a date range (default the last 12 months), grouped by month over completed orders. | behavioral test | [TASK-039](../task/TASK-039.md) `[!]` |
 
 ### FR-MOD-09 — Moderator profile
 
