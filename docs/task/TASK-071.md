@@ -1,7 +1,7 @@
 ---
 id: TASK-071
 title: Web admin order, review and report queues
-execution_status: todo
+execution_status: verifying
 relevance: current
 depends_on: [TASK-070, TASK-040, TASK-041]
 supersedes: []
@@ -11,6 +11,8 @@ superseded_by: null
 # TASK-071 — Web admin order, review and report queues
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
+
+**Current state:** `verifying` — Pages wired and building; behaviour is not covered by automated tests and was only partly observed in a browser
 
 ## Traceability
 

@@ -144,7 +144,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-WEB-18-1` | Admin queues and detail pages use paginated authorized APIs and show valid action results and failures without bypassing lifecycle or sanction rules. | behavioral test, manual review | [TASK-071](../task/TASK-071.md) `[]` |
+| `AC-WEB-18-1` | Admin queues and detail pages use paginated authorized APIs and show valid action results and failures without bypassing lifecycle or sanction rules. | behavioral test, manual review | [TASK-071](../task/TASK-071.md) `[!]` |
 
 ### FR-WEB-19 — Web admin disputes, withdrawals and revenue
 
