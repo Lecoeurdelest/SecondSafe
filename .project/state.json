@@ -545,10 +545,33 @@
       "history": []
     },
     "TASK-036": {
-      "execution": "todo",
+      "execution": "verifying",
       "relevance": "current",
-      "detail": "Waiting for TASK-009, TASK-033",
-      "history": []
+      "detail": "Review creation, lists, statistics, edit and removal implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-10",
+          "execution": "in_progress",
+          "note": "Implement on the migrated code base after the full WDP comparison"
+        },
+        {
+          "date": "2026-11-10",
+          "execution": "verifying",
+          "note": "Review creation, lists, statistics, edit and removal implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-036/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-036.md",
+      "criteria": {
+        "AC-REV-01-1": "inconclusive",
+        "AC-REV-01-2": "inconclusive",
+        "AC-REV-02-1": "inconclusive",
+        "AC-REV-03-1": "inconclusive",
+        "AC-REV-04-1": "inconclusive",
+        "AC-REV-05-1": "inconclusive"
+      }
     },
     "TASK-037": {
       "execution": "todo",
