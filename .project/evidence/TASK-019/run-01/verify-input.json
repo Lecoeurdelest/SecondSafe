@@ -1,0 +1,47 @@
+{
+  "task_id": "TASK-019",
+  "run": "run-01",
+  "date": "2026-11-10",
+  "kind": "backend",
+  "execution": "verifying",
+  "detail": "My-listings, owner detail view and the public seller filter implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration",
+  "sections": [
+    "upload",
+    "listing",
+    "seller-listings"
+  ],
+  "complexity": [
+    "backend/src/modules/products/product-management.service.js",
+    "backend/src/modules/products/product.controller.js",
+    "backend/src/modules/products/product.route.js"
+  ],
+  "flow": null,
+  "manual": null,
+  "history": [
+    [
+      "in_progress",
+      "Implement on the migrated code base after the full WDP comparison"
+    ],
+    [
+      "verifying",
+      "My-listings, owner detail view and the public seller filter implemented with unit and real-MongoDB evidence; automatic completion remains inconclusive without applicable calibration"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Dependencies of this task were delivered outside the task workflow and are not all recorded as done",
+    "Unit tests mock the models; the integration run uses a disposable local MongoDB replica set, not a deployed environment"
+  ],
+  "criteria": {
+    "AC-PROD-06-1": {
+      "observed": "pass",
+      "note": "tests/seller-listings.test.js (status filter, default 20, maximum 100); integration section seller-listings",
+      "checks": {}
+    },
+    "AC-PROD-07-1": {
+      "observed": "pass",
+      "note": "tests/seller-listings.test.js and tests/products.test.js (seller summary, 404 for a suspended or missing seller); integration section seller-listings",
+      "checks": {}
+    }
+  }
+}

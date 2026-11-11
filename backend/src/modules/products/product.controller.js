@@ -35,7 +35,7 @@ async function search(req, res) {
 
 async function getById(req, res) {
   try {
-    return sendSuccess(res, 200, await productService.getProductById(req.params.id));
+    return sendSuccess(res, 200, await productService.getProductById(req.params.id, req.user?.userId));
   } catch (error) {
     return respondError(res, error, 'Get product by ID failed');
   }
@@ -91,4 +91,13 @@ async function updateVisibility(req, res) {
   }
 }
 
-module.exports = { list, search, getById, create, update, remove, updateVisibility };
+async function listMine(req, res) {
+  try {
+    const result = await managementService.getMyProducts(req.user.userId, req.query);
+    return sendSuccess(res, 200, result, 'Danh sách sản phẩm của bạn');
+  } catch (error) {
+    return respondError(res, error, 'Listing own products failed');
+  }
+}
+
+module.exports = { list, search, getById, create, update, remove, updateVisibility, listMine };

@@ -3,6 +3,7 @@ const Category = require('./category.model');
 const Product = require('./product.model');
 const Order = require('../orders/order.model');
 const User = require('../users/user.model');
+const { pagination } = require('../../common/utils/pagination.util');
 const { refreshSellingRestriction, getSellingRestrictionMessage } = require('../../common/utils/seller-restriction.util');
 
 const ACTIVE_ORDER_STATUSES = ['awaiting_seller_confirmation', 'awaiting_payment', 'paid', 'shipped', 'disputed'];
@@ -209,10 +210,48 @@ async function setProductVisibility(productId, userId, status) {
   return populated(product);
 }
 
+async function activeOrderCounts(productIds) {
+  if (!productIds.length) return {};
+  const rows = await Order.aggregate([
+    { $match: { productId: { $in: productIds }, status: { $in: ACTIVE_ORDER_STATUSES } } },
+    { $group: { _id: '$productId', count: { $sum: 1 } } }
+  ]);
+  return Object.fromEntries(rows.map(row => [String(row._id), row.count]));
+}
+
+async function getMyProducts(userId, query = {}) {
+  const { page, limit, skip } = pagination(query);
+  const filter = { seller: userId, status: text(query.status) || { $ne: 'deleted' } };
+  if (text(query.moderationStatus)) filter.moderationStatus = text(query.moderationStatus);
+
+  const [products, total] = await Promise.all([
+    Product.find(filter)
+      .populate('category', 'name slug')
+      .populate('categories', 'name slug')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Product.countDocuments(filter)
+  ]);
+  const counts = await activeOrderCounts(products.map(product => product._id));
+  return {
+    products: products.map(product => {
+      const activeOrderCount = counts[String(product._id)] || 0;
+      return { ...product, activeOrderCount, isInActiveOrder: activeOrderCount > 0 };
+    }),
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+    limit
+  };
+}
+
 module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
   setProductVisibility,
+  getMyProducts,
   ACTIVE_ORDER_STATUSES
 };

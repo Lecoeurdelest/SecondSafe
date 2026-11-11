@@ -63,7 +63,7 @@ Baseline: `GET /api/products/my-products`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-06-1` | GET /api/products/my-products returns the caller's listings filtered by status, paginated (default 20, maximum 100). | behavioral test | [TASK-019](../task/TASK-019.md) `[]` |
+| `AC-PROD-06-1` | GET /api/products/my-products returns the caller's listings filtered by status, paginated (default 20, maximum 100). | behavioral test | [TASK-019](../task/TASK-019.md) `[!]` |
 
 ### FR-PROD-07 — View listing detail
 
@@ -73,7 +73,7 @@ Baseline: `GET /api/products/:id`
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-PROD-07-1` | The detail returns the listing with a seller summary and returns 404 when the seller is deleted or suspended. | behavioral test | [TASK-019](../task/TASK-019.md) `[]` |
+| `AC-PROD-07-1` | The detail returns the listing with a seller summary and returns 404 when the seller is deleted or suspended. | behavioral test | [TASK-019](../task/TASK-019.md) `[!]` |
 
 ### FR-PROD-09 — Pre-publication listing moderation
 
