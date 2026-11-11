@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function PasswordField({
   id,
+  name,
   label,
   value,
   onChange,
@@ -17,6 +18,7 @@ export default function PasswordField({
       <div className="auth-password-control">
         <input
           id={id}
+          name={name || id}
           type={visible ? 'text' : 'password'}
           autoComplete={autoComplete}
           minLength={minLength}

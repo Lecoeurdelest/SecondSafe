@@ -282,22 +282,27 @@ function Home() {
       </div>
 
       {/* Category Icons */}
-      <div className="home__categories">
+      <section className="home__categories" aria-labelledby="category-heading">
         <div className="home__categories-container">
+          <div className="home__categories-heading">
+            <div><p>KHÁM PHÁ</p><h2 id="category-heading">Danh mục đa dạng</h2></div>
+            <span>Cập nhật sản phẩm đang bán</span>
+          </div>
           <div className="home__categories-grid">
             {categories.map((cat) => (
-              <div
+              <button
                 key={cat.id}
-                className="category-item"
+                type="button"
+                className={`category-item${filters.category === cat.id ? ' is-active' : ''}`}
                 onClick={() => handleFilterChange({ category: cat.id })}
               >
-                <div className="category-item__icon">{cat.icon}</div>
-                <div className="category-item__name">{cat.name}</div>
-              </div>
+                <span className="category-item__icon" aria-hidden="true">{cat.icon}</span>
+                <span className="category-item__name">{cat.name}</span>
+              </button>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Sort control: placed below categories and above products */}
       <div className="home__sort-container" style={{ maxWidth: 1200, margin: '16px auto', padding: '0 20px' }}>
