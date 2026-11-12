@@ -69,7 +69,7 @@ const ModeratorHeader = ({ onOpenMenu, isMobile }) => {
       </div>
 
       <Space size={14}>
-        <Tag className="moderator-role-tag" color="gold">
+        <Tag className="moderator-role-tag" color="default">
           {user?.role === "admin" ? "Quản trị viên" : "Kiểm duyệt viên"}
         </Tag>
 

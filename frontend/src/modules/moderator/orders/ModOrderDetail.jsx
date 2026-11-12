@@ -111,7 +111,7 @@ const ModOrderDetail = () => {
       </Button>
 
       <Card className="mod-panel" title={`Chi tiết Đơn hàng: ${order?.orderCode || order?._id?.slice(-8)?.toUpperCase() || ""}`} loading={loading}>
-        <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
+        <Descriptions bordered column={{ xs: 1, md: 2 }} style={{ marginBottom: 24 }}>
           <Descriptions.Item label="Mã đơn hàng">{order?.orderCode || order?._id?.slice(-8)?.toUpperCase() || "N/A"}</Descriptions.Item>
           <Descriptions.Item label="Mã vận đơn">{order?.trackingNumber || "N/A"}</Descriptions.Item>
           <Descriptions.Item label="Người mua">{order?.buyerId?.fullName || "N/A"}</Descriptions.Item>

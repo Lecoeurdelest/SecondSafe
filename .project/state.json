@@ -1505,7 +1505,7 @@
     "TASK-077": {
       "execution": "verifying",
       "relevance": "current",
-      "detail": "Restyle implemented in six passes; the last bundles the Font Awesome Free icon font so the blank icons render, after an independent page-by-page review fixed the other defects; build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend",
+      "detail": "Restyle merged to main in PR 148; a follow-up fixes the defects of a second page-by-page review (staff detail pages at 390 px, notification panel on mobile, staff tags and buttons, seller order tabs); build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend",
       "history": [
         {
           "date": "2026-11-12",
@@ -1546,6 +1546,11 @@
           "date": "2026-11-12",
           "execution": "verifying",
           "note": "Bundled the Font Awesome Free solid font so the icons render; task scope amended to allow that one dependency"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Follow-up after merge: fixed mobile and theme defects found by a second review and recorded the findings that were left alone"
         }
       ],
       "evidence": [
@@ -1554,7 +1559,8 @@
         ".project/evidence/TASK-077/run-03/report.json",
         ".project/evidence/TASK-077/run-04/report.json",
         ".project/evidence/TASK-077/run-05/report.json",
-        ".project/evidence/TASK-077/run-06/report.json"
+        ".project/evidence/TASK-077/run-06/report.json",
+        ".project/evidence/TASK-077/run-07/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-077.md",
       "criteria": {

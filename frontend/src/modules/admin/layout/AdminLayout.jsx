@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import { useAuth } from '../../../hooks/useAuth';
-import staffTheme from '../../staffTheme';
+import staffTheme, { staffLocale } from '../../staffTheme';
 import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
 import './AdminLayout.css';
@@ -25,7 +25,7 @@ const AdminLayout = () => {
   }
 
   return (
-    <ConfigProvider theme={staffTheme}>
+    <ConfigProvider theme={staffTheme} locale={staffLocale}>
       <div className="admin-layout">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 

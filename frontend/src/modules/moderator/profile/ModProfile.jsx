@@ -115,7 +115,7 @@ const ModProfile = () => {
           <Card className="mod-panel" loading={loadingProfile} title={<><UserOutlined /> Hồ sơ cá nhân</>}>
             <Descriptions column={1} size="middle" className="mod-profile-summary">
               <Descriptions.Item label="Vai trò">
-                <Tag color={profile?.role === "admin" ? "red" : "gold"}>
+                <Tag color="default">
                   {profile?.role === "admin" ? "Quản trị viên" : "Kiểm duyệt viên"}
                 </Tag>
               </Descriptions.Item>

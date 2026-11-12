@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "f82e35046cf75d7ce2c4a1225728e82508c63cc8b23adc0475b87790c7212acc",
+  "source_hash": "658dec2def2cff9017d3ffd845d5819338490d33f8d0e11f622d70bc6d665bed",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, never against a real backend or another browser",
+    "Only the pages named in manual-review.md were re-captured after the fixes",
+    "Dark mode is not implemented",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The staff order detail, dispute detail and notification panel no longer overflow or clip at 390 px, and the staff tags, buttons and moderator header render in the neutral palette; build and the 58 existing frontend tests pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-07/manual-review.md",
+            ".project/evidence/TASK-077/run-07/screenshots/admin-dispute-detail-return.png",
+            ".project/evidence/TASK-077/run-07/screenshots/m-admin-order-detail-s1.png",
+            ".project/evidence/TASK-077/run-07/screenshots/m-mod-order-detail-s1.png",
+            ".project/evidence/TASK-077/run-07/screenshots/notif-panel-mobile.png",
+            ".project/evidence/TASK-077/run-07/screenshots/seller-orders-cho-giao.png"
+          ]
+        }
+      ]
+    }
+  ]
+}
