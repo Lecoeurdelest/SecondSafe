@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Form, Select } from 'antd';
 import locationService from '../services/location.service';
 import './LocationSelector.css';
+
+const toOptions = (items) => items.map(item => ({ value: item.code, label: item.name }));
 
 const LocationSelector = ({ value, onChange, errors }) => {
   const [provinces, setProvinces] = useState([]);
@@ -61,8 +64,7 @@ const LocationSelector = ({ value, onChange, errors }) => {
     setWards(data);
   };
 
-  const handleProvinceChange = (e) => {
-    const code = parseInt(e.target.value);
+  const handleProvinceChange = (code) => {
     const province = provinces.find(p => p.code === code);
     
     setSelectedProvince(province);
@@ -93,8 +95,7 @@ const LocationSelector = ({ value, onChange, errors }) => {
     }
   };
 
-  const handleDistrictChange = (e) => {
-    const code = parseInt(e.target.value);
+  const handleDistrictChange = (code) => {
     const district = districts.find(d => d.code === code);
     
     setSelectedDistrict(district);
@@ -123,8 +124,7 @@ const LocationSelector = ({ value, onChange, errors }) => {
     }
   };
 
-  const handleWardChange = (e) => {
-    const code = parseInt(e.target.value);
+  const handleWardChange = (code) => {
     const ward = wards.find(w => w.code === code);
     
     setSelectedWard(ward);
@@ -152,63 +152,58 @@ const LocationSelector = ({ value, onChange, errors }) => {
 
   return (
     <div className="location-selector">
-      <div className="form-group">
-        <label htmlFor="province">
-          Tỉnh/Thành phố <span className="required">*</span>
-        </label>
-        <select
+      <Form.Item
+        label="Tỉnh/Thành phố"
+        htmlFor="province"
+        required
+        validateStatus={errors?.city ? 'error' : undefined}
+        help={errors?.city}
+      >
+        <Select
           id="province"
-          value={selectedProvince?.code || ''}
+          showSearch
+          allowClear
+          optionFilterProp="label"
+          placeholder="Chọn Tỉnh/Thành phố"
+          value={selectedProvince?.code}
+          options={toOptions(provinces)}
           onChange={handleProvinceChange}
-          className={errors?.city ? 'error' : ''}
-        >
-          <option value="">-- Chọn Tỉnh/Thành phố --</option>
-          {provinces.map(province => (
-            <option key={province.code} value={province.code}>
-              {province.name}
-            </option>
-          ))}
-        </select>
-        {errors?.city && <p className="error-text">{errors.city}</p>}
-      </div>
+        />
+      </Form.Item>
 
-      <div className="form-group">
-        <label htmlFor="district">
-          Quận/Huyện <span className="required">*</span>
-        </label>
-        <select
+      <Form.Item
+        label="Quận/Huyện"
+        htmlFor="district"
+        required
+        validateStatus={errors?.district ? 'error' : undefined}
+        help={errors?.district}
+      >
+        <Select
           id="district"
-          value={selectedDistrict?.code || ''}
-          onChange={handleDistrictChange}
+          showSearch
+          allowClear
+          optionFilterProp="label"
+          placeholder="Chọn Quận/Huyện"
           disabled={!selectedProvince}
-          className={errors?.district ? 'error' : ''}
-        >
-          <option value="">-- Chọn Quận/Huyện --</option>
-          {districts.map(district => (
-            <option key={district.code} value={district.code}>
-              {district.name}
-            </option>
-          ))}
-        </select>
-        {errors?.district && <p className="error-text">{errors.district}</p>}
-      </div>
+          value={selectedDistrict?.code}
+          options={toOptions(districts)}
+          onChange={handleDistrictChange}
+        />
+      </Form.Item>
 
-      <div className="form-group">
-        <label htmlFor="ward">Phường/Xã</label>
-        <select
+      <Form.Item label="Phường/Xã" htmlFor="ward">
+        <Select
           id="ward"
-          value={selectedWard?.code || ''}
-          onChange={handleWardChange}
+          showSearch
+          allowClear
+          optionFilterProp="label"
+          placeholder="Chọn Phường/Xã"
           disabled={!selectedDistrict}
-        >
-          <option value="">-- Chọn Phường/Xã --</option>
-          {wards.map(ward => (
-            <option key={ward.code} value={ward.code}>
-              {ward.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          value={selectedWard?.code}
+          options={toOptions(wards)}
+          onChange={handleWardChange}
+        />
+      </Form.Item>
     </div>
   );
 };

@@ -5,9 +5,19 @@ import productService from '../../services/product.service';
 import api from '../../services/api';
 import { getProfile } from '../../services/user.service';
 import LocationSelector from '../../components/LocationSelector';
+import ProductImagePicker from './ProductImagePicker';
 import './CreateProduct.css';
-import { Check, MapPin, X } from '@phosphor-icons/react';
+import { Alert, App as AntApp, Button, Card, Descriptions, Flex, Form, Input, Progress, Select, Statistic, Tag, Typography } from 'antd';
+import { Check, MapPin } from '@phosphor-icons/react';
 import CategoryIcon from '../../utils/categoryIcons';
+
+const CONDITION_OPTIONS = [
+  { value: 'new', label: 'Mới' },
+  { value: 'like-new', label: 'Như mới' },
+  { value: 'good', label: 'Tốt' },
+  { value: 'fair', label: 'Khá' },
+  { value: 'poor', label: 'Cũ' }
+];
 
 const CONDITION_LABELS = {
   new: 'Mới',
@@ -24,6 +34,7 @@ const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
 const CreateProduct = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { message } = AntApp.useApp();
 
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -278,9 +289,7 @@ const CreateProduct = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
@@ -314,11 +323,11 @@ const CreateProduct = () => {
       localStorage.setItem('products:lastCreatedAt', createdAtMarker);
       window.dispatchEvent(new CustomEvent('products:updated', { detail: { createdAt: createdAtMarker } }));
       
-      alert('Đăng tin thành công. Bạn sẽ thấy thông báo mới trong mục thông báo.');
+      message.success('Đăng tin thành công. Bạn sẽ thấy thông báo mới trong mục thông báo.');
       navigate('/my-products');
     } catch (error) {
       console.error('Create product error:', error);
-      alert(error.response?.data?.message || error.message || 'Không thể tạo sản phẩm');
+      message.error(error.response?.data?.message || error.message || 'Không thể tạo sản phẩm');
     } finally {
       setLoading(false);
     }
@@ -344,306 +353,216 @@ const CreateProduct = () => {
   ].filter(Boolean).length;
   const completionPercent = Math.round((completedFieldCount / 7) * 100);
 
+  const toggleProfileLocation = () => {
+    const next = !useProfileLocation;
+    setUseProfileLocation(next);
+    if (next && profileLocation) {
+      setFormData(prev => ({ ...prev, location: profileLocation }));
+    } else {
+      setFormData(prev => ({ ...prev, location: { city: '', district: '', ward: '', provinceCode: null, districtCode: null, wardCode: null } }));
+    }
+  };
+
   return (
     <div className="create-product-container">
-      <div className="create-product-header">
+      <Flex justify="space-between" align="flex-start" wrap gap={16} className="create-product-header">
         <div className="create-product-header-copy">
-          <span className="create-product-eyebrow">Đăng bán sản phẩm</span>
-          <h1>Đăng tin mới</h1>
-          <p>Tạo một bài đăng rõ ràng, đẹp mắt để tăng độ tin cậy và giúp người mua ra quyết định nhanh hơn.</p>
+          <Typography.Text strong className="create-product-eyebrow">Đăng bán sản phẩm</Typography.Text>
+          <Typography.Title level={1}>Đăng tin mới</Typography.Title>
+          <Typography.Paragraph type="secondary">Tạo một bài đăng rõ ràng, đẹp mắt để tăng độ tin cậy và giúp người mua ra quyết định nhanh hơn.</Typography.Paragraph>
         </div>
-        <div className="create-product-header-stats">
-          <div className="header-stat-card">
-            <span className="header-stat-label">Ảnh đã thêm</span>
-            <strong>{imageFiles.length}/5</strong>
-          </div>
-          <div className="header-stat-card">
-            <span className="header-stat-label">Mức hoàn thiện</span>
-            <strong>{completionPercent}%</strong>
-          </div>
-        </div>
-      </div>
+        <Flex gap={12} className="create-product-header-stats">
+          <Card size="small"><Statistic title="Ảnh đã thêm" value={`${imageFiles.length}/5`} /></Card>
+          <Card size="small"><Statistic title="Mức hoàn thiện" value={`${completionPercent}%`} /></Card>
+        </Flex>
+      </Flex>
+      <Progress percent={completionPercent} showInfo={false} className="create-product-progress" aria-label="Mức hoàn thiện" />
 
-      <form onSubmit={handleSubmit} className="create-product-form">
+      <Form layout="vertical" onFinish={handleSubmit} className="create-product-form" requiredMark>
         <div className="create-product-grid">
           <div className="create-product-main">
-            <div className="form-section form-section-highlight">
-              <div className="section-heading">
-                <div>
-                  <span className="section-kicker">Bộ ảnh</span>
-                  <h2>Hình ảnh sản phẩm</h2>
-                </div>
-                <p>Ảnh sáng rõ, nhiều góc chụp sẽ giúp tin đăng chuyên nghiệp và tăng độ tin cậy.</p>
-              </div>
+            <Card className="product-form-section" title={<Typography.Title level={2}>Hình ảnh sản phẩm</Typography.Title>}>
+              <Typography.Paragraph type="secondary">Ảnh sáng rõ, nhiều góc chụp sẽ giúp tin đăng chuyên nghiệp và tăng độ tin cậy.</Typography.Paragraph>
+              <ProductImagePicker
+                images={imagePreviews.map((src, index) => ({ key: src, src, alt: `Preview ${index + 1}` }))}
+                canAdd={imageFiles.length < 5}
+                accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                hint="1-5 ảnh, tối đa 5MB mỗi ảnh. Ưu tiên ảnh thật của sản phẩm."
+                error={errors.images}
+                onAdd={handleImageChange}
+                onRemove={(_, index) => removeImage(index)}
+              />
+            </Card>
 
-              <div className="image-upload-area">
-                <div className="image-previews">
-                  {imagePreviews.map((preview, index) => (
-                    <div key={index} className="image-preview">
-                      <img src={preview} alt={`Preview ${index + 1}`} />
-                      <button
-                        type="button"
-                        className="remove-image"
-                        aria-label="Xóa ảnh"
-                        title="Xóa ảnh"
-                        onClick={() => removeImage(index)}
-                      >
-                        <X />
-                      </button>
-                    </div>
-                  ))}
-                  {imageFiles.length < 5 && (
-                    <label className="upload-pill-button">
-                      <input
-                        type="file"
-                        accept=".jpg,.jpeg,.png,image/jpeg,image/png"
-                        multiple
-                        onChange={handleImageChange}
-                        style={{ display: 'none' }}
-                      />
-                      <div className="upload-pill-content">
-                        <span className="upload-pill-icon">+</span>
-                        <span className="upload-pill-text">Up ảnh</span>
-                      </div>
-                    </label>
+            <Card className="product-form-section" title={<Typography.Title level={2}>Thông tin cơ bản</Typography.Title>}>
+              <Typography.Paragraph type="secondary">Trình bày rõ ràng để người mua hiểu nhanh tình trạng, giá bán và danh mục sản phẩm.</Typography.Paragraph>
+
+              <Form.Item
+                label="Tiêu đề"
+                htmlFor="title"
+                required
+                validateStatus={errors.title ? 'error' : undefined}
+                help={errors.title}
+                extra="Tiêu đề càng cụ thể càng dễ tiếp cận đúng người mua."
+              >
+                <Input
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="VD: iPhone 13 Pro Max 256GB, đầy đủ phụ kiện"
+                  maxLength={100}
+                  showCount
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Danh mục"
+                required
+                validateStatus={errors.categories ? 'error' : undefined}
+                help={errors.categories}
+                extra="Bạn có thể chọn nhiều danh mục để tăng khả năng tiếp cận người mua."
+              >
+                <Flex wrap gap={8} role="group" aria-label="Chọn nhiều danh mục">
+                  {categories && categories.length > 0 ? (
+                    categories.map(cat => {
+                      const isSelected = formData.categories.includes(cat._id);
+                      return (
+                        <Button
+                          key={cat._id}
+                          shape="round"
+                          type={isSelected ? 'primary' : 'default'}
+                          aria-pressed={isSelected}
+                          icon={isSelected ? <Check /> : <CategoryIcon slug={cat.slug} />}
+                          onClick={() => handleCategoryToggle(cat._id)}
+                        >
+                          {cat.name}
+                        </Button>
+                      );
+                    })
+                  ) : (
+                    <Typography.Text type="secondary">Đang tải danh mục...</Typography.Text>
                   )}
-                </div>
+                </Flex>
+              </Form.Item>
 
-                <div className="upload-guidelines">
-                  <span>1-5 ảnh</span>
-                  <span>Tối đa 5MB mỗi ảnh</span>
-                  <span>Ưu tiên ảnh thật của sản phẩm</span>
-                </div>
+              <Form.Item label="Tình trạng" htmlFor="condition" required>
+                <Select
+                  id="condition"
+                  value={formData.condition}
+                  options={CONDITION_OPTIONS}
+                  onChange={(value) => handleChange({ target: { name: 'condition', value } })}
+                />
+              </Form.Item>
 
-                {errors.images && <p className="error-text">{errors.images}</p>}
-              </div>
-            </div>
+              <Form.Item
+                label="Giá bán (VNĐ)"
+                htmlFor="price"
+                required
+                validateStatus={errors.price ? 'error' : undefined}
+                help={errors.price}
+                extra="Giá tối đa cho phép: 100.000.000 VND."
+              >
+                <Input
+                  id="price"
+                  name="price"
+                  inputMode="numeric"
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder="VD: 25000000"
+                  maxLength={MAX_PRICE_DIGITS}
+                  suffix="VND"
+                />
+              </Form.Item>
 
-            <div className="form-section">
-              <div className="section-heading">
-                <div>
-                  <span className="section-kicker">Thông tin</span>
-                  <h2>Thông tin cơ bản</h2>
-                </div>
-                <p>Trình bày rõ ràng để người mua hiểu nhanh tình trạng, giá bán và danh mục sản phẩm.</p>
-              </div>
+              <Form.Item
+                label="Mô tả chi tiết"
+                htmlFor="description"
+                required
+                validateStatus={errors.description ? 'error' : undefined}
+                help={errors.description}
+              >
+                <Input.TextArea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Mô tả rõ ngoại hình, phụ kiện đi kèm, thời gian sử dụng, lỗi nếu có và lý do bán..."
+                  rows={7}
+                />
+              </Form.Item>
+            </Card>
 
-              <div className="form-grid two-columns">
-                <div className="form-group form-group-full">
-                  <label htmlFor="title">Tiêu đề <span className="required">*</span></label>
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    placeholder="VD: iPhone 13 Pro Max 256GB, đầy đủ phụ kiện"
-                    maxLength={100}
-                  />
-                  <div className="field-footnote">
-                    <span>Tiêu đề càng cụ thể càng dễ tiếp cận đúng người mua.</span>
-                    <span>{formData.title.length}/100</span>
-                  </div>
-                  {errors.title && <p className="error-text">{errors.title}</p>}
-                </div>
-
-                <div className="form-group">
-                  <label>Danh mục <span className="required">*</span></label>
-                  <div className="category-picker-grid" role="group" aria-label="Chọn nhiều danh mục">
-                    {categories && categories.length > 0 ? (
-                      categories.map(cat => {
-                        const isSelected = formData.categories.includes(cat._id);
-                        return (
-                          <button
-                            key={cat._id}
-                            type="button"
-                            className={`category-chip ${isSelected ? 'is-selected' : ''}`}
-                            onClick={() => handleCategoryToggle(cat._id)}
-                          >
-                            <span className="category-chip-check">{isSelected ? <Check /> : null}</span>
-                            <span className="category-chip-label"><CategoryIcon slug={cat.slug} /> {cat.name}</span>
-                          </button>
-                        );
-                      })
-                    ) : (
-                      <p className="help-text">Đang tải danh mục...</p>
-                    )}
-                  </div>
-
-                  {errors.categories && <p className="error-text">{errors.categories}</p>}
-                  <p className="help-text">Bạn có thể chọn nhiều danh mục để tăng khả năng tiếp cận người mua.</p>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="condition">Tình trạng <span className="required">*</span></label>
-                  <select
-                    id="condition"
-                    name="condition"
-                    value={formData.condition}
-                    onChange={handleChange}
-                  >
-                    <option value="new">Mới</option>
-                    <option value="like-new">Như mới</option>
-                    <option value="good">Tốt</option>
-                    <option value="fair">Khá</option>
-                    <option value="poor">Cũ</option>
-                  </select>
-                </div>
-
-                <div className="form-group form-group-full">
-                  <label htmlFor="price">Giá bán (VNĐ) <span className="required">*</span></label>
-                  <div className="price-input-wrap">
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      id="price"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleChange}
-                      placeholder="VD: 25000000"
-                      maxLength={MAX_PRICE_DIGITS}
-                    />
-                    <span className="price-input-suffix">VND</span>
-                  </div>
-                  <p className="help-text">Giá tối đa cho phép: 100.000.000 VND.</p>
-                  {errors.price && <p className="error-text">{errors.price}</p>}
-                </div>
-
-                <div className="form-group form-group-full">
-                  <label htmlFor="description">Mô tả chi tiết <span className="required">*</span></label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Mô tả rõ ngoại hình, phụ kiện đi kèm, thời gian sử dụng, lỗi nếu có và lý do bán..."
-                    rows={7}
-                  />
-                  {errors.description && <p className="error-text">{errors.description}</p>}
-                </div>
-              </div>
-            </div>
-
-            <div className="form-section">
-              <div className="section-heading">
-                <div>
-                  <span className="section-kicker">Khu vực</span>
-                  <h2>Địa chỉ đăng bán</h2>
-                </div>
-                <p>Thông tin địa điểm rõ ràng sẽ giúp người mua yên tâm hơn khi trao đổi và nhận hàng.</p>
-              </div>
-
-              <div className="location-panel">
-                {profileLocation && (
-                  <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: '#fff1f0', border: '1px solid #fdbeba', borderRadius: '8px' }}>
-                    <span style={{ flex: 1, fontSize: '14px', color: 'var(--brand-dark)' }}>
-                      <MapPin /> Mặc định từ hồ sơ: <strong>{[profileLocation.ward, profileLocation.district, profileLocation.city].filter(Boolean).join(', ')}</strong>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const next = !useProfileLocation;
-                        setUseProfileLocation(next);
-                        if (next && profileLocation) {
-                          setFormData(prev => ({ ...prev, location: profileLocation }));
-                        } else {
-                          setFormData(prev => ({ ...prev, location: { city: '', district: '', ward: '', provinceCode: null, districtCode: null, wardCode: null } }));
-                        }
-                      }}
-                      style={{ fontSize: '13px', padding: '5px 12px', background: useProfileLocation ? '#fee2e0' : '#fff', border: '1px solid #fc857d', borderRadius: '6px', cursor: 'pointer', color: 'var(--brand-dark)', whiteSpace: 'nowrap' }}
-                    >
-                      {useProfileLocation ? 'Tùy chỉnh' : 'Dùng hồ sơ'}
-                    </button>
-                  </div>
-                )}
-                {(!profileLocation || !useProfileLocation) && (
-                  <LocationSelector
-                    value={formData.location}
-                    onChange={handleLocationChange}
-                    errors={{
-                      city: errors['location.city'],
-                      district: errors['location.district']
-                    }}
-                  />
-                )}
-              </div>
-            </div>
+            <Card className="product-form-section" title={<Typography.Title level={2}>Địa chỉ đăng bán</Typography.Title>}>
+              <Typography.Paragraph type="secondary">Thông tin địa điểm rõ ràng sẽ giúp người mua yên tâm hơn khi trao đổi và nhận hàng.</Typography.Paragraph>
+              {profileLocation && (
+                <Alert
+                  className="create-product-profile-location"
+                  type="info"
+                  icon={<MapPin />}
+                  showIcon
+                  title={<>Mặc định từ hồ sơ: <strong>{[profileLocation.ward, profileLocation.district, profileLocation.city].filter(Boolean).join(', ')}</strong></>}
+                  action={<Button size="small" onClick={toggleProfileLocation}>{useProfileLocation ? 'Tùy chỉnh' : 'Dùng hồ sơ'}</Button>}
+                />
+              )}
+              {(!profileLocation || !useProfileLocation) && (
+                <LocationSelector
+                  value={formData.location}
+                  onChange={handleLocationChange}
+                  errors={{
+                    city: errors['location.city'],
+                    district: errors['location.district']
+                  }}
+                />
+              )}
+            </Card>
           </div>
 
           <aside className="create-product-sidebar">
-            <div className="sidebar-card sidebar-card-accent">
-              <div className="sidebar-card-head">
-                <span className="sidebar-kicker">Xem trước</span>
-                <h3>Tóm tắt tin đăng</h3>
+            <Card className="product-sidebar-card" title={<Typography.Title level={3}>Tóm tắt tin đăng</Typography.Title>} extra={<Typography.Text type="secondary">Xem trước</Typography.Text>}>
+              <div className="listing-preview-media">
+                {imagePreviews[0] ? (
+                  <img src={imagePreviews[0]} alt="Ảnh xem trước sản phẩm" />
+                ) : (
+                  <Typography.Text type="secondary">Chưa có ảnh</Typography.Text>
+                )}
               </div>
+              <Tag className="listing-preview-condition">{CONDITION_LABELS[formData.condition]}</Tag>
+              <Typography.Title level={4} className="listing-preview-title">
+                {formData.title.trim() || 'Tiêu đề tin đăng sẽ hiển thị tại đây'}
+              </Typography.Title>
+              <Typography.Text strong className="listing-preview-price">
+                {formattedPrice === 'Chưa nhập' ? formattedPrice : `${formattedPrice} đ`}
+              </Typography.Text>
+              <Descriptions
+                size="small"
+                column={1}
+                items={[
+                  { key: 'category', label: 'Danh mục', children: categoryPreviewLabel || 'Chưa chọn' },
+                  { key: 'area', label: 'Khu vực', children: locationPreview || 'Chưa cập nhật' },
+                  { key: 'images', label: 'Số ảnh', children: `${imageFiles.length} ảnh` }
+                ]}
+              />
+            </Card>
 
-              <div className="listing-preview-card">
-                <div className="listing-preview-media">
-                  {imagePreviews[0] ? (
-                    <img src={imagePreviews[0]} alt="Ảnh xem trước sản phẩm" />
-                  ) : (
-                    <div className="listing-preview-placeholder">Chưa có ảnh</div>
-                  )}
-                </div>
-
-                <div className="listing-preview-body">
-                  <span className="listing-preview-condition">
-                    {CONDITION_LABELS[formData.condition]}
-                  </span>
-                  <h4>{formData.title.trim() || 'Tiêu đề tin đăng sẽ hiển thị tại đây'}</h4>
-                  <p className="listing-preview-price">{formattedPrice === 'Chưa nhập' ? formattedPrice : `${formattedPrice} đ`}</p>
-                  <ul className="preview-meta-list">
-                    <li>
-                      <span>Danh mục</span>
-                      <strong>{categoryPreviewLabel || 'Chưa chọn'}</strong>
-                    </li>
-                    <li>
-                      <span>Khu vực</span>
-                      <strong>{locationPreview || 'Chưa cập nhật'}</strong>
-                    </li>
-                    <li>
-                      <span>Số ảnh</span>
-                      <strong>{imageFiles.length} ảnh</strong>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="sidebar-card">
-              <div className="sidebar-card-head">
-                <span className="sidebar-kicker">Gợi ý</span>
-                <h3>Mẹo để tin đăng đẹp hơn</h3>
-              </div>
-
+            <Card className="product-sidebar-card" title={<Typography.Title level={3}>Mẹo để tin đăng đẹp hơn</Typography.Title>} extra={<Typography.Text type="secondary">Gợi ý</Typography.Text>}>
               <ul className="tips-list">
                 <li>Chụp đủ mặt trước, mặt sau, viền và phụ kiện đi kèm.</li>
                 <li>Tiêu đề nên gồm tên sản phẩm, phiên bản và dung lượng nếu có.</li>
                 <li>Mô tả trung thực tình trạng để giảm trao đổi qua lại không cần thiết.</li>
                 <li>Đặt giá rõ ràng để tăng tỷ lệ được liên hệ đúng nhu cầu.</li>
               </ul>
-            </div>
+            </Card>
           </aside>
         </div>
 
-        <div className="form-actions">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="btn btn-secondary"
-            disabled={loading}
-          >
-            Hủy
-          </button>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-          >
+        <Flex justify="flex-end" gap={12} className="product-form-actions">
+          <Button size="large" onClick={() => navigate(-1)} disabled={loading}>Hủy</Button>
+          <Button type="primary" size="large" htmlType="submit" disabled={loading}>
             {loading ? 'Đang đăng...' : 'Đăng tin'}
-          </button>
-        </div>
-      </form>
+          </Button>
+        </Flex>
+      </Form>
     </div>
   );
 };

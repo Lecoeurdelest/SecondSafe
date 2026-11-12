@@ -1807,6 +1807,35 @@
       "criteria": {
         "AC-WEB-25-4": "inconclusive"
       }
+    },
+    "TASK-085": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The listing creation and editing forms and the location selector are rebuilt from Ant Design form components; the new tests and the existing suites pass and the forms were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Sixth slice of the Ant Design goal: listing forms and location selector"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the listing creation and editing forms and the location selector with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the listing creation and editing forms and the location selector with Ant Design form components; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-085/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-085.md",
+      "criteria": {
+        "AC-WEB-25-5": "inconclusive"
+      }
     }
   }
 }

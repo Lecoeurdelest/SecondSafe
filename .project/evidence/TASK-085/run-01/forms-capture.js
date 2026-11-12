@@ -1,0 +1,83 @@
+const http = require('http'), fs = require('fs'), path = require('path');
+const { chromium } = require('playwright');
+const BUILD = '/home/user/secondsafe/frontend/build';
+const OUT = process.argv[2];
+const server = http.createServer((req, res) => {
+  let file = path.join(BUILD, req.url.split('?')[0]);
+  if (!file.startsWith(BUILD) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(BUILD, 'index.html');
+  res.writeHead(200, { 'Content-Type': { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml' }[path.extname(file)] || 'application/octet-stream' });
+  fs.createReadStream(file).pipe(res);
+});
+const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+const swatch = (i) => `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480"><rect width="640" height="480" fill="${['#fde68a', '#bfdbfe', '#fbcfe8'][i % 3]}"/></svg>`;
+const CATS = [['Sách', 'books'], ['Quần áo', 'fashion'], ['Đồ điện tử', 'electronics'], ['Đồ gia dụng', 'home'], ['Làm đẹp', 'beauty'], ['Thể thao', 'sports']].map(([name, slug], i) => ({ _id: 'c' + i, name, slug }));
+const PRODUCT = { _id: 'p0', title: 'iPhone 13 Pro 128GB còn bảo hành', description: 'Máy dùng một năm, pin còn 92%.', price: 12500000, condition: 'good', category: { _id: 'c2' }, seller: { _id: 'u1' }, images: ['http://localhost:5000/uploads/a0.svg', 'http://localhost:5000/uploads/a1.svg'], location: { city: 'Hà Nội', district: 'Ba Đình', ward: 'Phúc Xá' } };
+(async () => {
+  await new Promise((r) => server.listen(4188, r));
+  const b = await chromium.launch();
+  const rows = [];
+  for (const theme of ['light', 'dark']) for (const [label, width, height] of [['w1280', 1280, 900], ['w390', 390, 844]]) {
+    const ctx = await b.newContext({ viewport: { width, height }, colorScheme: theme });
+    const page = await ctx.newPage();
+    const errs = []; page.on('pageerror', (e) => errs.push(String(e.message).slice(0, 100)));
+    await page.addInitScript(([th]) => {
+      localStorage.setItem('secondsafe:theme', th);
+      localStorage.setItem('token', 'x.' + btoa(JSON.stringify({ userId: 'u1' })) + '.y'); localStorage.setItem('secondsafe:role', 'user');
+      localStorage.setItem('user', JSON.stringify({ role: 'user', _id: 'u1', fullName: 'Demo' }));
+    }, [theme]);
+    await page.route('https://provinces.open-api.vn/**', (route) => {
+      const u = route.request().url(); const headers = { 'access-control-allow-origin': '*' };
+      const json = (d) => route.fulfill({ status: 200, contentType: 'application/json', headers, body: JSON.stringify(d) });
+      if (u.includes('/d/')) return json({ wards: [{ code: 100, name: 'Phúc Xá' }, { code: 101, name: 'Trúc Bạch' }] });
+      if (u.includes('/p/1')) return json({ districts: [{ code: 10, name: 'Ba Đình' }, { code: 11, name: 'Cầu Giấy' }] });
+      return json([{ code: 1, name: 'Hà Nội' }, { code: 79, name: 'TP. Hồ Chí Minh' }, { code: 48, name: 'Đà Nẵng' }]);
+    });
+    await page.route('http://localhost:5000/**', (route) => {
+      const headers = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' };
+      const u = route.request().url(); const method = route.request().method();
+      if (method === 'OPTIONS') return route.fulfill({ status: 204, headers });
+      const json = (data) => route.fulfill({ status: 200, contentType: 'application/json', headers, body: JSON.stringify({ success: true, data }) });
+      if (u.includes('/uploads/')) return route.fulfill({ status: 200, contentType: 'image/svg+xml', headers, body: swatch(Number((u.match(/(\d+)\.svg/) || [0, 0])[1])) });
+      if (u.includes('/auth/profile')) return json({ _id: 'u1', fullName: 'Demo', role: 'user', email: 'demo@example.com' });
+      if (u.includes('/users/profile')) return json({ _id: 'u1', fullName: 'Demo', location: { city: 'Hà Nội', district: 'Ba Đình', ward: '' } });
+      if (u.includes('/categories')) return json(CATS);
+      if (u.includes('/products/p0')) return json(PRODUCT);
+      return json([]);
+    });
+    const shot = (name) => page.screenshot({ path: `${OUT}/${theme}-${label}-${name}.png`, fullPage: true });
+    const overflow = async () => await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    const row = { theme, label };
+    await page.goto('http://localhost:4188/product/create', { waitUntil: 'load' }); await page.waitForTimeout(1800);
+    row.createHeading = await page.getByRole('heading', { level: 1, name: 'Đăng tin mới' }).count();
+    row.profileLocation = await page.getByText('Mặc định từ hồ sơ').count();
+    row.createOverflow = await overflow();
+    await shot('create');
+    await page.getByRole('button', { name: 'Tùy chỉnh' }).click(); await page.waitForTimeout(600);
+    await page.getByRole('combobox', { name: 'Tỉnh/Thành phố' }).click(); await page.waitForTimeout(500);
+    await page.getByTitle('Hà Nội').first().click(); await page.waitForTimeout(800);
+    await page.getByRole('combobox', { name: 'Quận/Huyện' }).click(); await page.waitForTimeout(400);
+    await page.getByTitle('Ba Đình').first().click(); await page.waitForTimeout(500);
+    row.districtChosen = await page.getByTitle('Ba Đình').count();
+    await page.setInputFiles('input[type=file]', [{ name: 'a.png', mimeType: 'image/png', buffer: PNG }, { name: 'b.png', mimeType: 'image/png', buffer: PNG }]); await page.waitForTimeout(500);
+    row.previews = await page.getByRole('img', { name: /Preview/ }).count();
+    await page.getByRole('button', { name: 'Sách' }).click();
+    row.chipPressed = await page.getByRole('button', { name: 'Sách' }).getAttribute('aria-pressed');
+    await page.getByLabel('Tiêu đề').fill('Sách giáo khoa lớp 10 còn mới');
+    await page.getByLabel('Giá bán (VNĐ)').fill('45000');
+    await shot('create-filled');
+    await page.getByLabel('Tiêu đề').fill('');
+    await page.getByRole('button', { name: 'Đăng tin' }).click(); await page.waitForTimeout(600);
+    row.errorsShown = await page.locator('.ant-form-item-explain-error').count();
+    await shot('create-errors');
+    await page.goto('http://localhost:4188/product/p0/edit', { waitUntil: 'load' }); await page.waitForTimeout(1800);
+    row.editHeading = await page.getByRole('heading', { level: 1, name: 'Chỉnh sửa tin đăng' }).count();
+    row.existingImages = await page.getByRole('img', { name: /Existing/ }).count();
+    row.editOverflow = await overflow();
+    await shot('edit');
+    row.errors = errs.length;
+    rows.push(row);
+    await ctx.close();
+  }
+  console.log(rows.map((r) => JSON.stringify(r)).join('\n'));
+  await b.close(); server.close();
+})();

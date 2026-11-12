@@ -4,13 +4,23 @@ import { useAuth } from '../../hooks/useAuth';
 import productService from '../../services/product.service';
 import api from '../../services/api';
 import { getImageUrl, handleImageError } from '../../utils/imageHelper';
+import ProductImagePicker from './ProductImagePicker';
 import './CreateProduct.css';
-import { X } from '@phosphor-icons/react';
+import { App as AntApp, Button, Card, Flex, Form, Input, Select, Spin, Typography } from 'antd';
+
+const CONDITION_OPTIONS = [
+  { value: 'new', label: 'Mới' },
+  { value: 'like-new', label: 'Như mới' },
+  { value: 'good', label: 'Tốt' },
+  { value: 'fair', label: 'Khá' },
+  { value: 'poor', label: 'Cũ' }
+];
 
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { message } = AntApp.useApp();
 
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -57,7 +67,7 @@ const EditProduct = () => {
       const sellerId = String(product?.seller?._id || product?.seller || '');
       const currentUserId = String(user?._id || user?.id || user?.userId || '');
       if (!sellerId || !currentUserId || sellerId !== currentUserId) {
-        alert('Bạn không có quyền chỉnh sửa sản phẩm này');
+        message.error('Bạn không có quyền chỉnh sửa sản phẩm này');
         navigate('/');
         return;
       }
@@ -74,12 +84,12 @@ const EditProduct = () => {
       
       setExistingImages(Array.isArray(product.images) ? product.images : []);
     } catch (error) {
-      alert('Không thể tải thông tin sản phẩm');
+      message.error('Không thể tải thông tin sản phẩm');
       navigate('/');
     } finally {
       setFetchingProduct(false);
     }
-  }, [id, navigate, user]);
+  }, [id, message, navigate, user]);
 
   useEffect(() => {
     if (!user) {
@@ -119,16 +129,17 @@ const EditProduct = () => {
     
     const totalImages = existingImages.length + newImageFiles.length + files.length;
     if (totalImages > 5) {
-      alert('Bạn chỉ có thể có tối đa 5 ảnh');
+      setErrors(prev => ({ ...prev, images: 'Bạn chỉ có thể có tối đa 5 ảnh' }));
       return;
     }
 
     const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024);
     if (invalidFiles.length > 0) {
-      alert('Mỗi ảnh không được vượt quá 5MB');
+      setErrors(prev => ({ ...prev, images: 'Mỗi ảnh không được vượt quá 5MB' }));
       return;
     }
 
+    setErrors(prev => ({ ...prev, images: '' }));
     const newPreviews = files.map(file => URL.createObjectURL(file));
     
     setNewImageFiles(prev => [...prev, ...files]);
@@ -208,9 +219,7 @@ const EditProduct = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
@@ -236,10 +245,10 @@ const EditProduct = () => {
 
       await productService.updateProduct(id, updateData);
       
-      alert('Sản phẩm đã được cập nhật thành công!');
+      message.success('Sản phẩm đã được cập nhật thành công!');
       navigate(`/product/${id}`);
     } catch (error) {
-      alert(error.response?.data?.message || error.message || 'Không thể cập nhật sản phẩm');
+      message.error(error.response?.data?.message || error.message || 'Không thể cập nhật sản phẩm');
     } finally {
       setLoading(false);
     }
@@ -248,219 +257,132 @@ const EditProduct = () => {
   if (fetchingProduct) {
     return (
       <div className="create-product-container">
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          Đang tải...
-        </div>
+        <Flex justify="center" gap={12} className="create-product-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
+  const pictureTiles = [
+    ...existingImages.map((image, index) => ({
+      key: `existing-${image}-${index}`,
+      src: getImageUrl(image) || '/images/placeholders/product-placeholder.svg',
+      alt: `Existing ${index + 1}`,
+      onError: (event) => handleImageError(event, 'product'),
+      existing: true,
+      index
+    })),
+    ...newImagePreviews.map((src, index) => ({ key: `new-${src}`, src, alt: `New ${index + 1}`, existing: false, index }))
+  ];
+
   return (
     <div className="create-product-container">
       <div className="create-product-header">
-        <h1>Chỉnh sửa tin đăng</h1>
-        <p>Cập nhật thông tin sản phẩm của bạn</p>
+        <div className="create-product-header-copy">
+          <Typography.Title level={1}>Chỉnh sửa tin đăng</Typography.Title>
+          <Typography.Paragraph type="secondary">Cập nhật thông tin sản phẩm của bạn</Typography.Paragraph>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="create-product-form">
-        {/* Images */}
-        <div className="form-section">
-          <h2>Hình ảnh sản phẩm</h2>
-          <div className="image-upload-area">
-            <div className="image-previews">
-              {/* Existing Images */}
-              {existingImages.map((image, index) => (
-                <div key={`existing-${index}`} className="image-preview">
-                  <img
-                    src={getImageUrl(image) || '/images/placeholders/product-placeholder.svg'}
-                    alt={`Existing ${index + 1}`}
-                    onError={(event) => handleImageError(event, 'product')}
-                  />
-                  <button
-                    type="button"
-                    className="remove-image"
-                    onClick={() => removeExistingImage(index)}
-                  >
-                    <X />
-                  </button>
-                </div>
-              ))}
-              
-              {/* New Images */}
-              {newImagePreviews.map((preview, index) => (
-                <div key={`new-${index}`} className="image-preview">
-                  <img src={preview} alt={`New ${index + 1}`} />
-                  <button
-                    type="button"
-                    className="remove-image"
-                    onClick={() => removeNewImage(index)}
-                  >
-                    <X />
-                  </button>
-                </div>
-              ))}
-              
-              {/* Upload Button */}
-              {(existingImages.length + newImageFiles.length) < 5 && (
-                <label className="image-upload-button">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleNewImageChange}
-                    style={{ display: 'none' }}
-                  />
-                  <div className="upload-placeholder">
-                    <span>+</span>
-                    <span>Up ảnh</span>
-                  </div>
-                </label>
-              )}
-            </div>
-            <p className="help-text">
-              Tối đa 5 ảnh (tối đa 5MB mỗi ảnh)
-            </p>
-            {errors.images && <p className="error-text">{errors.images}</p>}
-          </div>
-        </div>
+      <Form layout="vertical" onFinish={handleSubmit} className="create-product-form" requiredMark>
+        <Card className="product-form-section" title={<Typography.Title level={2}>Hình ảnh sản phẩm</Typography.Title>}>
+          <ProductImagePicker
+            images={pictureTiles}
+            canAdd={(existingImages.length + newImageFiles.length) < 5}
+            accept="image/*"
+            hint="Tối đa 5 ảnh (tối đa 5MB mỗi ảnh)"
+            error={errors.images}
+            onAdd={handleNewImageChange}
+            onRemove={(image) => (image.existing ? removeExistingImage(image.index) : removeNewImage(image.index))}
+          />
+        </Card>
 
-        {/* Basic Info */}
-        <div className="form-section">
-          <h2>Thông tin cơ bản</h2>
-          
-          <div className="form-group">
-            <label htmlFor="title">Tiêu đề <span className="required">*</span></label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              maxLength={100}
-            />
-            {errors.title && <p className="error-text">{errors.title}</p>}
-          </div>
+        <Card className="product-form-section" title={<Typography.Title level={2}>Thông tin cơ bản</Typography.Title>}>
+          <Form.Item
+            label="Tiêu đề"
+            htmlFor="title"
+            required
+            validateStatus={errors.title ? 'error' : undefined}
+            help={errors.title}
+          >
+            <Input id="title" name="title" value={formData.title} onChange={handleChange} maxLength={100} showCount />
+          </Form.Item>
 
-          <div className="form-group">
-            <label htmlFor="category">Danh mục</label>
-            <select
+          <Form.Item label="Danh mục" htmlFor="category" extra="Không thể thay đổi danh mục">
+            <Select
               id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
               disabled
-            >
-              <option value="">Chọn danh mục</option>
-              {categories.map(cat => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-            <p className="help-text">Không thể thay đổi danh mục</p>
-          </div>
+              placeholder="Chọn danh mục"
+              value={formData.category || undefined}
+              options={categories.map(cat => ({ value: cat._id, label: cat.name }))}
+            />
+          </Form.Item>
 
-          <div className="form-group">
-            <label htmlFor="condition">Tình trạng <span className="required">*</span></label>
-            <select
+          <Form.Item label="Tình trạng" htmlFor="condition" required>
+            <Select
               id="condition"
-              name="condition"
               value={formData.condition}
-              onChange={handleChange}
-            >
-              <option value="new">Mới</option>
-              <option value="like-new">Như mới</option>
-              <option value="good">Tốt</option>
-              <option value="fair">Khá</option>
-              <option value="poor">Cũ</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="price">Giá (VNĐ) <span className="required">*</span></label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              min="0"
+              options={CONDITION_OPTIONS}
+              onChange={(value) => handleChange({ target: { name: 'condition', value } })}
             />
-            {errors.price && <p className="error-text">{errors.price}</p>}
-          </div>
+          </Form.Item>
 
-          <div className="form-group">
-            <label htmlFor="description">Mô tả chi tiết <span className="required">*</span></label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows={6}
-            />
-            {errors.description && <p className="error-text">{errors.description}</p>}
-          </div>
-        </div>
-
-        {/* Location */}
-        <div className="form-section">
-          <h2>Địa chỉ</h2>
-          
-          <div className="form-group">
-            <label htmlFor="city">Thành phố <span className="required">*</span></label>
-            <input
-              type="text"
-              id="city"
-              name="location.city"
-              value={formData.location.city}
-              onChange={handleChange}
-            />
-            {errors['location.city'] && <p className="error-text">{errors['location.city']}</p>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="district">Quận/Huyện <span className="required">*</span></label>
-            <input
-              type="text"
-              id="district"
-              name="location.district"
-              value={formData.location.district}
-              onChange={handleChange}
-            />
-            {errors['location.district'] && <p className="error-text">{errors['location.district']}</p>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="ward">Phường/Xã</label>
-            <input
-              type="text"
-              id="ward"
-              name="location.ward"
-              value={formData.location.ward}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        {/* Submit Buttons */}
-        <div className="form-actions">
-          <button
-            type="button"
-            onClick={() => navigate(`/product/${id}`)}
-            className="btn btn-secondary"
-            disabled={loading}
+          <Form.Item
+            label="Giá (VNĐ)"
+            htmlFor="price"
+            required
+            validateStatus={errors.price ? 'error' : undefined}
+            help={errors.price}
           >
-            Hủy
-          </button>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
+            <Input id="price" name="price" type="number" min="0" value={formData.price} onChange={handleChange} suffix="VND" />
+          </Form.Item>
+
+          <Form.Item
+            label="Mô tả chi tiết"
+            htmlFor="description"
+            required
+            validateStatus={errors.description ? 'error' : undefined}
+            help={errors.description}
           >
+            <Input.TextArea id="description" name="description" value={formData.description} onChange={handleChange} rows={6} />
+          </Form.Item>
+        </Card>
+
+        <Card className="product-form-section" title={<Typography.Title level={2}>Địa chỉ</Typography.Title>}>
+          <Form.Item
+            label="Thành phố"
+            htmlFor="city"
+            required
+            validateStatus={errors['location.city'] ? 'error' : undefined}
+            help={errors['location.city']}
+          >
+            <Input id="city" name="location.city" value={formData.location.city} onChange={handleChange} />
+          </Form.Item>
+
+          <Form.Item
+            label="Quận/Huyện"
+            htmlFor="district"
+            required
+            validateStatus={errors['location.district'] ? 'error' : undefined}
+            help={errors['location.district']}
+          >
+            <Input id="district" name="location.district" value={formData.location.district} onChange={handleChange} />
+          </Form.Item>
+
+          <Form.Item label="Phường/Xã" htmlFor="ward">
+            <Input id="ward" name="location.ward" value={formData.location.ward} onChange={handleChange} />
+          </Form.Item>
+        </Card>
+
+        <Flex justify="flex-end" gap={12} className="product-form-actions">
+          <Button size="large" onClick={() => navigate(`/product/${id}`)} disabled={loading}>Hủy</Button>
+          <Button type="primary" size="large" htmlType="submit" disabled={loading}>
             {loading ? 'Đang cập nhật...' : 'Cập nhật'}
-          </button>
-        </div>
-      </form>
+          </Button>
+        </Flex>
+      </Form>
     </div>
   );
 };

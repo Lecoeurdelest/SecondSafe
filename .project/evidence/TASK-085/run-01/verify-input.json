@@ -1,0 +1,36 @@
+{
+  "task_id": "TASK-085",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The listing creation and editing forms and the location selector are rebuilt from Ant Design form components; the new tests and the existing suites pass and the forms were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses and a canned province list (`forms-capture.js`). For light and dark at 1280 and 390 px the script signs in and opens the creation form (checks the heading and the profile-location notice), switches to a custom location and chooses a province and a district in the searchable selects, attaches two photos, toggles the \"Sách\" category chip (checks `aria-pressed`), fills the title and price, then clears the title and submits (counts the inline errors), and finally opens the edit form of a listing (checks the heading and the two existing photos). Horizontal overflow and page errors are recorded on both pages.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-create-filled.png` | Creation form with photos, category, custom location, summary and progress (light) |\n| `dark-w1280-create.png` | Empty creation form with the profile location in the dark theme |\n| `light-w1280-create-errors.png` | Inline errors after submitting (light) |\n| `dark-w390-create-errors.png` | Inline errors at 390 px in the dark theme |\n| `light-w390-create.png` | Creation form at 390 px (light) |\n| `dark-w1280-edit.png`, `dark-w390-edit.png` | Edit form in the dark theme at both widths |\n\nResults: in all four combinations the heading and the profile-location notice appeared, two photo previews were added, the category chip reported `aria-pressed=\"true\"`, the district was chosen, clearing the title and the description showed two inline errors, the edit form showed its two existing photos, no page overflowed horizontally and none raised an error. The first capture showed the native file input visible at 390 px because a stylesheet overrode the `hidden` attribute; it is now hidden by the stylesheet and the pages were re-captured.\n\nNot observed: a real upload and save against the backend, the province list from its real service, long titles and descriptions beyond the sample, the profile and shipping forms that embed the selector, a real phone, Firefox or WebKit.",
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the listing creation and editing forms and the location selector with Ant Design form components; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses and a canned province list",
+    "No real upload or save and no real province service were exercised",
+    "The profile and shipping forms that embed the selector were not re-observed",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-25-5": {
+      "observed": "pass",
+      "note": "The new CreateProduct, EditProduct and LocationSelector tests and the existing suites pass; the build passes; the forms show inline validation, the photo picker, the summary and the cascading selects with no overflow or error in light and dark at 390 and 1280 px; a real upload and save were not exercised",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}
