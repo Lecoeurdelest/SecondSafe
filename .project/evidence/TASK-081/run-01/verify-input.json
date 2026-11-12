@@ -1,0 +1,36 @@
+{
+  "task_id": "TASK-081",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The storefront shell is rebuilt on Ant Design with one theme that follows the light or dark choice and the language; App tests pass and the shell was observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`shell-capture.js`). The script opens the home page signed in and signed out, in light and dark, at 1280 and 390 px; checks horizontal overflow and page errors; opens the notification popover (signed in), the language dropdown and the help-center dialog and photographs them.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-in-header.png` | Signed-in header at 1280 px: brand, main menu, Đăng tin, notifications, account menu |\n| `light-w1280-in-notifications.png` | Notification popover with an unread badge, mark-all link and three list items |\n| `dark-w1280-in-notifications.png` | The same popover in the dark theme |\n| `dark-w1280-in-support.png` | Help-center dialog in the dark theme |\n| `dark-w390-in-header.png` | Signed-in header at 390 px: wrapped main links and the account menu overflowing into a \"…\" item |\n| `light-w390-out-header.png` | Signed-out header at 390 px |\n| `dark-w1280-out-language.png` | Language dropdown |\n| `light-w390-in-notifications.png` | Notification popover at 390 px |\n\nResults: no page overflowed horizontally and none raised an error in any of the eight combinations; the notification popover listed the three canned notifications each time. The shell keeps the brand colours, the gradient primary buttons, the pill shapes and DM Sans; the dark theme drives Ant Design's dark algorithm. The first capture showed the floating chat button as a small two-line square (icon above the word \"Chat\"); a rule for the Ant Design 6 markup made it a single-row pill like before.\n\nNot observed: a real phone, Firefox or WebKit, the staff areas (unchanged), keyboard use of the header menus and popover beyond the tests, long notification lists with \"Tải thêm\", and the pages under the shell, which are not part of this task.",
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the shell (top bar, header menus, notifications, help center, floating chat, footer) on Ant Design with one shared theme; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "Only the shell moved; pages still use hand-written components until later tasks",
+    "The frontend test suite is about four times slower with Ant Design rendering in jsdom",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-25-1": {
+      "observed": "pass",
+      "note": "The App tests pass (menus, notifications, language dropdown, theme switch, help-center dialog and link buttons); the build passes; the shell shows no overflow or error in light and dark at 390 and 1280 px; pages under the shell were not part of this task",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

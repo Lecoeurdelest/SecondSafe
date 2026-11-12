@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 import { Moon, Sun } from '@phosphor-icons/react';
 
 export default function ThemeToggle({ theme, onToggle, language = 'vi' }) {
@@ -7,8 +8,16 @@ export default function ThemeToggle({ theme, onToggle, language = 'vi' }) {
     ? (dark ? 'Switch to light mode' : 'Switch to dark mode')
     : (dark ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối');
   return (
-    <button type="button" className="theme-toggle" aria-pressed={dark} aria-label={label} title={label} onClick={onToggle}>
-      <span aria-hidden="true">{dark ? <Sun weight="fill" /> : <Moon weight="fill" />}</span>
-    </button>
+    <Button
+      type="text"
+      shape="circle"
+      size="small"
+      className="theme-toggle"
+      aria-pressed={dark}
+      aria-label={label}
+      title={label}
+      icon={dark ? <Sun weight="fill" /> : <Moon weight="fill" />}
+      onClick={onToggle}
+    />
   );
 }

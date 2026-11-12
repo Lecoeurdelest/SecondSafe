@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import notificationService from "../services/notification.service";
 import productService from "../services/product.service";
 import { useAuth } from "../hooks/useAuth";
+import { Avatar, Badge, Button, Empty, Flex, List, Typography } from "antd";
 import "./NotificationPanel.css";
 import { Bell, CheckCircle, Confetti, HandCoins, Lock, Megaphone, Package, Scales, ShieldCheck, Star, Truck, Warning, X } from "@phosphor-icons/react";
 
@@ -29,7 +30,7 @@ const NotificationPanel = ({
   const navigate = useNavigate();
   const { user } = useAuth();
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [, setUnreadCount] = useState(0);
   const [page, setPage] = useState(1);
@@ -320,63 +321,52 @@ const NotificationPanel = ({
 
   return (
     <div className="notification-panel" onClick={(e) => e.stopPropagation()}>
-      <div className="notification-header">
-        <h3>Thông báo</h3>
-        <button className="close-btn" onClick={onClose}>
-          <X />
-        </button>
-      </div>
+      <Flex justify="space-between" align="center" className="notification-header">
+        <Typography.Title level={5}>Thông báo</Typography.Title>
+        <Button type="text" size="small" aria-label="Đóng thông báo" icon={<X />} onClick={onClose} />
+      </Flex>
 
       {notifications.length > 0 && (
-        <button className="mark-all-btn" onClick={handleMarkAllAsRead}>
+        <Button type="link" block onClick={handleMarkAllAsRead}>
           Đánh dấu tất cả đã đọc
-        </button>
+        </Button>
       )}
 
-      <div className="notification-list">
-        {loading ? (
-          <div className="loading">Đang tải...</div>
-        ) : notifications.length === 0 ? (
-          <div className="empty-state">
-            <p>Không có thông báo nào</p>
-          </div>
-        ) : (
-          notifications.map((notification) => (
-            <div
-              key={notification._id}
-              className={`notification-item ${notification.isRead ? "is-read" : "is-unread"}`}
-              onClick={() => handleNotificationClick(notification)}
-            >
-              <span className="notification-icon">
-                {getNotificationIcon(notification.type)}
-              </span>
-              <div className="notification-content">
-                <div className="notification-title">{normalizeLegacyVietnamese(notification.title)}</div>
-                {notification.message && (
-                  <div className="notification-message">
-                    {normalizeLegacyVietnamese(notification.message)}
-                  </div>
-                )}
-                <div className="notification-time">
-                  {new Date(notification.createdAt).toLocaleString("vi-VN")}
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-
-        {!loading && hasMore && (
-          <div className="notification-load-more-wrap">
-            <button
-              className="notification-load-more-btn"
-              onClick={handleLoadMore}
-              disabled={loadingMore}
-            >
+      <List
+        className="notification-list"
+        loading={loading}
+        dataSource={notifications}
+        locale={{ emptyText: loading ? <span /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Không có thông báo nào" /> }}
+        loadMore={!loading && hasMore ? (
+          <Flex justify="center" className="notification-load-more-wrap">
+            <Button onClick={handleLoadMore} loading={loadingMore}>
               {loadingMore ? "Đang tải thêm..." : "Tải thêm"}
-            </button>
-          </div>
+            </Button>
+          </Flex>
+        ) : null}
+        renderItem={(notification) => (
+          <List.Item
+            key={notification._id}
+            className={`notification-item ${notification.isRead ? "is-read" : "is-unread"}`}
+            onClick={() => handleNotificationClick(notification)}
+          >
+            <List.Item.Meta
+              avatar={
+                <Badge dot={!notification.isRead}>
+                  <Avatar className="notification-icon" icon={getNotificationIcon(notification.type)} />
+                </Badge>
+              }
+              title={normalizeLegacyVietnamese(notification.title)}
+              description={
+                <>
+                  {notification.message && <div className="notification-message">{normalizeLegacyVietnamese(notification.message)}</div>}
+                  <div className="notification-time">{new Date(notification.createdAt).toLocaleString("vi-VN")}</div>
+                </>
+              }
+            />
+          </List.Item>
         )}
-      </div>
+      />
     </div>
   );
 };

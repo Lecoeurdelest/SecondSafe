@@ -3058,6 +3058,22 @@ requirements:
       - behavioral_test
       - static_flow
       - manual_review
+  - id: FR-WEB-25
+    title: Web storefront on Ant Design
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 17. Icon set and component library amendment (2026-11-12)
+    acceptance:
+    - id: AC-WEB-25-1
+      statement: The storefront shell (announcement bar, header, navigation, notification panel, support dialog, floating chat button
+        and footer) is built from Ant Design components inside one theme that follows the light or dark choice and the interface
+        language, keeps the brand colours, and works from 360 px to 1920 px wide.
+      verification:
+      - behavioral_test
+      - manual_review
 tasks:
   - id: TASK-001
     title: Scaffold the backend database layer and control framework
@@ -7020,6 +7036,50 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: Icons are Phosphor React components imported by name, so unused icons are dropped from the bundle. Static Font Awesome markup, dynamic icon classes, Ant Design icon imports and glyph characters were converted file by file; category icons share one slug-to-icon map. A global rule aligns icons with text and an icon-spin class replaces the Font Awesome spinner. A policy test fails on any icon package import, icon class or glyph.
+  - id: TASK-081
+    title: Ant Design storefront shell
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-1
+    objective: Give the storefront one Ant Design theme and rebuild its shell (top bar, header, navigation, notifications, support dialog, floating chat
+      and footer) from Ant Design components, so later tasks can move each page area over without redoing the base.
+    in_scope:
+    - frontend/src/App.js
+    - frontend/src/App.test.jsx
+    - frontend/src/setupTests.js
+    - frontend/src/index.css
+    - frontend/src/ui
+    - frontend/src/components/LanguageSwitcher.jsx
+    - frontend/src/components/ThemeToggle.jsx
+    - frontend/src/components/NotificationPanel.jsx
+    - frontend/src/components/NotificationPanel.css
+    out_of_scope:
+    - Pages and page-level components (later tasks, by area)
+    - Admin, moderator and dashboard pages, which already use Ant Design
+    - Behaviour, routes, services and API calls
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/ui/AppProviders.jsx
+    - frontend/src/ui/antdTheme.js
+    - frontend/src/ui/LinkButton.jsx
+    - frontend/src/ui/shell.css
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: One ConfigProvider wraps the app with the brand tokens, the light or dark algorithm chosen by the existing theme state and the Vietnamese or English locale, plus Ant Design's App context. The shell uses Layout, Menu, Button, Badge, Popover, Dropdown, Modal, List, FloatButton and Flex; links that look like buttons go through a small LinkButton that keeps a real anchor and navigates with the router. The notification panel becomes an Ant Design list inside a popover. Test setup gains the browser stubs Ant Design needs and removes the style tags it injects after each test.
 verification:
   thresholds:
     standard: 0.95

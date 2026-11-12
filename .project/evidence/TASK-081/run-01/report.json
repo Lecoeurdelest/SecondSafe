@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-081",
+  "spec_hash": "ef29c44d994de10a22b5806881231adc0e6d5fdb3d8bb154196525d7697ad20f",
+  "source_hash": "237700359ffb6dea61a0087cb67a93c45ee40bc85a4084effe3969effa5601b6",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "Only the shell moved; pages still use hand-written components until later tasks",
+    "The frontend test suite is about four times slower with Ant Design rendering in jsdom",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The App tests pass (menus, notifications, language dropdown, theme switch, help-center dialog and link buttons); the build passes; the shell shows no overflow or error in light and dark at 390 and 1280 px; pages under the shell were not part of this task",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-081/run-01/frontend-test.txt",
+            ".project/evidence/TASK-081/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-081/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

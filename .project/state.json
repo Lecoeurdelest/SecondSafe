@@ -1691,6 +1691,35 @@
       "criteria": {
         "AC-WEB-24-1": "inconclusive"
       }
+    },
+    "TASK-081": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The storefront shell is rebuilt on Ant Design with one theme that follows the light or dark choice and the language; App tests pass and the shell was observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Second slice of the Ant Design goal after the icon set"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Add the shared theme and rebuild the shell with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the shell (top bar, header menus, notifications, help center, floating chat, footer) on Ant Design with one shared theme; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-081/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-081.md",
+      "criteria": {
+        "AC-WEB-25-1": "inconclusive"
+      }
     }
   }
 }
