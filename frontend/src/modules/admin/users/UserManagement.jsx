@@ -17,16 +17,7 @@ import {
   message,
   Popconfirm
 } from "antd";
-import {
-  SearchOutlined,
-  ReloadOutlined,
-  EyeOutlined,
-  UserSwitchOutlined,
-  StopOutlined,
-  CheckCircleOutlined,
-  LockOutlined,
-  UnlockOutlined
-} from "@ant-design/icons";
+import { ArrowClockwise, CheckCircle, Eye, Lock, LockOpen, MagnifyingGlass, Prohibit, UserSwitch } from "@phosphor-icons/react";
 import dayjs from "dayjs";
 import { adminUserApi } from "../../../services/adminApi";
 
@@ -492,7 +483,7 @@ const UserManagement = () => {
                   title={`Nâng quyền "${record.fullName}" lên Moderator?`}
                   onConfirm={() => handlePromoteToModerator(record)}
                 >
-                  <Button size="small" icon={<UserSwitchOutlined />} style={functionButtonStyle}>
+                  <Button size="small" icon={<UserSwitch />} style={functionButtonStyle}>
                     Nâng Mod
                   </Button>
                 </Popconfirm>
@@ -505,12 +496,12 @@ const UserManagement = () => {
                   title={`Khóa tài khoản moderator "${record.fullName}"?`}
                     onConfirm={() => handleLockModeratorAccount(record)}
                 >
-                  <Button size="small" danger icon={<LockOutlined />} style={functionButtonStyle}>
+                  <Button size="small" danger icon={<Lock />} style={functionButtonStyle}>
                     Khóa
                   </Button>
                 </Popconfirm>
               ) : (
-                <Button size="small" disabled icon={<LockOutlined />} style={functionButtonStyle}>
+                <Button size="small" disabled icon={<Lock />} style={functionButtonStyle}>
                   Khóa
                 </Button>
               );
@@ -530,12 +521,12 @@ const UserManagement = () => {
                   title={`Mở khóa tài khoản moderator "${record.fullName}"?`}
                   onConfirm={() => handleUnlockModeratorAccount(record)}
                 >
-                  <Button size="small" icon={<UnlockOutlined />} style={functionButtonStyle}>
+                  <Button size="small" icon={<LockOpen />} style={functionButtonStyle}>
                     Mở khóa
                   </Button>
                 </Popconfirm>
               ) : (
-                <Button size="small" disabled icon={<UnlockOutlined />} style={functionButtonStyle}>
+                <Button size="small" disabled icon={<LockOpen />} style={functionButtonStyle}>
                   Mở khóa
                 </Button>
               );
@@ -563,7 +554,7 @@ const UserManagement = () => {
                   title={`Gỡ hạn chế quyền bán của "${record.fullName}"?`}
                   onConfirm={() => handleUnrestrictSelling(record)}
                 >
-                  <Button size="small" icon={<CheckCircleOutlined />} style={functionButtonStyle}>
+                  <Button size="small" icon={<CheckCircle />} style={functionButtonStyle}>
                     Gỡ hạn chế
                   </Button>
                 </Popconfirm>
@@ -571,7 +562,7 @@ const UserManagement = () => {
             }
 
             return (
-              <Button size="small" danger icon={<StopOutlined />} style={functionButtonStyle} onClick={() => openRestrictionModal(record)}>
+              <Button size="small" danger icon={<Prohibit />} style={functionButtonStyle} onClick={() => openRestrictionModal(record)}>
                 Hạn chế
               </Button>
             );
@@ -579,7 +570,7 @@ const UserManagement = () => {
 
           return (
             <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 8, width: "100%", maxWidth: 200 }}>
-              <Button type="primary" icon={<EyeOutlined />} style={detailButtonStyle} onClick={() => handleViewUser(record)}>
+              <Button type="primary" icon={<Eye />} style={detailButtonStyle} onClick={() => handleViewUser(record)}>
                 Chi tiết
               </Button>
 
@@ -603,7 +594,7 @@ const UserManagement = () => {
         <div className="mod-filter-row">
           <Input
             placeholder="Tìm theo tên, email, số điện thoại..."
-            prefix={<SearchOutlined />}
+            prefix={<MagnifyingGlass />}
             value={rawSearchKeyword}
             onChange={(e) => setRawSearchKeyword(e.target.value)}
             onPressEnter={handleApplyKeyword}
@@ -644,7 +635,7 @@ const UserManagement = () => {
 
           <div className="mod-filter-actions">
             <Button type="primary" onClick={handleApplyKeyword}>Lọc</Button>
-            <Button icon={<ReloadOutlined />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
+            <Button icon={<ArrowClockwise />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
           </div>
         </div>
       </div>
@@ -691,7 +682,7 @@ const UserManagement = () => {
                   title={`Nâng quyền "${selectedUser.fullName}" lên Moderator?`}
                   onConfirm={() => handlePromoteToModerator(selectedUser)}
                 >
-                  <Button type="primary" icon={<UserSwitchOutlined />}>
+                  <Button type="primary" icon={<UserSwitch />}>
                     Nâng lên Mod
                   </Button>
                 </Popconfirm>
@@ -703,10 +694,10 @@ const UserManagement = () => {
                     title={`Mở khóa tài khoản moderator "${selectedUser.fullName}"?`}
                     onConfirm={() => handleUnlockModeratorAccount(selectedUser)}
                   >
-                    <Button icon={<UnlockOutlined />}>Mở khóa tài khoản</Button>
+                    <Button icon={<LockOpen />}>Mở khóa tài khoản</Button>
                   </Popconfirm>
                 ) : (
-                  <Button danger icon={<LockOutlined />} onClick={() => handleLockModeratorAccount(selectedUser)}>
+                  <Button danger icon={<Lock />} onClick={() => handleLockModeratorAccount(selectedUser)}>
                     Khóa tài khoản
                   </Button>
                 )
@@ -718,10 +709,10 @@ const UserManagement = () => {
                     title={`Gỡ hạn chế quyền bán của "${selectedUser.fullName}"?`}
                     onConfirm={() => handleUnrestrictSelling(selectedUser)}
                   >
-                    <Button icon={<CheckCircleOutlined />}>Gỡ hạn chế quyền bán</Button>
+                    <Button icon={<CheckCircle />}>Gỡ hạn chế quyền bán</Button>
                   </Popconfirm>
                 ) : (
-                  <Button danger icon={<StopOutlined />} onClick={() => openRestrictionModal(selectedUser)}>
+                  <Button danger icon={<Prohibit />} onClick={() => openRestrictionModal(selectedUser)}>
                     Hạn chế
                   </Button>
                 )

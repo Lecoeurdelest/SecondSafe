@@ -1,5 +1,5 @@
 import { Card, Table, Button, Typography, Tag, message, Select, Space, Input, Modal, Descriptions, Divider, Alert } from "antd";
-import { WarningOutlined, SearchOutlined, ReloadOutlined, EyeOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { ArrowClockwise, CheckCircle, Eye, MagnifyingGlass, Star, Warning } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getModeratorReviews, markBadModeratorReview, markGoodModeratorReview } from "../../../services/moderator.service";
@@ -207,8 +207,8 @@ const AdminReviewList = () => {
     const rounded = Math.max(0, Math.min(5, Number(rating || 0)));
     return (
       <span style={{ color: "#f59e0b", letterSpacing: 2, fontSize: 16 }}>
-        {"★".repeat(rounded)}
-        <span style={{ color: "#d1d5db" }}>{"★".repeat(5 - rounded)}</span>
+        {Array.from({ length: rounded }, (_, index) => <Star key={index} weight="fill" />)}
+        <span style={{ color: "#d1d5db" }}>{Array.from({ length: 5 - rounded }, (_, index) => <Star key={index} weight="fill" />)}</span>
       </span>
     );
   };
@@ -323,7 +323,7 @@ const AdminReviewList = () => {
         <div className="mod-review-actions">
           <Button
             size="small"
-            icon={<EyeOutlined />}
+            icon={<Eye />}
             className="mod-review-btn mod-review-btn-detail"
             onClick={() => openReviewDetail(record)}
           >
@@ -333,7 +333,7 @@ const AdminReviewList = () => {
             <Button
               type="primary"
               size="small"
-              icon={<CheckCircleOutlined />}
+              icon={<CheckCircle />}
               className="mod-review-btn mod-review-btn-approve"
               disabled={record?.moderatorAssessment?.isReviewed || record?.moderatorAssessment?.isBad}
               loading={approvingReviewId === record._id}
@@ -345,7 +345,7 @@ const AdminReviewList = () => {
               type="primary"
               danger
               size="small"
-              icon={<WarningOutlined />}
+              icon={<Warning />}
               className="mod-review-btn mod-review-btn-reject"
               disabled={record?.moderatorAssessment?.isReviewed || record?.moderatorAssessment?.isBad}
               loading={markingReviewId === record._id}
@@ -366,7 +366,7 @@ const AdminReviewList = () => {
         <div className="mod-filter-row">
           <Input
             placeholder="Tìm theo người đánh giá, người bị đánh giá, sản phẩm, nội dung..."
-            prefix={<SearchOutlined />}
+            prefix={<MagnifyingGlass />}
             value={rawKeyword}
             onChange={(e) => setRawKeyword(e.target.value)}
             onPressEnter={() => setKeyword(String(rawKeyword || "").trim())}
@@ -385,7 +385,7 @@ const AdminReviewList = () => {
           />
           <div className="mod-filter-actions">
             <Button type="primary" onClick={() => setKeyword(String(rawKeyword || "").trim())}>Lọc</Button>
-            <Button icon={<ReloadOutlined />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
+            <Button icon={<ArrowClockwise />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
           </div>
         </div>
       </div>
@@ -411,7 +411,7 @@ const AdminReviewList = () => {
             <Button onClick={closeReviewDetail}>Đóng</Button>
             <Button
               type="primary"
-              icon={<CheckCircleOutlined />}
+              icon={<CheckCircle />}
               style={{ background: "#15803d", borderColor: "#15803d" }}
               disabled={selectedReview?.moderatorAssessment?.isReviewed || selectedReview?.moderatorAssessment?.isBad}
               loading={approvingReviewId === selectedReview?._id}
@@ -422,7 +422,7 @@ const AdminReviewList = () => {
             <Button
               type="primary"
               danger
-              icon={<WarningOutlined />}
+              icon={<Warning />}
               disabled={selectedReview?.moderatorAssessment?.isReviewed || selectedReview?.moderatorAssessment?.isBad}
               loading={markingReviewId === selectedReview?._id}
               onClick={async () => {
@@ -541,7 +541,7 @@ const AdminReviewList = () => {
         cancelText="Hủy"
         okButtonProps={{
           danger: true,
-          icon: <WarningOutlined />,
+          icon: <Warning />,
           loading: markingReviewId === pendingReview?._id
         }}
       >

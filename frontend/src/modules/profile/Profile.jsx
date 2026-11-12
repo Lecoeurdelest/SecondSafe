@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { getProfile } from "../../services/user.service";
 import { getImageUrl } from "../../utils/imageHelper";
 import "./Profile.css";
+import { ChatsCircle, Handshake, Key, Package, ShoppingCart, Wallet } from "@phosphor-icons/react";
 
 function Profile() {
   const { user, logout, loading: authLoading } = useAuth();
@@ -176,32 +177,32 @@ function Profile() {
 
           <div className="quick-actions">
             <Link to="/my-products" className="action-item">
-              <i className="fas fa-box"></i>
+              <Package />
               <span>Quản lý sản phẩm</span>
             </Link>
 
             <Link to="/orders" className="action-item">
-              <i className="fas fa-shopping-cart"></i>
+              <ShoppingCart />
               <span>Đơn hàng của tôi</span>
             </Link>
 
             <Link to="/wallet" className="action-item">
-              <i className="fas fa-wallet"></i>
+              <Wallet />
               <span>Ví của tôi</span>
             </Link>
 
             <Link to="/orders" className="action-item">
-              <i className="fas fa-handshake"></i>
+              <Handshake />
               <span>Yêu cầu mua hàng</span>
             </Link>
 
             <Link to="/chat" className="action-item">
-              <i className="fas fa-comments"></i>
+              <ChatsCircle />
               <span>Tin nhắn</span>
             </Link>
 
             <Link to="/profile/change-password" className="action-item">
-              <i className="fas fa-key"></i>
+              <Key />
               <span>Đổi mật khẩu</span>
             </Link>
           </div>

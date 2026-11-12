@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
+import { Sparkle } from '@phosphor-icons/react';
 
 const CONDITION_LABELS = { new: 'Mới', 'like-new': 'Như mới', good: 'Tốt', fair: 'Khá', poor: 'Cũ' };
 
@@ -59,7 +60,7 @@ export default function AssistantMessage({ message }) {
   const products = message.products || [];
   return (
     <li className={`assistant-chat__message${mine ? ' is-mine' : ''}`}>
-      {!mine && <span className="assistant-chat__avatar" aria-hidden="true">✦</span>}
+      {!mine && <span className="assistant-chat__avatar" aria-hidden="true"><Sparkle weight="fill" /></span>}
       <div className="assistant-chat__body">
         <div className="assistant-chat__bubble">{mine ? <p>{message.content}</p> : renderRichText(message.content)}</div>
         {message.degraded && <small className="assistant-chat__hint">Trợ lý AI đang bận nên đây là câu trả lời có sẵn.</small>}

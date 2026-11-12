@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ProductComponents.css';
+import { MagnifyingGlass, X } from '@phosphor-icons/react';
 
 /**
  * SearchBar Component
@@ -31,7 +32,7 @@ function SearchBar({ onSearch, placeholder = 'Tìm kiếm sản phẩm...', init
     <div className="search-bar">
       <form className="search-bar__form" onSubmit={handleSubmit}>
         <div className="search-bar__input-wrapper">
-          <span className="search-bar__icon">🔍</span>
+          <span className="search-bar__icon"><MagnifyingGlass /></span>
           
           <input
             type="text"
@@ -48,7 +49,7 @@ function SearchBar({ onSearch, placeholder = 'Tìm kiếm sản phẩm...', init
               onClick={handleClear}
               aria-label="Xóa tìm kiếm"
             >
-              ✕
+              <X />
             </button>
           )}
         </div>

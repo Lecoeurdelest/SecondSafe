@@ -1,9 +1,5 @@
 import { Card, Descriptions, Button, Space, Tag, message, Popconfirm, Input, Select, Alert, Image } from "antd";
-import { 
-  CheckCircleOutlined, 
-  CloseCircleOutlined, 
-  ArrowLeftOutlined
-} from "@ant-design/icons";
+import { ArrowLeft, CheckCircle, XCircle } from "@phosphor-icons/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getModeratorReportById, resolveModeratorReport } from "../../../services/moderator.service";
@@ -107,7 +103,7 @@ const AdminReportDetail = () => {
 
   return (
     <Space direction="vertical" style={{ width: "100%" }} size="large">
-      <Button icon={<ArrowLeftOutlined />} onClick={() => navigate("/admin/reports")}>
+      <Button icon={<ArrowLeft />} onClick={() => navigate("/admin/reports")}>
         Quay lại danh sách
       </Button>
 
@@ -238,13 +234,13 @@ const AdminReportDetail = () => {
 
             <div className="mod-action-buttons">
               <Popconfirm title="Xác nhận đã giải quyết báo cáo này?" onConfirm={() => handleAction("resolved")}>
-                <Button type="primary" style={{ background: "#15803d" }} icon={<CheckCircleOutlined />}>
+                <Button type="primary" style={{ background: "#15803d" }} icon={<CheckCircle />}>
                   Đánh dấu Đã giải quyết
                 </Button>
               </Popconfirm>
 
               <Popconfirm title="Bỏ qua báo cáo này (báo cáo sai)?" onConfirm={() => handleAction("dismissed")}>
-                <Button icon={<CloseCircleOutlined />}>
+                <Button icon={<XCircle />}>
                   Bỏ qua báo cáo
                 </Button>
               </Popconfirm>

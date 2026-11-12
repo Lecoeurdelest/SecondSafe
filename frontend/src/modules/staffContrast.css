@@ -13,3 +13,6 @@
 
 /* Chart legend text inherits the series colour; keep it readable */
 .recharts-legend-item-text { color: #374151 !important; }
+
+/* Select suffix arrows default to 25% opacity; keep them visible unless the control is disabled */
+.ant-select:not(.ant-select-disabled) .ant-select-suffix { color: rgba(0, 0, 0, 0.55); }

@@ -4,6 +4,7 @@ import assistantService from '../../services/assistant.service';
 import AssistantMessage from './AssistantMessage';
 import { loadThread, newMessageId, saveThread, toPayload } from './assistantThread';
 import './Assistant.css';
+import { ArrowLeft, Sparkle } from '@phosphor-icons/react';
 
 const STARTERS = [
   'Mình cần balo đi học dưới 300.000đ',
@@ -35,7 +36,7 @@ function ModerationGuidance() {
 
   return (
     <section className="assistant-page container">
-      <Link to="/staff">← Quay lại dashboard nhân viên</Link>
+      <Link to="/staff"><ArrowLeft /> Quay lại dashboard nhân viên</Link>
       <p className="assistant-page__eyebrow">CÔNG CỤ HỖ TRỢ KIỂM DUYỆT</p>
       <h1>Checklist tham khảo</h1>
       <p>AI chỉ nhận mã loại, lý do và trạng thái báo cáo. Không gửi mô tả, bằng chứng hoặc thông tin cá nhân.</p>
@@ -120,7 +121,7 @@ function AssistantChat() {
     <section className="assistant-chat container">
       <header className="assistant-chat__header">
         <div className="assistant-chat__identity">
-          <span className="assistant-chat__avatar assistant-chat__avatar--large" aria-hidden="true">✦</span>
+          <span className="assistant-chat__avatar assistant-chat__avatar--large" aria-hidden="true"><Sparkle weight="fill" /></span>
           <div>
             <h1>Trợ lý SecondSafe</h1>
             <p>Tư vấn chọn đồ, giải đáp cách mua bán và thanh toán trên SecondSafe.</p>

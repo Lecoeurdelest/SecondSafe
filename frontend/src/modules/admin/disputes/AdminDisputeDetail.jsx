@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Descriptions, Button, Space, Tag, Input, Alert, Popconfirm, message, Image, Typography } from "antd";
-import { ArrowLeftOutlined, CheckCircleOutlined, StopOutlined } from "@ant-design/icons";
+import { ArrowLeft, CheckCircle, Prohibit } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getModeratorDisputeById,
@@ -252,7 +252,7 @@ const AdminDisputeDetail = () => {
 
   return (
     <Space direction="vertical" size="large" style={{ width: "100%" }}>
-      <Button icon={<ArrowLeftOutlined />} onClick={() => navigate("/admin/disputes")}>Quay lại danh sách</Button>
+      <Button icon={<ArrowLeft />} onClick={() => navigate("/admin/disputes")}>Quay lại danh sách</Button>
 
       <Card className="mod-panel" title={`Chi tiết Khiếu nại: ${dispute?._id?.slice(-8)?.toUpperCase() || ""}`} loading={loading}>
         <Descriptions bordered column={1} labelStyle={{ width: "clamp(110px, 32%, 220px)", fontWeight: 700 }}>
@@ -333,13 +333,13 @@ const AdminDisputeDetail = () => {
 
             {isInvestigating && (
               <Popconfirm title="Xác nhận hoàn tiền cho người mua?" onConfirm={() => handleResolve("refund")}>
-                <Button type="primary" danger icon={<StopOutlined />}>Hoàn tiền cho người mua</Button>
+                <Button type="primary" danger icon={<Prohibit />}>Hoàn tiền cho người mua</Button>
               </Popconfirm>
             )}
 
             {isInvestigating && (
               <Popconfirm title="Xác nhận nhả tiền cho người bán?" onConfirm={() => handleResolve("release")}>
-                <Button type="primary" icon={<CheckCircleOutlined />}>Nhả tiền cho người bán</Button>
+                <Button type="primary" icon={<CheckCircle />}>Nhả tiền cho người bán</Button>
               </Popconfirm>
             )}
           </div>

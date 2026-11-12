@@ -4,6 +4,7 @@ import notificationService from "../services/notification.service";
 import productService from "../services/product.service";
 import { useAuth } from "../hooks/useAuth";
 import "./NotificationPanel.css";
+import { Bell, CheckCircle, Confetti, HandCoins, Lock, Megaphone, Package, Scales, ShieldCheck, Star, Truck, Warning, X } from "@phosphor-icons/react";
 
 const PAGE_SIZE = 20;
 
@@ -289,29 +290,29 @@ const NotificationPanel = ({
   const getNotificationIcon = (type) => {
     switch (type) {
       case "order_created":
-        return "📦";
+        return <Package />;
       case "order_confirmed":
-        return "✅";
+        return <CheckCircle />;
       case "order_shipped":
-        return "🚚";
+        return <Truck />;
       case "order_completed":
-        return "🎉";
+        return <Confetti />;
       case "payment_success":
-        return "💸";
+        return <HandCoins />;
       case "report_update":
-        return "🛡️";
+        return <ShieldCheck />;
       case "dispute_update":
-        return "⚖️";
+        return <Scales />;
       case "system":
-        return "📢";
+        return <Megaphone />;
       case "dispute_created":
-        return "⚠️";
+        return <Warning />;
       case "review_received":
-        return "⭐";
+        return <Star weight="fill" />;
       case "security":
-        return "🔒";
+        return <Lock />;
       default:
-        return "🔔";
+        return <Bell />;
     }
   };
 
@@ -322,7 +323,7 @@ const NotificationPanel = ({
       <div className="notification-header">
         <h3>Thông báo</h3>
         <button className="close-btn" onClick={onClose}>
-          ×
+          <X />
         </button>
       </div>
 

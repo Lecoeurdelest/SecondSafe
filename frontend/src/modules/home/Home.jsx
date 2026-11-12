@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import productService from '../../services/product.service';
 import ProductList from '../../components/ProductList';
 import './Home.css';
+import { MagnifyingGlass, MapPin } from '@phosphor-icons/react';
+import CategoryIcon from '../../utils/categoryIcons';
 
 /**
  * Home Component (Landing Page)
@@ -196,14 +198,14 @@ function Home() {
 
   // Categories data - Updated to match seed data
   const categories = [
-    { id: 'books', name: 'Sách', icon: '📚' },
-    { id: 'fashion', name: 'Quần áo', icon: '👕' },
-    { id: 'electronics', name: 'Đồ điện tử', icon: '📱' },
-    { id: 'home', name: 'Đồ gia dụng', icon: '🏠' },
-    { id: 'beauty', name: 'Làm đẹp', icon: '💄' },
-    { id: 'sports', name: 'Thể thao', icon: '⚽' },
-    { id: 'toys', name: 'Đồ chơi', icon: '🧸' },
-    { id: 'pets', name: 'Thú cưng', icon: '🐕' }
+    { id: 'books', name: 'Sách' },
+    { id: 'fashion', name: 'Quần áo' },
+    { id: 'electronics', name: 'Đồ điện tử' },
+    { id: 'home', name: 'Đồ gia dụng' },
+    { id: 'beauty', name: 'Làm đẹp' },
+    { id: 'sports', name: 'Thể thao' },
+    { id: 'toys', name: 'Đồ chơi' },
+    { id: 'pets', name: 'Thú cưng' }
   ];
 
   return (
@@ -238,7 +240,7 @@ function Home() {
 
               {/* Search Input */}
               <div className="search-advanced__input-wrapper">
-                <span className="search-advanced__icon">🔍</span>
+                <span className="search-advanced__icon"><MagnifyingGlass /></span>
                 <input
                   type="text"
                   className="search-advanced__input"
@@ -255,7 +257,7 @@ function Home() {
 
               {/* City filter */}
               <label className="search-advanced__location">
-                <span className="search-advanced__location-icon">📍</span>
+                <span className="search-advanced__location-icon"><MapPin /></span>
                 <input
                   className="search-advanced__city"
                   type="text"
@@ -296,7 +298,7 @@ function Home() {
                 className={`category-item${filters.category === cat.id ? ' is-active' : ''}`}
                 onClick={() => handleFilterChange({ category: cat.id })}
               >
-                <span className="category-item__icon" aria-hidden="true">{cat.icon}</span>
+                <span className="category-item__icon" aria-hidden="true"><CategoryIcon slug={cat.id} /></span>
                 <span className="category-item__name">{cat.name}</span>
               </button>
             ))}

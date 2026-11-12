@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Dashboard.css';
+import { ArrowUpRight, Clock, Package, SquaresFour } from '@phosphor-icons/react';
 
 export default function DashboardLayout({ role, title, description, children }) {
   const isAdmin = role === 'admin';
@@ -15,18 +16,18 @@ export default function DashboardLayout({ role, title, description, children }) 
         </Link>
         <div className="dashboard-sidebar__label">KHÔNG GIAN LÀM VIỆC</div>
         <Link className={`dashboard-sidebar__item${!isProductsPage ? ' dashboard-sidebar__item--active' : ''}`} to={isAdmin ? '/admin' : '/staff'}>
-          <span className="dashboard-sidebar__item-icon" aria-hidden="true">▦</span>
+          <span className="dashboard-sidebar__item-icon" aria-hidden="true"><SquaresFour /></span>
           <span>Tổng quan</span>
         </Link>
         {isAdmin && (
           <Link className={`dashboard-sidebar__item${isProductsPage ? ' dashboard-sidebar__item--active' : ''}`} to="/admin/products">
-            <span className="dashboard-sidebar__item-icon" aria-hidden="true">◇</span>
+            <span className="dashboard-sidebar__item-icon" aria-hidden="true"><Package /></span>
             <span>Quản lý sản phẩm</span>
           </Link>
         )}
         <div className="dashboard-sidebar__label dashboard-sidebar__label--secondary">TRUY CẬP NHANH</div>
         <Link className="dashboard-sidebar__item" to="/">
-          <span className="dashboard-sidebar__item-icon" aria-hidden="true">↗</span>
+          <span className="dashboard-sidebar__item-icon" aria-hidden="true"><ArrowUpRight /></span>
           <span>Về trang mua sắm</span>
         </Link>
         <Link className="dashboard-sidebar__item" to="/change-password">
@@ -47,7 +48,7 @@ export default function DashboardLayout({ role, title, description, children }) 
             <span>SecondSafe</span><span aria-hidden="true">/</span><strong>{isAdmin ? 'Quản trị' : 'Nhân viên'}</strong>
           </div>
           <Link className="dashboard-topbar__link" to="/">
-            Về cửa hàng <span aria-hidden="true">↗</span>
+            Về cửa hàng <span aria-hidden="true"><ArrowUpRight /></span>
           </Link>
         </header>
         <section className="dashboard-content">
@@ -58,7 +59,7 @@ export default function DashboardLayout({ role, title, description, children }) 
               <p className="dashboard-heading__description">{description}</p>
             </div>
             <div className="dashboard-heading__date">
-              <span aria-hidden="true">◷</span>
+              <span aria-hidden="true"><Clock /></span>
               {new Intl.DateTimeFormat('vi-VN', { dateStyle: 'full' }).format(new Date())}
             </div>
           </div>

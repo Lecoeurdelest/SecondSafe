@@ -1,0 +1,47 @@
+[
+ {
+  "sel": "span",
+  "text": "Mở khóa",
+  "ratio": 1.82,
+  "fg": "rgba(0, 0, 0, 0.25)",
+  "bg": "rgb(245,245,245)",
+  "pages": [
+   "admin-users",
+   "admin-users",
+   "admin-users",
+   "mod-order-detail"
+  ]
+ },
+ {
+  "sel": "span.ant-btn-icon",
+  "text": "icon",
+  "ratio": 1.41,
+  "fg": "rgba(0, 0, 0, 0.25)",
+  "bg": "rgb(245,245,245)",
+  "pages": [
+   "admin-users"
+  ]
+ },
+ {
+  "sel": "span.anticon.anticon-left",
+  "text": "icon",
+  "ratio": 1.41,
+  "fg": "rgba(0, 0, 0, 0.25)",
+  "bg": "rgb(255,255,255)",
+  "pages": [
+   "mod-reports",
+   "mod-orders"
+  ]
+ },
+ {
+  "sel": "span.anticon.anticon-right",
+  "text": "icon",
+  "ratio": 1.41,
+  "fg": "rgba(0, 0, 0, 0.25)",
+  "bg": "rgb(255,255,255)",
+  "pages": [
+   "mod-reports",
+   "mod-orders"
+  ]
+ }
+]

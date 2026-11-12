@@ -3,6 +3,7 @@ import { confirmShipment } from '../../services/order.service';
 import LocationSelector from '../../components/LocationSelector';
 import { useAuth } from '../../hooks/useAuth';
 import './ShipOrder.css';
+import { CircleNotch, Truck, X } from '@phosphor-icons/react';
 
 const ShipOrder = ({ order, onClose, onSuccess }) => {
   const { user } = useAuth();
@@ -231,7 +232,7 @@ const ShipOrder = ({ order, onClose, onSuccess }) => {
         <div className="ship-order-header">
           <h3>Xác nhận giao hàng</h3>
           <button className="close-button" onClick={onClose}>
-            <i className="fas fa-times"></i>
+            <X />
           </button>
         </div>
 
@@ -493,12 +494,12 @@ const ShipOrder = ({ order, onClose, onSuccess }) => {
             >
               {loading ? (
                 <>
-                  <i className="fas fa-spinner fa-spin"></i>
+                  <CircleNotch className="icon-spin" />
                   Đang xử lý...
                 </>
               ) : (
                 <>
-                  <i className="fas fa-shipping-fast"></i>
+                  <Truck />
                   Xác nhận giao hàng
                 </>
               )}

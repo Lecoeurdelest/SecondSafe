@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { changePassword } from '../../services/user.service';
 import { validateStrongPassword } from '../../utils/passwordValidator';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import './ChangePassword.css';
+import { ArrowLeft, Check, Eye, EyeSlash, X } from '@phosphor-icons/react';
 
 const ChangePassword = () => {
   const navigate = useNavigate();
@@ -136,7 +136,7 @@ const ChangePassword = () => {
     <div className="change-password-container">
       <div className="page-header">
         <button onClick={() => navigate('/profile')} className="back-button">
-          <i className="fas fa-arrow-left"></i>
+          <ArrowLeft />
           Quay lại
         </button>
         <h1>Đổi mật khẩu</h1>
@@ -167,7 +167,7 @@ const ChangePassword = () => {
                   className="password-toggle"
                   onClick={() => togglePasswordVisibility('current')}
                 >
-                  {showPasswords.current ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                  {showPasswords.current ? <EyeSlash /> : <Eye />}
                 </button>
               </div>
             </div>
@@ -190,7 +190,7 @@ const ChangePassword = () => {
                   className="password-toggle"
                   onClick={() => togglePasswordVisibility('new')}
                 >
-                  {showPasswords.new ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                  {showPasswords.new ? <EyeSlash /> : <Eye />}
                 </button>
               </div>
               
@@ -229,7 +229,7 @@ const ChangePassword = () => {
                   className="password-toggle"
                   onClick={() => togglePasswordVisibility('confirm')}
                 >
-                  {showPasswords.confirm ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                  {showPasswords.confirm ? <EyeSlash /> : <Eye />}
                 </button>
               </div>
               
@@ -237,12 +237,12 @@ const ChangePassword = () => {
                 <div className="password-match">
                   {formData.newPassword === formData.confirmPassword ? (
                     <span className="match-success">
-                      <i className="fas fa-check"></i>
+                      <Check />
                       Mật khẩu khớp
                     </span>
                   ) : (
                     <span className="match-error">
-                      <i className="fas fa-times"></i>
+                      <X />
                       Mật khẩu không khớp
                     </span>
                   )}
@@ -254,23 +254,23 @@ const ChangePassword = () => {
               <h4>Yêu cầu mật khẩu:</h4>
               <ul>
                 <li className={formData.newPassword.length >= 8 ? 'requirement-met' : ''}>
-                  <i className={`fas ${formData.newPassword.length >= 8 ? 'fa-check' : 'fa-times'}`}></i>
+                  {formData.newPassword.length >= 8 ? <Check /> : <X />}
                   Ít nhất 8 ký tự
                 </li>
                 <li className={/[a-z]/.test(formData.newPassword) ? 'requirement-met' : ''}>
-                  <i className={`fas ${/[a-z]/.test(formData.newPassword) ? 'fa-check' : 'fa-times'}`}></i>
+                  {/[a-z]/.test(formData.newPassword) ? <Check /> : <X />}
                   Chứa chữ thường (a-z)
                 </li>
                 <li className={/[A-Z]/.test(formData.newPassword) ? 'requirement-met' : ''}>
-                  <i className={`fas ${/[A-Z]/.test(formData.newPassword) ? 'fa-check' : 'fa-times'}`}></i>
+                  {/[A-Z]/.test(formData.newPassword) ? <Check /> : <X />}
                   Chứa chữ hoa (A-Z)
                 </li>
                 <li className={/[0-9]/.test(formData.newPassword) ? 'requirement-met' : ''}>
-                  <i className={`fas ${/[0-9]/.test(formData.newPassword) ? 'fa-check' : 'fa-times'}`}></i>
+                  {/[0-9]/.test(formData.newPassword) ? <Check /> : <X />}
                   Chứa số (0-9)
                 </li>
                 <li className={/[^A-Za-z0-9]/.test(formData.newPassword) ? 'requirement-met' : ''}>
-                  <i className={`fas ${/[^A-Za-z0-9]/.test(formData.newPassword) ? 'fa-check' : 'fa-times'}`}></i>
+                  {/[^A-Za-z0-9]/.test(formData.newPassword) ? <Check /> : <X />}
                   Chứa ký tự đặc biệt (!@#$%^&*)
                 </li>
               </ul>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import sePayService from '../../services/sepay.service';
 import './TopUp.css';
+import { ArrowLeft, Check, Lock } from '@phosphor-icons/react';
 
 const TopUp = () => {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ const TopUp = () => {
           onClick={() => navigate('/wallet')}
           className="back-btn"
         >
-          ← Quay lại
+          <ArrowLeft /> Quay lại
         </button>
         <h1>Nạp tiền vào ví</h1>
         <p>Chọn số tiền bạn muốn nạp vào ví</p>
@@ -206,7 +207,7 @@ const TopUp = () => {
                   <h4>Chuyển khoản Ngân hàng</h4>
                   <p>Xử lý tự động 24/7 qua mã QR (Nhanh chóng & An toàn)</p>
                 </div>
-                <div className="method-check">✓</div>
+                <div className="method-check"><Check /></div>
               </div>
             </div>
           </div>
@@ -233,7 +234,7 @@ const TopUp = () => {
 
         {/* Security Notice */}
         <div className="security-notice">
-          <h3>🔒 Bảo mật thanh toán</h3>
+          <h3><Lock /> Bảo mật thanh toán</h3>
           <ul>
             <li>Giao dịch được mã hóa SSL 256-bit</li>
             <li>Không lưu trữ thông tin thẻ ngân hàng</li>

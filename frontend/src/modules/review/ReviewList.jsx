@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getReviews, getRatingStats } from '../../services/review.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './ReviewList.css';
+import { Star } from '@phosphor-icons/react';
 
 const ReviewList = ({ userId, showStats = true }) => {
   const [reviews, setReviews] = useState([]);
@@ -47,7 +48,7 @@ const ReviewList = ({ userId, showStats = true }) => {
     for (let i = 1; i <= 5; i++) {
       stars.push(
         <span key={i} className={`star ${i <= rating ? 'filled' : ''}`}>
-          ★
+          <Star weight="fill" />
         </span>
       );
     }

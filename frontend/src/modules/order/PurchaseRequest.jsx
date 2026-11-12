@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPurchaseRequest } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './PurchaseRequest.css';
+import { Check, CircleNotch, PaperPlaneTilt, X } from '@phosphor-icons/react';
 
 const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) => {
   const [formData, setFormData] = useState({
@@ -106,7 +107,7 @@ const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) =>
         <div className="purchase-request-header">
           <h3>Gửi yêu cầu mua hàng</h3>
           <button className="close-button" onClick={onClose}>
-            <i className="fas fa-times"></i>
+            <X />
           </button>
         </div>
 
@@ -206,12 +207,12 @@ const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) =>
             >
               {loading ? (
                 <>
-                  <i className="fas fa-spinner fa-spin"></i>
+                  <CircleNotch className="icon-spin" />
                   {isQuickBuy ? 'Đang xác nhận...' : 'Đang gửi...'}
                 </>
               ) : (
                 <>
-                  <i className={`fas fa-${isQuickBuy ? 'check' : 'paper-plane'}`}></i>
+                  {isQuickBuy ? <Check /> : <PaperPlaneTilt />}
                   {isQuickBuy ? 'Xác nhận mua ngay' : 'Gửi yêu cầu'}
                 </>
               )}

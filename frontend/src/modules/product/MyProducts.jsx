@@ -5,6 +5,7 @@ import productService from '../../services/product.service';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import { formatCategoryText } from '../../utils/categoryHelper';
 import './MyProducts.css';
+import { CaretLeft, CaretRight, MapPin } from '@phosphor-icons/react';
 
 const MyProducts = () => {
   const navigate = useNavigate();
@@ -309,7 +310,7 @@ const MyProducts = () => {
                   <div className="product-detail-block product-location-block">
                     <span className="product-label">Địa chỉ</span>
                     <div className="product-meta product-location-row">
-                      <span className="product-meta-icon">📍</span>
+                      <span className="product-meta-icon"><MapPin /></span>
                       <span>{product.location?.city || 'Chưa cập nhật vị trí'}</span>
                     </div>
                   </div>
@@ -395,7 +396,7 @@ const MyProducts = () => {
                 disabled={pagination.page === 1}
                 className="pagination-btn"
               >
-                ← Trước
+                <CaretLeft /> Trước
               </button>
               
               <span className="pagination-info">
@@ -407,7 +408,7 @@ const MyProducts = () => {
                 disabled={pagination.page === pagination.totalPages}
                 className="pagination-btn"
               >
-                Sau →
+                Sau <CaretRight />
               </button>
             </div>
           )}

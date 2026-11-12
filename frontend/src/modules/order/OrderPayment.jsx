@@ -6,6 +6,7 @@ import walletService from '../../services/wallet.service';
 import sePayService, { postToSepay } from '../../services/sepay.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './OrderPayment.css';
+import { Check, CircleNotch, QrCode, ShieldCheck } from '@phosphor-icons/react';
 
 const OrderPayment = () => {
   const { id } = useParams();
@@ -274,14 +275,14 @@ const OrderPayment = () => {
                   <h4>Chuyển khoản Ngân hàng</h4>
                   <p>Xử lý tự động 24/7 qua mã QR</p>
                 </div>
-                <div className="method-check">✓</div>
+                <div className="method-check"><Check /></div>
               </div>
             </div>
           </div>
 
           <div className="wallet-info" style={{ marginTop: '20px' }}>
             <div className="sepay-info" style={{ padding: '12px', backgroundColor: '#ffe8e6', border: '1px solid #ff9891', borderRadius: '6px', color: '#b30c00' }}>
-              <i className="fas fa-shield-alt" style={{ marginRight: '8px', color: '#ff2718' }}></i>
+              <ShieldCheck style={{ marginRight: '8px', color: '#ff2718' }} />
               <strong>Thanh toán An toàn:</strong> Hệ thống sẽ chuyển bạn đến Cổng giao dịch tự động. Đơn hàng sẽ được xác nhận 24/7 ngay sau khi bạn quét mã QR chuyển khoản thành công.
             </div>
           </div>
@@ -301,12 +302,12 @@ const OrderPayment = () => {
             >
               {paymentLoading ? (
                 <>
-                  <i className="fas fa-spinner fa-spin"></i>
+                  <CircleNotch className="icon-spin" />
                   Đang xử lý...
                 </>
               ) : (
                 <>
-                  <i className="fas fa-qrcode"></i>
+                  <QrCode />
                   Quét mã QR thanh toán
                 </>
               )}

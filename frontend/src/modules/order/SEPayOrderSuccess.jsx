@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import sePayService from '../../services/sepay.service';
+import { Check, X } from '@phosphor-icons/react';
 
 const SEPayOrderSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -109,7 +110,7 @@ const SEPayOrderSuccess = () => {
             borderRadius: '50%', display: 'flex', alignItems: 'center',
             justifyContent: 'center', margin: '0 auto 20px', color: '#2e7d32', fontSize: '40px'
           }}>
-            <i className="fas fa-check"></i>
+            <Check />
           </div>
           <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Thanh toán thành công!</h2>
           <p style={{color: '#666', marginBottom: '25px'}}>{message}</p>
@@ -147,7 +148,7 @@ const SEPayOrderSuccess = () => {
             borderRadius: '50%', display: 'flex', alignItems: 'center',
             justifyContent: 'center', margin: '0 auto 20px', color: '#c62828', fontSize: '40px'
           }}>
-            <i className="fas fa-times"></i>
+            <X />
           </div>
           <h2 style={{color: '#c62828', marginBottom: '15px'}}>Thanh toán không thành công</h2>
           <p style={{color: '#666', marginBottom: '30px'}}>{message}</p>

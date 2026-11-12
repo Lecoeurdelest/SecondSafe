@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createProductReport, uploadEvidenceImages } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './ReportProduct.css';
+import { X } from '@phosphor-icons/react';
 
 const ReportProduct = ({ product, onSuccess, onCancel }) => {
   const [reason, setReason] = useState('');
@@ -74,7 +75,7 @@ const ReportProduct = ({ product, onSuccess, onCancel }) => {
       <div className="report-content">
         <div className="report-header">
           <h3>Báo cáo sản phẩm</h3>
-          <button className="close-btn" onClick={onCancel}>×</button>
+          <button className="close-btn" onClick={onCancel}><X /></button>
         </div>
 
         <div className="product-info">
@@ -151,7 +152,7 @@ const ReportProduct = ({ product, onSuccess, onCancel }) => {
                       className="remove-image"
                       onClick={() => removeImage(index)}
                     >
-                      ×
+                      <X />
                     </button>
                   </div>
                 ))}

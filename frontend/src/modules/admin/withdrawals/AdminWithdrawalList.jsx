@@ -1,5 +1,5 @@
 import { Card, Table, Button, Typography, Tag, Space, message, Select, Modal, Input } from "antd";
-import { CheckOutlined, CloseOutlined, SearchOutlined, ReloadOutlined } from "@ant-design/icons";
+import { ArrowClockwise, Check, MagnifyingGlass, X } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { getModeratorWithdrawals, updateModeratorWithdrawalStatus } from "../../../services/moderator.service";
 
@@ -110,8 +110,8 @@ const AdminWithdrawalList = () => {
       render: (_, record) => (
         record.status === "pending" && (
           <Space>
-            <Button type="primary" style={{ background: "#15803d" }} icon={<CheckOutlined />} onClick={() => handleApprove(record._id)}>Duyệt</Button>
-            <Button danger icon={<CloseOutlined />} onClick={() => setRejectTarget(record._id)}>Từ chối</Button>
+            <Button type="primary" style={{ background: "#15803d" }} icon={<Check />} onClick={() => handleApprove(record._id)}>Duyệt</Button>
+            <Button danger icon={<X />} onClick={() => setRejectTarget(record._id)}>Từ chối</Button>
           </Space>
         )
       )
@@ -125,7 +125,7 @@ const AdminWithdrawalList = () => {
         <div className="mod-filter-row">
           <Input
             placeholder="Tìm theo tên, ngân hàng..."
-            prefix={<SearchOutlined />}
+            prefix={<MagnifyingGlass />}
             value={rawKeyword}
             onChange={(e) => setRawKeyword(e.target.value)}
             onPressEnter={() => setKeyword(rawKeyword)}
@@ -144,7 +144,7 @@ const AdminWithdrawalList = () => {
           />
           <div className="mod-filter-actions">
             <Button type="primary" onClick={() => setKeyword(rawKeyword)}>Lọc</Button>
-            <Button icon={<ReloadOutlined />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
+            <Button icon={<ArrowClockwise />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
           </div>
         </div>
       </div>

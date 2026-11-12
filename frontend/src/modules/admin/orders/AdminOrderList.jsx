@@ -1,5 +1,5 @@
 import { Card, Table, Tag, Button, Typography, Space, Select, Input, message } from "antd";
-import { EyeOutlined, SearchOutlined, ReloadOutlined } from "@ant-design/icons";
+import { ArrowClockwise, Eye, MagnifyingGlass } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getModeratorOrders } from "../../../services/moderator.service";
@@ -125,7 +125,7 @@ const AdminOrderList = () => {
         <Space>
           <Button
             type="primary"
-            icon={<EyeOutlined />}
+            icon={<Eye />}
             onClick={() => navigate(`/admin/orders/${record._id}`)}
           >
             Chi tiết
@@ -142,7 +142,7 @@ const AdminOrderList = () => {
         <div className="mod-filter-row">
           <Input
             placeholder="Tìm đơn hàng..."
-            prefix={<SearchOutlined />}
+            prefix={<MagnifyingGlass />}
             value={filters.keyword}
             onChange={(e) => setFilters((prev) => ({ ...prev, keyword: e.target.value }))}
             onPressEnter={() => fetchOrders(1, pagination.pageSize)}
@@ -165,7 +165,7 @@ const AdminOrderList = () => {
           />
           <div className="mod-filter-actions">
             <Button type="primary" onClick={() => fetchOrders(1, pagination.pageSize)}>Lọc</Button>
-            <Button icon={<ReloadOutlined />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
+            <Button icon={<ArrowClockwise />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
           </div>
         </div>
       </div>

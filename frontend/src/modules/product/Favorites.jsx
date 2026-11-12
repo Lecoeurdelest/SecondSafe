@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import favoriteService from '../../services/favorite.service';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import './Favorites.css';
+import { Heart } from '@phosphor-icons/react';
 
 function hasSession() {
   try {
@@ -118,7 +119,7 @@ const Favorites = () => {
 
       {favorites.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">♡</div>
+          <div className="empty-icon"><Heart /></div>
           <h2>Chưa có tin đã lưu</h2>
           <p>Hãy khám phá sản phẩm và nhấn lưu để xem lại tại đây.</p>
           <Link to="/" className="favorites-explore-btn">

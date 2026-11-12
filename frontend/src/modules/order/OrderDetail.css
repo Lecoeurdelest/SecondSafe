@@ -412,7 +412,7 @@
 
 .timeline-step.current .timeline-marker {
   background-color: var(--ink);
-  color: #fff;
+  color: var(--surface);
 }
 
 .timeline-step.current .timeline-label {

@@ -1,0 +1,38 @@
+{
+  "task_id": "TASK-080",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "Every icon is now Phosphor: Font Awesome, Ant Design icon imports and glyph icons were converted, Ant Design's own icons go through a local replacement package, and tests keep the old sets out; frontend tests and build pass; pages scanned in both themes and against the real backend for the staff pages; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": "10",
+  "flow": "Files and functions inspected for AC-WEB-24-1: `frontend/src/iconPolicy.test.js` (scans every source and stylesheet outside comments for icon package imports, Font Awesome classes and glyph characters), `frontend/src/antdIcons.test.jsx` (renders the Ant Design components that draw icons and asserts the glyph viewBox), `frontend/vendor/ant-design-icons/build.js` (maps the 51 icons Ant Design imports to Phosphor icons and fails on an unknown Phosphor name) and `.project/evidence/TASK-080/run-01/icon-audit.txt` (grep results over `frontend/src`: no icon package import, no icon class, one arrow in a comment, four exempt option arrows).",
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build. Storefront pages used canned API responses (`fixture-capture.js`: 20 routes, light and dark, signed in as a customer); the 20 admin and moderator pages used the real backend (`backend/src/server.js`) with a disposable MongoDB 7.0.14 replica set and the seed scripts of TASK-079 run-02 (`staff-scan.js`). Both scripts also check icons: every `svg` with the Phosphor viewBox gets its colour compared with its background (below 2.5:1 is reported), and the staff scan counts leftover Ant Design glyphs (viewBox `64 64 896 896`) and Font Awesome elements.\n\n| File | What it shows |\n|---|---|\n| `light-home.png` | Light theme home: Phosphor category, search, cart and theme icons |\n| `light-orders.png` | Light theme order list: tab and button icons |\n| `dark-home.png` | Dark theme home |\n| `dark-wallet.png` | Dark theme wallet: Phosphor transaction icon |\n| `dark-order-detail.png` | Dark theme order detail: timeline markers |\n| `dark-assistant.png` | Dark theme assistant chat |\n| `dark-profile.png` | Dark theme profile |\n| `dark-chat.png` | Dark theme conversation |\n| `admin-dashboard.png` | Admin dashboard: sidebar, header and metric icons |\n| `admin-users.png` | Admin users: select arrows, pagination arrows and action icons |\n| `admin-reports.png` | Admin reports |\n| `mod-reports.png` | Moderator reports |\n| `mod-orders.png` | Moderator orders |\n| `staff-dashboard.png` | Staff dashboard |\n\nResults: the 20 staff pages render 12 to 30 Phosphor icons each and no Ant Design or Font Awesome glyph (`legacy-icons=0` on every page), including the select arrows, pagination arrows, password toggle and form tooltip that Ant Design draws itself; they come from the local `@ant-design/icons` replacement. A unit test (`antdIcons.test.jsx`) renders alerts, select, pagination, password input, table, popconfirm, message and modal confirm and finds only Phosphor glyphs. The storefront scan found two icons that blended into the background (the home search and location icons inherited a white colour, which the emoji had hidden) and one that was invisible in dark mode (the current step of the order timeline); all three were fixed, and the final scans report no icon below 2.5:1 except disabled controls (pagination arrows on a single page, a disabled button). The text contrast scan keeps its two earlier known items (a grey timestamp and white on the green \"Hoàn thành\" badge). No page overflowed horizontally.\n\n`icon-audit.txt` lists the icon package imports, icon classes and glyph characters left in `frontend/src` (none, apart from one arrow inside a code comment) and the exempt text arrows in four `option` elements, which cannot hold an icon. `iconPolicy.test.js` fails on any icon package import, Font Awesome class or glyph character in the sources.\n\nNot observed: icons in states that were not rendered (open modals, error states, notification panel, mobile menu, the support dialog), a real phone, Firefox or WebKit, and Gemini or payment flows.",
+  "history": [
+    [
+      "verifying",
+      "Converted Font Awesome, Ant Design icon imports and glyph icons to Phosphor, replaced Ant Design's own icons through a local package, added the policy and icon tests, and scanned the storefront and staff pages"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium: storefront with canned API responses, staff pages with the real backend and seeded data",
+    "Icons in states that were not rendered (open modals, error states, notification panel, mobile menu, support dialog) were not scanned",
+    "Four arrows inside option elements stay as text because an option cannot hold an icon",
+    "Ant Design's own icons are replaced through a local package that covers the 51 icons the installed Ant Design imports; a newer Ant Design that imports another icon fails the build until it is added",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-24-1": {
+      "observed": "pass",
+      "note": "The policy test and the Ant Design icon test pass; the audit finds no icon package import, icon class or glyph left; 20 staff pages show only Phosphor icons and no legacy glyph; the storefront scans found and fixed three icons that blended into the background; states that were not rendered were not scanned",
+      "checks": {
+        "behavioral_test": "pass",
+        "static_flow": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

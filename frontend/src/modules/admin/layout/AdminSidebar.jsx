@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
+import { ChartLine, Gauge, Gavel, Flag, Money, ShoppingCart, Star, Users, X } from '@phosphor-icons/react';
 
 const AdminSidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
@@ -9,49 +10,49 @@ const AdminSidebar = ({ isOpen, onClose }) => {
   const menuItems = [
     {
       path: '/admin/dashboard',
-      icon: 'fas fa-tachometer-alt',
+      icon: Gauge,
       label: 'Tổng quan',
       description: 'Dashboard và thống kê'
     },
     {
       path: '/admin/revenue',
-      icon: 'fas fa-chart-line',
+      icon: ChartLine,
       label: 'Báo cáo doanh thu',
       description: 'Thống kê phí 5% và chi trả'
     },
     {
       path: '/admin/users',
-      icon: 'fas fa-users',
+      icon: Users,
       label: 'Quản lý người dùng',
       description: 'CRUD người dùng hệ thống'
     },
     {
       path: '/admin/reports',
-      icon: 'fas fa-flag',
+      icon: Flag,
       label: 'Quản lý báo cáo',
       description: 'Xử lý báo cáo từ người dùng'
     },
     {
       path: '/admin/orders',
-      icon: 'fas fa-shopping-cart',
+      icon: ShoppingCart,
       label: 'Quản lý đơn hàng',
       description: 'Theo dõi và xử lý đơn hàng'
     },
     {
       path: '/admin/reviews',
-      icon: 'fas fa-star',
+      icon: Star,
       label: 'Đánh giá & Nhận xét',
       description: 'Quản lý đánh giá người dùng'
     },
     {
       path: '/admin/withdrawals',
-      icon: 'fas fa-money-bill-wave',
+      icon: Money,
       label: 'Duyệt rút tiền',
       description: 'Xử lý yêu cầu rút tiền'
     },
     {
       path: '/admin/disputes',
-      icon: 'fas fa-gavel',
+      icon: Gavel,
       label: 'Giải quyết tranh chấp',
       description: 'Xử lý tranh chấp đơn hàng'
     }
@@ -84,7 +85,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
           className="admin-sidebar__close"
           onClick={onClose}
         >
-          <i className="fas fa-times"></i>
+          <X />
         </button>
       </div>
 
@@ -108,7 +109,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
               {item.disabled ? (
                 <div className="admin-sidebar__link admin-sidebar__link--disabled">
                   <div className="admin-sidebar__link-icon">
-                    <i className={item.icon}></i>
+                    <item.icon />
                   </div>
                   <div className="admin-sidebar__link-content">
                     <div className="admin-sidebar__link-label">{item.label}</div>
@@ -125,7 +126,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                   onClick={onClose}
                 >
                   <div className="admin-sidebar__link-icon">
-                    <i className={item.icon}></i>
+                    <item.icon />
                   </div>
                   <div className="admin-sidebar__link-content">
                     <div className="admin-sidebar__link-label">{item.label}</div>

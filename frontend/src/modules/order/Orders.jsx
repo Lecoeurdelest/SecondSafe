@@ -6,6 +6,7 @@ import { getImageUrl } from '../../utils/imageHelper';
 import Dispute from '../report/Dispute';
 import ShipOrder from './ShipOrder';
 import './Orders.css';
+import { CaretLeft, CaretRight, ChatCircle, CircleNotch, CreditCard, Package, ShoppingCart, Storefront, X } from '@phosphor-icons/react';
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -229,14 +230,14 @@ const Orders = () => {
                   navigate(`/orders/${order._id}/pay`);
                 }}
               >
-                <i className="fas fa-credit-card"></i>
+                <CreditCard />
                 Thanh toán
               </button>
               <button 
                 className="btn btn-danger btn-sm"
                 onClick={(e) => handleCancelOrder(order, e)}
               >
-                <i className="fas fa-times"></i>
+                <X />
                 Hủy đơn
               </button>
             </div>
@@ -247,7 +248,7 @@ const Orders = () => {
               className="btn btn-danger btn-sm"
               onClick={(e) => handleCancelOrder(order, e)}
             >
-              <i className="fas fa-times"></i>
+              <X />
               Hủy đơn (Hoàn tiền)
             </button>
           );
@@ -381,14 +382,14 @@ const Orders = () => {
           className={`tab-button ${activeTab === 'buying' ? 'active' : ''}`}
           onClick={() => handleTabChange('buying')}
         >
-          <i className="fas fa-shopping-cart"></i>
+          <ShoppingCart />
           Đơn mua ({activeTab === 'buying' ? pagination.totalOrders : '...'})
         </button>
         <button
           className={`tab-button ${activeTab === 'selling' ? 'active' : ''}`}
           onClick={() => handleTabChange('selling')}
         >
-          <i className="fas fa-store"></i>
+          <Storefront />
           Đơn bán ({activeTab === 'selling' ? pagination.totalOrders : '...'})
         </button>
       </div>
@@ -422,7 +423,7 @@ const Orders = () => {
       {orders.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">
-            <i className="fas fa-box-open"></i>
+            <Package />
           </div>
           <h3>Chưa có đơn hàng nào</h3>
           <p>
@@ -510,7 +511,7 @@ const Orders = () => {
                       await openOrderChat(order);
                     }}
                   >
-                    <i className="fas fa-comment"></i>
+                    <ChatCircle />
                     Chat
                   </button>
                   {getActionButton(order)}
@@ -536,7 +537,7 @@ const Orders = () => {
                 onClick={() => handlePageChange(pagination.currentPage - 1)}
                 disabled={pagination.currentPage === 1}
               >
-                <i className="fas fa-chevron-left"></i>
+                <CaretLeft />
                 Trước
               </button>
               
@@ -553,7 +554,7 @@ const Orders = () => {
                 disabled={pagination.currentPage === pagination.totalPages}
               >
                 Sau
-                <i className="fas fa-chevron-right"></i>
+                <CaretRight />
               </button>
             </div>
           )}
@@ -563,7 +564,7 @@ const Orders = () => {
       {loading && orders.length > 0 && (
         <div className="loading-overlay">
           <div className="loading-spinner">
-            <i className="fas fa-spinner fa-spin"></i>
+            <CircleNotch className="icon-spin" />
             Đang tải...
           </div>
         </div>

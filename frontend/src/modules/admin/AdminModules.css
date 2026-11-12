@@ -64,7 +64,7 @@
   flex-shrink: 0;
 }
 
-.btn-create i {
+.btn-create svg {
   font-size: 14px;
 }
 
@@ -487,7 +487,7 @@
   line-height: 1.2;
 }
 
-.btn-create-small i {
+.btn-create-small svg {
   font-size: 11px;
   margin-right: 0;
 }
@@ -515,7 +515,7 @@
   color: #666;
 }
 
-.loading i {
+.loading svg {
   margin-right: 8px;
   font-size: 16px;
 }

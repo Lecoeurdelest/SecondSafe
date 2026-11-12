@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { SafetyCertificateOutlined } from '@ant-design/icons';
+import { CaretDown, List, SealCheck, SignOut } from '@phosphor-icons/react';
 
 const AdminHeader = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
@@ -20,11 +20,11 @@ const AdminHeader = ({ onToggleSidebar }) => {
           className="admin-header__menu-btn"
           onClick={onToggleSidebar}
         >
-          <i className="fas fa-bars"></i>
+          <List />
         </button>
 
         <div className="admin-header__badge">
-          <SafetyCertificateOutlined />
+          <SealCheck />
         </div>
         
         <div className="admin-header__title-wrap">
@@ -46,7 +46,7 @@ const AdminHeader = ({ onToggleSidebar }) => {
               className="admin-header__user-avatar"
             />
             <span className="admin-header__user-name">{user?.fullName}</span>
-            <i className="fas fa-chevron-down"></i>
+            <CaretDown />
           </button>
 
           {showUserMenu && (
@@ -68,7 +68,7 @@ const AdminHeader = ({ onToggleSidebar }) => {
                   className="admin-header__user-menu-item admin-header__user-menu-item--danger"
                   onClick={handleLogout}
                 >
-                  <i className="fas fa-sign-out-alt"></i>
+                  <SignOut />
                   <span>Đăng xuất</span>
                 </button>
               </div>
