@@ -1,10 +1,11 @@
-import { Layout, Grid, Drawer } from "antd";
+import { ConfigProvider, Layout, Grid, Drawer } from "antd";
 import { Outlet, Navigate } from "react-router-dom";
 import { useState } from "react";
 import ModeratorSidebar from "./ModeratorSidebar";
 import ModeratorHeader from "./ModeratorHeader";
 import ModeratorFooter from "./ModeratorFooter";
 import { useAuth } from "../../../hooks/useAuth";
+import staffTheme from "../../staffTheme";
 import "./moderator-layout.css";
 import "../moderator-pages.css";
 
@@ -32,6 +33,7 @@ const ModeratorLayout = () => {
   const isMobile = !screens.lg;
 
   return (
+    <ConfigProvider theme={staffTheme}>
     <Layout className="moderator-shell">
       {!isMobile && (
         <Sider width={280} className="moderator-sider" theme="light">
@@ -60,6 +62,7 @@ const ModeratorLayout = () => {
         <ModeratorSidebar onNavigate={() => setOpenDrawer(false)} />
       </Drawer>
     </Layout>
+    </ConfigProvider>
   );
 };
 

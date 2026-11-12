@@ -6,7 +6,7 @@
 }
 
 .assistant-page__eyebrow {
-  color: var(--primary-dark);
+  color: var(--brand-dark);
   font-size: var(--font-size-sm);
   font-weight: 700;
   letter-spacing: .08em;
@@ -19,9 +19,9 @@
 .assistant-page__notice {
   margin: 20px 0;
   padding: 14px 16px;
-  border: 1px solid #c7d7f4;
+  border: 1px solid #f4cac7;
   border-radius: var(--radius-md);
-  background: #f2f7ff;
+  background: #fff3f2;
   line-height: 1.6;
 }
 
@@ -59,7 +59,7 @@
   min-height: 42px;
   padding: 0 18px;
   border-radius: var(--radius-md);
-  background: var(--primary-blue);
+  background: var(--brand);
   color: white;
   font-weight: 700;
 }
@@ -123,7 +123,7 @@
 }
 
 .assistant-page__product b {
-  color: var(--primary-dark);
+  color: var(--brand-dark);
 }
 
 .assistant-page__error {

@@ -57,7 +57,7 @@
 
 .cart-item__details p:first-of-type {
   margin-top: 8px;
-  color: var(--primary-dark);
+  color: var(--brand-dark);
   font-weight: 700;
 }
 
@@ -82,8 +82,8 @@
 }
 
 .cart-item__actions .cart-item__buy {
-  border-color: var(--primary-blue);
-  background: var(--primary-blue);
+  border-color: var(--brand);
+  background: var(--brand);
   color: white;
 }
 

@@ -19,7 +19,7 @@
 
 .support-page__heading p {
   margin: 0 0 5px;
-  color: var(--primary-dark);
+  color: var(--brand-dark);
   font-size: var(--font-size-sm);
   font-weight: 700;
   letter-spacing: .08em;
@@ -92,7 +92,7 @@
 
 .support-inbox li button.is-active,
 .support-inbox li button:hover {
-  background: #f3f7ff;
+  background: #fff4f3;
 }
 
 .support-inbox li button strong,
@@ -142,7 +142,7 @@
   min-height: 38px;
   padding: 7px 12px;
   border-radius: var(--radius-md);
-  background: var(--primary-blue);
+  background: var(--brand);
   color: white;
   font-weight: 650;
 }
@@ -187,8 +187,8 @@
   height: 48px;
   place-items: center;
   border-radius: 16px;
-  background: #eef4ff;
-  color: var(--primary-blue);
+  background: #ffefee;
+  color: var(--brand);
   font-size: 23px;
 }
 
@@ -221,7 +221,7 @@
 .support-messages li.is-mine {
   align-self: flex-end;
   border-radius: 14px 14px 4px 14px;
-  background: #e8f1ff;
+  background: #ffeae8;
 }
 
 .support-message__sender,

@@ -87,7 +87,7 @@ function TopUpResult() {
               padding: '10px 20px',
               borderRadius: 8,
               border: 'none',
-              background: '#1677ff',
+              background: '#ff2616',
               color: '#fff',
               fontWeight: 500,
               cursor: 'pointer'

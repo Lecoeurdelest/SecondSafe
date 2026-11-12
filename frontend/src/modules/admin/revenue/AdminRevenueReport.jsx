@@ -228,8 +228,8 @@ const AdminRevenueReport = () => {
                   <ComposedChart data={monthlyChartData} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="grossRevenueFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.32} />
-                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0.02} />
+                        <stop offset="5%" stopColor="#111827" stopOpacity={0.32} />
+                        <stop offset="95%" stopColor="#111827" stopOpacity={0.02} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -252,7 +252,7 @@ const AdminRevenueReport = () => {
                       type="monotone"
                       dataKey="grossRevenue"
                       name="Doanh thu gộp"
-                      stroke="#2563eb"
+                      stroke="#111827"
                       fill="url(#grossRevenueFill)"
                       strokeWidth={2}
                     />
@@ -304,7 +304,7 @@ const AdminRevenueReport = () => {
                       <Legend />
                       <Bar dataKey="sellerPayout" name="Chi trả người bán" stackId="rev" fill="#22c55e" radius={[6, 6, 0, 0]} />
                       <Bar dataKey="platformRevenue" name="Doanh thu hệ thống" stackId="rev" fill="#ef4444" radius={[6, 6, 0, 0]} />
-                      <Line type="monotone" dataKey="completedOrders" name="Số đơn" stroke="#2563eb" strokeWidth={2} dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="completedOrders" name="Số đơn" stroke="#111827" strokeWidth={2} dot={{ r: 3 }} />
                     </ComposedChart>
                   </ResponsiveContainer>
                 )}

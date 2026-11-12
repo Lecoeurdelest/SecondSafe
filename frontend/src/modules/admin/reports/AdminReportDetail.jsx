@@ -238,7 +238,7 @@ const AdminReportDetail = () => {
 
             <div className="mod-action-buttons">
               <Popconfirm title="Xác nhận đã giải quyết báo cáo này?" onConfirm={() => handleAction("resolved")}>
-                <Button type="primary" style={{ background: "#52c41a" }} icon={<CheckCircleOutlined />}>
+                <Button type="primary" style={{ background: "#16a34a" }} icon={<CheckCircleOutlined />}>
                   Đánh dấu Đã giải quyết
                 </Button>
               </Popconfirm>

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "ad05a8e660d492fde1899819d8be81fdf793c1e0517a9e091e25b978867a0a30",
+  "source_hash": "670d6369a675dbb0afa840a4a4e6b47f06f2c189a09350b59f477bae1fe9d747",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 360, 390, 1440 and 1920 px",
+    "Pages other than home, login, product detail, admin users and moderator reports were not individually inspected after the mechanical colour conversion",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Home, login and product detail render without horizontal overflow or broken layout at 360 and 1440 or 1920 px; build and the 58 existing frontend tests pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-01/manual-review.md",
+            ".project/evidence/TASK-077/run-01/screenshots/w1440-admin-users.png",
+            ".project/evidence/TASK-077/run-01/screenshots/w1440-login.png",
+            ".project/evidence/TASK-077/run-01/screenshots/w1440-moderator-reports.png",
+            ".project/evidence/TASK-077/run-01/screenshots/w1440-product-p0.png",
+            ".project/evidence/TASK-077/run-01/screenshots/w1920-home.png",
+            ".project/evidence/TASK-077/run-01/screenshots/w360-home.png",
+            ".project/evidence/TASK-077/run-01/screenshots/w360-login.png",
+            ".project/evidence/TASK-077/run-01/screenshots/w360-product-p0.png"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -49,7 +49,7 @@
 }
 
 .total-users strong {
-  color: #1890ff;
+  color: #111827;
   font-weight: 600;
 }
 
@@ -95,7 +95,7 @@
 .stat-number {
   font-size: 32px;
   font-weight: 700;
-  color: #1890ff;
+  color: #111827;
   margin-bottom: 8px;
 }
 
@@ -126,7 +126,7 @@
 }
 
 .role-item strong {
-  color: #1890ff;
+  color: #111827;
   font-weight: 600;
 }
 
@@ -161,9 +161,9 @@
 }
 
 .search-input:focus {
-  border-color: #1890ff;
+  border-color: #111827;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.2);
 }
 
 .filter-controls {
@@ -183,9 +183,9 @@
 }
 
 .filter-select:focus {
-  border-color: #1890ff;
+  border-color: #111827;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.2);
 }
 
 .users-table {
@@ -267,8 +267,8 @@
 }
 
 .role.user {
-  background: #e6f7ff;
-  color: #1890ff;
+  background: #f3f4f6;
+  color: #111827;
 }
 
 .status {
@@ -390,9 +390,9 @@
 }
 
 .filter-input:focus {
-  border-color: #1890ff;
+  border-color: #111827;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.2);
 }
 
 .filter-select {
@@ -405,9 +405,9 @@
 }
 
 .filter-select:focus {
-  border-color: #1890ff;
+  border-color: #111827;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.2);
 }
 
 .filter-actions {
@@ -434,12 +434,12 @@
 }
 
 .btn-primary {
-  background: #1890ff;
+  background: #111827;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #40a9ff;
+  background: #9ca3af;
 }
 
 .btn-secondary {
@@ -449,9 +449,9 @@
 }
 
 .btn-secondary:hover {
-  background: #e6f7ff;
-  border-color: #1890ff;
-  color: #1890ff;
+  background: #f3f4f6;
+  border-color: #111827;
+  color: #111827;
 }
 
 .btn-danger {
@@ -587,8 +587,8 @@
 
 .status-awaiting_seller_confirmation,
 .status-blue {
-  background: #e6f7ff;
-  color: #1890ff;
+  background: #f3f4f6;
+  color: #111827;
 }
 
 .status-awaiting_payment,
@@ -643,8 +643,8 @@
 }
 
 .status-pending {
-  background: #e6f7ff;
-  color: #1890ff;
+  background: #f3f4f6;
+  color: #111827;
 }
 
 .status-reviewing {
@@ -1033,9 +1033,9 @@
 }
 
 .form-control:focus {
-  border-color: #1890ff;
+  border-color: #111827;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.2);
 }
 
 .char-count {
@@ -1085,15 +1085,15 @@
 }
 
 .user-form .verify-toggle:hover {
-  border-color: #91caff;
-  background: #f0f7ff;
+  border-color: #9ca3af;
+  background: #f3f4f6;
 }
 
 .user-form .verify-toggle input {
   width: 16px;
   height: 16px;
   margin: 0;
-  accent-color: #1890ff;
+  accent-color: #111827;
 }
 
 .user-form .verify-toggle span {
@@ -1154,9 +1154,9 @@
 }
 
 .admin-report-detail {
-  --report-accent: #5E9848F4;
-  --report-accent-solid: #5E9848;
-  --report-accent-soft: #5e98481a;
+  --report-accent: #111827F4;
+  --report-accent-solid: #111827;
+  --report-accent-soft: #1118271a;
 }
 
 .admin-report-detail .admin-module__header h1 {
@@ -1424,9 +1424,9 @@
 }
 
 .admin-order-detail {
-  --order-accent: #5E9848F4;
-  --order-accent-solid: #5E9848;
-  --order-accent-soft: #5e98481a;
+  --order-accent: #111827F4;
+  --order-accent-solid: #111827;
+  --order-accent-soft: #1118271a;
 }
 
 .admin-order-detail .admin-module__header h1 {
@@ -1664,9 +1664,9 @@
 }
 
 .admin-revenue-report {
-  --revenue-accent: #5E9848F4;
-  --revenue-accent-solid: #5E9848;
-  --revenue-accent-soft: #5e98481a;
+  --revenue-accent: #111827F4;
+  --revenue-accent-solid: #111827;
+  --revenue-accent-soft: #1118271a;
 }
 
 .admin-revenue-report .admin-module__header h1 {
@@ -1720,8 +1720,8 @@
 }
 
 .admin-revenue-report .revenue-filter-field .filter-input:focus {
-  border-color: #95b3e9;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #9ca3af;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.12);
 }
 
 .admin-revenue-report .revenue-filter-actions {
@@ -1745,7 +1745,7 @@
 }
 
 .revenue-overview-card {
-  background: linear-gradient(165deg, #ffffff 0%, #f9fdf8 100%);
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
   border: 1px solid #dfe9de;
   border-top: 3px solid var(--revenue-accent);
   border-radius: 12px;
@@ -1767,39 +1767,39 @@
 }
 
 .revenue-overview-card--orders {
-  border-top-color: #7c3aed;
-  background: linear-gradient(165deg, #ffffff 0%, #f7f3ff 100%);
+  border-top-color: #111827;
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
 }
 
 .revenue-overview-card--orders::after {
-  background: #8b5cf6;
+  background: #6b7280;
 }
 
 .revenue-overview-card--gross {
-  border-top-color: #2563eb;
-  background: linear-gradient(165deg, #ffffff 0%, #f2f8ff 100%);
+  border-top-color: #111827;
+  background: linear-gradient(165deg, #ffffff 0%, #f3f4f6 100%);
 }
 
 .revenue-overview-card--gross::after {
-  background: #3b82f6;
+  background: #9ca3af;
 }
 
 .revenue-overview-card--system {
-  border-top-color: #ef4444;
-  background: linear-gradient(165deg, #ffffff 0%, #fff3f3 100%);
+  border-top-color: #111827;
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
 }
 
 .revenue-overview-card--system::after {
-  background: #ef4444;
+  background: #111827;
 }
 
 .revenue-overview-card--seller {
-  border-top-color: #16a34a;
-  background: linear-gradient(165deg, #ffffff 0%, #f2fdf5 100%);
+  border-top-color: #111827;
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
 }
 
 .revenue-overview-card--seller::after {
-  background: #22c55e;
+  background: #6b7280;
 }
 
 .revenue-overview-card .label {
@@ -1820,19 +1820,19 @@
 }
 
 .revenue-value--orders {
-  color: #6d28d9;
+  color: #111827;
 }
 
 .revenue-value--gross {
-  color: #1d4ed8;
+  color: #111827;
 }
 
 .revenue-value--system {
-  color: #dc2626;
+  color: #111827;
 }
 
 .revenue-value--seller {
-  color: #15803d;
+  color: #111827;
 }
 
 .revenue-overview-card .meta {
@@ -1852,6 +1852,7 @@
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   overflow: hidden;
+  padding-top: 4px;
 }
 
 .revenue-chart-wrap {

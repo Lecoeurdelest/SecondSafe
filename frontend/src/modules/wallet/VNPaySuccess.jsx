@@ -80,8 +80,8 @@ function VNPaySuccess() {
         {/* Transaction Info */}
         <div
           style={{
-            background: '#f6faff',
-            border: '1px solid #e6f4ff',
+            background: '#fff7f6',
+            border: '1px solid #ffe8e6',
             borderRadius: 10,
             padding: 18,
             marginBottom: 28,
@@ -91,7 +91,7 @@ function VNPaySuccess() {
           {formatMoney(amount) && (
             <p style={{ margin: '0 0 10px 0', fontSize: 15 }}>
               <strong>Số tiền nạp:</strong>{' '}
-              <span style={{ color: '#1677ff', fontWeight: 600 }}>
+              <span style={{ color: '#ff2616', fontWeight: 600 }}>
                 {formatMoney(amount)}
               </span>
             </p>
@@ -128,7 +128,7 @@ function VNPaySuccess() {
               padding: '10px 22px',
               borderRadius: 8,
               border: 'none',
-              background: '#1677ff',
+              background: '#ff2616',
               color: '#fff',
               fontWeight: 500,
               cursor: 'pointer'

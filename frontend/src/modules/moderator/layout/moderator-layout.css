@@ -1,15 +1,11 @@
 .moderator-shell {
   min-height: 100vh;
-  /* Nền phân lớp để khu vực moderator tách biệt trực quan với khu vực người dùng. */
-  background:
-    radial-gradient(circle at top right, #fef1de 0%, rgba(254, 241, 222, 0) 30%),
-    radial-gradient(circle at bottom left, #e9f0ff 0%, rgba(233, 240, 255, 0) 34%),
-    #f4f6fb;
+  background: #f9fafb;
 }
 
 .moderator-sider {
   border-right: 1px solid #e7e7e7;
-  background: linear-gradient(180deg, #ffffff 0%, #fff7eb 100%);
+  background: #ffffff;
 }
 
 .moderator-main {
@@ -21,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 251, 255, 0.95) 60%, rgba(255, 248, 238, 0.92) 100%);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid #e7ebf3;
   padding: 0 20px;
@@ -33,11 +29,11 @@
 .moderator-header::after {
   content: "";
   position: absolute;
-  inset: auto -70px -38px auto;
+  inset: auto 0 -38px auto;
   width: 130px;
   height: 64px;
   border-radius: 100px;
-  background: radial-gradient(circle, rgba(35, 131, 246, 0.17) 0%, rgba(35, 131, 246, 0) 72%);
+  background: radial-gradient(circle, rgba(156, 163, 175, 0.17) 0%, rgba(156, 163, 175, 0) 72%);
   pointer-events: none;
 }
 
@@ -58,9 +54,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #c66a00;
-  background: linear-gradient(145deg, #fff3df, #ffe5bd);
-  border: 1px solid #f3cf96;
+  color: #111827;
+  background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+  border: 1px solid #d1d5db;
 }
 
 .moderator-header-title {
@@ -129,9 +125,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #c66a00;
-  background: linear-gradient(145deg, #fff3df, #ffe3b8);
-  border: 1px solid #f3cf96;
+  color: #111827;
+  background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+  border: 1px solid #d1d5db;
   font-size: 18px;
 }
 
@@ -154,7 +150,7 @@
 .moderator-footer {
   padding: 12px 20px;
   border-top: 1px solid #e5ebf5;
-  background: linear-gradient(180deg, #fbfcff 0%, #f6f9ff 100%);
+  background: linear-gradient(180deg, #fbfcff 0%, #f3f4f6 100%);
 }
 
 .moderator-footer-inner {
@@ -172,7 +168,7 @@
 }
 
 .moderator-footer-icon {
-  color: #1d6fd4;
+  color: #111827;
   font-size: 14px;
 }
 
@@ -205,7 +201,7 @@
   border-radius: 12px;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, #d97706, #f59e0b);
+  background: #111827;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -229,8 +225,8 @@
 }
 
 .moderator-menu .ant-menu-item-selected {
-  background: #e8f1ff;
-  color: #1153b7;
+  background: #f3f4f6;
+  color: #111827;
 }
 
 @media (max-width: 991px) {

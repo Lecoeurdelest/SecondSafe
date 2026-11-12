@@ -56,17 +56,17 @@
 }
 
 .btn-secondary {
-  background-color: #3498db;
+  background-color: var(--brand);
   color: white;
 }
 
 .btn-secondary:hover {
-  background-color: #2980b9;
+  background-color: #b93329;
 }
 
 /* Balance Card */
 .balance-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff3b3b 0%, #ff6b35 100%);
   color: #ffffff;
   padding: 30px;
   border-radius: 12px;
@@ -95,7 +95,7 @@
 
 .balance-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 20px;
 }
 
@@ -185,7 +185,7 @@
 .filter-select:focus,
 .filter-input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: var(--brand);
 }
 
 /* Transaction List */

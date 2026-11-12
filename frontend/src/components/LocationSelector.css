@@ -42,8 +42,8 @@
 
 .location-selector select:focus {
   outline: none;
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.24);
+  border-color: #fd9a93;
+  box-shadow: 0 0 0 4px rgba(253, 154, 147, 0.24);
 }
 
 .location-selector select.error {

@@ -45,7 +45,7 @@
 }
 
 .product-detail__price {
-  color: var(--primary-dark);
+  color: var(--brand-dark);
   font-size: var(--font-size-xl);
   font-weight: 700;
 }
@@ -59,15 +59,15 @@
 .product-detail__button {
   min-height: 42px;
   padding: 10px 16px;
-  border: 1px solid var(--primary-blue);
+  border: 1px solid var(--brand);
   border-radius: var(--radius-md);
   background: white;
-  color: var(--primary-blue);
+  color: var(--brand);
   font-weight: 600;
 }
 
 .product-detail__button--primary {
-  background: var(--primary-blue);
+  background: var(--brand);
   color: white;
 }
 

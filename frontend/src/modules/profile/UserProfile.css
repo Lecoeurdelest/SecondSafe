@@ -41,7 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff3b3b 0%, #ff6b35 100%);
   color: white;
   font-size: 48px;
   font-weight: 600;
@@ -106,9 +106,9 @@
   min-height: 42px;
   padding: 0 16px;
   border-radius: 10px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
+  background: #fff0ef;
+  color: var(--brand-hover);
+  border: 1px solid #fec3bf;
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
@@ -116,7 +116,7 @@
 }
 
 .user-profile-link-btn:hover {
-  background: #dbeafe;
+  background: #fedddb;
 }
 
 .user-profile-link-btn--danger {
@@ -171,10 +171,11 @@
 }
 
 .product-card {
-  background: white;
-  border-radius: 8px;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-card);
   transition: all 0.2s;
   text-decoration: none;
   color: inherit;
@@ -182,7 +183,7 @@
 
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .product-image {
@@ -244,7 +245,7 @@
 .btn-back {
   margin-top: 20px;
   padding: 12px 24px;
-  background: #007bff;
+  background: var(--brand);
   color: white;
   border: none;
   border-radius: 8px;
@@ -254,7 +255,7 @@
 }
 
 .btn-back:hover {
-  background: #0056b3;
+  background: var(--brand-hover);
 }
 
 /* Responsive */

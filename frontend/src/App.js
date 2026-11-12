@@ -92,30 +92,15 @@ export default function App() {
             <Link className="site-header__cart" to="/cart" aria-label="Giỏ hàng">🛒<span>Giỏ hàng</span></Link>
             <Link to="/assistant">Trợ lý AI</Link>
             <Link to="/support">Hỗ trợ</Link>
-            {isAuthenticated && !adminRole && !staffRole && <>
-              <Link className="site-header__sell" to="/product/create">Đăng tin</Link>
-              <Link to="/my-products">Tin của tôi</Link>
-              <Link to="/orders">Đơn mua</Link>
-              <Link to="/seller-orders">Đơn bán</Link>
-              <Link to="/wallet">Ví</Link>
-            </>}
-            {isAuthenticated && <>
-              <Link to="/chat">Tin nhắn</Link>
-              <Link to="/profile">Hồ sơ</Link>
-              <div className="notification-dropdown-wrapper">
-                <button type="button" className="site-header__logout" aria-expanded={notificationsOpen} onClick={() => setNotificationsOpen(open => !open)}>Thông báo{unreadCount > 0 ? ` (${unreadCount})` : ''}</button>
-                {notificationsOpen && <Suspense fallback={<p role="status">Đang tải thông báo...</p>}>
-                  <NotificationPanel isOpen onClose={() => setNotificationsOpen(false)} onUnreadCountChange={setUnreadCount} />
-                </Suspense>}
-              </div>
-            </>}
-            {adminRole && <><Link to="/admin">Dashboard</Link><Link to="/admin/users">Quản lý người dùng</Link><Link to="/admin/reports">Kiểm duyệt</Link></>}
-            {staffRole && <><Link to="/staff">Dashboard nhân viên</Link><Link to="/moderator/reports">Kiểm duyệt</Link></>}
+            {isAuthenticated && !adminRole && !staffRole && <Link className="site-header__sell" to="/product/create">Đăng tin</Link>}
+            {isAuthenticated && <div className="notification-dropdown-wrapper">
+              <button type="button" className="site-header__logout" aria-expanded={notificationsOpen} onClick={() => setNotificationsOpen(open => !open)}>Thông báo{unreadCount > 0 ? ` (${unreadCount})` : ''}</button>
+              {notificationsOpen && <Suspense fallback={<p role="status">Đang tải thông báo...</p>}>
+                <NotificationPanel isOpen onClose={() => setNotificationsOpen(false)} onUnreadCountChange={setUnreadCount} />
+              </Suspense>}
+            </div>}
             {isAuthenticated ? (
-              <>
-                <Link to="/change-password">Đổi mật khẩu</Link>
-                <button type="button" className="site-header__logout" onClick={handleLogout}>Đăng xuất</button>
-              </>
+              <button type="button" className="site-header__logout" onClick={handleLogout}>Đăng xuất</button>
             ) : (
               <>
                 <Link to="/login">Đăng nhập</Link>
@@ -123,7 +108,21 @@ export default function App() {
               </>
             )}
           </nav>
-        </div></header>
+        </div>
+        {isAuthenticated && <div className="container"><nav className="site-header__account" aria-label="Tài khoản và công việc">
+          {!adminRole && !staffRole && <>
+            <Link to="/my-products">Tin của tôi</Link>
+            <Link to="/orders">Đơn mua</Link>
+            <Link to="/seller-orders">Đơn bán</Link>
+            <Link to="/wallet">Ví</Link>
+          </>}
+          {adminRole && <><Link to="/admin">Dashboard</Link><Link to="/admin/users">Quản lý người dùng</Link><Link to="/admin/reports">Kiểm duyệt</Link></>}
+          {staffRole && <><Link to="/staff">Dashboard nhân viên</Link><Link to="/moderator/reports">Kiểm duyệt</Link></>}
+          <Link to="/chat">Tin nhắn</Link>
+          <Link to="/profile">Hồ sơ</Link>
+          <Link to="/change-password">Đổi mật khẩu</Link>
+        </nav></div>}
+        </header>
         {logoutError && <p className="site-header__error" role="alert">{logoutError}</p>}
         <PageContent />
         <Link className="floating-chat" to="/support" aria-label="Chat hỗ trợ">

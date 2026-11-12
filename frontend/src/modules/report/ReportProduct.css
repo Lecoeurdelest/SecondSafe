@@ -58,7 +58,7 @@
   color: #333;
 }
 
-.product-info {
+.report-modal .product-info {
   display: flex;
   gap: 16px;
   padding: 24px;
@@ -66,7 +66,7 @@
   background: #f8f9fa;
 }
 
-.product-image {
+.report-modal .product-image {
   width: 80px;
   height: 80px;
   object-fit: cover;
@@ -124,7 +124,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--brand);
 }
 
 .form-group textarea {
@@ -150,8 +150,8 @@
 }
 
 .form-group input[type="file"]:hover {
-  border-color: #007bff;
-  background: #f0f8ff;
+  border-color: var(--brand);
+  background: #fff1f0;
 }
 
 .form-group input[type="file"]:disabled {

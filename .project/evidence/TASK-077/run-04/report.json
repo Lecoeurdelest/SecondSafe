@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "ad05a8e660d492fde1899819d8be81fdf793c1e0517a9e091e25b978867a0a30",
+  "source_hash": "09afadc893c9dfd0761662d33b8b124d3a5a4482dd2d9849815fd61b4300620e",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 1280 px for this run",
+    "Seller orders, order detail, dashboards and most staff pages with data were not observed",
+    "Dark mode is not implemented",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Order list, wallet, conversation thread and the notification panel render with realistic data in the shared visual language without overflow or broken layout at 1280 px; build and the 58 existing frontend tests pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-04/manual-review.md",
+            ".project/evidence/TASK-077/run-04/screenshots/w1280-chat-thread.png",
+            ".project/evidence/TASK-077/run-04/screenshots/w1280-notifications-open.png",
+            ".project/evidence/TASK-077/run-04/screenshots/w1280-orders-data.png",
+            ".project/evidence/TASK-077/run-04/screenshots/w1280-wallet-data.png"
+          ]
+        }
+      ]
+    }
+  ]
+}

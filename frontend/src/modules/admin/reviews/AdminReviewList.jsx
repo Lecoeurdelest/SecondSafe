@@ -305,7 +305,7 @@ const AdminReviewList = () => {
         if (record?.moderatorAssessment?.isReviewed || record?.moderatorAssessment?.verdict === "good") {
           return <Tag className="mod-status-pill" color="green">Đã duyệt</Tag>;
         }
-        return <Tag className="mod-status-pill" color="blue">Chưa đánh giá</Tag>;
+        return <Tag className="mod-status-pill" color="default">Chưa đánh giá</Tag>;
       }
     },
     {
@@ -396,6 +396,7 @@ const AdminReviewList = () => {
         dataSource={reviews}
         loading={loading}
         rowKey="_id"
+        scroll={{ x: 1100 }}
         rowClassName={(_, index) => (index % 2 === 0 ? "mod-review-row-even" : "mod-review-row-odd")}
         pagination={pagination}
         onChange={(pager) => fetchReviews(pager.current, pager.pageSize)}
@@ -441,7 +442,7 @@ const AdminReviewList = () => {
               <Tag color={selectedReview.status === "reported" ? "red" : selectedReview.status === "hidden" ? "default" : "green"}>
                 {selectedReview.status === "reported" ? "Bị báo cáo" : selectedReview.status === "hidden" ? "Đã ẩn" : "Bình thường"}
               </Tag>
-              <Tag color={selectedReview?.moderatorAssessment?.isBad ? "volcano" : selectedReview?.moderatorAssessment?.isReviewed ? "green" : "blue"}>
+              <Tag color={selectedReview?.moderatorAssessment?.isBad ? "volcano" : selectedReview?.moderatorAssessment?.isReviewed ? "green" : "default"}>
                 {selectedReview?.moderatorAssessment?.isBad
                   ? `Mod đã đánh giá xấu (Mức ${selectedReview?.moderatorAssessment?.penaltyLevel || 1})`
                   : selectedReview?.moderatorAssessment?.isReviewed

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "ad05a8e660d492fde1899819d8be81fdf793c1e0517a9e091e25b978867a0a30",
+  "source_hash": "6dd20b683480465e58950f1f5ff1e203de68a9a55c4f9d344b59ec37b5402d4f",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 360, 1280, 1440 and 1920 px",
+    "Pages with real data, the notification panel and most staff pages were not observed; other pages were converted by a mechanical colour rule",
+    "Dark mode is not implemented",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Buyer pages, messaging and support pages and the admin and moderator shells render in one visual language without horizontal overflow or broken layout at the sampled widths from 360 to 1920 px; the header fits one row plus a tab strip; build and the 58 existing frontend tests pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-03/manual-review.md",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-assistant.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-cart.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-chat.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-my-products.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-orders.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-profile.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-register.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-support.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1280-wallet.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1440-admin-orders.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1440-admin-users.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1440-login.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1440-moderator-reports.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1440-moderator-withdrawals.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1440-product-p0.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w1920-home.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w360-home.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w360-login.png",
+            ".project/evidence/TASK-077/run-03/screenshots/w360-product-p0.png"
+          ]
+        }
+      ]
+    }
+  ]
+}
