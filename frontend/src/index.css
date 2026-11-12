@@ -536,61 +536,6 @@
 }
 
 /* Profile Container */
-.profile-container {
-  max-width: 600px;
-  margin: var(--spacing-xl) auto;
-  padding: var(--spacing-xl);
-}
-
-.profile-card {
-  background: var(--surface);
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-color);
-}
-
-.profile-card h2 {
-  color: var(--gray-900);
-  margin-bottom: var(--spacing-lg);
-  text-align: center;
-  font-size: var(--font-size-2xl);
-}
-
-.profile-info {
-  margin-bottom: var(--spacing-xl);
-}
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  padding: var(--spacing-md) 0;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.info-row:last-child {
-  border-bottom: none;
-}
-
-.info-row label {
-  font-weight: 600;
-  color: var(--gray-700);
-  font-size: var(--font-size-base);
-}
-
-.info-row span {
-  color: var(--gray-900);
-  font-size: var(--font-size-base);
-}
-
-.role-badge {
-  background-color: var(--info);
-  color: var(--white);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-}
 
 .verified {
   color: var(--success);
@@ -606,10 +551,6 @@
   font-family: monospace;
   font-size: var(--font-size-sm);
   color: var(--gray-600);
-}
-
-.profile-actions {
-  text-align: center;
 }
 
 .btn-logout {
@@ -744,14 +685,6 @@
     right: -20px;
   }
 
-  .profile-container {
-    padding: var(--spacing-md);
-  }
-
-  .profile-card {
-    padding: var(--spacing-lg);
-  }
-
   .home-container {
     padding: var(--spacing-md);
   }
@@ -809,32 +742,6 @@
     right: -12px;
   }
 
-  .profile-container {
-    padding: var(--spacing-sm);
-  }
-
-  .profile-card {
-    padding: var(--spacing-md);
-  }
-
-  .profile-card h2 {
-    font-size: var(--font-size-xl);
-  }
-
-  .info-row {
-    flex-direction: column;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-sm) 0;
-  }
-
-  .info-row label {
-    font-size: var(--font-size-sm);
-  }
-
-  .info-row span {
-    font-size: var(--font-size-sm);
-  }
-
   .btn-logout {
     padding: 10px var(--spacing-lg);
     font-size: var(--font-size-sm);
@@ -854,9 +761,6 @@
     height: 28px;
   }
 
-  .profile-card h2 {
-    font-size: var(--font-size-lg);
-  }
 }
 
 body { min-width: 320px; }
@@ -874,6 +778,5 @@ body:has(.admin-layout, .moderator-shell, .dashboard-shell) :is(.marketplace-ann
 
 /* Dark theme: pastel chips keep their own text colour where a more specific rule would lighten it */
 :root[data-theme="dark"] .value.condition-badge { color: #2d6a2d; }
-:root[data-theme="dark"] .role-badge { color: #1976d2; }
 :root[data-theme="dark"] .method-card.active h4 { color: #1a1a1a; }
 :root[data-theme="dark"] .method-card.active p { color: #666666; }

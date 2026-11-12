@@ -1923,6 +1923,35 @@
       "criteria": {
         "AC-WEB-25-8": "inconclusive"
       }
+    },
+    "TASK-089": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The account profile, profile editing and seller profile pages are rebuilt from Ant Design components; the new tests and the existing suites pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Tenth slice of the Ant Design goal: profile pages"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the profile, profile editing and seller profile pages with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the profile, profile editing and seller profile pages with Ant Design components and removed legacy global profile styles; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-089/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-089.md",
+      "criteria": {
+        "AC-WEB-25-9": "inconclusive"
+      }
     }
   }
 }

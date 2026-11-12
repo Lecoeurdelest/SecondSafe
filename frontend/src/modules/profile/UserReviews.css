@@ -1,46 +1,18 @@
 .user-reviews-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 90px 20px 20px 20px;
+  padding-top: 32px;
+  padding-bottom: 32px;
 }
 
-.page-header {
+.user-reviews__header {
+  margin-bottom: 24px;
   text-align: center;
-  margin-bottom: 32px;
-  padding: 24px;
-  background: var(--surface);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.page-header h1 {
-  margin: 0 0 8px 0;
-  color: var(--ink);
-  font-size: 2rem;
-  font-weight: 600;
-}
-
-.page-header p {
+.user-reviews-container .ant-typography {
   margin: 0;
-  color: var(--text-2);
-  font-size: 1.1rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .user-reviews-container {
-    padding: 16px;
-  }
-  
-  .page-header {
-    padding: 20px 16px;
-  }
-  
-  .page-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .page-header p {
-    font-size: 1rem;
-  }
+.user-reviews-container h1.ant-typography {
+  font-size: 28px;
+  line-height: 1.25;
 }

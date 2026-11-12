@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Alert, App as AntApp, Avatar, Button, Card, Col, Empty, Flex, Row, Spin, Typography } from 'antd';
+import LinkButton from '../../ui/LinkButton';
 import { getPublicProfile, getUserStats } from '../../services/user.service';
 import productService from '../../services/product.service';
-import { getImageUrl, getUserAvatarUrl, handleImageError } from '../../utils/imageHelper';
+import { getImageUrl, getUserAvatarUrl } from '../../utils/imageHelper';
 import { useAuth } from '../../hooks/useAuth';
 import ReportUser from '../report/ReportUser';
 import './UserProfile.css';
@@ -14,7 +16,8 @@ const UserProfile = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
-  
+  const { message } = AntApp.useApp();
+
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
   const [products, setProducts] = useState([]);
@@ -65,13 +68,13 @@ const UserProfile = () => {
   const handleOpenReport = () => {
     const currentUserId = String(currentUser?._id || currentUser?.id || currentUser?.userId || '');
     if (!currentUserId) {
-      alert('Vui lòng đăng nhập để báo cáo người dùng');
+      message.warning('Vui lòng đăng nhập để báo cáo người dùng');
       navigate('/login');
       return;
     }
 
     if (currentUserId === String(userId)) {
-      alert('Bạn không thể báo cáo chính mình');
+      message.warning('Bạn không thể báo cáo chính mình');
       return;
     }
 
@@ -80,24 +83,24 @@ const UserProfile = () => {
 
   const handleReportSuccess = () => {
     setShowReportModal(false);
-    alert('Báo cáo người dùng đã được gửi thành công. Chúng tôi sẽ kiểm tra sớm nhất.');
+    message.success('Báo cáo người dùng đã được gửi thành công. Chúng tôi sẽ kiểm tra sớm nhất.');
   };
 
   if (loading) {
     return (
-      <div className="user-profile-container">
-        <div className="loading">Đang tải...</div>
+      <div className="user-profile-container container">
+        <Flex justify="center" gap={12} className="user-profile-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="user-profile-container">
-        <div className="error-message">{error}</div>
-        <button onClick={() => navigate(-1)} className="btn-back">
-          Quay lại
-        </button>
+      <div className="user-profile-container container">
+        <Alert type="error" showIcon role="alert" title={error} action={<Button size="small" onClick={() => navigate(-1)}>Quay lại</Button>} />
       </div>
     );
   }
@@ -106,91 +109,79 @@ const UserProfile = () => {
     return null;
   }
 
+  const isSelf = String(currentUser?._id || currentUser?.id || currentUser?.userId || '') === String(userId);
+
   return (
-    <div className="user-profile-container">
-      {/* User Info Card */}
-      <div className="user-info-card">
-        <div className="user-header">
-          <div className="user-avatar-large">
-            <img
-              src={getUserAvatarUrl(user)}
-              alt={user.fullName}
-              onError={(event) => handleImageError(event, 'avatar')}
-            />
-          </div>
+    <div className="user-profile-container container">
+      <Card className="user-info-card">
+        <Flex gap={20} align="center" wrap className="user-header">
+          <Avatar
+            size={96}
+            src={getUserAvatarUrl(user)}
+            alt={user.fullName}
+            icon={<User />}
+          />
           <div className="user-details">
-            <h1 className="user-name">
-              {user.fullName}
-            </h1>
-            <div className="user-meta">
-              <span className="meta-item">
-                <User /> Thành viên từ {formatDate(user.createdAt)}
-              </span>
-              <span className="meta-item">
-                <Package /> {products.length} sản phẩm đang bán
-              </span>
+            <Typography.Title level={1} className="user-name">{user.fullName}</Typography.Title>
+            <Flex wrap gap={16} className="user-meta">
+              <span className="meta-item"><User /> Thành viên từ {formatDate(user.createdAt)}</span>
+              <span className="meta-item"><Package /> {products.length} sản phẩm đang bán</span>
               <span className="meta-item">
                 <Star weight="fill" /> {Number(stats?.rating || user.rating || 0).toFixed(1)}/5 · {Number(stats?.totalReviews || user.totalReviews || 0)} đánh giá
               </span>
-            </div>
+            </Flex>
           </div>
-        </div>
+        </Flex>
 
-        <div className="user-profile-actions">
-          <Link to={`/user/${userId}/reviews`} className="user-profile-link-btn">
-            Xem đánh giá người bán
-          </Link>
-          {String(currentUser?._id || currentUser?.id || currentUser?.userId || '') !== String(userId) && (
-            <button type="button" className="user-profile-link-btn user-profile-link-btn--danger" onClick={handleOpenReport}>
-              Báo cáo người dùng
-            </button>
-          )}
-        </div>
+        <Flex wrap gap={8} className="user-profile-actions">
+          <LinkButton to={`/user/${userId}/reviews`}>Xem đánh giá người bán</LinkButton>
+          {!isSelf && <Button danger onClick={handleOpenReport}>Báo cáo người dùng</Button>}
+        </Flex>
 
         <div className="user-bio">
-          <h3>Tổng quan</h3>
-          <p>
+          <Typography.Title level={3}>Tổng quan</Typography.Title>
+          <Typography.Paragraph>
             Người bán đang hoạt động trên ReFlow. Hãy xem thêm đánh giá và tin đăng trước khi giao dịch.
-          </p>
+          </Typography.Paragraph>
         </div>
-      </div>
+      </Card>
 
-      {/* User's Products */}
       <div className="user-products-section">
-        <h2>Sản phẩm đang bán ({products.length})</h2>
-        
+        <Typography.Title level={2}>Sản phẩm đang bán ({products.length})</Typography.Title>
+
         {products.length === 0 ? (
-          <div className="no-products">
-            <p>Người dùng chưa có sản phẩm nào</p>
-          </div>
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Người dùng chưa có sản phẩm nào" />
         ) : (
-          <div className="products-grid">
+          <Row gutter={[{ xs: 10, md: 20 }, { xs: 10, md: 20 }]} className="user-products-grid">
             {products.map(product => (
-              <Link 
-                key={product._id} 
-                to={`/product/${product._id}`}
-                className="product-card"
-              >
-                <div className="product-image">
-                  <img 
-                    src={getImageUrl(product.images?.[0]) || PRODUCT_PLACEHOLDER}
-                    alt={product.title}
-                    onError={(event) => {
-                      event.currentTarget.onerror = null;
-                      event.currentTarget.src = PRODUCT_PLACEHOLDER;
-                    }}
-                  />
-                </div>
-                <div className="product-info">
-                  <h3 className="product-title">{product.title}</h3>
-                  <div className="product-price">{formatPrice(product.price)}</div>
-                  <div className="product-location">
-                    <MapPin /> {product.location?.district}, {product.location?.city}
-                  </div>
-                </div>
-              </Link>
+              <Col key={product._id} xs={12} md={8} lg={6}>
+                <Link to={`/product/${product._id}`} className="user-product-link">
+                  <Card
+                    hoverable
+                    className="user-product-card"
+                    cover={(
+                      <div className="user-product-card__image">
+                        <img
+                          src={getImageUrl(product.images?.[0]) || PRODUCT_PLACEHOLDER}
+                          alt={product.title}
+                          onError={(event) => {
+                            event.currentTarget.onerror = null;
+                            event.currentTarget.src = PRODUCT_PLACEHOLDER;
+                          }}
+                        />
+                      </div>
+                    )}
+                  >
+                    <Typography.Title level={3} className="user-product-card__title">{product.title}</Typography.Title>
+                    <Typography.Text strong className="user-product-card__price">{formatPrice(product.price)}</Typography.Text>
+                    <Typography.Text type="secondary" className="user-product-card__location">
+                      <MapPin /> {product.location?.district}, {product.location?.city}
+                    </Typography.Text>
+                  </Card>
+                </Link>
+              </Col>
             ))}
-          </div>
+          </Row>
         )}
       </div>
 

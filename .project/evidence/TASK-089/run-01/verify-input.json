@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-089",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The account profile, profile editing and seller profile pages are rebuilt from Ant Design components; the new tests and the existing suites pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses and a canned province list (`profile-capture.js`). For light and dark at 1280 and 390 px the script signs in and opens the account page (checks the heading and the six quick-action links), the profile editing page (checks the heading) and a public seller profile with four listings (checks the heading and the four cards), recording horizontal overflow and page errors on every page.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-profile.png`, `dark-w390-profile.png` | Account page with the details, rating and quick actions |\n| `light-w1280-edit.png`, `dark-w390-edit.png` | Profile editing with the avatar, the details and the cascading area selects |\n| `dark-w1280-seller.png`, `light-w390-seller.png` | Public seller profile with the stats, actions and listing cards |\n\nResults: in all four combinations the account page showed its heading and six quick-action links, the editing page showed its heading, the seller page showed four listing cards, no page overflowed horizontally and none raised an error. The first capture showed card headings centred and the account page narrowed by legacy global rules in `index.css`, and the native file input visible on the editing page; the legacy rules were removed and a global rule makes the hidden attribute win, then the pages were re-captured.\n\nNot observed: a real avatar upload and save, the report dialog from the seller page (covered by tests with a stub), a signed-out visit in the browser, long names or addresses beyond the sample, a real phone, Firefox or WebKit.",
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the profile, profile editing and seller profile pages with Ant Design components and removed legacy global profile styles; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses and a canned province list",
+    "A real avatar upload and the report dialog were not exercised in the browser",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-25-9": {
+      "observed": "pass",
+      "note": "The new Profile, EditProfile and UserProfile tests and the existing suites pass; the build passes; the pages show the details, forms, stats and listing cards with no overflow or error in light and dark at 390 and 1280 px; a real avatar upload was not exercised",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

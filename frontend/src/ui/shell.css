@@ -174,3 +174,7 @@ body:has(.admin-layout, .moderator-shell, .dashboard-shell) :is(.marketplace-ann
   .site-header { padding: 10px 0 !important; }
   .site-header__content { align-items: flex-start; }
 }
+
+input[hidden] {
+  display: none !important;
+}
