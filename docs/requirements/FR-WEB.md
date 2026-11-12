@@ -193,3 +193,11 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 17. Icon set an
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-24-1` | Every icon in the web application comes from the Phosphor icon set; the Font Awesome and Ant Design icon packages, icon classes and emoji or symbol glyphs used as icons are gone, icons keep a visible colour and size in the light and dark themes, and loading indicators still spin. | behavioral test, static flow review, manual review | [TASK-080](../task/TASK-080.md) `[!]` |
+
+### FR-WEB-25 — Web storefront on Ant Design
+
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 17. Icon set and component library amendment (2026-11-12)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-WEB-25-1` | The storefront shell (announcement bar, header, navigation, notification panel, support dialog, floating chat button and footer) is built from Ant Design components inside one theme that follows the light or dark choice and the interface language, keeps the brand colours, and works from 360 px to 1920 px wide. | behavioral test, manual review | [TASK-081](../task/TASK-081.md) `[!]` |

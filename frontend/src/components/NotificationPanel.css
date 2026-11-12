@@ -1,198 +1,47 @@
-.notification-dropdown-wrapper {
-  position: relative;
-}
-
 .notification-panel {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 380px;
-  max-height: 480px;
-  background: var(--surface);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  overflow: hidden;
-  z-index: 2000;
   display: flex;
   flex-direction: column;
-  border: 1px solid #eaeaea;
-}
-
-.notification-panel::before {
-  content: '';
-  position: absolute;
-  top: -7px;
-  right: 12px;
-  width: 14px;
-  height: 14px;
-  background: var(--surface-2);
-  border-left: 1px solid #eaeaea;
-  border-top: 1px solid #eaeaea;
-  transform: rotate(45deg);
-  z-index: 1;
+  width: min(380px, calc(100vw - 48px));
+  max-height: 480px;
 }
 
 .notification-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  border-bottom: 1px solid #eaeaea;
-  background: var(--surface-2);
+  padding: 4px 4px 8px;
 }
 
-.notification-header h3 {
+.notification-header .ant-typography {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.notification-panel .close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--text-3);
-  padding: 0;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s;
-}
-
-.notification-panel .close-btn:hover {
-  color: var(--ink);
-}
-
-.mark-all-btn {
-  padding: 8px 16px;
-  background: none;
-  border: none;
-  color: var(--brand);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border-bottom: 1px solid #eaeaea;
-  transition: background 0.2s;
-}
-
-.mark-all-btn:hover {
-  background: var(--surface-2);
 }
 
 .notification-list {
-  flex: 1;
   overflow-y: auto;
 }
 
 .notification-item {
-  display: flex;
-  gap: 12px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--line);
   cursor: pointer;
-  transition: background 0.2s;
+  padding-inline: 8px;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
 }
 
 .notification-item:hover {
-  background: var(--surface-2);
+  background: var(--fill-subtle);
 }
 
 .notification-item.is-unread {
-  background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
+  background: var(--brand-tint);
 }
 
-.notification-item.is-unread .notification-title::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  border-radius: 50%;
-  background: var(--brand);
-  vertical-align: middle;
-}
-
-.notification-item.is-read {
-  opacity: 0.82;
-}
-
-.notification-icon {
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.notification-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.notification-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-
-.notification-message {
-  font-size: 13px;
-  color: var(--text-2);
-  line-height: 1.4;
-  margin-bottom: 6px;
-  word-break: break-word;
+.notification-item .ant-list-item-meta-title {
+  margin-block-end: 2px;
 }
 
 .notification-time {
-  font-size: 11px;
-  color: var(--text-3);
-}
-
-.empty-state {
-  padding: 40px 20px;
-  text-align: center;
-  color: var(--text-3);
-  font-size: 14px;
-}
-
-.loading {
-  padding: 20px;
-  text-align: center;
-  color: var(--text-2);
+  margin-top: 2px;
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
 }
 
 .notification-load-more-wrap {
-  padding: 12px;
-  border-top: 1px solid var(--line);
-  background: var(--surface);
-}
-
-.notification-load-more-btn {
-  width: 100%;
-  border: 1px solid #d7dbe2;
-  background: var(--surface-2);
-  color: var(--ink);
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.notification-load-more-btn:hover:not(:disabled) {
-  background: var(--surface-2);
-}
-
-.notification-load-more-btn:disabled {
-  opacity: 0.75;
-  cursor: not-allowed;
-}
-
-@media (max-width: 480px) {
-  .notification-panel {
-    width: calc(100vw - 30px);
-    right: -60px;
-  }
+  padding: 12px 0 4px;
 }

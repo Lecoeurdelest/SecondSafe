@@ -126,8 +126,9 @@ test('changes and persists the marketplace language from the header selector', (
   expect(languageButton).toHaveAttribute('aria-expanded', 'false');
   fireEvent.click(languageButton);
   expect(languageButton).toHaveAttribute('aria-expanded', 'true');
-  expect(screen.getAllByRole('menuitem')).toHaveLength(2);
-  fireEvent.click(screen.getByRole('menuitem', { name: /English/ }));
+  const languageMenu = document.querySelector('.ant-dropdown-menu');
+  expect(within(languageMenu).getAllByRole('menuitem')).toHaveLength(2);
+  fireEvent.click(within(languageMenu).getByRole('menuitem', { name: /English/ }));
 
   expect(languageButton).toHaveAttribute('aria-expanded', 'false');
   expect(document.documentElement).toHaveAttribute('lang', 'en');
