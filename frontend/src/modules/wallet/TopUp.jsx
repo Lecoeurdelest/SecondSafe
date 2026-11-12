@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import sePayService from '../../services/sepay.service';
+import LinkButton from '../../ui/LinkButton';
 import './TopUp.css';
+import { App as AntApp, Alert, Button, Card, Descriptions, Flex, Form, Input, Typography } from 'antd';
 import { ArrowLeft, Check, Lock } from '@phosphor-icons/react';
 
 const TopUp = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { message } = AntApp.useApp();
 
   const [amount, setAmount] = useState('');
   const [orderInfo, setOrderInfo] = useState('');
@@ -20,8 +23,7 @@ const TopUp = () => {
   ];
 
   if (!user) {
-    navigate('/login');
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   const handleAmountChange = (e) => {
@@ -58,9 +60,7 @@ const TopUp = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
@@ -94,7 +94,7 @@ const TopUp = () => {
       document.body.appendChild(form);
       form.submit();
     } catch (error) {
-      alert(error.message || 'Không thể tạo thanh toán. Vui lòng thử lại.');
+      message.error(error.message || 'Không thể tạo thanh toán. Vui lòng thử lại.');
       setLoading(false);
     }
   };
@@ -103,145 +103,112 @@ const TopUp = () => {
     return new Intl.NumberFormat('vi-VN').format(price);
   };
 
+  const amountNumber = parseInt(amount);
+
   return (
-    <div className="topup-container">
+    <div className="topup-container container">
       <div className="topup-header">
-        <button
-          onClick={() => navigate('/wallet')}
-          className="back-btn"
-        >
-          <ArrowLeft /> Quay lại
-        </button>
-        <h1>Nạp tiền vào ví</h1>
-        <p>Chọn số tiền bạn muốn nạp vào ví</p>
+        <LinkButton type="link" to="/wallet" icon={<ArrowLeft />} className="back-btn">Quay lại</LinkButton>
+        <Typography.Title level={1}>Nạp tiền vào ví</Typography.Title>
+        <Typography.Paragraph type="secondary">Chọn số tiền bạn muốn nạp vào ví</Typography.Paragraph>
       </div>
 
       <div className="topup-content">
-        <form onSubmit={handleSubmit} className="topup-form">
-          {/* Predefined Amounts */}
-          <div className="form-section">
-            <h2>Chọn nhanh</h2>
-            <div className="amount-grid">
+        <Form layout="vertical" onFinish={handleSubmit} className="topup-form">
+          <Card className="topup-section" title={<Typography.Title level={2}>Chọn nhanh</Typography.Title>}>
+            <Flex wrap gap={10} className="amount-grid">
               {predefinedAmounts.map(value => (
-                <button
+                <Button
                   key={value}
-                  type="button"
-                  className={`amount-btn ${amount === value.toString() ? 'active' : ''}`}
+                  type={amount === value.toString() ? 'primary' : 'default'}
+                  aria-pressed={amount === value.toString()}
                   onClick={() => handlePredefinedAmount(value)}
                 >
                   {formatPrice(value)} VNĐ
-                </button>
+                </Button>
               ))}
-            </div>
-          </div>
+            </Flex>
+          </Card>
 
-          {/* Custom Amount */}
-          <div className="form-section">
-            <h2>Hoặc nhập số tiền khác</h2>
-            <div className="form-group">
-              <label htmlFor="amount">Số tiền (VNĐ) <span className="required">*</span></label>
-              <div className="amount-input-wrapper">
-                <input
-                  type="text"
-                  id="amount"
-                  value={amount}
-                  onChange={handleAmountChange}
-                  placeholder="VD: 100000"
-                  className={errors.amount ? 'error' : ''}
-                />
-                <span className="currency">VNĐ</span>
-              </div>
-              {errors.amount && <p className="error-text">{errors.amount}</p>}
-              <p className="help-text">
-                Số tiền nạp từ 10,000 VNĐ đến 500,000,000 VNĐ
-              </p>
-            </div>
+          <Card className="topup-section" title={<Typography.Title level={2}>Hoặc nhập số tiền khác</Typography.Title>}>
+            <Form.Item
+              label="Số tiền (VNĐ)"
+              htmlFor="amount"
+              required
+              validateStatus={errors.amount ? 'error' : undefined}
+              help={errors.amount}
+              extra="Số tiền nạp từ 10,000 VNĐ đến 500,000,000 VNĐ"
+            >
+              <Input id="amount" value={amount} onChange={handleAmountChange} placeholder="VD: 100000" suffix="VNĐ" inputMode="numeric" />
+            </Form.Item>
 
-            <div className="form-group">
-              <label htmlFor="orderInfo">Ghi chú (tùy chọn)</label>
-              <input
-                type="text"
+            <Form.Item label="Ghi chú (tùy chọn)" htmlFor="orderInfo">
+              <Input
                 id="orderInfo"
                 value={orderInfo}
                 onChange={(e) => setOrderInfo(e.target.value)}
                 placeholder="VD: Nạp tiền mua sản phẩm"
                 maxLength={100}
               />
-            </div>
-          </div>
+            </Form.Item>
+          </Card>
 
-          {/* Payment Summary */}
-          {amount && parseInt(amount) >= 10000 && (
-            <div className="payment-summary">
-              <h3>Thông tin thanh toán</h3>
-              <div className="summary-row">
-                <span>Số tiền nạp:</span>
-                <span className="amount-display">{formatPrice(parseInt(amount))} VNĐ</span>
-              </div>
-              <div className="summary-row">
-                <span>Phí giao dịch:</span>
-                <span>Miễn phí</span>
-              </div>
-              <div className="summary-row total">
-                <span>Tổng thanh toán:</span>
-                <span className="total-amount">{formatPrice(parseInt(amount))} VNĐ</span>
-              </div>
-            </div>
+          {amount && amountNumber >= 10000 && (
+            <Card className="topup-section payment-summary" title={<Typography.Title level={3}>Thông tin thanh toán</Typography.Title>}>
+              <Descriptions
+                column={1}
+                size="small"
+                items={[
+                  { key: 'amount', label: 'Số tiền nạp', children: `${formatPrice(amountNumber)} VNĐ` },
+                  { key: 'fee', label: 'Phí giao dịch', children: 'Miễn phí' },
+                  { key: 'total', label: 'Tổng thanh toán', children: <strong className="total-amount">{formatPrice(amountNumber)} VNĐ</strong> }
+                ]}
+              />
+            </Card>
           )}
 
-          {/* Payment Method */}
-          <div className="form-section">
-            <h2>Phương thức thanh toán</h2>
-            <div className="payment-method">
-              <div className="method-card active">
-                <img
-                  src="/images/sepay-logo.png"
-                  alt="SePay"
-                  className="method-logo"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = '/images/logo/logo.png';
-                  }}
-                />
-                <div className="method-info">
-                  <h4>Chuyển khoản Ngân hàng</h4>
-                  <p>Xử lý tự động 24/7 qua mã QR (Nhanh chóng & An toàn)</p>
-                </div>
-                <div className="method-check"><Check /></div>
+          <Card className="topup-section" title={<Typography.Title level={2}>Phương thức thanh toán</Typography.Title>}>
+            <Flex align="center" gap={16} className="topup-method">
+              <img
+                src="/images/sepay-logo.png"
+                alt="SePay"
+                className="topup-method__logo"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/images/logo/logo.png';
+                }}
+              />
+              <div className="topup-method__info">
+                <Typography.Title level={4}>Chuyển khoản Ngân hàng</Typography.Title>
+                <Typography.Text type="secondary">Xử lý tự động 24/7 qua mã QR (Nhanh chóng & An toàn)</Typography.Text>
               </div>
-            </div>
-          </div>
+              <Check className="topup-method__check" />
+            </Flex>
+          </Card>
 
-          {/* Submit Button */}
-          <div className="form-actions">
-            <button
-              type="button"
-              onClick={() => navigate('/wallet')}
-              className="btn btn-secondary"
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading || !amount || parseInt(amount) < 10000}
-            >
+          <Flex justify="flex-end" gap={12} className="topup-actions">
+            <Button size="large" onClick={() => navigate('/wallet')} disabled={loading}>Hủy</Button>
+            <Button type="primary" size="large" htmlType="submit" disabled={loading || !amount || amountNumber < 10000}>
               {loading ? 'Đang xử lý...' : 'Thanh toán'}
-            </button>
-          </div>
-        </form>
+            </Button>
+          </Flex>
+        </Form>
 
-        {/* Security Notice */}
-        <div className="security-notice">
-          <h3><Lock /> Bảo mật thanh toán</h3>
-          <ul>
-            <li>Giao dịch được mã hóa SSL 256-bit</li>
-            <li>Không lưu trữ thông tin thẻ ngân hàng</li>
-            <li>Tuân thủ tiêu chuẩn bảo mật PCI DSS</li>
-            <li>Hỗ trợ 24/7 cho mọi vấn đề thanh toán</li>
-          </ul>
-        </div>
+        <Alert
+          className="security-notice"
+          type="info"
+          showIcon
+          icon={<Lock />}
+          title="Bảo mật thanh toán"
+          description={(
+            <ul>
+              <li>Giao dịch được mã hóa SSL 256-bit</li>
+              <li>Không lưu trữ thông tin thẻ ngân hàng</li>
+              <li>Tuân thủ tiêu chuẩn bảo mật PCI DSS</li>
+              <li>Hỗ trợ 24/7 cho mọi vấn đề thanh toán</li>
+            </ul>
+          )}
+        />
       </div>
     </div>
   );

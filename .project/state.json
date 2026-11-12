@@ -1865,6 +1865,35 @@
       "criteria": {
         "AC-WEB-25-6": "inconclusive"
       }
+    },
+    "TASK-087": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The wallet, top-up, withdrawal and result pages are rebuilt from Ant Design components; the new tests and the existing suites pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Eighth slice of the Ant Design goal: wallet pages"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the wallet, top-up, withdrawal and result pages with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the wallet, top-up, withdrawal and result pages with Ant Design components; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-087/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-087.md",
+      "criteria": {
+        "AC-WEB-25-7": "inconclusive"
+      }
     }
   }
 }

@@ -3109,6 +3109,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-7
+      statement: The wallet, top-up, withdrawal and payment result pages are built from Ant Design components, with the balance and
+        totals, the filtered and paged transaction history, inline validation, summaries, and result pages, and work from 360 px to
+        1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7309,6 +7316,37 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: The status filter is a Segmented control, the listings are Cards in a Row and Col grid with the status as a Tag over the photo and the actions in the card footer, deleting and hiding use Modal with a confirm loading state, and paging uses Pagination. The success and error notices are closable Alerts that are no longer cleared by the reload that follows the action, and a selling restriction is shown as a warning Alert. A failed load now shows an error. The overlay dialogs and the unscoped stylesheet rules that other pages also define are removed.
+  - id: TASK-087
+    title: Ant Design wallet pages
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-7
+    objective: Rebuild the wallet, top-up, withdrawal and payment result pages from Ant Design components, keeping the amounts, rules and requests.
+    in_scope:
+    - frontend/src/modules/wallet
+    out_of_scope:
+    - Services, routes, amount rules and the payment gateway hand-off
+    - The order payment page (order area)
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/wallet/WalletResult.css
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: The wallet page keeps its balance logic and the rule that decides the sign, tone and suffix of each amount, moved into one helper, and renders them with Card, Statistic, Select, Input, Tag and Pagination. The top-up and withdrawal forms keep their validation and requests and render through Form.Item, Input, Select and Descriptions, with the quick amounts as buttons that report their pressed state. The two result pages use Result. Browser alerts become toasts, and a signed-out visitor to the top-up page is redirected with Navigate instead of a call during render.
 verification:
   thresholds:
     standard: 0.95

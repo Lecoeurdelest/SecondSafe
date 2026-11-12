@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-087",
+  "spec_hash": "a54f61715dbe4c1d480689204916acfd01da2c316baf33e506437862f2130d0a",
+  "source_hash": "227464c17dbbe6090170807644de19ce012d271be846750bf91f1bc50ac91be5",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The hand-off to the payment gateway and a real withdrawal were not exercised",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-7",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new Wallet, TopUp, Withdrawal and result tests (amount rules, filters, paging, validation, requests, failures) and the existing suites pass; the build passes; the pages show the balance, history, forms, summaries and results with no overflow or error in light and dark at 390 and 1280 px; the gateway hand-off and a real withdrawal were not exercised",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-087/run-01/frontend-test.txt",
+            ".project/evidence/TASK-087/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-087/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
