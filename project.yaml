@@ -3102,6 +3102,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-6
+      statement: The my-listings page is built from Ant Design components, with the status filter, listing cards with their actions,
+        confirmation dialogs for deleting and hiding, paging, and loading, empty and error states, and works from 360 px to 1920 px
+        wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7269,6 +7276,39 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: Both forms keep their state and validation functions and render them through Form.Item with validateStatus and help, Input, Input.TextArea and Select; the category chips are toggle Buttons with aria-pressed. A ProductImagePicker shared by both forms shows the photo tiles and an add button that opens a hidden file input. The creation form shows a summary Card and a completeness Progress. The selector uses searchable Selects with the same onChange payloads. Success and failure messages use the Ant Design message instead of the browser alert. Shared class names were renamed to product-form-section, product-form-actions and product-sidebar-card so they no longer collide with other pages.
+  - id: TASK-086
+    title: Ant Design my-listings page
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-6
+    objective: Rebuild the seller's my-listings page from Ant Design components and keep its filter, actions and confirmations.
+    in_scope:
+    - frontend/src/modules/product/MyProducts.jsx
+    - frontend/src/modules/product/MyProducts.css
+    - frontend/src/modules/product/MyProducts.test.jsx
+    out_of_scope:
+    - Services, routes and the listing status rules
+    - Other page areas
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/product/MyProducts.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: The status filter is a Segmented control, the listings are Cards in a Row and Col grid with the status as a Tag over the photo and the actions in the card footer, deleting and hiding use Modal with a confirm loading state, and paging uses Pagination. The success and error notices are closable Alerts that are no longer cleared by the reload that follows the action, and a selling restriction is shown as a warning Alert. A failed load now shows an error. The overlay dialogs and the unscoped stylesheet rules that other pages also define are removed.
 verification:
   thresholds:
     standard: 0.95

@@ -4,8 +4,18 @@ import { useAuth } from '../../hooks/useAuth';
 import productService from '../../services/product.service';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import { formatCategoryText } from '../../utils/categoryHelper';
+import LinkButton from '../../ui/LinkButton';
 import './MyProducts.css';
-import { CaretLeft, CaretRight, MapPin } from '@phosphor-icons/react';
+import { Alert, Button, Card, Col, Empty, Flex, Modal, Pagination, Row, Segmented, Spin, Tag, Typography } from 'antd';
+import { MapPin, Plus } from '@phosphor-icons/react';
+
+const STATUS_TAGS = {
+  active: { text: 'Đang bán', color: 'success' },
+  pending: { text: 'Đang giao dịch', color: 'warning' },
+  sold: { text: 'Đã bán', color: 'processing' },
+  hidden: { text: 'Đã ẩn', color: 'default' },
+  deleted: { text: 'Đã xóa', color: 'error' }
+};
 
 const MyProducts = () => {
   const navigate = useNavigate();
@@ -69,7 +79,6 @@ const MyProducts = () => {
   const fetchMyProducts = async () => {
     try {
       setLoading(true);
-      setFeedback({ type: '', message: '' });
       const params = {
         page: pagination.page,
         limit: pagination.limit
@@ -89,6 +98,7 @@ const MyProducts = () => {
     } catch (error) {
       console.error('Error fetching products:', error);
       console.error('Error response:', error.response?.data);
+      setFeedback({ type: 'error', message: error.response?.data?.message || 'Không thể tải danh sách tin đăng.' });
     } finally {
       setLoading(false);
     }
@@ -161,298 +171,217 @@ const MyProducts = () => {
     }).format(price);
   };
 
-  const getStatusBadge = (status) => {
-    const badges = {
-      'active': { text: 'Đang bán', class: 'status-active' },
-      'pending': { text: 'Đang giao dịch', class: 'status-hidden' },
-      'sold': { text: 'Đã bán', class: 'status-sold' },
-      'hidden': { text: 'Đã ẩn', class: 'status-hidden' },
-      'deleted': { text: 'Đã xóa', class: 'status-deleted' }
-    };
-
-    const badge = badges[status] || { text: status, class: '' };
-    
-    return (
-      <span className={`status-badge ${badge.class}`}>
-        {badge.text}
-      </span>
-    );
-  };
-
-  const getProductStatusBadge = (product) => {
-    return getStatusBadge(product.status);
-  };
-
   const handlePageChange = (newPage) => {
+    setFeedback({ type: '', message: '' });
     setPagination(prev => ({ ...prev, page: newPage }));
     window.scrollTo(0, 0);
   };
 
   const applyFilter = (nextFilter) => {
+    setFeedback({ type: '', message: '' });
     setStatusFilter(nextFilter);
     setPagination(prev => ({ ...prev, page: 1 }));
   };
 
   const getVisibilityAction = (product) => {
     if (product.status === 'hidden') {
-      return { label: 'Hiện', nextStatus: 'active', className: 'show-btn' };
+      return { label: 'Hiện', nextStatus: 'active' };
     }
-    return { label: 'Ẩn', nextStatus: 'hidden', className: 'hide-btn' };
+    return { label: 'Ẩn', nextStatus: 'hidden' };
   };
 
   if (loading && products.length === 0) {
     return (
-      <div className="my-products-container">
-        <div className="loading">Đang tải...</div>
+      <div className="my-products-container container">
+        <Flex justify="center" gap={12} className="my-products-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
-  return (
-    <div className="my-products-container">
-      <div className="my-products-header">
-        <div className="my-products-header-content">
-          <h1>Quản lý tin đăng</h1>
-          <p>Theo dõi trạng thái và chỉnh sửa tin đăng của bạn tại một nơi.</p>
-        </div>
-        <Link to="/product/create" className="btn btn-primary">
-          + Tạo tin mới
-        </Link>
-      </div>
+  const renderActions = (product) => {
+    if (product.status === 'deleted') {
+      return [<Typography.Text key="deleted" type="secondary">Tin đã xóa, không thể chỉnh sửa.</Typography.Text>];
+    }
 
-      {feedback.message && (
-        <div className={`my-products-feedback ${feedback.type === 'error' ? 'is-error' : 'is-success'}`}>
-          {feedback.message}
+    const view = <LinkButton key="view" type="link" to={`/product/${product._id}`}>Xem</LinkButton>;
+    const isLockedAction = product.status === 'sold' || product.status === 'pending' || Boolean(product.isInActiveOrder);
+    if (isLockedAction) {
+      const note = product.status === 'sold'
+        ? 'Đã bán - chỉ xem'
+        : product.status === 'pending'
+          ? 'Đang giao dịch - chỉ xem'
+          : 'Đang trong đơn hàng - chỉ xem';
+      return [view, <Tag key="locked">{note}</Tag>];
+    }
+
+    const actions = [view, <LinkButton key="edit" type="link" to={`/product/${product._id}/edit`}>Sửa</LinkButton>];
+    if (product.status === 'active' || product.status === 'hidden') {
+      const action = getVisibilityAction(product);
+      const blocked = action.nextStatus === 'active' && !canShowProducts;
+      actions.push(
+        <Button
+          key="visibility"
+          type="text"
+          disabled={blocked}
+          title={blocked ? 'Tài khoản đang bị hạn chế quyền bán' : ''}
+          onClick={() => openVisibilityModal(product, action.nextStatus)}
+        >
+          {action.label}
+        </Button>
+      );
+    }
+    actions.push(<Button key="delete" type="text" danger onClick={() => openDeleteModal(product)}>Xóa</Button>);
+    return actions;
+  };
+
+  return (
+    <div className="my-products-container container">
+      <Flex justify="space-between" align="center" wrap gap={16} className="my-products-header">
+        <div>
+          <Typography.Title level={1}>Quản lý tin đăng</Typography.Title>
+          <Typography.Text type="secondary">Theo dõi trạng thái và chỉnh sửa tin đăng của bạn tại một nơi.</Typography.Text>
         </div>
+        <LinkButton type="primary" to="/product/create" icon={<Plus />}>Tạo tin mới</LinkButton>
+      </Flex>
+
+      {!canShowProducts && (
+        <Alert className="my-products-feedback" type="warning" showIcon title={buildRestrictionMessage(user)} />
       )}
 
-      {/* Filter */}
-      <div className="filter-bar">
-        <button
-          className={`filter-btn ${statusFilter === '' ? 'active' : ''}`}
-          onClick={() => applyFilter('')}
-        >
-          Tất cả ({pagination.total})
-        </button>
-        <button
-          className={`filter-btn ${statusFilter === 'active' ? 'active' : ''}`}
-          onClick={() => applyFilter('active')}
-        >
-          Đang bán
-        </button>
-        <button
-          className={`filter-btn ${statusFilter === 'sold' ? 'active' : ''}`}
-          onClick={() => applyFilter('sold')}
-        >
-          Đã bán
-        </button>
-        <button
-          className={`filter-btn ${statusFilter === 'hidden' ? 'active' : ''}`}
-          onClick={() => applyFilter('hidden')}
-        >
-          Đã ẩn
-        </button>
-        <button
-          className={`filter-btn ${statusFilter === 'deleted' ? 'active' : ''}`}
-          onClick={() => applyFilter('deleted')}
-        >
-          Đã xóa
-        </button>
+      {feedback.message && (
+        <Alert
+          className="my-products-feedback"
+          type={feedback.type === 'error' ? 'error' : 'success'}
+          showIcon
+          closable
+          role={feedback.type === 'error' ? 'alert' : 'status'}
+          title={feedback.message}
+          onClose={() => setFeedback({ type: '', message: '' })}
+        />
+      )}
+
+      <div className="my-products-filter">
+        <Segmented
+          aria-label="Lọc theo trạng thái"
+          value={statusFilter || 'all'}
+          onChange={(value) => applyFilter(value === 'all' ? '' : value)}
+          options={[
+            { value: 'all', label: `Tất cả (${pagination.total})` },
+            { value: 'active', label: 'Đang bán' },
+            { value: 'sold', label: 'Đã bán' },
+            { value: 'hidden', label: 'Đã ẩn' },
+            { value: 'deleted', label: 'Đã xóa' }
+          ]}
+        />
       </div>
 
-      {/* Products Grid */}
       {products.length === 0 ? (
-        <div className="empty-state">
-          <h3>Chưa có tin đăng nào</h3>
-          <p>Đăng tin đầu tiên để bắt đầu tiếp cận người mua.</p>
-          <Link to="/product/create" className="btn btn-primary">
-            Đăng tin ngay
-          </Link>
-        </div>
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description={(
+            <Flex vertical gap={4}>
+              <Typography.Title level={2}>Chưa có tin đăng nào</Typography.Title>
+              <Typography.Text type="secondary">Đăng tin đầu tiên để bắt đầu tiếp cận người mua.</Typography.Text>
+            </Flex>
+          )}
+        >
+          <LinkButton type="primary" to="/product/create">Đăng tin ngay</LinkButton>
+        </Empty>
       ) : (
         <>
-          <div className="products-grid">
-            {products.map(product => (
-              <div key={product._id} className="product-card">
-                <Link to={`/product/${product._id}`} className="product-image">
-                  <img 
-                    src={getProductImageUrl(product)}
-                    alt={product.title}
-                    loading="lazy"
-                    onError={(event) => handleImageError(event, 'product')}
-                  />
-                  {getProductStatusBadge(product)}
-                </Link>
-                
-                <div className="product-info">
-                  <div className="product-detail-block">
-                    <span className="product-label">Tiêu đề</span>
-                    <Link to={`/product/${product._id}`} className="product-title">
-                      {product.title}
-                    </Link>
-                  </div>
+          <Row gutter={[{ xs: 10, md: 20 }, { xs: 10, md: 20 }]} className="my-products-grid">
+            {products.map(product => {
+              const status = STATUS_TAGS[product.status] || { text: product.status, color: 'default' };
+              return (
+                <Col key={product._id} xs={24} sm={12} lg={8}>
+                  <Card
+                    className="my-product-card"
+                    cover={(
+                      <Link to={`/product/${product._id}`} className="my-product-card__image">
+                        <img
+                          src={getProductImageUrl(product)}
+                          alt={product.title}
+                          loading="lazy"
+                          onError={(event) => handleImageError(event, 'product')}
+                        />
+                        <Tag className="my-product-card__status" color={status.color} variant="solid">{status.text}</Tag>
+                      </Link>
+                    )}
+                    actions={renderActions(product)}
+                  >
+                    <Flex vertical gap={8}>
+                      <div>
+                        <Typography.Text type="secondary" className="my-product-card__label">Tiêu đề</Typography.Text>
+                        <Link to={`/product/${product._id}`} className="my-product-card__title">{product.title}</Link>
+                      </div>
+                      <Flex justify="space-between" gap={12} wrap>
+                        <div>
+                          <Typography.Text type="secondary" className="my-product-card__label">Giá bán</Typography.Text>
+                          <Typography.Text strong className="my-product-card__price">{formatPrice(product.price)}</Typography.Text>
+                        </div>
+                        <div>
+                          <Typography.Text type="secondary" className="my-product-card__label">Danh mục</Typography.Text>
+                          <Tag>{formatCategoryText(product)}</Tag>
+                        </div>
+                      </Flex>
+                      <div>
+                        <Typography.Text type="secondary" className="my-product-card__label">Địa chỉ</Typography.Text>
+                        <Flex align="center" gap={6}>
+                          <MapPin />
+                          <span>{product.location?.city || 'Chưa cập nhật vị trí'}</span>
+                        </Flex>
+                      </div>
+                    </Flex>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
 
-                  <div className="product-detail-grid">
-                    <div className="product-detail-block product-detail-block--price">
-                      <span className="product-label">Giá bán</span>
-                      <div className="product-price">{formatPrice(product.price)}</div>
-                    </div>
-
-                    <div className="product-detail-block">
-                      <span className="product-label">Danh mục</span>
-                      <span className="product-category-chip">
-                        {/* Hien thi day du danh muc da gan (bao gom category + categories + otherCategory). */}
-                        {formatCategoryText(product)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="product-detail-block product-location-block">
-                    <span className="product-label">Địa chỉ</span>
-                    <div className="product-meta product-location-row">
-                      <span className="product-meta-icon"><MapPin /></span>
-                      <span>{product.location?.city || 'Chưa cập nhật vị trí'}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="product-actions">
-                  {product.status !== 'deleted' ? (
-                    (() => {
-                      const isLockedAction = product.status === 'sold' || product.status === 'pending' || Boolean(product.isInActiveOrder);
-
-                      if (isLockedAction) {
-                        return (
-                          <>
-                            <Link to={`/product/${product._id}`} className="action-btn view-btn">
-                              Xem
-                            </Link>
-                            <span className="action-chip action-chip--sold">
-                              {product.status === 'sold'
-                                ? 'Đã bán - chỉ xem'
-                                : product.status === 'pending'
-                                  ? 'Đang giao dịch - chỉ xem'
-                                  : 'Đang trong đơn hàng - chỉ xem'}
-                            </span>
-                          </>
-                        );
-                      }
-
-                      return (
-                        <>
-                          <Link to={`/product/${product._id}`} className="action-btn view-btn">
-                            Xem
-                          </Link>
-
-                          <Link
-                            to={`/product/${product._id}/edit`}
-                            className="action-btn edit-btn"
-                          >
-                            Sửa
-                          </Link>
-
-                          {(product.status === 'active' || product.status === 'hidden') && (
-                            <button
-                              onClick={() => {
-                                const action = getVisibilityAction(product);
-                                if (action.nextStatus === 'active' && !canShowProducts) {
-                                  const restrictionMessage = buildRestrictionMessage(user);
-                                  setFeedback({ type: 'error', message: restrictionMessage });
-                                  window.alert(restrictionMessage);
-                                  return;
-                                }
-                                openVisibilityModal(product, action.nextStatus);
-                              }}
-                              className={`action-btn ${getVisibilityAction(product).className}`}
-                              disabled={getVisibilityAction(product).nextStatus === 'active' && !canShowProducts}
-                              title={getVisibilityAction(product).nextStatus === 'active' && !canShowProducts ? 'Tài khoản đang bị hạn chế quyền bán' : ''}
-                            >
-                              {getVisibilityAction(product).label}
-                            </button>
-                          )}
-
-                          <button
-                            onClick={() => openDeleteModal(product)}
-                            className="action-btn delete-btn"
-                          >
-                            Xóa
-                          </button>
-                        </>
-                      );
-                    })()
-                  ) : (
-                    <div className="deleted-note">Tin đã xóa, không thể chỉnh sửa.</div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {pagination.totalPages > 1 && (
-            <div className="pagination">
-              <button
-                onClick={() => handlePageChange(pagination.page - 1)}
-                disabled={pagination.page === 1}
-                className="pagination-btn"
-              >
-                <CaretLeft /> Trước
-              </button>
-              
-              <span className="pagination-info">
-                Trang {pagination.page} / {pagination.totalPages}
-              </span>
-              
-              <button
-                onClick={() => handlePageChange(pagination.page + 1)}
-                disabled={pagination.page === pagination.totalPages}
-                className="pagination-btn"
-              >
-                Sau <CaretRight />
-              </button>
-            </div>
-          )}
+          <Pagination
+            className="my-products-pagination"
+            align="center"
+            hideOnSinglePage
+            showSizeChanger={false}
+            current={pagination.page}
+            pageSize={pagination.limit}
+            total={pagination.total}
+            onChange={handlePageChange}
+          />
         </>
       )}
 
-      {/* Delete Confirmation Modal */}
-      {deleteModal.show && (
-        <div className="modal-overlay" onClick={closeDeleteModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Xác nhận xóa</h3>
-            <p>Bạn có chắc chắn muốn xóa sản phẩm "{deleteModal.productTitle}"?</p>
-            <div className="modal-actions">
-              <button onClick={closeDeleteModal} className="btn btn-secondary">
-                Hủy
-              </button>
-              <button onClick={handleDelete} className="btn btn-danger" disabled={processingAction}>
-                Xóa
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={deleteModal.show}
+        title="Xác nhận xóa"
+        okText="Xóa"
+        cancelText="Hủy"
+        okButtonProps={{ danger: true }}
+        confirmLoading={processingAction}
+        onOk={handleDelete}
+        onCancel={closeDeleteModal}
+      >
+        <p>Bạn có chắc chắn muốn xóa sản phẩm "{deleteModal.productTitle}"?</p>
+      </Modal>
 
-      {visibilityModal.show && (
-        <div className="modal-overlay" onClick={closeVisibilityModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>{visibilityModal.nextStatus === 'hidden' ? 'Ẩn tin đăng' : 'Hiện lại tin đăng'}</h3>
-            <p>
-              {visibilityModal.nextStatus === 'hidden'
-                ? `Bạn có chắc muốn ẩn sản phẩm "${visibilityModal.productTitle}"?`
-                : `Bạn có chắc muốn hiển thị lại sản phẩm "${visibilityModal.productTitle}"?`}
-            </p>
-            <div className="modal-actions">
-              <button onClick={closeVisibilityModal} className="btn btn-secondary">
-                Hủy
-              </button>
-              <button onClick={handleVisibilityChange} className="btn btn-primary" disabled={processingAction}>
-                Xác nhận
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={visibilityModal.show}
+        title={visibilityModal.nextStatus === 'hidden' ? 'Ẩn tin đăng' : 'Hiện lại tin đăng'}
+        okText="Xác nhận"
+        cancelText="Hủy"
+        confirmLoading={processingAction}
+        onOk={handleVisibilityChange}
+        onCancel={closeVisibilityModal}
+      >
+        <p>
+          {visibilityModal.nextStatus === 'hidden'
+            ? `Bạn có chắc muốn ẩn sản phẩm "${visibilityModal.productTitle}"?`
+            : `Bạn có chắc muốn hiển thị lại sản phẩm "${visibilityModal.productTitle}"?`}
+        </p>
+      </Modal>
     </div>
   );
 };

@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-086",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The my-listings page is rebuilt from Ant Design components; the new tests and the existing suites pass and the page was observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`my-products-capture.js`). For light and dark at 1280 and 390 px the script signs in and opens the page with six listings (active, active, hidden, sold, pending, deleted), counts the cards, opens the delete confirmation and cancels it, opens the hide confirmation and cancels it, then picks the \"Đã bán\" filter and checks that the next request asks for `status=sold`, recording horizontal overflow and page errors.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-list.png`, `dark-w1280-list.png` | The page with its header, filter and listing cards at 1280 px in both themes |\n| `dark-w1280-delete.png` | The delete confirmation dialog in the dark theme |\n| `light-w390-list.png` | The full page at 390 px in the light theme |\n| `dark-w390-delete.png` | The delete confirmation dialog at 390 px in the dark theme |\n\nResults: in all four combinations six cards were shown, the delete and hide confirmations opened, the filter sent `status=sold`, no page overflowed horizontally and none raised an error. Status tags are solid so they stay readable over any photo, the card links use the brand text colour, and the page aligns with the shell container.\n\nNot observed: a real delete or visibility change against the backend, a restricted seller account, a list with several pages, long titles beyond the sample, a real phone, Firefox or WebKit.",
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the my-listings page with Ant Design components; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "No real delete, visibility change or restricted account was exercised",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-25-6": {
+      "observed": "pass",
+      "note": "The new MyProducts tests (listing, filter, locked and deleted listings, delete and hide confirmations, failures, restriction, paging) and the existing suites pass; the build passes; the page shows the filter, cards, confirmations and states with no overflow or error in light and dark at 390 and 1280 px; real changes against the backend were not exercised",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}
