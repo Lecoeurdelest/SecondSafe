@@ -178,6 +178,34 @@ test('staff sessions always use the light theme and get no theme switch', async 
   expect(await screen.findByRole('heading', { name: 'Bảng điều phối' })).toBeInTheDocument();
 });
 
+test('the help center opens a dialog with the three support options and closes again', async () => {
+  window.history.replaceState({}, '', '/');
+  render(<App />);
+
+  fireEvent.click(screen.getByRole('button', { name: 'Trung tâm hỗ trợ' }));
+  const dialog = await screen.findByRole('dialog', { name: 'Liên hệ SecondSafe' });
+  expect(within(dialog).getByRole('link', { name: /Hỏi trợ lý AI/ })).toHaveAttribute('href', '/assistant');
+  expect(within(dialog).getByRole('link', { name: /Trò chuyện với nhân viên/ })).toHaveAttribute('href', '/support');
+  expect(within(dialog).getByRole('link', { name: /Trung tâm trợ giúp/ })).toHaveAttribute('href', '/support');
+
+  fireEvent.click(within(dialog).getByRole('link', { name: /Hỏi trợ lý AI/ }));
+  await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Liên hệ SecondSafe' })).not.toBeInTheDocument());
+  expect(window.location.pathname).toBe('/assistant');
+});
+
+test('header buttons that look like buttons are real links and keep modified clicks for the browser', () => {
+  window.history.replaceState({}, '', '/');
+  render(<App />);
+
+  const login = screen.getByRole('link', { name: 'Đăng nhập' });
+  expect(login).toHaveAttribute('href', '/login');
+  const modified = fireEvent.click(login, { ctrlKey: true });
+  expect(modified).toBe(true);
+  expect(window.location.pathname).toBe('/');
+  fireEvent.click(login);
+  expect(window.location.pathname).toBe('/login');
+});
+
 test('authenticated users can open the seller listing form from Đăng tin', async () => {
   window.localStorage.setItem('token', 'seller-token');
   authService.getProfile.mockResolvedValue({ _id: '507f1f77bcf86cd799439012', role: 'user', fullName: 'Người bán' });

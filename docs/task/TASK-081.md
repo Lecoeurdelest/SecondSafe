@@ -1,7 +1,7 @@
 ---
 id: TASK-081
 title: Ant Design storefront shell
-execution_status: in_progress
+execution_status: verifying
 relevance: current
 depends_on: []
 supersedes: []
@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `in_progress` — Rebuild the storefront shell on Ant Design and verify it
+**Current state:** `verifying` — The storefront shell is rebuilt on Ant Design with one theme that follows the light or dark choice and the language; App tests pass and the shell was observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 
