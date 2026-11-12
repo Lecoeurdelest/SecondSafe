@@ -412,7 +412,7 @@ const ModReviewList = () => {
             <Button
               type="primary"
               icon={<CheckCircleOutlined />}
-              style={{ background: "#16a34a", borderColor: "#16a34a" }}
+              style={{ background: "#15803d", borderColor: "#15803d" }}
               disabled={selectedReview?.moderatorAssessment?.isReviewed || selectedReview?.moderatorAssessment?.isBad}
               loading={approvingReviewId === selectedReview?._id}
               onClick={() => submitMarkGood(selectedReview)}

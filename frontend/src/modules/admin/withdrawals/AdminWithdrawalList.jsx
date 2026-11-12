@@ -110,7 +110,7 @@ const AdminWithdrawalList = () => {
       render: (_, record) => (
         record.status === "pending" && (
           <Space>
-            <Button type="primary" style={{ background: "#16a34a" }} icon={<CheckOutlined />} onClick={() => handleApprove(record._id)}>Duyệt</Button>
+            <Button type="primary" style={{ background: "#15803d" }} icon={<CheckOutlined />} onClick={() => handleApprove(record._id)}>Duyệt</Button>
             <Button danger icon={<CloseOutlined />} onClick={() => setRejectTarget(record._id)}>Từ chối</Button>
           </Space>
         )

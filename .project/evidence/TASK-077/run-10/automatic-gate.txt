@@ -1,0 +1,15 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py gate project.yaml .project/evidence/TASK-077/run-10/report.json --task TASK-077 --source-hash d06f944f731a6ce91ad399c31dadcb30d9670b25ad9547bba2642d97403a1412
+{
+  "status": "inconclusive",
+  "task_id": "TASK-077",
+  "failures": [],
+  "blockers": [
+    "Applicable validated calibration is unavailable.",
+    "AC-NFR-USA-02-1: criterion did not pass.",
+    "AC-NFR-USA-02-1: finite measured confidence is unavailable."
+  ],
+  "minimum_criterion_confidence": null,
+  "scope": "Supplied metadata only; independently verify artifacts, calibration, and dependency state."
+}
+
+exit_code=2
