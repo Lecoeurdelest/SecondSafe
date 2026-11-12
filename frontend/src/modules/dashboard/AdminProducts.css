@@ -67,7 +67,7 @@
 }
 
 .admin-products__table th {
-  color: #8490a2;
+  color: #5b6472;
   font-size: 10px;
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -101,7 +101,7 @@
 }
 
 .admin-products__item small {
-  color: #8a96a9;
+  color: #5b6472;
 }
 
 .admin-products__action {

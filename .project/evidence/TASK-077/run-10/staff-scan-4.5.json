@@ -1,0 +1,15 @@
+[
+ {
+  "sel": "span",
+  "text": "Mở khóa",
+  "ratio": 1.82,
+  "fg": "rgba(0, 0, 0, 0.25)",
+  "bg": "rgb(245,245,245)",
+  "pages": [
+   "admin-users",
+   "admin-users",
+   "admin-users",
+   "mod-order-detail"
+  ]
+ }
+]

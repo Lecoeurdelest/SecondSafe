@@ -1,0 +1,15 @@
+/* Ant Design preset tag colours at the -8 shade (gold at -9) so text on the tinted background stays above 4.5:1 */
+.ant-tag.ant-tag-success, .ant-tag.ant-tag-green { color: #237804 !important; }
+.ant-tag.ant-tag-warning, .ant-tag.ant-tag-gold { color: #874d00 !important; }
+.ant-tag.ant-tag-orange { color: #ad4e00 !important; }
+.ant-tag.ant-tag-volcano { color: #ad2102 !important; }
+.ant-tag.ant-tag-error, .ant-tag.ant-tag-red { color: #a8071a !important; }
+.ant-tag.ant-tag-magenta { color: #9e1068 !important; }
+.ant-tag.ant-tag-purple { color: #531dab !important; }
+.ant-tag.ant-tag-blue, .ant-tag.ant-tag-processing { color: #0050b3 !important; }
+.ant-tag.ant-tag-geekblue { color: #10239e !important; }
+.ant-tag.ant-tag-cyan { color: #006d75 !important; }
+.ant-tag.ant-tag-lime { color: #3f6600 !important; }
+
+/* Chart legend text inherits the series colour; keep it readable */
+.recharts-legend-item-text { color: #374151 !important; }

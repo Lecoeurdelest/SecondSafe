@@ -95,7 +95,7 @@
   display: none;
   background: none;
   border: none;
-  color: #6b7280;
+  color: #5b6472;
   font-size: 1.2rem;
   cursor: pointer;
   padding: 5px;
@@ -229,7 +229,7 @@
 .admin-sidebar__link-desc {
   font-size: 0.75rem;
   opacity: 1;
-  color: #9ca3af;
+  color: #5b6472;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

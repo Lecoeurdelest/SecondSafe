@@ -26,18 +26,20 @@ A follow-up after the merge of PR 148 fixes what a second review found: the staf
 
 A second follow-up (`run-09`) makes the seller order list open on its first tab, "Chờ giao" (`SellerOrders.jsx` started on a filter named `pending` that matched no tab, so every order was listed and no tab was marked), and records the first observation of the notification panel for a staff account.
 
+A third follow-up (`run-10`) raises the contrast of the admin and moderator pages. A scan of 20 staff pages against a real backend with seeded data found 33 distinct text and background pairs below 4.5:1; after the change only a disabled button (exempt) remains. Muted greys in the staff stylesheets became `#5b6472`, the Ant Design tokens for placeholder, description, error and success colours were darkened, preset tag text uses the -8 shade (gold the -9) through `staffContrast.css`, chart legend text no longer takes the series colour, and the filled success buttons use `#15803d`.
+
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-08/manual-review.md` and, for the seller order tabs and the staff notification panel, `.project/evidence/TASK-077/run-09/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-08/manual-review.md` and, for the seller order tabs and the staff notification panel, `.project/evidence/TASK-077/run-09/manual-review.md`; for the staff contrast scan, `.project/evidence/TASK-077/run-10/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-09/frontend-test.txt` — 10 suites, 60 tests pass (2 new for the seller order tabs) |
+| Tests | `.project/evidence/TASK-077/run-10/frontend-test.txt` — 11 suites, 76 tests pass |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-09/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-08/manual-review.md` and `screenshots/` (`run-01` to `run-07` are the earlier passes; `run-08` closes four small items; `run-09` covers the seller order tabs and the staff notification panel) |
+| Build/typecheck | `.project/evidence/TASK-077/run-10/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-08/manual-review.md` and `screenshots/` (`run-01` to `run-07` are the earlier passes; `run-08` closes four small items; `run-09` covers the seller order tabs and the staff notification panel; `run-10` covers the staff contrast scan) |
 
 ## Deviations
 
@@ -46,6 +48,9 @@ The task spec first excluded new dependencies and was amended to allow the Font 
 The task has no dependencies on other tasks because it changes presentation only. The `TASK-057` home page and the other web tasks remain the owners of behaviour on those pages.
 
 ## Known gaps
+
+- Staff contrast (`run-10`): the scan covers the staff pages as rendered with seeded data; states that were not rendered (open modals, form errors, dispute detail with evidence, hover and focus) were not scanned, and text over gradients or images is skipped by the scan. Ant Design components that were not on the scanned pages may still use their default light greys.
+- The admin and moderator pages still have no dark theme, by design (TASK-079).
 
 - Observed only in Chromium against canned API responses; no real phone, no other browser (`NFR-COMP-01` is not evaluated here).
 - Every page was checked only with realistic canned data, never against a real backend. Staff detail pages, the moderator profile and some order tabs were not observed.

@@ -568,7 +568,7 @@
 
 .no-data {
   text-align: center;
-  color: #999;
+  color: #666666;
   font-style: italic;
   padding: 40px;
 }
@@ -606,7 +606,7 @@
 .status-shipped,
 .status-processing {
   background: #f6ffed;
-  color: #52c41a;
+  color: #237804;
 }
 
 .status-completed,
@@ -775,7 +775,7 @@
 .admin-table .currency {
   text-align: right;
   font-weight: 600;
-  color: #52c41a;
+  color: #237804;
   font-family: 'Arial', sans-serif;
   white-space: nowrap;
 }
@@ -796,7 +796,7 @@
 
 .user-info .text-muted {
   font-size: 11px;
-  color: #999;
+  color: #666666;
   font-weight: normal;
   line-height: 1.2;
 }
@@ -812,7 +812,7 @@
 }
 
 .no-tracking {
-  color: #999;
+  color: #666666;
   font-style: italic;
   font-size: 12px;
 }
@@ -897,7 +897,7 @@
   border: none;
   font-size: 18px;
   cursor: pointer;
-  color: #999;
+  color: #666666;
   padding: 4px;
 }
 
@@ -973,7 +973,7 @@
 
 .detail-item label {
   font-size: 12px;
-  color: #999;
+  color: #666666;
   text-transform: uppercase;
   font-weight: 500;
 }
@@ -1041,7 +1041,7 @@
 .char-count {
   text-align: right;
   font-size: 12px;
-  color: #999;
+  color: #666666;
   margin-top: 4px;
 }
 
@@ -1150,7 +1150,7 @@
 
 .user-detail-header p {
   margin: 0;
-  color: #6b7280;
+  color: #5b6472;
 }
 
 .admin-report-detail {
@@ -1220,7 +1220,7 @@
 
 .admin-report-detail .violation-default {
   background: #f3f4f6;
-  color: #6b7280;
+  color: #5b6472;
 }
 
 .admin-report-detail .violation-green {
@@ -1475,7 +1475,7 @@
 
 .admin-order-detail .receipt-row label {
   font-size: 11px;
-  color: #6b7280;
+  color: #5b6472;
   letter-spacing: 0.4px;
 }
 
@@ -1804,7 +1804,7 @@
 
 .revenue-overview-card .label {
   font-size: 12px;
-  color: #6b7280;
+  color: #5b6472;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }

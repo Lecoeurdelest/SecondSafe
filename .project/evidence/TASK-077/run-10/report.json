@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "8822cfb3c6850f2ff1299481368973fba4aa0c0d5325a5f97d61176e9ba0de41",
+  "source_hash": "d06f944f731a6ce91ad399c31dadcb30d9670b25ad9547bba2642d97403a1412",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against the real backend with seeded data, at 1280 px",
+    "The contrast scan skips text over gradients and images and covers only the states that were rendered",
+    "Admin, moderator and dashboard pages have no dark theme by design",
+    "No real phone, no other browser, no real payment provider",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "A scan of 20 admin and moderator pages against the real backend found 33 distinct text pairs below 4.5:1 before and one after (a disabled button, exempt); the pages render without API errors; every page, every state and other browsers were not observed",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-10/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

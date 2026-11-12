@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `verifying` — Restyle merged to main in PR 148 and PR 149; a second follow-up makes the seller order list open on its first tab and observes the staff notification panel; build and 60 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend
+**Current state:** `verifying` — Restyle merged to main in PR 148 and PR 149; follow-ups cover the seller order tabs, the staff notification panel and the contrast of the admin and moderator pages; build and frontend tests pass; the staff pages were scanned against a real backend with a disposable MongoDB; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 
