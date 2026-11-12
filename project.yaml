@@ -3122,6 +3122,12 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-9
+      statement: The account profile, profile editing and public seller profile pages are built from Ant Design components, with the
+        same details, validation, avatar upload, report flow and states, and work from 360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7387,6 +7393,39 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: Each page keeps its state, effects, socket handlers and request code and renders through Card, Flex, Form, Input, Button, Alert, Tag, Badge, Avatar and Empty. The support request form uses Form rules and an AutoComplete for the subject suggestions; message sending goes through the form's onFinish. The offer card is a Card with a status Tag. Information alerts use a neutral blue instead of the brand red so they no longer look like errors.
+  - id: TASK-089
+    title: Ant Design profile pages
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-9
+    objective: Rebuild the account profile, profile editing, seller profile and seller reviews pages from Ant Design components and remove the unused profile password page.
+    in_scope:
+    - frontend/src/modules/profile
+    - frontend/src/index.css
+    - frontend/src/ui/shell.css
+    out_of_scope:
+    - Services, routes and the report dialog opened from the seller profile (report area)
+    - The review list shown on the seller reviews page (review area)
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/profile/Profile.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: Each page keeps its state and requests and renders through Card, Avatar, Descriptions, Tag, Form items, Input, Button, Alert and a Row and Col grid. The edit form keeps its own validation messages and the avatar upload; the avatar button opens a hidden file input. Browser alerts become toasts. A signed-out visitor no longer sees a spinner forever on the account page. The legacy global profile rules in index.css, which centred card headings and styled the old markup, are removed, and a global rule makes the hidden attribute win on file inputs. The profile password page that no route used is deleted.
 verification:
   thresholds:
     standard: 0.95
