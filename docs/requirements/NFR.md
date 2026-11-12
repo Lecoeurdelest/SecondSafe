@@ -315,7 +315,7 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 12. Migration a
 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
-| `AC-NFR-USA-02-1` | The user interface works from 360 px to 1920 px wide. | manual review | [TASK-073](../task/TASK-073.md) `[]` |
+| `AC-NFR-USA-02-1` | The user interface works from 360 px to 1920 px wide. | manual review | [TASK-077](../task/TASK-077.md) `[!]` |
 
 ### NFR-COMP-01 — Browser support
 

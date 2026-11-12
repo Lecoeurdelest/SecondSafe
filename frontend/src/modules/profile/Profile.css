@@ -5,12 +5,12 @@
 }
 
 .profile-container ::selection {
-  background: #dbeafe;
+  background: #fedddb;
   color: #0f172a;
 }
 
 .profile-container ::-moz-selection {
-  background: #dbeafe;
+  background: #fedddb;
   color: #0f172a;
 }
 
@@ -47,13 +47,13 @@
 }
 
 .btn-uniqlo-primary {
-  background-color: #1e6bdd;
+  background-color: #dd2b1e;
   color: #ffffff;
-  border: 1px solid #10108e;
+  border: 1px solid #8e1810;
 }
 
 .btn-uniqlo-primary:hover {
-  background-color: #1a49d7;
+  background-color: #d7271a;
   color: #ffffff;
 }
 
@@ -173,16 +173,16 @@
 }
 
 .profile-review-link.btn.btn-outline.btn-sm {
-  color: #0b57d0;
-  border: 1px solid #0b57d0;
+  color: #d0180b;
+  border: 1px solid #d0180b;
   background: #ffffff;
   font-weight: 600;
 }
 
 .profile-review-link.btn.btn-outline.btn-sm:hover {
   color: #ffffff;
-  background: #0b57d0;
-  border-color: #0b57d0;
+  background: #d0180b;
+  border-color: #d0180b;
 }
 
 /* Profile Info */
@@ -216,8 +216,8 @@
 }
 
 .role-badge {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #fde5e3;
+  color: #d22519;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -255,7 +255,7 @@
 
 .action-item i {
   font-size: 1.2rem;
-  color: #007bff;
+  color: var(--brand);
   width: 20px;
   text-align: center;
 }
@@ -280,12 +280,12 @@
 }
 
 .btn-primary {
-  background: #007bff;
+  background: var(--brand);
   color: white;
 }
 
 .btn-primary:hover {
-  background: #0056b3;
+  background: var(--brand-hover);
   color: white;
   text-decoration: none;
 }

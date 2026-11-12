@@ -6752,6 +6752,57 @@ tasks:
     - Verification cannot run or produces no original output
     technical_approach: Load the checkout list and the summary on their own so a failure never blocks the order list,
       the cart or the dashboard. Backend integration evidence is required before marking the task done.
+  - id: TASK-077
+    title: Web marketplace visual restyle
+    requirement_ids:
+    - NFR-USA-02
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-NFR-USA-02-1
+    objective: The web client shares one visual language across the buyer marketplace and the staff consoles, with the
+      same behaviour, routes and API calls as before; it renders from 360 px to 1920 px wide.
+    in_scope:
+    - frontend/src/assets/styles/global.css
+    - frontend/src/index.css
+    - frontend/src/modules/home/Home.css
+    - frontend/src/components/ProductComponents.css
+    - frontend/src/modules/auth/Auth.css
+    - frontend/src/modules/staffTheme.js
+    - frontend/src/modules/admin/layout/AdminLayout.jsx
+    - frontend/src/modules/moderator/layout/ModeratorLayout.jsx
+    - Colour, radius, shadow and typography values in the other module stylesheets
+    out_of_scope:
+    - Routes, services, API contracts and business rules
+    - New runtime dependencies
+    - Unrelated modules
+    - Production deployment
+    inputs:
+    - plan.md#12. Migration amendment (2026-10-09)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/assets/styles/global.css
+    - frontend/src/index.css
+    - frontend/src/modules/home/Home.css
+    - frontend/src/components/ProductComponents.css
+    - frontend/src/modules/auth/Auth.css
+    - frontend/src/modules/staffTheme.js
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A change needs a route, service or API contract change
+    - A needed dependency is not approved
+    - Verification cannot run or produces no original output
+    technical_approach: Design tokens in global.css (brand gradient, surfaces, radius, shadows, DM Sans) drive the buyer
+      pages, and the saturated blues of the old theme are recoloured to the brand hue across the module stylesheets. Staff
+      consoles use a neutral palette and one shared Ant Design theme, and hide the storefront header while mounted. The
+      two reference projects are visual references only; no code was copied from them.
 verification:
   thresholds:
     standard: 0.95

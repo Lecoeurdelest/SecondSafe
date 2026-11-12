@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
 import { useAuth } from '../../../hooks/useAuth';
+import staffTheme from '../../staffTheme';
 import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
 import './AdminLayout.css';
@@ -23,24 +25,26 @@ const AdminLayout = () => {
   }
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <div className="admin-main">
-        <AdminHeader onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        
-        <main className="admin-content">
-          <Outlet />
-        </main>
+    <ConfigProvider theme={staffTheme}>
+      <div className="admin-layout">
+        <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+        <div className="admin-main">
+          <AdminHeader onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+
+          <main className="admin-content">
+            <Outlet />
+          </main>
+        </div>
+
+        {sidebarOpen && (
+          <div
+            className="admin-overlay"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
       </div>
-      
-      {sidebarOpen && (
-        <div 
-          className="admin-overlay" 
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-    </div>
+    </ConfigProvider>
   );
 };
 

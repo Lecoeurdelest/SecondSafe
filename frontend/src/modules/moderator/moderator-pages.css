@@ -55,7 +55,7 @@
 
 .mod-filter-row .ant-select-focused .ant-select-selector,
 .mod-filter-row .ant-select:hover .ant-select-selector {
-  border-color: #8fb0e6;
+  border-color: #9ca3af;
 }
 
 .mod-filter-select-dropdown.ant-select-dropdown {
@@ -75,7 +75,7 @@
 }
 
 .mod-filter-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background: #eaf2ff;
+  background: #f3f4f6;
 }
 
 .mod-filter-actions {
@@ -95,7 +95,7 @@
 }
 
 .mod-table :where(.ant-table-thead > tr > th) {
-  background: #f7f9ff;
+  background: #f3f4f6;
   font-weight: 700;
   color: #22324f;
 }
@@ -374,7 +374,7 @@
 }
 
 .mod-review-table :where(.ant-table-thead > tr > th) {
-  background: #f4f7ff;
+  background: #f3f4f6;
   color: #1f2e4d;
   font-weight: 700;
 }
@@ -392,7 +392,7 @@
 }
 
 .mod-review-table :where(.ant-table-tbody > tr:hover > td) {
-  background: #f2f7ff !important;
+  background: #f3f4f6 !important;
 }
 
 .mod-review-evidence-grid {

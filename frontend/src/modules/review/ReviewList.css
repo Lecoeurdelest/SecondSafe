@@ -216,7 +216,7 @@
 
 .page-btn:hover:not(:disabled) {
   background: #f8f9fa;
-  border-color: #007bff;
+  border-color: var(--brand);
 }
 
 .page-btn:disabled {

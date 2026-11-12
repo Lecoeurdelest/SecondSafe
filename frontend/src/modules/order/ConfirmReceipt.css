@@ -574,7 +574,7 @@
 .btn-primary {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: white;
-  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22);
+  box-shadow: 0 14px 30px rgba(235, 50, 37, 0.22);
 }
 
 .btn-primary:hover:not(:disabled) {

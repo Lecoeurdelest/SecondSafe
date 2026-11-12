@@ -185,7 +185,7 @@
 
 .comment-section textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--brand);
 }
 
 .review-evidence-input {
@@ -278,12 +278,12 @@
 }
 
 .submit-btn {
-  background: #007bff;
+  background: var(--brand);
   color: white;
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #0056b3;
+  background: var(--brand-hover);
 }
 
 .submit-btn:disabled {

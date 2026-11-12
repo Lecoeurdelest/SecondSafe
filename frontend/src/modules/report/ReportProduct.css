@@ -124,7 +124,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--brand);
 }
 
 .form-group textarea {
@@ -150,8 +150,8 @@
 }
 
 .form-group input[type="file"]:hover {
-  border-color: #007bff;
-  background: #f0f8ff;
+  border-color: var(--brand);
+  background: #fff1f0;
 }
 
 .form-group input[type="file"]:disabled {

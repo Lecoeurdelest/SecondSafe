@@ -1,15 +1,11 @@
 .moderator-shell {
   min-height: 100vh;
-  /* Nền phân lớp để khu vực moderator tách biệt trực quan với khu vực người dùng. */
-  background:
-    radial-gradient(circle at top right, #fef1de 0%, rgba(254, 241, 222, 0) 30%),
-    radial-gradient(circle at bottom left, #e9f0ff 0%, rgba(233, 240, 255, 0) 34%),
-    #f4f6fb;
+  background: #f9fafb;
 }
 
 .moderator-sider {
   border-right: 1px solid #e7e7e7;
-  background: linear-gradient(180deg, #ffffff 0%, #fff7eb 100%);
+  background: #ffffff;
 }
 
 .moderator-main {
@@ -37,7 +33,7 @@
   width: 130px;
   height: 64px;
   border-radius: 100px;
-  background: radial-gradient(circle, rgba(35, 131, 246, 0.17) 0%, rgba(35, 131, 246, 0) 72%);
+  background: radial-gradient(circle, rgba(156, 163, 175, 0.17) 0%, rgba(156, 163, 175, 0) 72%);
   pointer-events: none;
 }
 
@@ -172,7 +168,7 @@
 }
 
 .moderator-footer-icon {
-  color: #1d6fd4;
+  color: #111827;
   font-size: 14px;
 }
 
@@ -229,8 +225,8 @@
 }
 
 .moderator-menu .ant-menu-item-selected {
-  background: #e8f1ff;
-  color: #1153b7;
+  background: #f3f4f6;
+  color: #111827;
 }
 
 @media (max-width: 991px) {

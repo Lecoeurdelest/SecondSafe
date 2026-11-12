@@ -1501,6 +1501,35 @@
       "criteria": {
         "AC-WEB-21-1": "inconclusive"
       }
+    },
+    "TASK-077": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "Restyle implemented with build, 58 passing frontend tests and screenshots at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and only some pages were observed",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Visual restyle requested for the whole web client"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Implement the shared design tokens, buyer chrome, home page and staff theme"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Build and tests pass; home, login, product detail and two staff pages observed in Chromium"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-077/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-077.md",
+      "criteria": {
+        "AC-NFR-USA-02-1": "inconclusive"
+      }
     }
   }
 }
