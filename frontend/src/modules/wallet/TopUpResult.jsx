@@ -1,10 +1,11 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle, XCircle } from '@phosphor-icons/react';
+import { useLocation } from 'react-router-dom';
+import { Result, Typography } from 'antd';
+import LinkButton from '../../ui/LinkButton';
+import './WalletResult.css';
 
 function TopUpResult() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
   const success = params.get('success') === 'true';
@@ -13,106 +14,21 @@ function TopUpResult() {
   const orderInfo = params.get('orderInfo');
 
   return (
-    <div
-      style={{
-        minHeight: '70vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: '#f5f7fb'
-      }}
-    >
-      <div
-        style={{
-          width: '100%',
-          maxWidth: 520,
-          background: '#fff',
-          borderRadius: 12,
-          padding: 32,
-          boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
-          textAlign: 'center'
-        }}
-      >
-        {/* Logo */}
-        
-
-        {/* Icon trạng thái */}
-        <div style={{ fontSize: 64, marginBottom: 16 }}>
-          {success ? (
-            <CheckCircle weight="fill" style={{ color: '#52c41a' }} />
-          ) : (
-            <XCircle weight="fill" style={{ color: '#ff4d4f' }} />
-          )}
-        </div>
-
-        {/* Tiêu đề */}
-        <h2
-          style={{
-            marginBottom: 10,
-            fontWeight: 600,
-            color: success ? '#389e0d' : '#cf1322'
-          }}
-        >
-          {success ? 'Thanh toán thành công' : 'Thanh toán chưa thành công'}
-        </h2>
-
-        {/* Nội dung */}
-        <p
-          style={{
-            color: '#666',
-            fontSize: 15,
-            marginBottom: 28
-          }}
-        >
-          {message}
-        </p>
-
-        {orderInfo && (
-          <p style={{ color: '#333', fontSize: 14, marginBottom: 18 }}>
-            <strong>Nội dung:</strong> {orderInfo}
-          </p>
+    <div className="wallet-result container">
+      <Result
+        status={success ? 'success' : 'error'}
+        title={<Typography.Title level={1}>{success ? 'Thanh toán thành công' : 'Thanh toán chưa thành công'}</Typography.Title>}
+        subTitle={(
+          <>
+            {message}
+            {orderInfo && <span className="wallet-result__info"><strong>Nội dung:</strong> {orderInfo}</span>}
+          </>
         )}
-        {/* Buttons */}
-        <div
-          style={{
-            display: 'flex',
-            gap: 12,
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}
-        >
-          <button
-            onClick={() => navigate('/wallet')}
-            style={{
-              padding: '10px 20px',
-              borderRadius: 8,
-              border: 'none',
-              background: '#ff2616',
-              color: '#fff',
-              fontWeight: 500,
-              cursor: 'pointer'
-            }}
-          >
-            Về ví của tôi
-          </button>
-
-          {!success && (
-            <button
-              onClick={() => navigate('/wallet/topup')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 8,
-                border: '1px solid #d9d9d9',
-                background: '#fff',
-                cursor: 'pointer',
-                fontWeight: 500
-              }}
-            >
-              Thử nạp lại
-            </button>
-          )}
-        </div>
-      </div>
+        extra={[
+          <LinkButton key="wallet" type="primary" to="/wallet">Về ví của tôi</LinkButton>,
+          !success && <LinkButton key="retry" to="/wallet/topup">Thử nạp lại</LinkButton>
+        ]}
+      />
     </div>
   );
 }

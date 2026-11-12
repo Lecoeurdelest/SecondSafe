@@ -1,6 +1,8 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle } from '@phosphor-icons/react';
+import { useLocation } from 'react-router-dom';
+import { Descriptions, Result, Typography } from 'antd';
+import LinkButton from '../../ui/LinkButton';
+import './WalletResult.css';
 
 const formatMoney = (value) => {
   const number = Number(value || 0);
@@ -10,7 +12,6 @@ const formatMoney = (value) => {
 
 function VNPaySuccess() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
   const message = params.get('message') || 'Nạp tiền thành công vào ví của bạn.';
@@ -18,140 +19,25 @@ function VNPaySuccess() {
   const transactionId = params.get('transactionId');
   const orderInfo = params.get('orderInfo');
 
+  const details = [
+    formatMoney(amount) && { key: 'amount', label: 'Số tiền nạp', children: <strong className="wallet-result__amount">{formatMoney(amount)}</strong> },
+    orderInfo && { key: 'info', label: 'Nội dung', children: orderInfo },
+    transactionId && { key: 'transaction', label: 'Mã giao dịch', children: <code>{transactionId}</code> }
+  ].filter(Boolean);
+
   return (
-    <div
-      style={{
-        minHeight: '70vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: '#f5f7fb'
-      }}
-    >
-      <div
-        style={{
-          width: '100%',
-          maxWidth: 560,
-          background: '#fff',
-          borderRadius: 14,
-          padding: 36,
-          boxShadow: '0 12px 35px rgba(0,0,0,0.08)',
-          textAlign: 'center'
-        }}
+    <div className="wallet-result container">
+      <Result
+        status="success"
+        title={<Typography.Title level={1}>Thanh toán thành công</Typography.Title>}
+        subTitle={message}
+        extra={[
+          <LinkButton key="wallet" type="primary" to="/wallet">Về ví của tôi</LinkButton>,
+          <LinkButton key="more" to="/wallet/topup">Nạp thêm</LinkButton>
+        ]}
       >
-        {/* Logo VNPay */}
-        {/* <img
-          src="/images/vnpay-logo.png"
-          alt="VNPay"
-          style={{ height: 36, marginBottom: 20 }}
-        /> */}
-
-        {/* Icon success */}
-        <CheckCircle weight="fill"
-          style={{
-            fontSize: 70,
-            color: '#52c41a',
-            marginBottom: 16
-          }}
-        />
-
-        {/* Title */}
-        <h2
-          style={{
-            marginBottom: 10,
-            fontWeight: 600,
-            color: '#389e0d'
-          }}
-        >
-          Thanh toán thành công
-        </h2>
-
-        {/* Message */}
-        <p
-          style={{
-            color: '#666',
-            fontSize: 15,
-            marginBottom: 26
-          }}
-        >
-          {message}
-        </p>
-
-        {/* Transaction Info */}
-        <div
-          style={{
-            background: '#fff7f6',
-            border: '1px solid #ffe8e6',
-            borderRadius: 10,
-            padding: 18,
-            marginBottom: 28,
-            textAlign: 'center'
-          }}
-        >
-          {formatMoney(amount) && (
-            <p style={{ margin: '0 0 10px 0', fontSize: 15 }}>
-              <strong>Số tiền nạp:</strong>{' '}
-              <span style={{ color: '#ff2616', fontWeight: 600 }}>
-                {formatMoney(amount)}
-              </span>
-            </p>
-          )}
-
-          {orderInfo && (
-            <p style={{ margin: 0, fontSize: 14 }}>
-              <strong>Nội dung:</strong> <span style={{ color: '#333' }}>{orderInfo}</span>
-            </p>
-          )}
-
-          {transactionId && (
-            <p style={{ margin: 0, fontSize: 14 }}>
-              <strong>Mã giao dịch:</strong>{' '}
-              <span style={{ fontFamily: 'monospace', color: '#333' }}>
-                {transactionId}
-              </span>
-            </p>
-          )}
-        </div>
-
-        {/* Buttons */}
-        <div
-          style={{
-            display: 'flex',
-            gap: 12,
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}
-        >
-          <button
-            onClick={() => navigate('/wallet')}
-            style={{
-              padding: '10px 22px',
-              borderRadius: 8,
-              border: 'none',
-              background: '#ff2616',
-              color: '#fff',
-              fontWeight: 500,
-              cursor: 'pointer'
-            }}
-          >
-            Về ví của tôi
-          </button>
-
-          <button
-            onClick={() => navigate('/wallet/topup')}
-            style={{
-              padding: '10px 22px',
-              borderRadius: 8,
-              border: '1px solid #d9d9d9',
-              background: '#fff',
-              cursor: 'pointer',
-              fontWeight: 500
-            }}
-          >
-            Nạp thêm
-          </button>
-        </div>
-      </div>
+        {details.length > 0 && <Descriptions className="wallet-result__details" bordered column={1} size="small" items={details} />}
+      </Result>
     </div>
   );
 }

@@ -1,0 +1,26 @@
+.wallet-result {
+  max-width: 640px;
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+.wallet-result .ant-typography {
+  margin: 0;
+}
+
+.wallet-result h1.ant-typography {
+  font-size: 24px;
+}
+
+.wallet-result__info {
+  display: block;
+  margin-top: 8px;
+}
+
+.wallet-result__amount {
+  color: var(--brand-text);
+}
+
+.wallet-result__details {
+  text-align: left;
+}

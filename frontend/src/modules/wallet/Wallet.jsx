@@ -1,9 +1,51 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import walletService from '../../services/wallet.service';
+import LinkButton from '../../ui/LinkButton';
 import './Wallet.css';
-import { ArrowDownLeft, ArrowUUpLeft, ArrowUpRight, Bank, CaretLeft, CaretRight, Coins, CreditCard, CurrencyCircleDollar } from '@phosphor-icons/react';
+import { Alert, Avatar, Button, Card, Col, Empty, Flex, Input, Pagination, Row, Select, Spin, Statistic, Tag, Typography } from 'antd';
+import { ArrowDownLeft, ArrowUUpLeft, ArrowUpRight, Bank, Coins, CreditCard, CurrencyCircleDollar } from '@phosphor-icons/react';
+
+const TYPE_OPTIONS = [
+  { value: '', label: 'Tất cả loại' },
+  { value: 'deposit', label: 'Nạp tiền' },
+  { value: 'withdrawal', label: 'Rút tiền' },
+  { value: 'payment', label: 'Thanh toán' },
+  { value: 'refund', label: 'Hoàn tiền' },
+  { value: 'earning', label: 'Thu nhập' }
+];
+
+const STATUS_TAGS = {
+  completed: { text: 'Hoàn thành', color: 'success' },
+  pending: { text: 'Đang xử lý', color: 'warning' },
+  failed: { text: 'Thất bại', color: 'error' },
+  cancelled: { text: 'Đã hủy', color: 'default' }
+};
+
+const DEBIT_TYPES = new Set(['withdrawal', 'payment', 'fee']);
+const CREDIT_TYPES = new Set(['deposit', 'refund', 'earning']);
+
+function describeAmount(transaction) {
+  const rawAmount = Math.abs(Number(transaction?.amount) || 0);
+  const type = transaction?.type;
+  const isCompleted = transaction?.status === 'completed';
+  let result = { amount: rawAmount, sign: '', tone: undefined, suffix: '' };
+
+  if (CREDIT_TYPES.has(type)) {
+    result = isCompleted && rawAmount > 0
+      ? { amount: rawAmount, sign: '+', tone: 'success', suffix: '' }
+      : { amount: 0, sign: '', tone: undefined, suffix: '' };
+  }
+
+  if (DEBIT_TYPES.has(type)) {
+    result = isCompleted && rawAmount > 0
+      ? { amount: rawAmount, sign: '-', tone: 'danger', suffix: '' }
+      : { amount: rawAmount, sign: '', tone: undefined, suffix: ' ( không thành công)' };
+  }
+
+  return result;
+}
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -127,23 +169,6 @@ const Wallet = () => {
     return icons[type] || <CurrencyCircleDollar />;
   };
 
-  const getStatusBadge = (status) => {
-    const badges = {
-      'completed': { text: 'Hoàn thành', class: 'status-completed' },
-      'pending': { text: 'Đang xử lý', class: 'status-pending' },
-      'failed': { text: 'Thất bại', class: 'status-failed' },
-      'cancelled': { text: 'Đã hủy', class: 'status-cancelled' }
-    };
-
-    const badge = badges[status] || { text: status, class: '' };
-
-    return (
-      <span className={`status-badge ${badge.class}`}>
-        {badge.text}
-      </span>
-    );
-  };
-
   const renderTransactionDetails = (transaction) => {
     if (transaction.type !== 'withdrawal') {
       return null;
@@ -151,21 +176,14 @@ const Wallet = () => {
 
     return (
       <div className="transaction-extra">
-        {/* Phần div này bọc thông tin ngân hàng để giữ chúng trên cùng 1 dòng */}
-        <div className="bank-info">
-          <span>
-            Ngân hàng: {transaction.metadata?.bankName || '---'} - {transaction.metadata?.bankAccount || '---'}
-          </span>
+        <Typography.Text type="secondary" className="bank-info">
+          Ngân hàng: {transaction.metadata?.bankName || '---'} - {transaction.metadata?.bankAccount || '---'}
           {transaction.metadata?.accountHolder && (
-            <span style={{ marginLeft: '10px' }}>Chủ TK: {transaction.metadata.accountHolder}</span>
+            <span className="bank-info__holder">Chủ TK: {transaction.metadata.accountHolder}</span>
           )}
-        </div>
-        
-        {/* Phần lỗi nằm ở div riêng để tự động rớt xuống dòng */}
+        </Typography.Text>
         {transaction.failureReason && (
-          <div className="transaction-extra__error" style={{ fontSize: '13px', marginTop: '4px' }}>
-            <span style={{ color: '#cf1322', fontWeight: 600 }}>Lý do: {transaction.failureReason}</span>
-          </div>
+          <Typography.Text type="danger" strong className="transaction-extra__error">Lý do: {transaction.failureReason}</Typography.Text>
         )}
       </div>
     );
@@ -173,255 +191,162 @@ const Wallet = () => {
 
   if (loading) {
     return (
-      <div className="wallet-container">
-        <div className="loading">Đang tải...</div>
+      <div className="wallet-container container">
+        <Flex justify="center" gap={12} className="wallet-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="wallet-container">
-        <div className="error-message">{error}</div>
-        <button onClick={fetchWalletData} className="btn btn-primary">
-          Thử lại
-        </button>
+      <div className="wallet-container container">
+        <Alert
+          type="error"
+          showIcon
+          role="alert"
+          title={error}
+          action={<Button size="small" type="primary" onClick={fetchWalletData}>Thử lại</Button>}
+        />
       </div>
     );
   }
 
+  const stats = [
+    { key: 'deposited', title: 'Tổng nạp:', value: balance?.totalDeposited },
+    { key: 'withdrawn', title: 'Tổng rút:', value: balance?.totalWithdrawn },
+    { key: 'pending', title: 'Đang chờ rút:', value: balance?.pendingWithdrawalAmount, highlight: true },
+    { key: 'spent', title: 'Tổng chi:', value: balance?.totalSpent },
+    { key: 'earned', title: 'Tổng thu:', value: balance?.totalEarned }
+  ];
+  const visibleTransactions = transactions.filter((transaction) => !(transaction.type === 'withdrawal' && !transaction.metadata?.bankName));
+
   return (
-    <div className="wallet-container">
-      <div className="wallet-header">
-        <h1>Ví của tôi</h1>
-        <div className="wallet-actions">
-          <Link to="/wallet/withdraw" className="btn btn-secondary">
-            Rút tiền
-          </Link>
-        </div>
-      </div>
+    <div className="wallet-container container">
+      <Flex justify="space-between" align="center" wrap gap={16} className="wallet-header">
+        <Typography.Title level={1}>Ví của tôi</Typography.Title>
+        <LinkButton to="/wallet/withdraw">Rút tiền</LinkButton>
+      </Flex>
 
-      {/* Balance Card */}
-      <div className="balance-card">
-        <div className="balance-main">
-          <h2>Số dư khả dụng</h2>
-          <div className="balance-amount">
-            {formatPrice(balance?.balance || 0)}
-          </div>
-        </div>
+      <Card className="balance-card">
+        <Statistic
+          className="balance-main"
+          title="Số dư khả dụng"
+          value={formatPrice(balance?.balance || 0)}
+          formatter={(value) => value}
+        />
+        <Row gutter={[16, 16]} className="balance-stats">
+          {stats.map(({ key, title, value, highlight }) => (
+            <Col key={key} flex="1 1 180px">
+              <Statistic
+                className={highlight ? 'stat-item stat-item--highlight' : 'stat-item'}
+                title={title}
+                value={formatPrice(value || 0)}
+                formatter={(text) => text}
+              />
+            </Col>
+          ))}
+        </Row>
+      </Card>
 
-        <div className="balance-stats">
-          <div className="stat-item">
-            <span className="stat-label">Tổng nạp:</span>
-            <span className="stat-value">{formatPrice(balance?.totalDeposited || 0)}</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Tổng rút:</span>
-            <span className="stat-value">{formatPrice(balance?.totalWithdrawn || 0)}</span>
-          </div>
-          <div className="stat-item stat-item--highlight">
-            <span className="stat-label">Đang chờ rút:</span>
-            <span className="stat-value">{formatPrice(balance?.pendingWithdrawalAmount || 0)}</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Tổng chi:</span>
-            <span className="stat-value">{formatPrice(balance?.totalSpent || 0)}</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Tổng thu:</span>
-            <span className="stat-value">{formatPrice(balance?.totalEarned || 0)}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Transaction History */}
-      <div className="transactions-section">
-        <div className="section-header">
-          <h2>Lịch sử giao dịch</h2>
-
-          {/* Filters */}
-          <div className="transaction-filters">
-            <select
-              name="type"
-              value={filters.type}
-              onChange={handleFilterChange}
+      <Card
+        className="transactions-section"
+        title={<Typography.Title level={2}>Lịch sử giao dịch</Typography.Title>}
+        extra={(
+          <Flex wrap gap={8} className="transaction-filters">
+            <Select
               className="filter-select"
-            >
-              <option value="">Tất cả loại</option>
-              <option value="deposit">Nạp tiền</option>
-              <option value="withdrawal">Rút tiền</option>
-              <option value="payment">Thanh toán</option>
-              <option value="refund">Hoàn tiền</option>
-              <option value="earning">Thu nhập</option>
-            </select>
-
-            <input
+              aria-label="Lọc theo loại giao dịch"
+              value={filters.type}
+              options={TYPE_OPTIONS}
+              onChange={(value) => handleFilterChange({ target: { name: 'type', value } })}
+            />
+            <Input
               type="date"
-              name="startDate"
+              className="filter-input"
+              aria-label="Từ ngày"
               value={filters.startDate}
-              onChange={handleFilterChange}
-              className="filter-input"
-              placeholder="Từ ngày"
+              onChange={(event) => handleFilterChange({ target: { name: 'startDate', value: event.target.value } })}
             />
-
-            <input
+            <Input
               type="date"
-              name="endDate"
-              value={filters.endDate}
-              onChange={handleFilterChange}
               className="filter-input"
-              placeholder="Đến ngày"
+              aria-label="Đến ngày"
+              value={filters.endDate}
+              onChange={(event) => handleFilterChange({ target: { name: 'endDate', value: event.target.value } })}
             />
-          </div>
-        </div>
-
-        {/* Transaction List */}
+          </Flex>
+        )}
+      >
         {transactionsLoading ? (
-          <div className="loading">Đang tải giao dịch...</div>
+          <Flex justify="center" gap={12} className="wallet-loading" role="status">
+            <Spin />
+            <Typography.Text type="secondary">Đang tải giao dịch...</Typography.Text>
+          </Flex>
         ) : transactions.length === 0 ? (
-          <div className="empty-state">
-            <p>Chưa có giao dịch nào</p>
-          </div>
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có giao dịch nào" />
         ) : (
           <>
-            <div className="transactions-list">
-              {transactions
-                // CHẶN HIỂN THỊ CÁC BẢN GHI RÚT TIỀN HOẶC NẠP TIỀN THIẾU THÔNG TIN (Do lỗi cũ lưu lại trong DB)
-                .filter((transaction) => {
-                  if (transaction.type === 'withdrawal' && !transaction.metadata?.bankName) {
-                    return false;
-                  }
-                  return true;
-                })
-                .map((transaction) => {
-                  const rawAmount = Math.abs(Number(transaction?.amount) || 0);
-                  const type = transaction?.type;
-                  const status = transaction?.status;
-                  const isPending = status === 'pending';
-                  const isFailed = status === 'failed';
-                  const isCompleted = status === 'completed';
+            <Flex vertical gap={12} className="transactions-list">
+              {visibleTransactions.map((transaction) => {
+                const type = transaction?.type;
+                const status = transaction?.status;
+                const isPending = status === 'pending';
+                const isFailed = status === 'failed';
+                const rawAmount = Math.abs(Number(transaction?.amount) || 0);
+                const { amount, sign, tone, suffix } = describeAmount(transaction);
+                const statusTag = STATUS_TAGS[status] || { text: status, color: 'default' };
 
-                  let displayAmount = rawAmount; // Mặc định hiển thị đúng số tiền
-                  let displaySign = '';
-                  let displayClass = '';
-                  let displaySuffix = '';
-
-                  const debitTypes = new Set(['withdrawal', 'payment', 'fee']);
-                  const creditTypes = new Set(['deposit', 'refund', 'earning']);
-
-                  // Logic cho Nạp tiền (deposit)
-                  if (creditTypes.has(type)) {
-                    if (isCompleted && rawAmount > 0) {
-                      displayAmount = rawAmount;
-                      displaySign = '+';
-                      displayClass = 'positive';
-                    } else {
-                      // Nạp tiền chưa hoàn thành -> Chuyển thành 0đ, màu đen (class trống)
-                      displayAmount = 0;
-                      displaySign = '';
-                      displayClass = '';
-                    }
-                  }
-
-                  // Logic cho Rút tiền/Thanh toán (debit types)
-                  if (debitTypes.has(type)) {
-                    if (isCompleted && rawAmount > 0) {
-                      displayAmount = rawAmount;
-                      displaySign = '-';
-                      displayClass = 'negative';
-                    } else if (isPending && rawAmount > 0) {
-                      // Đang xử lý -> bớt dấu âm, chữ màu đen, có hậu tố
-                      displayAmount = rawAmount;
-                      displaySign = '';
-                      displayClass = '';
-                      displaySuffix = ' ( không thành công)';
-                    } else {
-                      // Thất bại -> Giữ nguyên số tiền, màu đen, có hậu tố
-                      displayAmount = rawAmount;
-                      displaySign = '';
-                      displayClass = '';
-                      displaySuffix = ' ( không thành công)';
-                    }
-                  }
-
-                  return (
-                    <div key={transaction._id} className="transaction-item">
-                      <div className="transaction-icon">
-                        {getTransactionIcon(transaction.type)}
-                      </div>
+                return (
+                  <Card size="small" key={transaction._id} className="transaction-item">
+                    <Flex align="flex-start" gap={16} className="transaction-item__body">
+                      <Avatar className="transaction-icon" icon={getTransactionIcon(type)} />
 
                       <div className="transaction-info">
-                        <div className="transaction-type">
-                          {getTransactionTypeText(transaction.type)}
-                        </div>
-                        <div className="transaction-description">
-                          {transaction.type === 'deposit' && transaction.status === 'completed' ? transaction.description : null}
-                        </div>
-
+                        <Typography.Text strong className="transaction-type">{getTransactionTypeText(type)}</Typography.Text>
+                        {type === 'deposit' && status === 'completed' && transaction.description && (
+                          <Typography.Text type="secondary" className="transaction-description">{transaction.description}</Typography.Text>
+                        )}
                         {renderTransactionDetails(transaction)}
-                        
-                        <div className="transaction-date">
-                          {formatDate(transaction.createdAt)}
-                        </div>
+                        <Typography.Text type="secondary" className="transaction-date">{formatDate(transaction.createdAt)}</Typography.Text>
                       </div>
 
-                      <div className="transaction-amount">
-                        <div className={`amount ${displayClass}`}>
-                          {displaySign}{formatPrice(displayAmount)}{displaySuffix}
-                        </div>
-                        {getStatusBadge(transaction.status)}
-
-                        {/* Show messages for withdrawals */}
+                      <Flex vertical align="flex-end" gap={4} className="transaction-amount">
+                        <Typography.Text strong type={tone} className="amount">
+                          {sign}{formatPrice(amount)}{suffix}
+                        </Typography.Text>
+                        <Tag color={statusTag.color}>{statusTag.text}</Tag>
                         {type === 'withdrawal' && isPending && (
-                          <div style={{ color: '#d48806', fontSize: 13, fontWeight: 600, marginTop: 6 }}>
-                            Đang xử lý
-                          </div>
+                          <Typography.Text type="warning" strong>Đang xử lý</Typography.Text>
                         )}
-
                         {type === 'withdrawal' && isFailed && (
-                          <div style={{ color: '#cf1322', fontSize: 13, fontWeight: 600, marginTop: 6 }}>
-                            Bạn rút tiền không thành công
-                          </div>
+                          <Typography.Text type="danger" strong>Bạn rút tiền không thành công</Typography.Text>
                         )}
-
                         {type === 'deposit' && (isFailed || isPending) && (
-                          <div style={{ color: '#cf1322', fontSize: 13, fontWeight: 600, marginTop: 6 }}>
-                            {formatPrice(rawAmount)} nạp thất bại
-                          </div>
+                          <Typography.Text type="danger" strong>{formatPrice(rawAmount)} nạp thất bại</Typography.Text>
                         )}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
+                      </Flex>
+                    </Flex>
+                  </Card>
+                );
+              })}
+            </Flex>
 
-            {/* Pagination */}
-            {pagination.totalPages > 1 && (
-              <div className="pagination">
-                <button
-                  onClick={() => handlePageChange(pagination.page - 1)}
-                  disabled={pagination.page === 1}
-                  className="pagination-btn"
-                >
-                  <CaretLeft /> Trước
-                </button>
-
-                <span className="pagination-info">
-                  Trang {pagination.page} / {pagination.totalPages}
-                </span>
-
-                <button
-                  onClick={() => handlePageChange(pagination.page + 1)}
-                  disabled={pagination.page === pagination.totalPages}
-                  className="pagination-btn"
-                >
-                  Sau <CaretRight />
-                </button>
-              </div>
-            )}
+            <Pagination
+              className="wallet-pagination"
+              align="center"
+              hideOnSinglePage
+              showSizeChanger={false}
+              current={pagination.page}
+              pageSize={pagination.limit}
+              total={pagination.total}
+              onChange={handlePageChange}
+            />
           </>
         )}
-      </div>
+      </Card>
     </div>
   );
 };
