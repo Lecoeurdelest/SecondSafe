@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardLayout from './DashboardLayout';
+import LinkButton from '../../ui/LinkButton';
 import dashboardService from '../../services/dashboard.service';
 import abandonedCheckoutService from '../../services/abandonedCheckout.service';
 import './Dashboard.css';
-import { ArrowUpRight, ChartPieSlice, Flag, ListChecks, Package, Receipt, Truck, Users } from '@phosphor-icons/react';
+import { Alert, Avatar, Badge, Button, Card, Col, Empty, Flex, Progress, Row, Spin, Statistic, Tag, Typography } from 'antd';
+import { ArrowUpRight, ChartPieSlice, CurrencyCircleDollar, Flag, House, ListChecks, Package, Receipt, Truck, Users } from '@phosphor-icons/react';
 
 function formatNumber(value) {
   return new Intl.NumberFormat('vi-VN').format(value || 0);
@@ -21,23 +23,51 @@ function dateLabel(value) {
 
 function MetricCard({ icon, label, value, hint, tone }) {
   return (
-    <article className={`dashboard-metric dashboard-metric--${tone}`}>
-      <div className="dashboard-metric__top"><span>{label}</span><span className="dashboard-metric__icon" aria-hidden="true">{icon}</span></div>
-      <strong>{value}</strong><small>{hint}</small>
-    </article>
+    <Card className={`dashboard-metric dashboard-metric--${tone}`}>
+      <Flex justify="space-between" align="flex-start" gap={12}>
+        <Statistic title={label} value={value} formatter={(text) => text} />
+        <Avatar className="dashboard-metric__icon" size={40} icon={icon} aria-hidden="true" />
+      </Flex>
+      <Typography.Text type="secondary" className="dashboard-metric__hint">{hint}</Typography.Text>
+    </Card>
+  );
+}
+
+function Panel({ title, subtitle, extra, wide, headingId, children }) {
+  return (
+    <Col xs={24} lg={wide ? 24 : 12}>
+      <Card
+        className="dashboard-panel"
+        aria-labelledby={headingId}
+        title={(
+          <div>
+            <Typography.Title level={2} id={headingId}>{title}</Typography.Title>
+            {subtitle && <Typography.Text type="secondary">{subtitle}</Typography.Text>}
+          </div>
+        )}
+        extra={extra}
+      >
+        {children}
+      </Card>
+    </Col>
   );
 }
 
 function Bars({ items, valueLabel = item => formatNumber(item.count), nameLabel = item => item.label, currency = false }) {
   const max = Math.max(...items.map(item => item.count), 1);
-  if (!items.length) return <p className="dashboard-empty">Chưa có dữ liệu trong kỳ này.</p>;
+  if (!items.length) return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có dữ liệu trong kỳ này." />;
   return (
     <div className="dashboard-bars">
       {items.map(item => (
         <div className="dashboard-bar-row" key={item.label}>
-          <span>{nameLabel(item)}</span>
-          <div className="dashboard-bar-track"><i style={{ width: `${Math.max((item.count / max) * 100, item.count ? 5 : 0)}%` }} /></div>
-          <strong>{currency ? formatVnd(item.count) : valueLabel(item)}</strong>
+          <Typography.Text className="dashboard-bar-row__name">{nameLabel(item)}</Typography.Text>
+          <Progress
+            percent={Math.max((item.count / max) * 100, item.count ? 5 : 0)}
+            showInfo={false}
+            size="small"
+            aria-label={nameLabel(item)}
+          />
+          <Typography.Text strong className="dashboard-bar-row__value">{currency ? formatVnd(item.count) : valueLabel(item)}</Typography.Text>
         </div>
       ))}
     </div>
@@ -63,48 +93,55 @@ function statusItems(byStatus) {
   return Object.entries(byStatus || {}).map(([label, count]) => ({ label, count }));
 }
 
+const ALERT_COLORS = { red: '#ef4444', amber: '#f59e0b', blue: '#3b82f6' };
+
+function AlertRow({ color, label, value }) {
+  return (
+    <Flex justify="space-between" align="center" gap={12} className="dashboard-alert-row">
+      <Badge color={ALERT_COLORS[color]} text={label} />
+      <Typography.Text strong>{value}</Typography.Text>
+    </Flex>
+  );
+}
+
 function AdminOverview({ data }) {
   const monthly = (data.orders.monthly || []).map(item => ({ label: item.month, count: item.count }));
   const categories = (data.products.byCategory || []).map(item => ({ label: item.category, count: item.count }));
   const orderStatus = statusItems(data.orders.byStatus).map(item => ({ ...item, label: statusLabel(item.label) }));
   const productStatus = statusItems(data.products.byStatus).map(item => ({ ...item, label: statusLabel(item.label) }));
+  const openDisputes = Object.entries(data.disputes.byStatus || {}).filter(([status]) => !['resolved', 'dismissed'].includes(status)).reduce((sum, [, count]) => sum + count, 0);
   return (
     <>
-      <div className="dashboard-metrics">
-        <MetricCard icon={<Users />} label="Tài khoản" value={formatNumber(data.users.total)} hint={`${formatNumber(data.users.byRole?.user || 0)} người mua / người bán`} tone="blue" />
-        <MetricCard icon={<Package />} label="Sản phẩm" value={formatNumber(data.products.total)} hint={`${formatNumber(data.products.byStatus?.active || 0)} sản phẩm đang bán`} tone="purple" />
-        <MetricCard icon={<Receipt />} label="Đơn hàng" value={formatNumber(data.orders.total)} hint={`${formatNumber(data.orders.byStatus?.completed || 0)} đơn hoàn tất`} tone="green" />
-        <MetricCard icon="₫" label="Phí nền tảng" value={formatVnd(data.transactions.feeRevenueVnd)} hint="Tổng phí giao dịch đã hoàn tất" tone="orange" />
-      </div>
-      <div className="dashboard-panels">
-        <section className="dashboard-panel dashboard-panel--wide">
-          <div className="dashboard-panel__heading"><div><h2>Nhịp giao dịch</h2><p>Số đơn hàng theo tháng</p></div><span className="dashboard-panel__tag">6 tháng gần nhất</span></div>
+      <Row gutter={[16, 16]} className="dashboard-metrics">
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<Users />} label="Tài khoản" value={formatNumber(data.users.total)} hint={`${formatNumber(data.users.byRole?.user || 0)} người mua / người bán`} tone="blue" /></Col>
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<Package />} label="Sản phẩm" value={formatNumber(data.products.total)} hint={`${formatNumber(data.products.byStatus?.active || 0)} sản phẩm đang bán`} tone="purple" /></Col>
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<Receipt />} label="Đơn hàng" value={formatNumber(data.orders.total)} hint={`${formatNumber(data.orders.byStatus?.completed || 0)} đơn hoàn tất`} tone="green" /></Col>
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<CurrencyCircleDollar />} label="Phí nền tảng" value={formatVnd(data.transactions.feeRevenueVnd)} hint="Tổng phí giao dịch đã hoàn tất" tone="orange" /></Col>
+      </Row>
+      <Row gutter={[16, 16]} className="dashboard-panels">
+        <Panel wide headingId="dashboard-monthly" title="Nhịp giao dịch" subtitle="Số đơn hàng theo tháng" extra={<Tag>6 tháng gần nhất</Tag>}>
           <Bars items={monthly} />
-        </section>
-        <section className="dashboard-panel">
-          <div className="dashboard-panel__heading"><div><h2>Danh mục nổi bật</h2><p>Sản phẩm theo danh mục</p></div><span aria-hidden="true"><ChartPieSlice /></span></div>
+        </Panel>
+        <Panel headingId="dashboard-categories" title="Danh mục nổi bật" subtitle="Sản phẩm theo danh mục" extra={<ChartPieSlice aria-hidden="true" />}>
           <Bars items={categories} />
-        </section>
-        <section className="dashboard-panel">
-          <div className="dashboard-panel__heading"><div><h2>Trạng thái đơn</h2><p>Tổng quan xử lý đơn hàng</p></div><span aria-hidden="true"><ArrowUpRight /></span></div>
+        </Panel>
+        <Panel headingId="dashboard-order-status" title="Trạng thái đơn" subtitle="Tổng quan xử lý đơn hàng" extra={<ArrowUpRight aria-hidden="true" />}>
           <Bars items={orderStatus} />
-        </section>
-        <section className="dashboard-panel">
-          <div className="dashboard-panel__heading"><div><h2>Trạng thái sản phẩm</h2><p>Tình trạng đăng bán hiện tại</p></div><span aria-hidden="true">⌂</span></div>
+        </Panel>
+        <Panel headingId="dashboard-product-status" title="Trạng thái sản phẩm" subtitle="Tình trạng đăng bán hiện tại" extra={<House aria-hidden="true" />}>
           <Bars items={productStatus} />
-        </section>
-        <section className="dashboard-panel dashboard-panel--summary">
-          <div className="dashboard-panel__heading"><div><h2>Điểm cần chú ý</h2><p>Chỉ số vận hành cần theo dõi</p></div></div>
-          <div className="dashboard-alert-list">
-            <div><span className="dashboard-alert-dot dashboard-alert-dot--red" />Tranh chấp cần xử lý<strong>{formatNumber(Object.entries(data.disputes.byStatus || {}).filter(([status]) => !['resolved', 'dismissed'].includes(status)).reduce((sum, [, count]) => sum + count, 0))}</strong></div>
-            <div><span className="dashboard-alert-dot dashboard-alert-dot--amber" />Yêu cầu mua đang chờ<strong>{formatNumber(data.purchaseRequests.byStatus?.pending || 0)}</strong></div>
-            <div><span className="dashboard-alert-dot dashboard-alert-dot--red" />Báo cáo chờ xử lý<strong>{formatNumber((data.reports?.byStatus?.pending || 0) + (data.reports?.byStatus?.reviewing || 0))}</strong></div>
-            <div><span className="dashboard-alert-dot dashboard-alert-dot--amber" />Yêu cầu rút tiền<strong>{formatNumber(data.pendingWithdrawals)}</strong></div>
-            <div><span className="dashboard-alert-dot dashboard-alert-dot--blue" />Ví người dùng<strong>{formatNumber(data.wallets.total)}</strong></div>
-          </div>
-        </section>
-      </div>
-      <p className="dashboard-footnote">Số liệu được lấy trực tiếp từ cơ sở dữ liệu lúc {dateLabel(data.generatedAt)}. Không hiển thị thông tin cá nhân.</p>
+        </Panel>
+        <Panel headingId="dashboard-attention" title="Điểm cần chú ý" subtitle="Chỉ số vận hành cần theo dõi">
+          <Flex vertical gap={12}>
+            <AlertRow color="red" label="Tranh chấp cần xử lý" value={formatNumber(openDisputes)} />
+            <AlertRow color="amber" label="Yêu cầu mua đang chờ" value={formatNumber(data.purchaseRequests.byStatus?.pending || 0)} />
+            <AlertRow color="red" label="Báo cáo chờ xử lý" value={formatNumber((data.reports?.byStatus?.pending || 0) + (data.reports?.byStatus?.reviewing || 0))} />
+            <AlertRow color="amber" label="Yêu cầu rút tiền" value={formatNumber(data.pendingWithdrawals)} />
+            <AlertRow color="blue" label="Ví người dùng" value={formatNumber(data.wallets.total)} />
+          </Flex>
+        </Panel>
+      </Row>
+      <Typography.Paragraph type="secondary" className="dashboard-footnote">Số liệu được lấy trực tiếp từ cơ sở dữ liệu lúc {dateLabel(data.generatedAt)}. Không hiển thị thông tin cá nhân.</Typography.Paragraph>
     </>
   );
 }
@@ -123,21 +160,25 @@ function AbandonedCheckoutPanel() {
 
   if (!summary) return null;
   return (
-    <section className="dashboard-panel dashboard-panel--wide" aria-labelledby="abandoned-checkout-heading">
-      <div className="dashboard-panel__heading">
-        <div><h2 id="abandoned-checkout-heading">Thanh toán dang dở</h2><p>Đơn quá hạn thanh toán và giỏ hàng bị bỏ quên</p></div>
-        <span className="dashboard-panel__tag">Tỷ lệ khôi phục {summary.recoveryRate}%</span>
-      </div>
-      <Bars items={[
-        { label: 'Đã khôi phục', count: summary.recovered },
-        { label: 'Đang chờ người mua', count: summary.active },
-        { label: 'Đã mất', count: summary.lost }
-      ]} />
-      <p className="dashboard-footnote">
-        Giá trị khôi phục {formatVnd(summary.recoveredAmount)} · đang chờ {formatVnd(summary.activeAmount)} · đã mất {formatVnd(summary.lostAmount)}.
-        Từ đơn hàng: {formatNumber(summary.bySource.order.total)} · từ giỏ hàng: {formatNumber(summary.bySource.cart.total)}.
-      </p>
-    </section>
+    <Row gutter={[16, 16]} className="dashboard-panels">
+      <Panel
+        wide
+        headingId="abandoned-checkout-heading"
+        title="Thanh toán dang dở"
+        subtitle="Đơn quá hạn thanh toán và giỏ hàng bị bỏ quên"
+        extra={<Tag>Tỷ lệ khôi phục {summary.recoveryRate}%</Tag>}
+      >
+        <Bars items={[
+          { label: 'Đã khôi phục', count: summary.recovered },
+          { label: 'Đang chờ người mua', count: summary.active },
+          { label: 'Đã mất', count: summary.lost }
+        ]} />
+        <Typography.Paragraph type="secondary" className="dashboard-footnote">
+          Giá trị khôi phục {formatVnd(summary.recoveredAmount)} · đang chờ {formatVnd(summary.activeAmount)} · đã mất {formatVnd(summary.lostAmount)}.
+          Từ đơn hàng: {formatNumber(summary.bySource.order.total)} · từ giỏ hàng: {formatNumber(summary.bySource.cart.total)}.
+        </Typography.Paragraph>
+      </Panel>
+    </Row>
   );
 }
 
@@ -145,29 +186,30 @@ function StaffOverview({ data }) {
   const queue = data.recentQueue || [];
   return (
     <>
-      <div className="dashboard-metrics dashboard-metrics--staff">
-        <MetricCard icon={<Flag />} label="Tranh chấp mở" value={formatNumber(data.openDisputes)} hint="Cần theo dõi và điều phối" tone="orange" />
-        <MetricCard icon={<ArrowUpRight />} label="Yêu cầu mua chờ" value={formatNumber(data.pendingPurchaseRequests)} hint="Đang chờ phản hồi" tone="blue" />
-        <MetricCard icon={<Receipt />} label="Đơn chưa hoàn tất" value={formatNumber(data.openOrders)} hint="Bao gồm đơn đang giao" tone="purple" />
-        <MetricCard icon={<Truck />} label="Đang vận chuyển" value={formatNumber(data.activeDeliveries)} hint="Đang chuẩn bị hoặc giao hàng" tone="green" />
-      </div>
-      <section className="dashboard-panel dashboard-queue">
-        <div className="dashboard-panel__heading"><div><h2>Hàng đợi vận hành</h2><p>Các nhóm việc đang chờ xử lý trong hệ thống</p></div><span className="dashboard-panel__tag">Tổng quan</span></div>
-        <div className="dashboard-queue__list">
-          {queue.map(item => (
-            <div className="dashboard-queue__item" key={item.label}>
-              <span className="dashboard-queue__icon" aria-hidden="true"><ListChecks /></span>
-              <span>{item.label}</span>
-              <strong>{formatNumber(item.count)}</strong>
-              <span className="dashboard-queue__status">{item.count ? 'Cần chú ý' : 'Đã ổn định'}</span>
-            </div>
-          ))}
-        </div>
-        <p className="dashboard-queue__note">
-          Xử lý tại: <Link to="/moderator/reports">Báo cáo</Link> · <Link to="/moderator/disputes">Tranh chấp</Link> · <Link to="/moderator/orders">Đơn hàng</Link> · <Link to="/moderator/reviews">Đánh giá</Link> · <Link to="/moderator/withdrawals">Rút tiền</Link>
-        </p>
-      </section>
-      <p className="dashboard-footnote">Số liệu được lấy trực tiếp từ cơ sở dữ liệu lúc {dateLabel(data.generatedAt)}. Nhân viên không xem số dư ví hoặc chi tiết giao dịch.</p>
+      <Row gutter={[16, 16]} className="dashboard-metrics">
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<Flag />} label="Tranh chấp mở" value={formatNumber(data.openDisputes)} hint="Cần theo dõi và điều phối" tone="orange" /></Col>
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<ArrowUpRight />} label="Yêu cầu mua chờ" value={formatNumber(data.pendingPurchaseRequests)} hint="Đang chờ phản hồi" tone="blue" /></Col>
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<Receipt />} label="Đơn chưa hoàn tất" value={formatNumber(data.openOrders)} hint="Bao gồm đơn đang giao" tone="purple" /></Col>
+        <Col xs={24} sm={12} xl={6}><MetricCard icon={<Truck />} label="Đang vận chuyển" value={formatNumber(data.activeDeliveries)} hint="Đang chuẩn bị hoặc giao hàng" tone="green" /></Col>
+      </Row>
+      <Row gutter={[16, 16]} className="dashboard-panels">
+        <Panel wide headingId="dashboard-queue" title="Hàng đợi vận hành" subtitle="Các nhóm việc đang chờ xử lý trong hệ thống" extra={<Tag>Tổng quan</Tag>}>
+          <Flex vertical gap={10}>
+            {queue.map(item => (
+              <Flex key={item.label} align="center" gap={12} className="dashboard-queue__item">
+                <ListChecks aria-hidden="true" />
+                <Typography.Text className="dashboard-queue__label">{item.label}</Typography.Text>
+                <Typography.Text strong>{formatNumber(item.count)}</Typography.Text>
+                <Tag color={item.count ? 'warning' : 'success'}>{item.count ? 'Cần chú ý' : 'Đã ổn định'}</Tag>
+              </Flex>
+            ))}
+          </Flex>
+          <Typography.Paragraph className="dashboard-queue__note">
+            Xử lý tại: <Link to="/moderator/reports">Báo cáo</Link> · <Link to="/moderator/disputes">Tranh chấp</Link> · <Link to="/moderator/orders">Đơn hàng</Link> · <Link to="/moderator/reviews">Đánh giá</Link> · <Link to="/moderator/withdrawals">Rút tiền</Link>
+          </Typography.Paragraph>
+        </Panel>
+      </Row>
+      <Typography.Paragraph type="secondary" className="dashboard-footnote">Số liệu được lấy trực tiếp từ cơ sở dữ liệu lúc {dateLabel(data.generatedAt)}. Nhân viên không xem số dư ví hoặc chi tiết giao dịch.</Typography.Paragraph>
     </>
   );
 }
@@ -194,13 +236,27 @@ export default function Dashboard({ role }) {
       title={isAdmin ? 'Bức tranh toàn cảnh' : 'Bảng điều phối'}
       description={isAdmin ? 'Theo dõi sức khỏe sàn giao dịch và các chỉ số quan trọng.' : 'Ưu tiên công việc cần xử lý và theo dõi hoạt động gần đây.'}
     >
-      {loading && <p className="dashboard-state" role="status">Đang tải dữ liệu dashboard…</p>}
+      {loading && (
+        <Flex justify="center" gap={12} className="dashboard-state" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải dữ liệu dashboard…</Typography.Text>
+        </Flex>
+      )}
       {!loading && error && (
-        <div className="dashboard-state dashboard-state--error" role="alert">
-          <strong>Chưa tải được dữ liệu</strong><p>{error}</p>
-          <button type="button" onClick={() => window.location.reload()}>Thử tải lại</button>
-          <Link to="/">Quay lại trang chủ</Link>
-        </div>
+        <Alert
+          className="dashboard-state"
+          type="error"
+          showIcon
+          role="alert"
+          title="Chưa tải được dữ liệu"
+          description={error}
+          action={(
+            <Flex gap={8}>
+              <Button size="small" type="primary" onClick={() => window.location.reload()}>Thử tải lại</Button>
+              <LinkButton size="small" to="/">Quay lại trang chủ</LinkButton>
+            </Flex>
+          )}
+        />
       )}
       {!loading && !error && data && (isAdmin ? <AdminOverview data={data} /> : <StaffOverview data={data} />)}
       {!loading && !error && data && <AbandonedCheckoutPanel />}

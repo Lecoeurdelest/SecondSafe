@@ -3162,6 +3162,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-15
+      statement: The administrator and staff dashboards and the product management page, with their shared navigation shell, are built
+        from Ant Design components with the same figures, charts, queue, filters, actions and messages, and work from 360 px to
+        1920 px wide.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7643,6 +7650,39 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: The page keeps its state, requests, role rules and auto-opened dialogs and renders through Card, Descriptions, Tag, Timeline, Rate, Avatar, Alert and Spin. The seller reply and buyer follow-up become Modals holding a Form and the shared EvidencePicker, the return confirmation a Modal, the cancellation reason a Modal instead of the browser prompt, and the delivery confirmation an Ant Design confirmation instead of the browser confirm; results appear as toasts. Order status labels come from the shared status module. The legacy dark override for the old condition badge is removed from index.css.
+  - id: TASK-095
+    title: Ant Design staff dashboards
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-15
+    objective: Rebuild the administrator and staff dashboards, the product management page and their navigation shell from Ant Design components.
+    in_scope:
+    - frontend/src/modules/dashboard
+    out_of_scope:
+    - Services and routes
+    - The admin and moderator page layouts that already use Ant Design
+    - A dark theme for staff roles, which are always shown in the light theme
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/dashboard/Dashboard.test.jsx
+    - frontend/src/modules/dashboard/AdminProducts.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: The shell keeps its sidebar and top bar and uses Menu, Breadcrumb and Avatar. The dashboards use Card, Statistic, Progress bars, Badge, Tag, Alert, Spin and a Row and Col grid, and the product page uses Form, Input, Select, Table, Pagination and Tag. Figures, requests and messages are unchanged. The stylesheets use the shared colour tokens instead of fixed colours, and the leftover symbol glyphs become Phosphor icons.
 verification:
   thresholds:
     standard: 0.95

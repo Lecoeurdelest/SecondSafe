@@ -4,6 +4,7 @@ import DashboardLayout from './DashboardLayout';
 import dashboardService from '../../services/dashboard.service';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import './AdminProducts.css';
+import { Alert, Button, Card, Empty, Flex, Form, Input, Pagination, Select, Spin, Table, Tag, Typography } from 'antd';
 
 const STATUS_OPTIONS = [
   ['all', 'Tất cả trạng thái'],
@@ -17,6 +18,8 @@ const STATUS_OPTIONS = [
 ];
 
 const STATUS_LABELS = Object.fromEntries(STATUS_OPTIONS);
+
+const STATUS_COLORS = { pending: 'warning', active: 'success', hidden: 'default', sold: 'processing', rejected: 'error', expired: 'default', deleted: 'error' };
 
 function formatPrice(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value || 0);
@@ -52,8 +55,7 @@ export default function AdminProducts() {
     loadProducts();
   }, [loadProducts]);
 
-  function submitSearch(event) {
-    event.preventDefault();
+  function submitSearch() {
     setPage(1);
     setSearch(searchInput.trim());
   }
@@ -74,6 +76,42 @@ export default function AdminProducts() {
     }
   }
 
+  const columns = [
+    {
+      title: 'Sản phẩm',
+      key: 'product',
+      render: (_, product) => (
+        <Flex gap={12} align="center" className="admin-products__item">
+          <img
+            src={getProductImageUrl(product)}
+            alt=""
+            onError={event => handleImageError(event, 'product')}
+          />
+          <div>
+            <Link to={`/product/${product._id}`}>{product.title}</Link>
+            <Typography.Text type="secondary" className="admin-products__category">{product.category?.name || 'Chưa phân loại'}</Typography.Text>
+          </div>
+        </Flex>
+      )
+    },
+    { title: 'Người bán', key: 'seller', render: (_, product) => product.seller?.fullName || 'Không rõ' },
+    { title: 'Giá', key: 'price', render: (_, product) => formatPrice(product.price) },
+    { title: 'Trạng thái', key: 'status', render: (_, product) => <Tag color={STATUS_COLORS[product.status]}>{STATUS_LABELS[product.status] || product.status}</Tag> },
+    {
+      title: 'Thao tác',
+      key: 'actions',
+      render: (_, product) => ['active', 'hidden'].includes(product.status) && (
+        <Button
+          size="small"
+          disabled={busyId === String(product._id)}
+          onClick={() => changeVisibility(product)}
+        >
+          {product.status === 'active' ? 'Ẩn tin' : 'Khôi phục'}
+        </Button>
+      )
+    }
+  ];
+
   return (
     <DashboardLayout
       role="admin"
@@ -81,81 +119,65 @@ export default function AdminProducts() {
       description="Tìm kiếm, theo dõi và kiểm soát trạng thái tin đăng trên nền tảng."
     >
       <section className="admin-products">
-        <form className="admin-products__filters" onSubmit={submitSearch}>
-          <label>
-            Tìm theo tên sản phẩm
-            <input
-              value={searchInput}
-              maxLength={100}
-              onChange={event => setSearchInput(event.target.value)}
-              placeholder="Nhập tên sản phẩm..."
-            />
-          </label>
-          <label>
-            Trạng thái
-            <select value={status} onChange={event => { setPage(1); setStatus(event.target.value); }}>
-              {STATUS_OPTIONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-            </select>
-          </label>
-          <button type="submit">Tìm kiếm</button>
-        </form>
+        <Card className="admin-products__filters">
+          <Form layout="vertical" onFinish={submitSearch}>
+            <Flex wrap gap={16} align="flex-end">
+              <Form.Item label="Tìm theo tên sản phẩm" htmlFor="admin-product-search" className="admin-products__field">
+                <Input
+                  id="admin-product-search"
+                  value={searchInput}
+                  maxLength={100}
+                  onChange={event => setSearchInput(event.target.value)}
+                  placeholder="Nhập tên sản phẩm..."
+                />
+              </Form.Item>
+              <Form.Item label="Trạng thái" htmlFor="admin-product-status" className="admin-products__field">
+                <Select
+                  id="admin-product-status"
+                  value={status}
+                  options={STATUS_OPTIONS.map(([value, label]) => ({ value, label }))}
+                  onChange={value => { setPage(1); setStatus(value); }}
+                  virtual={false}
+                />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">Tìm kiếm</Button>
+              </Form.Item>
+            </Flex>
+          </Form>
+        </Card>
 
-        {error && <p className="admin-products__feedback admin-products__feedback--error" role="alert">{error}</p>}
-        {notice && <p className="admin-products__feedback" role="status">{notice}</p>}
+        {error && <Alert className="admin-products__feedback" type="error" showIcon role="alert" title={error} />}
+        {notice && <Alert className="admin-products__feedback" type="success" showIcon role="status" title={notice} />}
         {loading ? (
-          <p className="admin-products__state" role="status">Đang tải sản phẩm...</p>
+          <Flex justify="center" gap={12} className="admin-products__state" role="status">
+            <Spin />
+            <Typography.Text type="secondary">Đang tải sản phẩm...</Typography.Text>
+          </Flex>
         ) : products.length === 0 ? (
-          <p className="admin-products__state">Không tìm thấy sản phẩm phù hợp.</p>
+          <Empty className="admin-products__state" image={Empty.PRESENTED_IMAGE_SIMPLE} description="Không tìm thấy sản phẩm phù hợp." />
         ) : (
-          <div className="admin-products__table-wrap">
-            <table className="admin-products__table">
-              <thead>
-                <tr><th>Sản phẩm</th><th>Người bán</th><th>Giá</th><th>Trạng thái</th><th>Thao tác</th></tr>
-              </thead>
-              <tbody>
-                {products.map(product => (
-                  <tr key={product._id}>
-                    <td>
-                      <div className="admin-products__item">
-                        <img
-                          src={getProductImageUrl(product)}
-                          alt=""
-                          onError={event => handleImageError(event, 'product')}
-                        />
-                        <div>
-                          <Link to={`/product/${product._id}`}>{product.title}</Link>
-                          <small>{product.category?.name || 'Chưa phân loại'}</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>{product.seller?.fullName || 'Không rõ'}</td>
-                    <td>{formatPrice(product.price)}</td>
-                    <td>{STATUS_LABELS[product.status] || product.status}</td>
-                    <td>
-                      {['active', 'hidden'].includes(product.status) && (
-                        <button
-                          type="button"
-                          className="admin-products__action"
-                          disabled={busyId === String(product._id)}
-                          onClick={() => changeVisibility(product)}
-                        >
-                          {product.status === 'active' ? 'Ẩn tin' : 'Khôi phục'}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            className="admin-products__table"
+            rowKey="_id"
+            columns={columns}
+            dataSource={products}
+            pagination={false}
+            scroll={{ x: 'max-content' }}
+          />
         )}
 
         {totalPages > 1 && (
-          <nav className="admin-products__pagination" aria-label="Phân trang sản phẩm">
-            <button type="button" disabled={page <= 1 || loading} onClick={() => setPage(current => current - 1)}>Trước</button>
-            <span>Trang {page} / {totalPages}</span>
-            <button type="button" disabled={page >= totalPages || loading} onClick={() => setPage(current => current + 1)}>Sau</button>
-          </nav>
+          <Pagination
+            className="admin-products__pagination"
+            align="center"
+            showSizeChanger={false}
+            current={page}
+            pageSize={20}
+            total={totalPages * 20}
+            disabled={loading}
+            onChange={setPage}
+          />
         )}
       </section>
     </DashboardLayout>
