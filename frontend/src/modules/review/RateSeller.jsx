@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
+import { Alert, Avatar, Button, Flex, Form, Input, Modal, Rate, Typography } from 'antd';
 import { createReview } from '../../services/review.service';
 import { uploadEvidenceMedia } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
-import './RateSeller.css';
-import { Star, X } from '@phosphor-icons/react';
+import EvidencePicker from '../../components/EvidencePicker';
+import '../../components/ReportModal.css';
+
+const RATING_TEXTS = {
+  1: 'Rất không hài lòng',
+  2: 'Không hài lòng',
+  3: 'Bình thường',
+  4: 'Hài lòng',
+  5: 'Rất hài lòng'
+};
+
+const isVideoEvidence = (url = '') => /\.(mp4)$/i.test(url);
 
 const RateSeller = ({ order, onSuccess, onCancel }) => {
   const [rating, setRating] = useState(0);
@@ -13,8 +24,6 @@ const RateSeller = ({ order, onSuccess, onCancel }) => {
   const [uploadingEvidence, setUploadingEvidence] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const isVideoEvidence = (url = '') => /\.(mp4)$/i.test(url);
 
   const handleEvidenceUpload = async (e) => {
     const files = Array.from(e.target.files || []);
@@ -44,9 +53,7 @@ const RateSeller = ({ order, onSuccess, onCancel }) => {
     setEvidenceFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (rating === 0) {
       setError('Vui lòng chọn số sao đánh giá');
       return;
@@ -65,159 +72,81 @@ const RateSeller = ({ order, onSuccess, onCancel }) => {
     }
   };
 
-  const renderStars = () => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <button
-          key={i}
-          type="button"
-          className={`star ${i <= (hoveredRating || rating) ? 'active' : ''}`}
-          onClick={() => setRating(i)}
-          onMouseEnter={() => setHoveredRating(i)}
-          onMouseLeave={() => setHoveredRating(0)}
-        >
-          <Star weight="fill" />
-        </button>
-      );
-    }
-    return stars;
-  };
-
-  const getRatingText = (rating) => {
-    const texts = {
-      1: 'Rất không hài lòng',
-      2: 'Không hài lòng',
-      3: 'Bình thường',
-      4: 'Hài lòng',
-      5: 'Rất hài lòng'
-    };
-    return texts[rating] || '';
-  };
-
   return (
-    <div className="rate-seller-modal">
-      <div className="rate-seller-content">
-        <div className="rate-seller-header">
-          <h3>Đánh giá người bán</h3>
-          <button className="close-btn" onClick={onCancel}><X /></button>
-        </div>
-
-        <div className="order-info">
-          <div className="product-info">
-            <img 
-              src={getImageUrl(order?.listing?.images?.[0]) || '/images/placeholders/product-placeholder.svg'} 
-              alt={order.listing?.title}
-              className="product-image"
-              onError={(event) => {
-                event.currentTarget.onerror = null;
-                event.currentTarget.src = '/images/placeholders/product-placeholder.svg';
-              }}
-            />
-            <div className="product-details">
-              <h4>{order.listing?.title}</h4>
-              <p className="price">{order.agreedPrice?.toLocaleString('vi-VN')} VNĐ</p>
-            </div>
+    <Modal open centered footer={null} title="Đánh giá người bán" width={560} onCancel={onCancel} mask={{ closable: false }}>
+      <Flex vertical gap={12} className="report-subject">
+        <Flex gap={12} align="center">
+          <img
+            src={getImageUrl(order?.listing?.images?.[0]) || '/images/placeholders/product-placeholder.svg'}
+            alt={order.listing?.title}
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = '/images/placeholders/product-placeholder.svg';
+            }}
+          />
+          <div className="report-subject__body">
+            <Typography.Title level={4}>{order.listing?.title}</Typography.Title>
+            <Typography.Text strong>{order.agreedPrice?.toLocaleString('vi-VN')} VNĐ</Typography.Text>
           </div>
-          
-          <div className="seller-info">
-            <img 
-              src={getImageUrl(order?.seller?.avatar) || '/images/placeholders/avatar-placeholder.svg'} 
-              alt={order.seller?.fullName}
-              className="seller-avatar"
-              onError={(event) => {
-                event.currentTarget.onerror = null;
-                event.currentTarget.src = '/images/placeholders/avatar-placeholder.svg';
-              }}
-            />
-            <span className="seller-name">{order.seller?.fullName}</span>
-          </div>
-        </div>
+        </Flex>
+        <Flex gap={8} align="center">
+          <Avatar
+            src={getImageUrl(order?.seller?.avatar) || '/images/placeholders/avatar-placeholder.svg'}
+            alt={order.seller?.fullName}
+          />
+          <Typography.Text strong>{order.seller?.fullName}</Typography.Text>
+        </Flex>
+      </Flex>
 
-        <form onSubmit={handleSubmit} className="rating-form">
-          <div className="rating-section">
-            <label>Đánh giá của bạn:</label>
-            <div className="stars-container">
-              {renderStars()}
-              <span className="rating-text">
-                {getRatingText(hoveredRating || rating)}
-              </span>
-            </div>
-          </div>
+      <Form layout="vertical" onFinish={handleSubmit} className="report-form">
+        <Form.Item label="Đánh giá của bạn">
+          <Flex align="center" gap={12} wrap>
+            <Rate value={rating} onChange={setRating} onHoverChange={(value) => setHoveredRating(value || 0)} />
+            <Typography.Text type="secondary">{RATING_TEXTS[hoveredRating || rating] || ''}</Typography.Text>
+          </Flex>
+        </Form.Item>
 
-          <div className="comment-section">
-            <label htmlFor="comment">Nhận xét (tùy chọn):</label>
-            <textarea
-              id="comment"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Chia sẻ trải nghiệm của bạn về người bán này..."
-              rows="4"
-              maxLength="500"
-            />
-            <div className="char-count">{comment.length}/500</div>
-          </div>
+        <Form.Item label="Nhận xét (tùy chọn)" htmlFor="comment">
+          <Input.TextArea
+            id="comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Chia sẻ trải nghiệm của bạn về người bán này..."
+            rows={4}
+            maxLength={500}
+            showCount
+          />
+        </Form.Item>
 
-          <div className="comment-section">
-            <label htmlFor="review-evidence">Ảnh/Video minh chứng (tùy chọn):</label>
-            <input
-              id="review-evidence"
-              type="file"
-              accept=".png,.jpg,.jpeg,.mp4,image/png,image/jpeg,video/mp4"
-              multiple
-              onChange={handleEvidenceUpload}
-              disabled={loading || uploadingEvidence || evidenceFiles.length >= 5}
-              className="review-evidence-input"
-            />
-            <div className="char-count">PNG/JPG/JPEG hoặc MP4 (H.264), ≤100MB, ≤3 phút, 720p-1080p.</div>
-            <div className="char-count">Video cần quay mở hộp liên tục, không chỉnh sửa.</div>
-            {uploadingEvidence && <div className="char-count">Đang upload tệp...</div>}
+        <Form.Item label="Ảnh/Video minh chứng (tùy chọn)" htmlFor="review-evidence">
+          <EvidencePicker
+            id="review-evidence"
+            files={evidenceFiles}
+            accept=".png,.jpg,.jpeg,.mp4,image/png,image/jpeg,video/mp4"
+            buttonLabel="Chọn tệp"
+            disabled={loading}
+            uploading={uploadingEvidence}
+            isVideo={isVideoEvidence}
+            imageAlt={(index) => `review-evidence-${index}`}
+            notes={[
+              'PNG/JPG/JPEG hoặc MP4 (H.264), ≤100MB, ≤3 phút, 720p-1080p.',
+              'Video cần quay mở hộp liên tục, không chỉnh sửa.'
+            ]}
+            onSelect={handleEvidenceUpload}
+            onRemove={removeEvidence}
+          />
+        </Form.Item>
 
-            {evidenceFiles.length > 0 && (
-              <div className="review-evidence-grid">
-                {evidenceFiles.map((file, index) => (
-                  <div key={`${file}-${index}`} className="review-evidence-item">
-                    {isVideoEvidence(file) ? (
-                      <video src={getImageUrl(file)} controls className="review-evidence-media" />
-                    ) : (
-                      <img src={getImageUrl(file)} alt={`review-evidence-${index}`} className="review-evidence-media" />
-                    )}
-                    <button
-                      type="button"
-                      className="review-evidence-remove"
-                      onClick={() => removeEvidence(index)}
-                      disabled={loading}
-                    >
-                      <X />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        {error && <Alert className="report-error" type="error" showIcon role="alert" title={error} />}
 
-          {error && <div className="error-message">{error}</div>}
-
-          <div className="form-actions">
-            <button 
-              type="button" 
-              className="cancel-btn"
-              onClick={onCancel}
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={loading || rating === 0 || uploadingEvidence}
-            >
-              {loading ? 'Đang gửi...' : 'Gửi đánh giá'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <Flex justify="flex-end" gap={12} className="report-actions">
+          <Button onClick={onCancel} disabled={loading}>Hủy</Button>
+          <Button type="primary" htmlType="submit" disabled={loading || rating === 0 || uploadingEvidence}>
+            {loading ? 'Đang gửi...' : 'Gửi đánh giá'}
+          </Button>
+        </Flex>
+      </Form>
+    </Modal>
   );
 };
 

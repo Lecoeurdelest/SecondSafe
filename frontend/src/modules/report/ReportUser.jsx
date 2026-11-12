@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
+import { Alert, Button, Flex, Form, Input, Modal, Select, Typography } from 'antd';
 import { createUserReport, uploadEvidenceImages } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
-import './ReportProduct.css';
-import { X } from '@phosphor-icons/react';
+import EvidencePicker from '../../components/EvidencePicker';
+import '../../components/ReportModal.css';
+
+const REASON_OPTIONS = [
+  { value: 'scam', label: 'Lừa đảo' },
+  { value: 'inappropriate', label: 'Hành vi không phù hợp' },
+  { value: 'spam', label: 'Spam / làm phiền' },
+  { value: 'counterfeit', label: 'Bán hàng giả / sai sự thật' },
+  { value: 'other', label: 'Khác' }
+];
+
+const isVideoEvidence = (url = '') => /\.(mp4|mov|m4v|webm|avi|mkv)$/i.test(url);
 
 const ReportUser = ({ reportedUser, onSuccess, onCancel }) => {
   const [reason, setReason] = useState('');
@@ -12,19 +23,7 @@ const ReportUser = ({ reportedUser, onSuccess, onCancel }) => {
   const [uploadingImages, setUploadingImages] = useState(false);
   const [error, setError] = useState('');
 
-  const reasonOptions = [
-    { value: 'scam', label: 'Lừa đảo' },
-    { value: 'inappropriate', label: 'Hành vi không phù hợp' },
-    { value: 'spam', label: 'Spam / làm phiền' },
-    { value: 'counterfeit', label: 'Bán hàng giả / sai sự thật' },
-    { value: 'other', label: 'Khác' }
-  ];
-
-  const isVideoEvidence = (url = '') => /\.(mp4|mov|m4v|webm|avi|mkv)$/i.test(url);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async () => {
     if (!reason || !description.trim()) {
       setError('Vui lòng điền đầy đủ thông tin');
       return;
@@ -73,110 +72,66 @@ const ReportUser = ({ reportedUser, onSuccess, onCancel }) => {
   };
 
   return (
-    <div className="report-modal">
-      <div className="report-content">
-        <div className="report-header">
-          <h3>Báo cáo người dùng</h3>
-          <button className="close-btn" onClick={onCancel}><X /></button>
+    <Modal open centered footer={null} title="Báo cáo người dùng" width={560} onCancel={onCancel} mask={{ closable: false }}>
+      <Flex gap={12} align="center" className="report-subject">
+        <img
+          src={getImageUrl(reportedUser?.avatar) || '/images/placeholders/avatar-placeholder.svg'}
+          alt={reportedUser?.fullName}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = '/images/placeholders/avatar-placeholder.svg';
+          }}
+        />
+        <div className="report-subject__body">
+          <Typography.Title level={4}>{reportedUser?.fullName || 'Người dùng'}</Typography.Title>
+          <Typography.Text type="secondary">Vai trò: Thành viên ReFlow</Typography.Text>
+          <br />
+          <Typography.Text type="secondary">Đánh giá: {Number(reportedUser?.rating || 0).toFixed(1)}/5</Typography.Text>
         </div>
+      </Flex>
 
-        <div className="product-info">
-          <img
-            src={getImageUrl(reportedUser?.avatar) || '/images/placeholders/avatar-placeholder.svg'}
-            alt={reportedUser?.fullName}
-            className="product-image"
-            onError={(event) => {
-              event.currentTarget.onerror = null;
-              event.currentTarget.src = '/images/placeholders/avatar-placeholder.svg';
-            }}
+      <Form layout="vertical" onFinish={handleSubmit} className="report-form">
+        <Form.Item label="Lý do báo cáo" htmlFor="user-report-reason" required>
+          <Select id="user-report-reason" placeholder="Chọn lý do" value={reason || undefined} options={REASON_OPTIONS} onChange={setReason} />
+        </Form.Item>
+
+        <Form.Item label="Mô tả chi tiết" htmlFor="user-report-description" required>
+          <Input.TextArea
+            id="user-report-description"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            placeholder="Vui lòng mô tả rõ hành vi vi phạm của người dùng này..."
+            rows={4}
+            maxLength={1000}
+            showCount
           />
-          <div className="product-details">
-            <h4>{reportedUser?.fullName || 'Người dùng'}</h4>
-            <p className="seller">Vai trò: Thành viên ReFlow</p>
-            <p className="seller">Đánh giá: {Number(reportedUser?.rating || 0).toFixed(1)}/5</p>
-          </div>
-        </div>
+        </Form.Item>
 
-        <form onSubmit={handleSubmit} className="report-form">
-          <div className="form-group">
-            <label htmlFor="user-report-reason">Lý do báo cáo *</label>
-            <select
-              id="user-report-reason"
-              value={reason}
-              onChange={(event) => setReason(event.target.value)}
-              required
-            >
-              <option value="">Chọn lý do</option>
-              {reasonOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        <Form.Item label="Bằng chứng (ảnh/video, tùy chọn)" htmlFor="user-report-evidence">
+          <EvidencePicker
+            id="user-report-evidence"
+            files={evidenceImages}
+            accept="image/*,video/*"
+            buttonLabel="Chọn tệp"
+            disabled={loading}
+            uploading={uploadingImages}
+            isVideo={isVideoEvidence}
+            notes={['Tối đa 5 tệp (ảnh hoặc video). Bằng chứng rõ ràng sẽ giúp xử lý nhanh hơn.']}
+            onSelect={handleImageUpload}
+            onRemove={removeImage}
+          />
+        </Form.Item>
 
-          <div className="form-group">
-            <label htmlFor="user-report-description">Mô tả chi tiết *</label>
-            <textarea
-              id="user-report-description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              placeholder="Vui lòng mô tả rõ hành vi vi phạm của người dùng này..."
-              rows="4"
-              maxLength="1000"
-              required
-            />
-            <div className="char-count">{description.length}/1000</div>
-          </div>
+        {error && <Alert className="report-error" type="error" showIcon role="alert" title={error} />}
 
-          <div className="form-group">
-            <label htmlFor="user-report-evidence">Bằng chứng (ảnh/video, tùy chọn)</label>
-            <input
-              type="file"
-              id="user-report-evidence"
-              accept="image/*,video/*"
-              multiple
-              onChange={handleImageUpload}
-              disabled={evidenceImages.length >= 5 || loading || uploadingImages}
-            />
-            <div className="upload-note">Tối đa 5 tệp (ảnh hoặc video). Bằng chứng rõ ràng sẽ giúp xử lý nhanh hơn.</div>
-            {uploadingImages && <div className="upload-note">Đang upload bằng chứng...</div>}
-
-            {evidenceImages.length > 0 && (
-              <div className="evidence-preview">
-                {evidenceImages.map((url, index) => (
-                  <div key={`${url}-${index}`} className="evidence-item">
-                    {isVideoEvidence(url) ? (
-                      <video src={getImageUrl(url)} controls />
-                    ) : (
-                      <img src={getImageUrl(url)} alt={`Bằng chứng ${index + 1}`} />
-                    )}
-                    <button type="button" className="remove-image" onClick={() => removeImage(index)}>
-                      <X />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {error && <div className="error-message">{error}</div>}
-
-          <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onCancel} disabled={loading}>
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="submit-btn"
-              disabled={loading || uploadingImages || !reason || !description.trim()}
-            >
-              {loading ? 'Đang gửi...' : 'Gửi báo cáo'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <Flex justify="flex-end" gap={12} className="report-actions">
+          <Button onClick={onCancel} disabled={loading}>Hủy</Button>
+          <Button type="primary" htmlType="submit" disabled={loading || uploadingImages || !reason || !description.trim()}>
+            {loading ? 'Đang gửi...' : 'Gửi báo cáo'}
+          </Button>
+        </Flex>
+      </Form>
+    </Modal>
   );
 };
 
