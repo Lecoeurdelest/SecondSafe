@@ -1505,7 +1505,7 @@
     "TASK-077": {
       "execution": "verifying",
       "relevance": "current",
-      "detail": "Restyle implemented in two colour passes with build, 58 passing frontend tests and screenshots at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and chat, support and most staff pages were not observed",
+      "detail": "Restyle implemented in three passes (tokens and chrome, colour sweep, two-tier header) with build, 58 passing frontend tests and screenshots of buyer, messaging and staff pages at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and pages with real data were not observed",
       "history": [
         {
           "date": "2026-11-12",
@@ -1526,11 +1526,17 @@
           "date": "2026-11-12",
           "execution": "verifying",
           "note": "Second colour pass converted gradient stops, a purple wallet gradient and inline colours; re-verified with build, tests and a wider set of pages"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Header split into primary actions and an account tab strip; chat, support, assistant and more staff pages observed; moderator logo neutralised"
         }
       ],
       "evidence": [
         ".project/evidence/TASK-077/run-01/report.json",
-        ".project/evidence/TASK-077/run-02/report.json"
+        ".project/evidence/TASK-077/run-02/report.json",
+        ".project/evidence/TASK-077/run-03/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-077.md",
       "criteria": {

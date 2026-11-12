@@ -14,22 +14,22 @@ The web client has one visual language. Design tokens in `frontend/src/assets/st
 
 Buyer pages changed most: a sticky header with pill links and a gradient call-to-action, a gradient hero with a floating search card on the home page, category chips that scroll sideways, product cards with a 4:3 image and a lifting hover, and the login and register cards. The footer sits at the bottom of short pages.
 
-The admin and moderator consoles use a neutral palette. Both shells are wrapped in one Ant Design theme (`frontend/src/modules/staffTheme.js`) with a near-black primary colour, and the storefront header, footer and chat button are hidden while either shell is mounted. Routes, services, API calls and business rules were not touched.
+The header is split into two tiers: primary actions on the first row and a tab strip with the account and work links below it, so a signed-in user's fourteen links no longer wrap. The admin and moderator consoles use a neutral palette. Both shells are wrapped in one Ant Design theme (`frontend/src/modules/staffTheme.js`) with a near-black primary colour, and the storefront header, footer and chat button are hidden while either shell is mounted. Routes, services, API calls and business rules were not touched.
 
 The two reference projects (`itsnotvii/mercari-clone`, `ReMarket-SE2/webapp`) have no licence file, so they were used as visual references only. No code was copied.
 
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: home, login, product detail and five logged-in buyer pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-02/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-03/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-02/frontend-test.txt` — 9 suites, 58 tests pass |
+| Tests | `.project/evidence/TASK-077/run-03/frontend-test.txt` — 9 suites, 58 tests pass |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-02/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-02/manual-review.md` and `screenshots/` (`run-01` is the earlier pass) |
+| Build/typecheck | `.project/evidence/TASK-077/run-03/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-03/manual-review.md` and `screenshots/` (`run-01` and `run-02` are the earlier passes) |
 
 ## Deviations
 
@@ -38,8 +38,7 @@ The task has no dependencies on other tasks because it changes presentation only
 ## Known gaps
 
 - Observed only in Chromium against canned API responses; no real phone, no other browser (`NFR-COMP-01` is not evaluated here).
-- The chat and support pages fell back to the error boundary under the canned API responses and were not evaluated; other pages not listed in `manual-review.md` were converted by a mechanical colour rule and not each inspected.
-- The buyer navigation has about fourteen links for a signed-in user and wraps onto two rows at 1280 px, as before; rebuilding it needs a markup change that is outside this task.
+- Pages not listed in `manual-review.md`, and every page with real data, were converted by a mechanical colour rule and not each inspected.
 - Status chips that were blue "info" colours in buyer modules are now brand-coloured and can read like the error colour; the shared `--info` colour was kept blue.
 - Dark mode is not implemented.
 - The dashboards under `frontend/src/modules/dashboard/` and the legacy `Footer.jsx` were not redesigned.
