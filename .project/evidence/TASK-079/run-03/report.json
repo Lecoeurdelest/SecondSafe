@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-079",
+  "spec_hash": "8822cfb3c6850f2ff1299481368973fba4aa0c0d5325a5f97d61176e9ba0de41",
+  "source_hash": "982cd04a0ea54c2507147140a963b31b30a030fefba7d9850ca76670ceaff5a3",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 1280 and 390 px",
+    "The contrast scan skips text over gradients and images and covers only the states that were rendered",
+    "Admin, moderator and dashboard pages have no dark theme by design",
+    "Run-03 rescanned only the canned-data pages after the merge; the real-backend pass is the earlier run-02",
+    "The chat page was not observed against a real backend or a real Gemini"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-23-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Theme tests and App tests pass; the build passes; after merging the conversational assistant, 20 pages scanned in dark mode with canned data show no text below 3:1 except one badge that was already low in the light theme; the earlier real-backend pass (run-02) covered the storefront and staff pages; states that were not rendered were not scanned",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-079/run-03/frontend-test.txt",
+            ".project/evidence/TASK-079/run-03/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-079/run-03/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,794 @@
+[
+ {
+  "tag": "buyer-dark-home",
+  "theme": "dark",
+  "overflow": false,
+  "text": 1697,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-product-detail",
+  "theme": "dark",
+  "overflow": false,
+  "text": 611,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-favorites",
+  "theme": "dark",
+  "overflow": false,
+  "text": 468,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-cart",
+  "theme": "dark",
+  "overflow": false,
+  "text": 579,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-orders",
+  "theme": "dark",
+  "overflow": false,
+  "text": 1275,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-order-detail",
+  "theme": "dark",
+  "overflow": false,
+  "text": 1017,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-wallet",
+  "theme": "dark",
+  "overflow": false,
+  "text": 617,
+  "low": 2,
+  "bad": [
+   {
+    "sel": "span.status-badge.status-completed",
+    "text": "Hoàn thành",
+    "ratio": 2.87,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(39,174,96)"
+   },
+   {
+    "sel": "span.status-badge.status-completed",
+    "text": "Hoàn thành",
+    "ratio": 2.87,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(39,174,96)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-chat",
+  "theme": "dark",
+  "overflow": false,
+  "text": 535,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-assistant",
+  "theme": "dark",
+  "overflow": false,
+  "text": 795,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-support",
+  "theme": "dark",
+  "overflow": false,
+  "text": 606,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-profile",
+  "theme": "dark",
+  "overflow": false,
+  "text": 654,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-dark-purchase-requests",
+  "theme": "dark",
+  "overflow": false,
+  "text": 479,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-home",
+  "theme": "light",
+  "overflow": false,
+  "text": 1697,
+  "low": 2,
+  "bad": [
+   {
+    "sel": "span.search-advanced__icon",
+    "text": "🔍",
+    "ratio": 1,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "span.search-advanced__location-icon",
+    "text": "📍",
+    "ratio": 1.09,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(245,245,245)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-product-detail",
+  "theme": "light",
+  "overflow": false,
+  "text": 611,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-favorites",
+  "theme": "light",
+  "overflow": false,
+  "text": 468,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-cart",
+  "theme": "light",
+  "overflow": false,
+  "text": 579,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-orders",
+  "theme": "light",
+  "overflow": false,
+  "text": 1275,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-order-detail",
+  "theme": "light",
+  "overflow": false,
+  "text": 1017,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-wallet",
+  "theme": "light",
+  "overflow": false,
+  "text": 617,
+  "low": 4,
+  "bad": [
+   {
+    "sel": "div.transaction-date",
+    "text": "08:59 12/11/2026",
+    "ratio": 2.56,
+    "fg": "rgb(149, 165, 166)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "span.status-badge.status-completed",
+    "text": "Hoàn thành",
+    "ratio": 2.87,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(39,174,96)"
+   },
+   {
+    "sel": "div.transaction-date",
+    "text": "08:59 12/11/2026",
+    "ratio": 2.56,
+    "fg": "rgb(149, 165, 166)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "span.status-badge.status-completed",
+    "text": "Hoàn thành",
+    "ratio": 2.87,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(39,174,96)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-chat",
+  "theme": "light",
+  "overflow": false,
+  "text": 535,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-assistant",
+  "theme": "light",
+  "overflow": false,
+  "text": 795,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-support",
+  "theme": "light",
+  "overflow": false,
+  "text": 606,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-profile",
+  "theme": "light",
+  "overflow": false,
+  "text": 654,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "buyer-light-purchase-requests",
+  "theme": "light",
+  "overflow": false,
+  "text": 479,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "seller-dark-seller-orders",
+  "theme": "dark",
+  "overflow": false,
+  "text": 700,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "seller-dark-my-products",
+  "theme": "dark",
+  "overflow": false,
+  "text": 2683,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-dashboard",
+  "theme": "light",
+  "overflow": false,
+  "text": 1409,
+  "low": 3,
+  "bad": [
+   {
+    "sel": "small",
+    "text": "Quản trị & vận hành",
+    "ratio": 2.99,
+    "fg": "rgb(138, 150, 169)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.dashboard-sidebar__label",
+    "text": "KHÔNG GIAN LÀM VIỆC",
+    "ratio": 2.49,
+    "fg": "rgb(154, 165, 181)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.dashboard-sidebar__label.dashboard-sidebar__label--secondary",
+    "text": "TRUY CẬP NHANH",
+    "ratio": 2.49,
+    "fg": "rgb(154, 165, 181)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-users",
+  "theme": "light",
+  "overflow": false,
+  "text": 1037,
+  "low": 13,
+  "bad": [
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Dashboard và thống kê",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Thống kê phí 5% và chi trả",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "CRUD người dùng hệ thống",
+    "ratio": 2.31,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(243,244,246)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Xử lý báo cáo từ người dùng",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-products",
+  "theme": "light",
+  "overflow": false,
+  "text": 1977,
+  "low": 23,
+  "bad": [
+   {
+    "sel": "small",
+    "text": "Quản trị & vận hành",
+    "ratio": 2.99,
+    "fg": "rgb(138, 150, 169)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.dashboard-sidebar__label",
+    "text": "KHÔNG GIAN LÀM VIỆC",
+    "ratio": 2.49,
+    "fg": "rgb(154, 165, 181)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.dashboard-sidebar__label.dashboard-sidebar__label--secondary",
+    "text": "TRUY CẬP NHANH",
+    "ratio": 2.49,
+    "fg": "rgb(154, 165, 181)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "small",
+    "text": "Thú cưng",
+    "ratio": 2.99,
+    "fg": "rgb(138, 150, 169)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-reports",
+  "theme": "light",
+  "overflow": false,
+  "text": 737,
+  "low": 12,
+  "bad": [
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Dashboard và thống kê",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Thống kê phí 5% và chi trả",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "CRUD người dùng hệ thống",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Xử lý báo cáo từ người dùng",
+    "ratio": 2.31,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(243,244,246)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-orders",
+  "theme": "light",
+  "overflow": false,
+  "text": 867,
+  "low": 9,
+  "bad": [
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Dashboard và thống kê",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Thống kê phí 5% và chi trả",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "CRUD người dùng hệ thống",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Xử lý báo cáo từ người dùng",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-reviews",
+  "theme": "light",
+  "overflow": false,
+  "text": 788,
+  "low": 8,
+  "bad": [
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Dashboard và thống kê",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Thống kê phí 5% và chi trả",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "CRUD người dùng hệ thống",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Xử lý báo cáo từ người dùng",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-withdrawals",
+  "theme": "light",
+  "overflow": false,
+  "text": 625,
+  "low": 8,
+  "bad": [
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Dashboard và thống kê",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Thống kê phí 5% và chi trả",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "CRUD người dùng hệ thống",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Xử lý báo cáo từ người dùng",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-disputes",
+  "theme": "light",
+  "overflow": false,
+  "text": 612,
+  "low": 8,
+  "bad": [
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Dashboard và thống kê",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Thống kê phí 5% và chi trả",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "CRUD người dùng hệ thống",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Xử lý báo cáo từ người dùng",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "admin-dark-admin-revenue",
+  "theme": "light",
+  "overflow": false,
+  "text": 1389,
+  "low": 11,
+  "bad": [
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Dashboard và thống kê",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Thống kê phí 5% và chi trả",
+    "ratio": 2.31,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(243,244,246)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "CRUD người dùng hệ thống",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.admin-sidebar__link-desc",
+    "text": "Xử lý báo cáo từ người dùng",
+    "ratio": 2.54,
+    "fg": "rgb(156, 163, 175)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "mod-dark-staff-dashboard",
+  "theme": "light",
+  "overflow": false,
+  "text": 1183,
+  "low": 3,
+  "bad": [
+   {
+    "sel": "small",
+    "text": "Quản trị & vận hành",
+    "ratio": 2.99,
+    "fg": "rgb(138, 150, 169)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.dashboard-sidebar__label",
+    "text": "KHÔNG GIAN LÀM VIỆC",
+    "ratio": 2.49,
+    "fg": "rgb(154, 165, 181)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.dashboard-sidebar__label.dashboard-sidebar__label--secondary",
+    "text": "TRUY CẬP NHANH",
+    "ratio": 2.49,
+    "fg": "rgb(154, 165, 181)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "mod-dark-mod-reports",
+  "theme": "light",
+  "overflow": false,
+  "text": 501,
+  "low": 4,
+  "bad": [
+   {
+    "sel": "div.ant-select-placeholder",
+    "text": "Trạng thái",
+    "ratio": 1.83,
+    "fg": "rgba(0, 0, 0, 0.25)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "div.ant-select-placeholder",
+    "text": "Loại báo cáo",
+    "ratio": 1.83,
+    "fg": "rgba(0, 0, 0, 0.25)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "span.ant-tag.ant-tag-filled",
+    "text": "1 lần bị báo",
+    "ratio": 2.76,
+    "fg": "rgb(212, 136, 6)",
+    "bg": "rgb(255,251,230)"
+   },
+   {
+    "sel": "span.ant-tag.ant-tag-filled",
+    "text": "Chờ xử lý",
+    "ratio": 1.83,
+    "fg": "rgb(250, 173, 20)",
+    "bg": "rgb(255,251,230)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "mod-dark-mod-orders",
+  "theme": "light",
+  "overflow": false,
+  "text": 631,
+  "low": 1,
+  "bad": [
+   {
+    "sel": "div.ant-select-placeholder",
+    "text": "Trạng thái",
+    "ratio": 1.83,
+    "fg": "rgba(0, 0, 0, 0.25)",
+    "bg": "rgb(255,255,255)"
+   }
+  ],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "mod-dark-mod-disputes",
+  "theme": "light",
+  "overflow": false,
+  "text": 376,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "mod-dark-mod-reviews",
+  "theme": "light",
+  "overflow": false,
+  "text": 552,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "mod-dark-mod-withdrawals",
+  "theme": "light",
+  "overflow": false,
+  "text": 389,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ },
+ {
+  "tag": "mod-dark-mod-profile",
+  "theme": "light",
+  "overflow": false,
+  "text": 705,
+  "low": 0,
+  "bad": [],
+  "api": [],
+  "errs": []
+ }
+]

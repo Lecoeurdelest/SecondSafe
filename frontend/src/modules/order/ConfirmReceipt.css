@@ -22,7 +22,7 @@
 
 .confirm-receipt-content {
   position: relative;
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   width: 100%;
   max-width: 600px;
@@ -36,13 +36,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid #e1e8ed;
-  background-color: #f8f9fa;
+  border-bottom: 1px solid var(--line);
+  background-color: var(--surface-2);
   border-radius: 12px 12px 0 0;
 }
 
 .confirm-receipt-header h3 {
-  color: #333;
+  color: var(--ink);
   margin: 0;
   font-size: 20px;
   font-weight: 600;
@@ -52,7 +52,7 @@
   background: none;
   border: none;
   font-size: 18px;
-  color: #666;
+  color: var(--text-2);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -60,14 +60,14 @@
 }
 
 .close-button:hover {
-  background-color: #e9ecef;
-  color: #333;
+  background-color: var(--surface-3);
+  color: var(--ink);
 }
 
 .order-summary {
   padding: 20px 24px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e1e8ed;
+  background-color: var(--surface-2);
+  border-bottom: 1px solid var(--line);
 }
 
 .order-info,
@@ -82,7 +82,7 @@
 
 .order-info h4,
 .shipping-info h4 {
-  color: #333;
+  color: var(--ink);
   margin-bottom: 12px;
   font-size: 16px;
   font-weight: 600;
@@ -102,13 +102,13 @@
 }
 
 .detail-item .label {
-  color: #666;
+  color: var(--text-2);
   font-size: 14px;
   font-weight: 500;
 }
 
 .detail-item .value {
-  color: #333;
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -120,7 +120,7 @@
   border: 1px solid #f1d7c8;
   border-radius: 18px;
   padding: 20px;
-  background: linear-gradient(180deg, #fff8f3 0%, #ffffff 42%);
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 42%);
   box-shadow: 0 16px 36px rgba(192, 88, 37, 0.08);
 }
 
@@ -149,7 +149,7 @@
 .review-order-chip {
   padding: 8px 12px;
   border-radius: 999px;
-  background: #fff;
+  background: var(--surface);
   color: #c2410c;
   font-size: 12px;
   font-weight: 700;
@@ -163,7 +163,7 @@
   gap: 16px;
   padding: 16px;
   border-radius: 16px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid #f3e0d6;
   margin-bottom: 20px;
   align-items: center;
@@ -174,7 +174,7 @@
   height: 92px;
   border-radius: 14px;
   object-fit: cover;
-  background: #f8fafc;
+  background: var(--surface-2);
   border: 1px solid #ececec;
 }
 
@@ -183,7 +183,7 @@
 }
 
 .review-product-card__title {
-  color: #1f2937;
+  color: var(--ink);
   font-size: 16px;
   font-weight: 700;
   line-height: 1.5;
@@ -202,8 +202,8 @@
   align-items: center;
   padding: 6px 10px;
   border-radius: 999px;
-  background: #f8fafc;
-  color: #475569;
+  background: var(--surface-2);
+  color: var(--text-2);
   font-size: 12px;
   font-weight: 600;
 }
@@ -217,9 +217,9 @@
 }
 
 .review-product-card__meta .tracking-pill {
-  background: #f8fafc;
-  color: #475569;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-2);
+  color: var(--text-2);
+  border: 1px solid var(--line);
 }
 
 .review-seller-card {
@@ -232,6 +232,7 @@
   border: 1px solid #fed7aa;
   justify-self: end;
   min-width: 180px;
+  color: #1a1a1a;
 }
 
 .review-seller-card__avatar {
@@ -239,7 +240,7 @@
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  background: #fff;
+  background: var(--surface);
   border: 2px solid #fff;
 }
 
@@ -264,7 +265,7 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: var(--ink);
   font-weight: 600;
   font-size: 14px;
 }
@@ -286,8 +287,8 @@
 }
 
 .satisfaction-card {
-  border: 1px solid #e5e7eb;
-  background: #fff;
+  border: 1px solid var(--line);
+  background: var(--surface);
   border-radius: 16px;
   padding: 16px;
   display: flex;
@@ -308,6 +309,7 @@
   border-color: #f97316;
   background: #fff7ed;
   box-shadow: 0 12px 24px rgba(249, 115, 22, 0.14);
+  color: #1a1a1a;
 }
 
 .satisfaction-card__icon {
@@ -315,13 +317,13 @@
 }
 
 .satisfaction-card__title {
-  color: #111827;
+  color: var(--ink);
   font-size: 15px;
   font-weight: 700;
 }
 
 .satisfaction-card__desc {
-  color: #6b7280;
+  color: var(--text-2);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -337,7 +339,7 @@
 }
 
 .radio-option:hover {
-  background-color: #f8f9fa;
+  background-color: var(--surface-2);
 }
 
 .radio-option input[type="radio"] {
@@ -346,7 +348,7 @@
 }
 
 .radio-label {
-  color: #333;
+  color: var(--ink);
   font-size: 14px;
 }
 
@@ -363,9 +365,9 @@
 }
 
 .star-button {
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  color: #94a3b8;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-3);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 12px 14px;
@@ -390,13 +392,13 @@
 }
 
 .star-button__value {
-  color: #475569;
+  color: var(--text-2);
   font-size: 12px;
   font-weight: 700;
 }
 
 .rating-text {
-  color: #666;
+  color: var(--text-2);
   font-size: 14px;
   font-weight: 500;
 }
@@ -415,8 +417,8 @@
 
 .highlight-chip {
   border: 1px solid #d6dce5;
-  background: #fff;
-  color: #475569;
+  background: var(--surface);
+  color: var(--text-2);
   border-radius: 999px;
   padding: 10px 14px;
   font-size: 13px;
@@ -439,7 +441,7 @@
 
 .form-helper-text {
   margin-top: 8px;
-  color: #64748b;
+  color: var(--text-2);
   font-size: 12px;
 }
 
@@ -471,7 +473,7 @@
   padding: 12px;
   border: 1px solid #d6dce5;
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface);
   box-sizing: border-box;
 }
 
@@ -488,7 +490,7 @@
   height: 110px;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--line);
   background: #0f172a;
 }
 
@@ -533,10 +535,11 @@
   padding: 12px;
   margin-bottom: 16px;
   font-size: 14px;
+  color: #1a1a1a;
 }
 
 .character-count {
-  color: #666;
+  color: var(--text-2);
   font-size: 12px;
   margin-top: 4px;
   text-align: right;
@@ -547,7 +550,7 @@
   gap: 12px;
   justify-content: flex-end;
   padding-top: 16px;
-  border-top: 1px solid #e1e8ed;
+  border-top: 1px solid var(--line);
 }
 
 .btn {
@@ -595,6 +598,7 @@
   background-color: #e8f5e8;
   border-top: 1px solid #c3e6cb;
   border-radius: 0 0 12px 12px;
+  color: #1a1a1a;
 }
 
 .receipt-notice h5 {
@@ -697,7 +701,7 @@
   
   .detail-item {
     padding: 8px 0;
-    border-bottom: 1px solid #e1e8ed;
+    border-bottom: 1px solid var(--line);
   }
   
   .detail-item:last-child {

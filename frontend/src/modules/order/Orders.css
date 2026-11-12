@@ -2,24 +2,24 @@
   max-width: 1220px;
   margin: 0 auto;
   padding: 88px 20px 32px;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .orders-container .page-header {
   margin-bottom: 26px;
   padding: 28px 30px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line);
   border-radius: 24px;
   background:
     radial-gradient(circle at top right, rgba(246, 71, 59, 0.12), transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
   box-shadow: 0 18px 44px rgba(15, 23, 42, 0.06);
   text-align: left;
 }
 
 .orders-container .page-header h1 {
   margin: 0 0 8px;
-  color: #0f172a;
+  color: var(--ink);
   font-size: 30px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -27,7 +27,7 @@
 
 .orders-container .page-header p {
   margin: 0;
-  color: #64748b;
+  color: var(--text-2);
   font-size: 15px;
   line-height: 1.6;
 }
@@ -35,7 +35,7 @@
 .orders-container .loading {
   padding: 72px 20px;
   text-align: center;
-  color: #64748b;
+  color: var(--text-2);
   font-size: 17px;
 }
 
@@ -59,9 +59,9 @@
   gap: 10px;
   margin-bottom: 24px;
   padding: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface-glass);
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
 }
 
@@ -73,7 +73,7 @@
   border-radius: 14px;
   background: transparent;
   padding: 13px 18px;
-  color: #64748b;
+  color: var(--text-2);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -81,8 +81,8 @@
 }
 
 .orders-container .tab-button:hover {
-  background: #f8fafc;
-  color: #0f172a;
+  background: var(--surface-2);
+  color: var(--ink);
 }
 
 .orders-container .tab-button.active {
@@ -101,9 +101,9 @@
   gap: 20px;
   margin-bottom: 24px;
   padding: 18px 20px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line);
   border-radius: 20px;
-  background: #ffffff;
+  background: var(--surface);
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.05);
 }
 
@@ -114,7 +114,7 @@
 }
 
 .orders-container .filter-group label {
-  color: #475569;
+  color: var(--text-2);
   font-size: 14px;
   font-weight: 700;
 }
@@ -122,10 +122,10 @@
 .orders-container .filter-group select {
   min-width: 200px;
   padding: 10px 14px;
-  border: 1px solid #dbe2ea;
+  border: 1px solid var(--line-strong);
   border-radius: 12px;
-  background: #f8fafc;
-  color: #0f172a;
+  background: var(--surface-2);
+  color: var(--ink);
   font-size: 14px;
   outline: none;
   transition: all 0.2s ease;
@@ -133,34 +133,34 @@
 
 .orders-container .filter-group select:focus {
   border-color: #fa6a60;
-  background: #ffffff;
+  background: var(--surface);
   box-shadow: 0 0 0 4px rgba(250, 106, 96, 0.15);
 }
 
 .orders-container .empty-state {
   padding: 64px 28px;
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed var(--line-strong);
   border-radius: 24px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
   text-align: center;
 }
 
 .orders-container .empty-icon {
   margin-bottom: 16px;
-  color: #94a3b8;
+  color: var(--text-3);
   font-size: 58px;
 }
 
 .orders-container .empty-state h3 {
   margin: 0 0 10px;
-  color: #0f172a;
+  color: var(--ink);
   font-size: 24px;
 }
 
 .orders-container .empty-state p {
   max-width: 560px;
   margin: 0 auto 22px;
-  color: #64748b;
+  color: var(--text-2);
   font-size: 15px;
   line-height: 1.7;
 }
@@ -172,9 +172,9 @@
 }
 
 .orders-container .order-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line);
   border-radius: 22px;
-  background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
   padding: 22px;
   cursor: pointer;
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
@@ -194,7 +194,7 @@
   gap: 16px;
   margin-bottom: 18px;
   padding-bottom: 14px;
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid var(--line);
 }
 
 .orders-container .order-id {
@@ -205,7 +205,7 @@
 }
 
 .orders-container .order-id .label {
-  color: #64748b;
+  color: var(--text-2);
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -213,7 +213,7 @@
 }
 
 .orders-container .order-id .value {
-  color: #0f172a;
+  color: var(--ink);
   font-size: 15px;
   font-weight: 800;
   font-family: Consolas, Monaco, monospace;
@@ -301,8 +301,8 @@
   overflow: hidden;
   border-radius: 18px;
   flex-shrink: 0;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
 }
 
 .orders-container .product-image img {
@@ -317,7 +317,7 @@
 
 .orders-container .product-details h4 {
   margin: 0 0 10px;
-  color: #0f172a;
+  color: var(--ink);
   font-size: 18px;
   font-weight: 700;
   line-height: 1.4;
@@ -326,7 +326,7 @@
 .orders-container .product-price,
 .orders-container .order-total {
   margin: 0 0 6px;
-  color: #64748b;
+  color: var(--text-2);
   font-size: 14px;
 }
 
@@ -343,8 +343,8 @@
   min-width: 220px;
   padding: 14px 16px;
   border-radius: 18px;
-  background: #f8fafc;
-  border: 1px solid #eef2f7;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
 }
 
 .orders-container .user-info,
@@ -358,7 +358,7 @@
 .orders-container .user-info .label,
 .orders-container .order-date .label,
 .orders-container .ship-date .label {
-  color: #64748b;
+  color: var(--text-2);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -368,7 +368,7 @@
 .orders-container .user-info .value,
 .orders-container .order-date .value,
 .orders-container .ship-date .value {
-  color: #0f172a;
+  color: var(--ink);
   font-size: 14px;
   font-weight: 700;
 }
@@ -379,7 +379,7 @@
   justify-content: flex-end;
   gap: 10px;
   padding-top: 16px;
-  border-top: 1px solid #eef2f7;
+  border-top: 1px solid var(--line);
 }
 
 .orders-container .order-actions .btn {
@@ -457,7 +457,7 @@
 }
 
 .orders-container .btn-outline {
-  background: #ffffff;
+  background: var(--surface);
   color: var(--brand);
   border-color: #fec3bf;
 }
@@ -465,6 +465,7 @@
 .orders-container .btn-outline:hover:not(:disabled) {
   background: #fff0ef;
   border-color: #fd9a93;
+  color: #1a1a1a;
 }
 
 .orders-container .btn-danger {
@@ -475,6 +476,7 @@
 
 .orders-container .btn-danger:hover:not(:disabled) {
   background: #ffe4e6;
+  color: #1a1a1a;
 }
 
 .orders-container .btn-warning {
@@ -485,6 +487,7 @@
 
 .orders-container .btn-warning:hover:not(:disabled) {
   background: #ffedd5;
+  color: #1a1a1a;
 }
 
 .orders-container .pagination {
@@ -503,10 +506,10 @@
   gap: 8px;
   min-height: 42px;
   padding: 0 18px;
-  border: 1px solid #dbe2ea;
+  border: 1px solid var(--line-strong);
   border-radius: 12px;
-  background: #ffffff;
-  color: #0f172a;
+  background: var(--surface);
+  color: var(--ink);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -529,12 +532,12 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  color: #0f172a;
+  color: var(--ink);
   font-weight: 800;
 }
 
 .orders-container .total-count {
-  color: #64748b;
+  color: var(--text-2);
   font-size: 12px;
   font-weight: 600;
 }
@@ -555,8 +558,8 @@
   gap: 12px;
   padding: 18px 24px;
   border-radius: 18px;
-  background: #ffffff;
-  color: #0f172a;
+  background: var(--surface);
+  color: var(--ink);
   font-weight: 700;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
 }

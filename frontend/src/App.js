@@ -5,6 +5,8 @@ import AppRoutes from './routes';
 import authService from './services/auth.service';
 import { clearSession, getSession } from './services/session.service';
 import LanguageSwitcher from './components/LanguageSwitcher';
+import ThemeToggle from './components/ThemeToggle';
+import { applyTheme, canChooseTheme, effectiveTheme, preferredTheme, savePreferredTheme } from './utils/theme';
 import { applySystemLanguage, observeSystemLanguage } from './services/language.service';
 
 const NotificationPanel = lazy(() => import('./components/NotificationPanel'));
@@ -26,6 +28,7 @@ export default function App() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [supportOpen, setSupportOpen] = useState(false);
+  const [preferred, setPreferred] = useState(preferredTheme);
   const [language, setLanguage] = useState(() => {
     try { return window.localStorage.getItem('secondsafe:language') === 'en' ? 'en' : 'vi'; }
     catch { return 'vi'; }
@@ -37,6 +40,16 @@ export default function App() {
     window.dispatchEvent(new CustomEvent('secondsafe:language-changed', { detail: { language } }));
     return observeSystemLanguage(language);
   }, [language]);
+
+  const theme = effectiveTheme(session.role, preferred);
+
+  useEffect(() => { applyTheme(theme); }, [theme]);
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setPreferred(next);
+    savePreferredTheme(next);
+  }
 
   useEffect(() => {
     const updateSession = () => setSession(getSession());
@@ -79,6 +92,7 @@ export default function App() {
           <div className="container marketplace-announcement__content">
             <span>{language === 'en' ? 'SecondSafe · Safe, transparent second-hand marketplace' : 'SecondSafe · Mua đồ đã qua sử dụng, chọn lọc và trao đổi minh bạch'}</span>
             <button type="button" className="marketplace-announcement__support" onClick={() => setSupportOpen(true)}>{language === 'en' ? 'Help center' : 'Trung tâm hỗ trợ'}</button>
+            {canChooseTheme(session.role) && <ThemeToggle theme={theme} onToggle={toggleTheme} language={language} />}
             <LanguageSwitcher value={language} onChange={setLanguage} />
           </div>
         </div>
