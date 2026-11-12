@@ -3148,6 +3148,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-13
+      statement: The shipment confirmation and receipt confirmation dialogs are built from Ant Design components with the same fields,
+        generated tracking code, pickup point choices, validation, review and evidence upload, results and messages, a dialog instead
+        of the browser confirm, and work from 360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7562,6 +7569,41 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: The purchase request becomes an Ant Design Modal holding a Form with a counting text area and a price input, keeping its validation messages, quick-buy variant and result callback. The inbox uses Card, Tag, Avatar, Empty and a confirmation Modal. The payment page uses Card, Descriptions, Alert and Row and Col, hands the buyer to the same SePay checkout, and replaces the browser confirm and alert with dialogs and toasts. The result page uses Result, Descriptions and Spin and keeps its polling. Dark overrides in index.css for the removed payment method markup are deleted.
+  - id: TASK-093
+    title: Ant Design shipment and receipt dialogs
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-13
+    objective: Rebuild the seller's shipment confirmation dialog and the buyer's receipt confirmation and review dialog from Ant Design components.
+    in_scope:
+    - frontend/src/modules/order/ShipOrder.jsx
+    - frontend/src/modules/order/ShipOrder.css
+    - frontend/src/modules/order/ConfirmReceipt.jsx
+    - frontend/src/modules/order/ConfirmReceipt.css
+    out_of_scope:
+    - The order detail page that opens the dialogs (next order task)
+    - Services, shipment and receipt rules and the review upload endpoints
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/order/ShipOrder.test.jsx
+    - frontend/src/modules/order/ConfirmReceipt.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: Both dialogs become Ant Design Modals holding a Form. The shipment dialog uses Descriptions for the order and the default pickup point, a Select for the carrier, a read-only generated tracking code, a date input, a Checkbox that reveals the custom pickup fields with the location selector, and an Alert for the notes. The receipt dialog uses Descriptions, a product summary, pressed-state buttons for the satisfaction and highlight choices, Rate for the stars, the shared EvidencePicker for photos and videos, and an Ant Design confirmation dialog instead of the browser confirm. Each keeps its validation messages, payloads and result callbacks.
 verification:
   thresholds:
     standard: 0.95

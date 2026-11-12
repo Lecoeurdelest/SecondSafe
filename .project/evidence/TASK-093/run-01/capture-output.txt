@@ -1,0 +1,4 @@
+{"theme":"light","label":"w1280","shipDialog":3,"shipOverflow":false,"receiptDialog":1,"askConfirm":1,"errors":0}
+{"theme":"light","label":"w390","shipDialog":3,"shipOverflow":false,"receiptDialog":1,"askConfirm":1,"errors":0}
+{"theme":"dark","label":"w1280","shipDialog":3,"shipOverflow":false,"receiptDialog":1,"askConfirm":1,"errors":0}
+{"theme":"dark","label":"w390","shipDialog":3,"shipOverflow":false,"receiptDialog":1,"askConfirm":1,"errors":0}
