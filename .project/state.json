@@ -1981,6 +1981,35 @@
       "criteria": {
         "AC-WEB-25-10": "inconclusive"
       }
+    },
+    "TASK-091": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The buyer and seller order lists, the seller orders page and the abandoned checkout section are rebuilt from Ant Design components; the new tests and the existing suites pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Twelfth slice of the Ant Design goal: order lists"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the buyer and seller order lists, the seller orders page and the abandoned checkout section with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the order lists, the seller orders page and the abandoned checkout section with Ant Design components, replacing the browser prompt, confirm and alerts; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-091/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-091.md",
+      "criteria": {
+        "AC-WEB-25-11": "inconclusive"
+      }
     }
   }
 }

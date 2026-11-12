@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-091",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The buyer and seller order lists, the seller orders page and the abandoned checkout section are rebuilt from Ant Design components; the new tests and the existing suites pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the order lists, the seller orders page and the abandoned checkout section with Ant Design components, replacing the browser prompt, confirm and alerts; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The dispute, shipping and seller confirmation dialogs were exercised by tests only; no real cancellation or confirmation",
+    "No real phone, no other browser"
+  ],
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`orders-capture.js`, original output in `capture-output.txt`). For light and dark at 1280 and 390 px the script signs in and opens the buyer orders page (four orders in different states, a two-page pager, and two unfinished checkouts above the list), switches to the selling tab, opens the cancel dialog from the first order and types a reason, then opens the seller orders page and the cart page with the unfinished checkouts. Counts, horizontal overflow and page errors are recorded.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-orders-buying.png`, `dark-w390-orders-buying.png` | Buyer orders with the unfinished-checkout section, tabs, status filter, order cards with status tags and actions, and the pager |\n| `light-w1280-orders-selling.png` | The selling tab with the seller actions |\n| `dark-w1280-orders-cancel.png` | The cancel dialog with a reason typed in, in the dark theme |\n| `light-w390-seller-orders.png`, `dark-w390-seller-orders.png` | Seller orders page with three tabs and their counts that fit a phone |\n| `light-w1280-abandoned.png` | The unfinished checkouts above the cart |\n\nResults: in all four combinations four buying orders, four selling orders, two unfinished checkouts and two seller-page orders were shown, the cancel dialog opened, no page overflowed horizontally and none raised an error. After the first capture the seller page tabs were tightened because the third tab was folded into an overflow menu at 390 px; the final capture shows all three.\n\nNot observed: the dispute, shipping and seller confirmation dialogs in the browser, a real cancellation or confirmation, a real phone, Firefox or WebKit.",
+  "criteria": {
+    "AC-WEB-25-11": {
+      "observed": "pass",
+      "note": "The new Orders, SellerOrders and AbandonedCheckouts tests and the existing suites pass; the build passes; the lists show their tabs, filters, cards, actions, cancel dialog and states with no overflow or error in light and dark at 390 and 1280 px; the dispute, shipping and confirmation dialogs were not seen in the browser",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

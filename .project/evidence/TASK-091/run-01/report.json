@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-091",
+  "spec_hash": "a362fbe0fa139942b5e652c023c845c0e5e162b53d8a1c66db9254714578019c",
+  "source_hash": "cd7c1db273fc64918f2db67280c733ef6627225fec6d4a12f757486829133f04",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The dispute, shipping and seller confirmation dialogs were exercised by tests only; no real cancellation or confirmation",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-11",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new Orders, SellerOrders and AbandonedCheckouts tests and the existing suites pass; the build passes; the lists show their tabs, filters, cards, actions, cancel dialog and states with no overflow or error in light and dark at 390 and 1280 px; the dispute, shipping and confirmation dialogs were not seen in the browser",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-091/run-01/frontend-test.txt",
+            ".project/evidence/TASK-091/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-091/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
