@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-085",
+  "spec_hash": "005baf3689bc2c04cbe0af4e7609947912ddc20dd441773d4bc40ca59840a07d",
+  "source_hash": "12e2816d08736e086f30f4475ac45855d895821af54680bf47e100a3a2e243aa",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses and a canned province list",
+    "No real upload or save and no real province service were exercised",
+    "The profile and shipping forms that embed the selector were not re-observed",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-5",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new CreateProduct, EditProduct and LocationSelector tests and the existing suites pass; the build passes; the forms show inline validation, the photo picker, the summary and the cascading selects with no overflow or error in light and dark at 390 and 1280 px; a real upload and save were not exercised",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-085/run-01/frontend-test.txt",
+            ".project/evidence/TASK-085/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-085/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

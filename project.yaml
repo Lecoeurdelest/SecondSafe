@@ -3095,6 +3095,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-5
+      statement: The listing creation and editing forms and the province, district and ward selector are built from Ant Design form
+        components with inline validation, a shared photo picker, a live summary and the same upload and save behaviour, and work from
+        360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7222,6 +7229,46 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: The detail page uses Row and Col, a Card for the photo, Typography, Descriptions for the facts, Alert for notices and errors, and Button for the actions, with the same names and aria-pressed on the favourite button. The cart uses a Card per item and Pagination, and the saved list uses a Card grid with a Popconfirm in place of the browser confirm dialog. An error while loading a product now shows the error alert instead of the not-found message. Test setup replaces jsdom's stylesheet-based computed style, which took seconds per role query once many Ant Design styles were present, with one built from the inline style and Ant Design's hidden classes.
+  - id: TASK-085
+    title: Ant Design listing forms and location selector
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-5
+    objective: Rebuild the listing creation and editing forms and the shared province, district and ward selector from Ant Design form components.
+    in_scope:
+    - frontend/src/modules/product/CreateProduct.jsx
+    - frontend/src/modules/product/CreateProduct.css
+    - frontend/src/modules/product/CreateProduct.test.jsx
+    - frontend/src/modules/product/EditProduct.jsx
+    - frontend/src/modules/product/EditProduct.test.jsx
+    - frontend/src/modules/product/ProductImagePicker.jsx
+    - frontend/src/components/LocationSelector.jsx
+    - frontend/src/components/LocationSelector.css
+    - frontend/src/components/LocationSelector.test.jsx
+    out_of_scope:
+    - The my-products page (next task)
+    - Services, routes, upload and save requests and the validation rules
+    - The profile and shipping forms that embed the selector, apart from the selector's own look
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/product/ProductImagePicker.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: Both forms keep their state and validation functions and render them through Form.Item with validateStatus and help, Input, Input.TextArea and Select; the category chips are toggle Buttons with aria-pressed. A ProductImagePicker shared by both forms shows the photo tiles and an add button that opens a hidden file input. The creation form shows a summary Card and a completeness Progress. The selector uses searchable Selects with the same onChange payloads. Success and failure messages use the Ant Design message instead of the browser alert. Shared class names were renamed to product-form-section, product-form-actions and product-sidebar-card so they no longer collide with other pages.
 verification:
   thresholds:
     standard: 0.95
