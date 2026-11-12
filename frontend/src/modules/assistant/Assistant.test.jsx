@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Assistant from './Assistant';
 import assistantService from '../../services/assistant.service';
 import { clearSession } from '../../services/session.service';
@@ -189,4 +189,40 @@ test('moderators still get the report checklist view', async () => {
   );
   expect(screen.getByRole('heading', { name: 'Checklist tham khảo' })).toBeInTheDocument();
   expect(screen.queryByLabelText('Câu hỏi')).not.toBeInTheDocument();
+});
+
+function renderModeration() {
+  return render(
+    <MemoryRouter future={future} initialEntries={['/staff/assistant/report-1']}>
+      <Routes>
+        <Route path="/staff/assistant/:reportId" element={<Assistant moderation />} />
+      </Routes>
+    </MemoryRouter>
+  );
+}
+
+test('the moderation checklist shows the guidance and links back to the staff dashboard', async () => {
+  assistantService.getModerationGuidance.mockResolvedValue({ guidance: 'Checklist: 1) Xem hồ sơ.' });
+  renderModeration();
+
+  expect(await screen.findByText('Checklist: 1) Xem hồ sơ.')).toBeInTheDocument();
+  expect(assistantService.getModerationGuidance).toHaveBeenCalledWith('report-1');
+  expect(screen.getByText('Đây chỉ là gợi ý chung. Nhân viên phải tự xem xét hồ sơ nội bộ và đưa ra quyết định cuối cùng.')).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /Quay lại dashboard nhân viên/ })).toHaveAttribute('href', '/staff');
+});
+
+test('the moderation checklist shows a status while loading and an alert when it fails', async () => {
+  assistantService.getModerationGuidance.mockRejectedValue(new Error('Không thể tạo checklist kiểm duyệt.'));
+  renderModeration();
+
+  expect(screen.getByRole('status')).toHaveTextContent('Đang tạo checklist...');
+  expect(await screen.findByRole('alert')).toHaveTextContent('Không thể tạo checklist kiểm duyệt.');
+});
+
+test('the character counter follows what is typed', () => {
+  renderAssistant();
+  expect(screen.getByText('0/600')).toBeInTheDocument();
+  type('Xin chào');
+  expect(screen.getByText('8/600')).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Mở cuộc trò chuyện hỗ trợ' })).toHaveAttribute('href', '/support');
 });

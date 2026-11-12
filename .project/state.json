@@ -1894,6 +1894,35 @@
       "criteria": {
         "AC-WEB-25-7": "inconclusive"
       }
+    },
+    "TASK-088": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The assistant, chat and support pages are rebuilt from Ant Design components; the existing and new tests pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Ninth slice of the Ant Design goal: assistant, chat and support pages"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the assistant, chat and support pages with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the assistant, chat and support pages with Ant Design components; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-088/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-088.md",
+      "criteria": {
+        "AC-WEB-25-8": "inconclusive"
+      }
     }
   }
 }

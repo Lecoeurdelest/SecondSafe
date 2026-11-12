@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-088",
+  "spec_hash": "566d3bb4670774d7e3e74424349880b6cf68ad1d5cea50db8dfae524ba88f3fd",
+  "source_hash": "ef17c6d5e754b43bcfe092b27dfb58f1e1a82a0a22b6e515480aa3ed4d899bc7",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses with no live socket",
+    "The staff inbox, image upload and real assistant answers were not exercised in the browser",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-8",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The existing Assistant, Chat and Support tests and the new ones (moderation checklist, support validation, staff inbox, status changes) pass; the build passes; the pages show answers, offers, conversations and forms with no overflow or error in light and dark at 390 and 1280 px; the live socket was not exercised",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-088/run-01/frontend-test.txt",
+            ".project/evidence/TASK-088/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-088/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

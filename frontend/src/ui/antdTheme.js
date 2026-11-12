@@ -16,7 +16,7 @@ export function storefrontTheme(mode) {
       colorPrimary: '#ff3b3b',
       colorLink: dark ? '#ff7b7b' : '#c42222',
       colorLinkHover: '#ff3b3b',
-      colorInfo: '#ff3b3b',
+      colorInfo: dark ? '#60a5fa' : '#2f6fe4',
       colorError: '#e74c3c',
       colorSuccess: '#38a169',
       colorWarning: '#f39c12',

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Card, Flex, Tag, Typography } from 'antd';
 
 const STATUS_LABELS = { pending: 'Đang chờ phản hồi', accepted: 'Đã chấp nhận', rejected: 'Đã từ chối' };
 
@@ -24,18 +25,22 @@ export default function OfferCard({ message, mine, onRespond }) {
     }
   }
 
+  const tagColor = status === 'accepted' ? 'success' : status === 'rejected' ? 'error' : 'warning';
+
   return (
-    <div className={`chat-offer is-${status}`}>
-      <span className="chat-offer-label">{initiatedBy === 'seller' ? 'Người bán đề nghị' : 'Người mua đề nghị'}</span>
-      <strong className="chat-offer-price">{formatPrice(agreedPrice)}</strong>
-      {message.content && <span>{message.content}</span>}
-      <span className="chat-offer-status">{STATUS_LABELS[status] || status}</span>
-      {canRespond && (
-        <span className="chat-offer-actions">
-          <button type="button" disabled={busy} onClick={() => respond(true)}>Chấp nhận</button>
-          <button type="button" disabled={busy} className="is-secondary" onClick={() => respond(false)}>Từ chối</button>
-        </span>
-      )}
-    </div>
+    <Card size="small" className={`chat-offer is-${status}`}>
+      <Flex vertical gap={4}>
+        <Typography.Text type="secondary" className="chat-offer-label">{initiatedBy === 'seller' ? 'Người bán đề nghị' : 'Người mua đề nghị'}</Typography.Text>
+        <Typography.Text strong className="chat-offer-price">{formatPrice(agreedPrice)}</Typography.Text>
+        {message.content && <span>{message.content}</span>}
+        <Tag color={tagColor} className="chat-offer-status">{STATUS_LABELS[status] || status}</Tag>
+        {canRespond && (
+          <Flex gap={8} className="chat-offer-actions">
+            <Button type="primary" size="small" disabled={busy} onClick={() => respond(true)}>Chấp nhận</Button>
+            <Button size="small" disabled={busy} onClick={() => respond(false)}>Từ chối</Button>
+          </Flex>
+        )}
+      </Flex>
+    </Card>
   );
 }
