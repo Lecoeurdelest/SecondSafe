@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-092",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The purchase request dialog and inbox, the order payment page and the bank transfer result page are rebuilt from Ant Design components; the new tests and the existing suites pass and the reachable pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the purchase request dialog and inbox, the order payment page and the bank transfer result page with Ant Design components, replacing the browser confirm and alerts; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The request inbox and the full purchase form are not reachable from any route, and the wallet payment branch from any control; tests only",
+    "No real SePay checkout or bank confirmation; no real phone, no other browser"
+  ],
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`payment-capture.js`, original output in `capture-output.txt`). For light and dark at 1280 and 390 px the script signs in and opens the payment page of an order awaiting payment, opens a product page and its \"Mua ngay\" quick-buy dialog, and opens the bank transfer result page for a completed, a rejected and a still-pending transaction. Headings, horizontal overflow and page errors are recorded.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-pay.png`, `dark-w390-pay.png` | Payment page with the order, the seller, the amounts, the bank transfer method, the safe-payment note and the escrow notes |\n| `light-w390-quick-buy.png`, `dark-w1280-quick-buy.png` | The quick-buy dialog with the listing and total |\n| `light-w1280-result-success.png`, `dark-w1280-result-success.png` | Completed payment with the amount and short code |\n| `light-w1280-result-failed.png` | Rejected payment with the server message |\n| `light-w390-result-checking.png` | Pending payment with the checking state |\n\nResults: in all four combinations the payment button and the quick-buy confirmation were present, the result pages showed \"Thanh toán thành công!\", \"Thanh toán không thành công\" and \"Đang kiểm tra...\", no page overflowed horizontally and none raised an error.\n\nNot observed: the purchase request inbox (no route reaches it) and the full message and price form of the purchase dialog (the product page and cart open it as a quick buy), the wallet branch, a real SePay checkout or bank confirmation, a real phone, Firefox or WebKit.",
+  "criteria": {
+    "AC-WEB-25-12": {
+      "observed": "pass",
+      "note": "The new PurchaseRequest, PurchaseRequests, OrderPayment and SEPayOrderSuccess tests and the existing suites pass; the build passes; the payment page, the quick-buy dialog and the result states show their content with no overflow or error in light and dark at 390 and 1280 px; the inbox, the full form and the wallet branch were exercised by tests only",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

@@ -778,5 +778,3 @@ body:has(.admin-layout, .moderator-shell, .dashboard-shell) :is(.marketplace-ann
 
 /* Dark theme: pastel chips keep their own text colour where a more specific rule would lighten it */
 :root[data-theme="dark"] .value.condition-badge { color: #2d6a2d; }
-:root[data-theme="dark"] .method-card.active h4 { color: #1a1a1a; }
-:root[data-theme="dark"] .method-card.active p { color: #666666; }

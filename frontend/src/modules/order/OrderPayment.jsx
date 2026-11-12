@@ -5,22 +5,40 @@ import { getOrderById, payOrder } from '../../services/order.service';
 import walletService from '../../services/wallet.service';
 import sePayService, { postToSepay } from '../../services/sepay.service';
 import { getImageUrl } from '../../utils/imageHelper';
+import { formatOrderPrice } from './orderStatus';
 import './OrderPayment.css';
-import { Check, CircleNotch, QrCode, ShieldCheck } from '@phosphor-icons/react';
+import { App as AntApp, Alert, Avatar, Button, Card, Col, Descriptions, Flex, Row, Spin, Typography } from 'antd';
+import { Check, QrCode, ShieldCheck } from '@phosphor-icons/react';
+
+const getUserId = (value) => value?._id || value?.id || value?.userId || value || null;
+
+const formatLongDate = (date) => new Date(date).toLocaleDateString('vi-VN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit'
+});
+
+const NOTICES = [
+  'Tiền sẽ được giữ trong ký quỹ và chỉ chuyển cho người bán khi bạn xác nhận đã nhận hàng',
+  'Nếu có tranh chấp, tiền sẽ được giữ cho đến khi giải quyết xong',
+  'Sau 10 ngày kể từ khi người bán xác nhận giao hàng, tiền sẽ tự động được chuyển',
+  'Bạn có thể liên hệ với người bán qua tính năng chat để thỏa thuận chi tiết'
+];
 
 const OrderPayment = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+  const { message, modal } = AntApp.useApp();
+
   const [order, setOrder] = useState(null);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [error, setError] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('sepay');
-
-  const getUserId = (value) => value?._id || value?.id || value?.userId || value || null;
 
   useEffect(() => {
     fetchOrderAndBalance();
@@ -38,10 +56,7 @@ const OrderPayment = () => {
       const normalizedOrder = orderData?.data || orderData;
       setOrder(normalizedOrder);
       setBalance(balanceData.balance);
-      
-      // Default payment method is sepay
       setPaymentMethod('sepay');
-      
       setError(null);
     } catch (err) {
       setError(err.message || 'Không thể tải thông tin đơn hàng');
@@ -50,87 +65,88 @@ const OrderPayment = () => {
     }
   };
 
-  const handlePayment = async () => {
-    if (paymentMethod === 'wallet') {
-      if (balance < order.totalAmount) {
-        const confirmTopUp = window.confirm(
-          'Số dư ví không đủ để thanh toán. Bạn có muốn nạp tiền không?'
-        );
-        if (confirmTopUp) {
-          navigate('/wallet/topup');
-        }
-        return;
-      }
+  const payWithWallet = () => {
+    if (balance < order.totalAmount) {
+      modal.confirm({
+        title: 'Số dư ví không đủ',
+        content: 'Số dư ví không đủ để thanh toán. Bạn có muốn nạp tiền không?',
+        okText: 'Nạp tiền',
+        cancelText: 'Hủy',
+        centered: true,
+        onOk: () => navigate('/wallet/topup')
+      });
+      return;
+    }
 
-      const confirmPayment = window.confirm(
-        `Bạn có chắc chắn muốn thanh toán ${formatPrice(order.totalAmount)} cho đơn hàng này bằng Ví Reflow?`
-      );
-      
-      if (!confirmPayment) return;
-
-      setPaymentLoading(true);
-      try {
-        await payOrder(id);
-        alert('Thanh toán thành công! Tiền đã được chuyển vào ký quỹ và sẽ được chuyển cho người bán khi bạn xác nhận đã nhận hàng.');
-        navigate('/orders');
-      } catch (err) {
-        alert(err.message || 'Không thể thực hiện thanh toán');
-      } finally {
-        setPaymentLoading(false);
-      }
-    } else if (paymentMethod === 'sepay') {
-      setPaymentLoading(true);
-      try {
-        const response = await sePayService.createOrderPayment(id, {
-          amount: order.totalAmount,
-          orderInfo: `Thanh toan don hang ${order.orderCode || id.slice(-8)}`
-        });
-        
-        if (response.checkoutUrl && response.fields) {
-          // SEPay requires a POST form submission (not GET redirect)
-          postToSepay(response.checkoutUrl, response.fields);
-        } else {
-          throw new Error('Khong nhan duoc thong tin thanh toan tu SePay');
+    modal.confirm({
+      title: 'Xác nhận thanh toán',
+      content: `Bạn có chắc chắn muốn thanh toán ${formatOrderPrice(order.totalAmount)} cho đơn hàng này bằng Ví Reflow?`,
+      okText: 'Thanh toán',
+      cancelText: 'Hủy',
+      centered: true,
+      onOk: async () => {
+        setPaymentLoading(true);
+        try {
+          await payOrder(id);
+          message.success('Thanh toán thành công! Tiền đã được chuyển vào ký quỹ và sẽ được chuyển cho người bán khi bạn xác nhận đã nhận hàng.');
+          navigate('/orders');
+        } catch (err) {
+          message.error(err.message || 'Không thể thực hiện thanh toán');
+        } finally {
+          setPaymentLoading(false);
         }
-      } catch (err) {
-        alert(err.message || 'Loi khi tao giao dich thanh toan qua SePay');
-        setPaymentLoading(false);
       }
+    });
+  };
+
+  const payWithSepay = async () => {
+    setPaymentLoading(true);
+    try {
+      const response = await sePayService.createOrderPayment(id, {
+        amount: order.totalAmount,
+        orderInfo: `Thanh toan don hang ${order.orderCode || id.slice(-8)}`
+      });
+
+      if (response.checkoutUrl && response.fields) {
+        postToSepay(response.checkoutUrl, response.fields);
+      } else {
+        throw new Error('Khong nhan duoc thong tin thanh toan tu SePay');
+      }
+    } catch (err) {
+      message.error(err.message || 'Loi khi tao giao dich thanh toan qua SePay');
+      setPaymentLoading(false);
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  const handlePayment = () => {
+    if (paymentMethod === 'wallet') {
+      payWithWallet();
+    } else if (paymentMethod === 'sepay') {
+      payWithSepay();
+    }
   };
 
   if (loading) {
     return (
-      <div className="order-payment-container">
-        <div className="loading">Đang tải...</div>
+      <div className="order-payment-container container">
+        <Flex justify="center" gap={12} className="order-payment-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="order-payment-container">
-        <div className="error-message">{error}</div>
-        <button onClick={() => navigate('/orders')} className="btn btn-primary">
-          Quay lại danh sách đơn hàng
-        </button>
+      <div className="order-payment-container container">
+        <Alert
+          type="error"
+          showIcon
+          role="alert"
+          title={error}
+          action={<Button size="small" type="primary" onClick={() => navigate('/orders')}>Quay lại danh sách đơn hàng</Button>}
+        />
       </div>
     );
   }
@@ -139,193 +155,142 @@ const OrderPayment = () => {
     return null;
   }
 
-  // Kiem tra nguoi dung co phai nguoi mua khong
   if (!user || String(getUserId(order.buyer)) !== String(getUserId(user))) {
     return (
-      <div className="order-payment-container">
-        <div className="error-message">Bạn không có quyền truy cập trang này</div>
-        <button onClick={() => navigate('/')} className="btn btn-primary">
-          Quay lại trang chủ
-        </button>
+      <div className="order-payment-container container">
+        <Alert
+          type="error"
+          showIcon
+          role="alert"
+          title="Bạn không có quyền truy cập trang này"
+          action={<Button size="small" type="primary" onClick={() => navigate('/')}>Quay lại trang chủ</Button>}
+        />
       </div>
     );
   }
 
-  // Kiem tra don hang da duoc thanh toan chua
   if (order.status !== 'awaiting_payment' && order.status !== 'pending') {
     return (
-      <div className="order-payment-container">
-        <div className="info-message">
-          Đơn hàng này đã được thanh toán hoặc không thể thanh toán.
-        </div>
-        <button onClick={() => navigate(`/orders/${id}`)} className="btn btn-primary">
-          Xem chi tiết đơn hàng
-        </button>
+      <div className="order-payment-container container">
+        <Alert
+          type="info"
+          showIcon
+          role="status"
+          title="Đơn hàng này đã được thanh toán hoặc không thể thanh toán."
+          action={<Button size="small" type="primary" onClick={() => navigate(`/orders/${id}`)}>Xem chi tiết đơn hàng</Button>}
+        />
       </div>
     );
   }
 
+  const seller = order.seller;
 
   return (
-    <div className="order-payment-container">
-      <div className="page-header">
-        <h1>Thanh toán đơn hàng</h1>
-        <p>Xác nhận và thanh toán cho đơn hàng của bạn</p>
+    <div className="order-payment-container container">
+      <div className="order-payment-header">
+        <Typography.Title level={1}>Thanh toán đơn hàng</Typography.Title>
+        <Typography.Paragraph type="secondary">Xác nhận và thanh toán cho đơn hàng của bạn</Typography.Paragraph>
       </div>
 
-      <div className="payment-content">
-        {/* Order Information */}
-        <div className="order-info-card">
-          <h2>Thông tin đơn hàng</h2>
-          
-          <div className="order-details">
-            <div className="order-id">
-              <span className="label">Mã đơn hàng:</span>
-              <span className="value">#{order.orderCode || order._id.slice(-8).toUpperCase()}</span>
-            </div>
-            
-            <div className="order-date">
-              <span className="label">Ngày tạo:</span>
-              <span className="value">{formatDate(order.createdAt)}</span>
-            </div>
-          </div>
+      <Row gutter={[{ xs: 0, md: 24 }, 24]} className="payment-content">
+        <Col xs={24} md={13}>
+          <Card className="payment-card" title={<Typography.Title level={2}>Thông tin đơn hàng</Typography.Title>}>
+            <Descriptions
+              size="small"
+              column={1}
+              items={[
+                { key: 'code', label: 'Mã đơn hàng', children: <strong>#{order.orderCode || order._id.slice(-8).toUpperCase()}</strong> },
+                { key: 'date', label: 'Ngày tạo', children: formatLongDate(order.createdAt) }
+              ]}
+            />
 
-          <div className="product-info">
-            <div className="product-image">
-              <img 
-                src={getImageUrl(order.listing?.images?.[0]) || '/placeholder-image.jpg'} 
+            <Flex gap={14} className="payment-product">
+              <img
+                src={getImageUrl(order.listing?.images?.[0]) || '/placeholder-image.jpg'}
                 alt={order.listing?.title}
               />
-            </div>
-            <div className="product-details">
-              <h3>{order.listing?.title}</h3>
-              <p className="product-condition">
-                Tình trạng: {order.listing?.condition}
-              </p>
-              <p className="product-location">
-                Khu vực: {order.listing?.location?.district}, {order.listing?.location?.city}
-              </p>
-            </div>
-          </div>
-
-          <div className="seller-info">
-            <h4>Thông tin người bán</h4>
-            <div className="seller-details">
-              <div className="seller-avatar">
-                {order.seller?.avatar ? (
-                  <img
-                    src={getImageUrl(order.seller.avatar)}
-                    alt={order.seller.fullName}
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = '/images/placeholders/avatar-placeholder.svg';
-                    }}
-                  />
-                ) : (
-                  <div className="avatar-placeholder">
-                    {order.seller?.fullName?.charAt(0).toUpperCase()}
-                  </div>
-                )}
+              <div className="payment-product__text">
+                <Typography.Title level={3}>{order.listing?.title}</Typography.Title>
+                <Typography.Text type="secondary">Tình trạng: {order.listing?.condition}</Typography.Text>
+                <Typography.Text type="secondary">
+                  Khu vực: {order.listing?.location?.district}, {order.listing?.location?.city}
+                </Typography.Text>
               </div>
-              <div className="seller-info-text">
-                <div className="seller-name">
-                  {order.seller?.fullName}
-                </div>
-                <div className="seller-contact">
-                  {order.seller?.email}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+            </Flex>
 
-        {/* Payment Summary */}
-        <div className="payment-summary-card">
-          <h2>Chi tiết thanh toán</h2>
-          
-          <div className="price-breakdown">
-            <div className="price-item">
-              <span className="label">Giá sản phẩm:</span>
-              <span className="value">{formatPrice(order.agreedPrice)}</span>
-            </div>
-            
-            <div className="price-item total">
-              <span className="label">Tổng cần thanh toán:</span>
-              <span className="value">{formatPrice(order.totalAmount)}</span>
-            </div>
-          </div>
-
-          <div className="payment-method-selection" style={{ marginTop: '20px' }}>
-            <h4>Chọn phương thức thanh toán</h4>
-            <div className="payment-method" style={{ marginTop: '10px' }}>
-              <div 
-                className={`method-card active`}
-                onClick={() => setPaymentMethod('sepay')}
+            <Typography.Title level={4} className="payment-section-title">Thông tin người bán</Typography.Title>
+            <Flex gap={12} align="center">
+              <Avatar
+                src={seller?.avatar ? getImageUrl(seller.avatar) : undefined}
+                alt={seller?.fullName}
               >
-                <img
-                  src="/images/sepay-logo.png"
-                  alt="Bank Transfer"
-                  className="method-logo"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = '/images/logo/logo.png';
-                  }}
-                />
-                <div className="method-info">
-                  <h4>Chuyển khoản Ngân hàng</h4>
-                  <p>Xử lý tự động 24/7 qua mã QR</p>
-                </div>
-                <div className="method-check"><Check /></div>
+                {seller?.fullName?.charAt(0).toUpperCase()}
+              </Avatar>
+              <div className="payment-product__text">
+                <Typography.Text strong>{seller?.fullName}</Typography.Text>
+                <Typography.Text type="secondary">{seller?.email}</Typography.Text>
               </div>
-            </div>
-          </div>
+            </Flex>
+          </Card>
+        </Col>
 
-          <div className="wallet-info" style={{ marginTop: '20px' }}>
-            <div className="sepay-info" style={{ padding: '12px', backgroundColor: '#ffe8e6', border: '1px solid #ff9891', borderRadius: '6px', color: '#b30c00' }}>
-              <ShieldCheck style={{ marginRight: '8px', color: '#ff2718' }} />
-              <strong>Thanh toán An toàn:</strong> Hệ thống sẽ chuyển bạn đến Cổng giao dịch tự động. Đơn hàng sẽ được xác nhận 24/7 ngay sau khi bạn quét mã QR chuyển khoản thành công.
-            </div>
-          </div>
+        <Col xs={24} md={11}>
+          <Card className="payment-card" title={<Typography.Title level={2}>Chi tiết thanh toán</Typography.Title>}>
+            <Descriptions
+              size="small"
+              column={1}
+              items={[
+                { key: 'price', label: 'Giá sản phẩm', children: formatOrderPrice(order.agreedPrice) },
+                { key: 'total', label: 'Tổng cần thanh toán', children: <strong className="payment-total">{formatOrderPrice(order.totalAmount)}</strong> }
+              ]}
+            />
 
-          <div className="payment-actions" style={{ marginTop: '20px' }}>
-            <button 
-              onClick={() => navigate('/orders')}
-              className="btn btn-secondary"
-              disabled={paymentLoading}
-            >
-              Hủy
-            </button>
-            <button 
-              onClick={handlePayment}
-              className="btn btn-primary"
-              disabled={paymentLoading}
-            >
-              {paymentLoading ? (
-                <>
-                  <CircleNotch className="icon-spin" />
-                  Đang xử lý...
-                </>
-              ) : (
-                <>
-                  <QrCode />
-                  Quét mã QR thanh toán
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
+            <Typography.Title level={4} className="payment-section-title">Chọn phương thức thanh toán</Typography.Title>
+            <Flex align="center" gap={14} className="payment-method">
+              <img
+                src="/images/sepay-logo.png"
+                alt="Bank Transfer"
+                className="payment-method__logo"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/images/logo/logo.png';
+                }}
+              />
+              <div className="payment-method__info">
+                <Typography.Title level={5}>Chuyển khoản Ngân hàng</Typography.Title>
+                <Typography.Text type="secondary">Xử lý tự động 24/7 qua mã QR</Typography.Text>
+              </div>
+              <Check className="payment-method__check" />
+            </Flex>
 
-      {/* Payment Notice */}
-      <div className="payment-notice">
-        <h4>Lưu ý quan trọng:</h4>
-        <ul>
-          <li>Tiền sẽ được giữ trong ký quỹ và chỉ chuyển cho người bán khi bạn xác nhận đã nhận hàng</li>
-          <li>Nếu có tranh chấp, tiền sẽ được giữ cho đến khi giải quyết xong</li>
-          <li>Sau 10 ngày kể từ khi người bán xác nhận giao hàng, tiền sẽ tự động được chuyển</li>
-          <li>Bạn có thể liên hệ với người bán qua tính năng chat để thỏa thuận chi tiết</li>
-        </ul>
-      </div>
+            <Alert
+              className="payment-secure"
+              type="success"
+              showIcon
+              icon={<ShieldCheck />}
+              role="note"
+              title="Thanh toán An toàn:"
+              description="Hệ thống sẽ chuyển bạn đến Cổng giao dịch tự động. Đơn hàng sẽ được xác nhận 24/7 ngay sau khi bạn quét mã QR chuyển khoản thành công."
+            />
+
+            <Flex justify="flex-end" gap={12} className="payment-actions">
+              <Button onClick={() => navigate('/orders')} disabled={paymentLoading}>Hủy</Button>
+              <Button type="primary" icon={<QrCode />} loading={paymentLoading} onClick={handlePayment}>
+                {paymentLoading ? 'Đang xử lý...' : 'Quét mã QR thanh toán'}
+              </Button>
+            </Flex>
+          </Card>
+        </Col>
+      </Row>
+
+      <Alert
+        className="payment-notice"
+        type="info"
+        showIcon
+        role="note"
+        title="Lưu ý quan trọng:"
+        description={<ul>{NOTICES.map(notice => <li key={notice}>{notice}</li>)}</ul>}
+      />
     </div>
   );
 };
