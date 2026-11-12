@@ -13,7 +13,7 @@
 }
 
 .rate-seller-content {
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   width: 100%;
   max-width: 600px;
@@ -27,12 +27,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--line);
 }
 
 .rate-seller-header h3 {
   margin: 0;
-  color: #333;
+  color: var(--ink);
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -41,7 +41,7 @@
   background: none;
   border: none;
   font-size: 24px;
-  color: #666;
+  color: var(--text-2);
   cursor: pointer;
   padding: 0;
   width: 30px;
@@ -54,13 +54,13 @@
 }
 
 .close-btn:hover {
-  background: #f5f5f5;
-  color: #333;
+  background: var(--surface-2);
+  color: var(--ink);
 }
 
 .order-info {
   padding: 24px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--line);
 }
 
 .product-info {
@@ -74,12 +74,12 @@
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid #eee;
+  border: 1px solid var(--line);
 }
 
 .product-details h4 {
   margin: 0 0 8px 0;
-  color: #333;
+  color: var(--ink);
   font-size: 1.1rem;
   font-weight: 500;
 }
@@ -96,7 +96,7 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: #f8f9fa;
+  background: var(--surface-2);
   border-radius: 8px;
 }
 
@@ -110,7 +110,7 @@
 
 .seller-name {
   font-weight: 500;
-  color: #333;
+  color: var(--ink);
 }
 
 .rating-form {
@@ -125,7 +125,7 @@
   display: block;
   margin-bottom: 12px;
   font-weight: 500;
-  color: #333;
+  color: var(--ink);
 }
 
 .stars-container {
@@ -155,7 +155,7 @@
 
 .rating-text {
   margin-left: 12px;
-  color: #666;
+  color: var(--text-2);
   font-weight: 500;
   min-width: 120px;
 }
@@ -168,7 +168,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #333;
+  color: var(--ink);
 }
 
 .comment-section textarea {
@@ -193,7 +193,7 @@
   padding: 10px;
   border: 2px solid #e1e5e9;
   border-radius: 8px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .review-evidence-grid {
@@ -209,7 +209,7 @@
   height: 100px;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--line);
   background: #111827;
 }
 
@@ -238,7 +238,7 @@
 .char-count {
   text-align: right;
   font-size: 12px;
-  color: #666;
+  color: var(--text-2);
   margin-top: 4px;
 }
 
@@ -268,13 +268,13 @@
 }
 
 .cancel-btn {
-  background: #f8f9fa;
-  color: #666;
-  border: 1px solid #dee2e6;
+  background: var(--surface-2);
+  color: var(--text-2);
+  border: 1px solid var(--line);
 }
 
 .cancel-btn:hover:not(:disabled) {
-  background: #e9ecef;
+  background: var(--surface-3);
 }
 
 .submit-btn {

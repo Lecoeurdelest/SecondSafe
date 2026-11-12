@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-079",
+  "spec_hash": "1f314fe4aa2c117966b602476740bd79d9bbf56811f8cccf8364bb7e9dca7a76",
+  "source_hash": "bee8a258c674216e63cf42465405e47e42573ce25ad540a8b1bbc3ecacd58511",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 1280 and 390 px",
+    "The contrast scan skips text over gradients and images and covers only the states that were rendered",
+    "Admin, moderator and dashboard pages have no dark theme by design",
+    "Run-02 used a real backend and a disposable MongoDB with seeded data; no real payment provider, no real phone, and only Chromium"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-23-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Theme tests and App tests pass (switch, remembered choice, system preference, forced light for staff); the build passes; 20 pages with canned data and 24 storefront scans against a real backend show no text below 3:1 in dark mode except one badge that was already low in the light theme; admin and moderator pages stayed light with a dark preference stored; states that were not rendered were not scanned",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-079/run-02/frontend-test.txt",
+            ".project/evidence/TASK-079/run-02/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-079/run-02/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

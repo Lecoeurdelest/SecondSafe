@@ -45,7 +45,7 @@
 }
 
 .product-detail__price {
-  color: var(--brand-dark);
+  color: var(--brand-text);
   font-size: var(--font-size-xl);
   font-weight: 700;
 }
@@ -61,7 +61,7 @@
   padding: 10px 16px;
   border: 1px solid var(--brand);
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--surface);
   color: var(--brand);
   font-weight: 600;
 }
@@ -140,7 +140,7 @@
   padding: 0;
   border: 0;
   background: none;
-  color: #b42318;
+  color: var(--brand-text);
   font: inherit;
   text-decoration: underline;
   cursor: pointer;

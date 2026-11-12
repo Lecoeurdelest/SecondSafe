@@ -177,3 +177,11 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 15. Conversatio
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-22-1` | The assistant page shows the conversation as chat bubbles with starter questions, a typing indicator, inline listing cards, a new-conversation action and a privacy notice, keeps the thread across a page reload in the same tab, and works from 360 px to 1920 px wide. | behavioral test, manual review | [TASK-078](../task/TASK-078.md) `[!]` |
+
+### FR-WEB-23 — Web storefront dark theme
+
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 16. Dark theme amendment (2026-11-12)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-WEB-23-1` | Visitors and customers can switch the storefront between a light and a dark theme from the header; the first choice follows the browser preference, the choice is remembered, text stays readable on the pages observed, and admin and moderator sessions always use the light theme and are not offered the switch. | behavioral test, manual review | [TASK-079](../task/TASK-079.md) `[!]` |

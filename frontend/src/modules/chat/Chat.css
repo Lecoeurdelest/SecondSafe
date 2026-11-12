@@ -8,7 +8,7 @@
 
 .chat-sidebar,
 .chat-panel {
-  background: var(--white);
+  background: var(--surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
@@ -279,7 +279,7 @@
 
 .chat-offer-actions .is-secondary,
 .chat-offer-toggle {
-  background: var(--white);
+  background: var(--surface);
   color: var(--brand);
 }
 

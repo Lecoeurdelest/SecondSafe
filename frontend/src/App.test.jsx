@@ -101,6 +101,8 @@ beforeEach(() => {
   window.localStorage.removeItem('secondsafe:role');
   window.localStorage.removeItem('user');
   window.localStorage.removeItem('secondsafe:language');
+  window.localStorage.removeItem('secondsafe:theme');
+  document.documentElement.removeAttribute('data-theme');
   jest.clearAllMocks();
   abandonedCheckoutService.getMine.mockResolvedValue([]);
   abandonedCheckoutService.getSummary.mockRejectedValue(new Error('Không có quyền'));
@@ -131,6 +133,48 @@ test('changes and persists the marketplace language from the header selector', (
   expect(document.documentElement).toHaveAttribute('lang', 'en');
   expect(window.localStorage.getItem('secondsafe:language')).toBe('en');
   expect(screen.getByText('SecondSafe · Safe, transparent second-hand marketplace')).toBeInTheDocument();
+});
+
+test('visitors can switch between light and dark themes and the choice is remembered', () => {
+  window.history.replaceState({}, '', '/');
+  render(<App />);
+
+  expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+  const toDark = screen.getByRole('button', { name: 'Chuyển sang giao diện tối' });
+  expect(toDark).toHaveAttribute('aria-pressed', 'false');
+  fireEvent.click(toDark);
+
+  expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+  expect(window.localStorage.getItem('secondsafe:theme')).toBe('dark');
+  const toLight = screen.getByRole('button', { name: 'Chuyển sang giao diện sáng' });
+  expect(toLight).toHaveAttribute('aria-pressed', 'true');
+  fireEvent.click(toLight);
+  expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+  expect(window.localStorage.getItem('secondsafe:theme')).toBe('light');
+});
+
+test('a saved dark preference is applied on load and follows the interface language', () => {
+  window.localStorage.setItem('secondsafe:theme', 'dark');
+  window.history.replaceState({}, '', '/');
+  render(<App />);
+
+  expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+  fireEvent.click(screen.getByRole('button', { name: 'Ngôn ngữ' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: /English/ }));
+  expect(screen.getByRole('button', { name: 'Switch to light mode' })).toBeInTheDocument();
+});
+
+test('staff sessions always use the light theme and get no theme switch', async () => {
+  window.localStorage.setItem('secondsafe:theme', 'dark');
+  window.localStorage.setItem('token', 'staff-token');
+  window.localStorage.setItem('secondsafe:role', 'moderator');
+  dashboardService.getStaffDashboard.mockResolvedValue({ generatedAt: '2026-10-27T00:00:00.000Z', openDisputes: 0, pendingPurchaseRequests: 0, openOrders: 0, ratings: 0, activeDeliveries: 0, recentQueue: [] });
+  window.history.replaceState({}, '', '/staff');
+  render(<App />);
+
+  expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+  expect(screen.queryByRole('button', { name: /giao diện (tối|sáng)/ })).not.toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: 'Bảng điều phối' })).toBeInTheDocument();
 });
 
 test('authenticated users can open the seller listing form from Đăng tin', async () => {

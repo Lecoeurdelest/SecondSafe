@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 6/77 tasks done (6 done, 3 in_progress, 30 verifying, 38 todo). 157 active requirements, 236 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 6/78 tasks done (6 done, 3 in_progress, 31 verifying, 38 todo). 158 active requirements, 237 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
@@ -202,3 +202,9 @@ This amendment changes product scope explicitly. It does not copy reviewed secur
 The user asks for an assistant in the system that advises like a modern chat assistant rather than a one-shot form. The current assistant is part of the baseline but outside the requirements model: it sends Gemini only a fixed FAQ topic, or the category, condition and price of a few listings, so it cannot hold a conversation. TASK-078 adds a multi-turn chat endpoint and a chat screen. Gemini receives the redacted conversation, looks listings up through a server-side search tool limited to active listings of eligible sellers that exposes only title, description, price, condition and category (never seller identity or location), and answers from platform facts in its instructions.
 
 D-013 records the data-flow change: the redacted conversation now reaches the provider, where `/api/assistant/ask` sent none of it. `ASSISTANT_LLM_SEES_MESSAGES=false` restores the earlier behaviour. There is no schema change because the conversation lives in the browser tab. The design is in `docs/technical/assistant-chat.md`. Existing task IDs, criteria and evidence are unchanged.
+
+## 16. Dark theme amendment (2026-11-12)
+
+The visual restyle of TASK-077 followed two reference projects. One of them, `mercari-clone`, offers a dark mode toggle; the other does not. The restyle left it out and recorded it as not implemented. TASK-079 adds it for the storefront only: customers and visitors get a switch in the header, the first choice follows the browser preference, and the choice is remembered in the browser. Admin and moderator sessions always use the light theme and are not offered the switch, because their pages use Ant Design and were not designed or observed in a dark palette.
+
+No behaviour, route, service or data model changes, and no existing task ID, criterion or evidence is altered.

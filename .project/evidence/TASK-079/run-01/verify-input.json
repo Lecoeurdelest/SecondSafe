@@ -1,0 +1,36 @@
+{
+  "task_id": "TASK-079",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "Storefront dark theme implemented with a header switch, remembered choice and forced light theme for staff; frontend tests and build pass; 20 pages scanned for contrast and photographed in dark mode with canned data; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally, with the browser colour scheme set to dark (light for the last three rows) and signed in as a customer. The API was replaced by canned responses; `fixture-capture.js` holds the script and the data. No real backend or database was involved.\n\nFor each of 20 routes the script also scanned every text element for contrast against its nearest opaque background (elements over gradients or images are skipped) and wrote the offenders with a ratio below 3 to `contrast-dark.json`, `contrast-dark-w390.json` and `contrast-light.json`.\n\n| File | Viewport | What it shows |\n|---|---|---|\n| `dark-home.png` | 1280 px | Home: hero, search card, categories |\n| `dark-product-detail.png` | 1280 px | Product page |\n| `dark-favorites.png` | 1280 px | Favorites |\n| `dark-cart.png` | 1280 px | Cart |\n| `dark-orders.png` | 1280 px | Buyer order list |\n| `dark-order-detail.png` | 1280 px | Order detail |\n| `dark-seller-orders.png` | 1280 px | Seller orders |\n| `dark-wallet.png` | 1280 px | Wallet with balance card and transactions |\n| `dark-topup.png` | 1280 px | Top-up |\n| `dark-chat.png` | 1280 px | Conversation |\n| `dark-assistant.png` | 1280 px | Assistant (the current one-shot form) |\n| `dark-support.png` | 1280 px | Support |\n| `dark-profile.png` | 1280 px | Profile |\n| `dark-profile-edit.png` | 1280 px | Edit profile |\n| `dark-my-products.png` | 1280 px | My listings |\n| `dark-create-product.png` | 1280 px | Create listing |\n| `dark-login.png` | 1280 px | Login |\n| `dark-register.png` | 1280 px | Register |\n| `dark-forgot.png` | 1280 px | Forgot password |\n| `dark-change-password.png` | 1280 px | Change password |\n| `dark-w390-home.png` | 390 px | Home on a phone-width screen |\n| `dark-w390-product-detail.png` | 390 px | Product page |\n| `dark-w390-orders.png` | 390 px | Orders |\n| `dark-w390-wallet.png` | 390 px | Wallet |\n| `dark-w390-chat.png` | 390 px | Conversation |\n| `dark-w390-assistant.png` | 390 px | Assistant |\n| `dark-w390-login.png` | 390 px | Login |\n| `light-home.png` | 1280 px | Light theme after the sweep: home |\n| `light-orders.png` | 1280 px | Light theme: orders |\n| `light-wallet.png` | 1280 px | Light theme: wallet |\n\nResults: in dark mode at 1280 px one element was below 3:1 (white text on the green \"Hoàn thành\" badge, 2.87, also present in the light theme); at 390 px the same one. The first scan found 10 more: dark text colours no sweep rule had covered (`#1a1a2e`, `#111`, `#1e293b`), pastel chips whose text a more specific rule had lightened, and a red link; these were fixed and the scan repeated. No page overflowed horizontally in either width. The light theme scan lists only elements that were already low before (emoji icons, a grey timestamp).\n\nNot observed: open modals, form validation states, hover and focus styles, empty and loading states of each page, real data, order detail with a dispute, product photos beyond the placeholder, a phone, browsers other than Chromium, and the admin and moderator pages (always light by design).",
+  "history": [
+    [
+      "verifying",
+      "Added theme tokens, the header switch, the pre-paint script and the stylesheet sweep; tests and build pass; scanned and photographed 20 storefront pages in dark mode"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 1280 and 390 px",
+    "The contrast scan skips text over gradients and images and covers only the states that were rendered",
+    "Admin, moderator and dashboard pages have no dark theme by design",
+    "No page was observed against a real backend"
+  ],
+  "criteria": {
+    "AC-WEB-23-1": {
+      "observed": "pass",
+      "note": "Theme tests and App tests pass (switch, remembered choice, system preference, forced light for staff); the build passes; 20 storefront pages show no text below 3:1 in dark mode except one badge that was already low in the light theme; states that were not rendered were not scanned",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

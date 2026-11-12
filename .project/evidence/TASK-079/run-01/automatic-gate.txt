@@ -1,0 +1,15 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py gate project.yaml .project/evidence/TASK-079/run-01/report.json --task TASK-079 --source-hash bc7e55d9883f9a2cda1cb0523d4f40fe20e05b38e26e64446c87117a1d369783
+{
+  "status": "inconclusive",
+  "task_id": "TASK-079",
+  "failures": [],
+  "blockers": [
+    "Applicable validated calibration is unavailable.",
+    "AC-WEB-23-1: criterion did not pass.",
+    "AC-WEB-23-1: finite measured confidence is unavailable."
+  ],
+  "minimum_criterion_confidence": null,
+  "scope": "Supplied metadata only; independently verify artifacts, calibration, and dependency state."
+}
+
+exit_code=2

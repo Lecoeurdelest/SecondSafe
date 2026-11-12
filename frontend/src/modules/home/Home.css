@@ -333,7 +333,7 @@
   padding: 20px;
   border: 1px solid rgba(231, 76, 60, 0.25);
   border-radius: var(--radius-xl);
-  background: #fff;
+  background: var(--surface);
   text-align: center;
 }
 
@@ -428,7 +428,7 @@
   top: calc(100% + 8px);
   left: 0;
   z-index: 999;
-  background: var(--white);
+  background: var(--surface);
   border: 1px solid var(--gray-200);
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
@@ -481,4 +481,5 @@
 
 .location-dropdown-panel__clear:hover {
   background: #fff5f5;
+  color: #1a1a1a;
 }

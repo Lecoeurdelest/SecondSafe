@@ -1609,6 +1609,47 @@
         "AC-CHAT-06-2": "inconclusive",
         "AC-WEB-22-1": "inconclusive"
       }
+    },
+    "TASK-079": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "Storefront dark theme merged with the conversational assistant now on main; frontend tests and build pass; the 20 canned-data pages were scanned again in dark mode including the new chat page; the real-backend pass is in run-02; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Dark theme left out of TASK-077 and requested through the standing UI goal"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Add theme tokens, the header switch and the stylesheet sweep"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Added theme tokens, the header switch, the pre-paint script and the stylesheet sweep; tests and build pass; scanned and photographed 20 storefront pages in dark mode"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Observed the storefront in dark and light, and the admin and moderator pages with a dark preference stored, against the real backend with seeded data; fixed the my-listings page, which declared its own light colours"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Merged main (conversational assistant, TASK-078) into the dark theme branch, rebuilt the model files from main, re-applied the colour tokens to the new assistant stylesheet and rescanned the pages in dark mode"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-079/run-01/report.json",
+        ".project/evidence/TASK-079/run-02/report.json",
+        ".project/evidence/TASK-079/run-03/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-079.md",
+      "criteria": {
+        "AC-WEB-23-1": "inconclusive"
+      }
     }
   }
 }

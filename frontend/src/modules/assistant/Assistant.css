@@ -6,7 +6,7 @@
 }
 
 .assistant-page__eyebrow {
-  color: var(--brand-dark);
+  color: var(--brand-text);
   font-size: var(--font-size-sm);
   font-weight: 700;
   letter-spacing: .08em;
@@ -111,7 +111,7 @@
 
 .assistant-chat__reset:hover:not(:disabled) {
   border-color: var(--brand);
-  color: var(--brand-dark);
+  color: var(--brand-text);
 }
 
 .assistant-chat__reset:disabled {
@@ -168,7 +168,7 @@
 .assistant-chat__starters button:hover:not(:disabled) {
   border-color: var(--brand);
   background: var(--brand-tint);
-  color: var(--brand-dark);
+  color: var(--brand-text);
 }
 
 .assistant-chat__starters button:disabled {
@@ -294,7 +294,7 @@
 }
 
 .assistant-chat__product b {
-  color: var(--brand-dark);
+  color: var(--brand-text);
   font-size: var(--font-size-base);
 }
 
@@ -337,7 +337,7 @@
   padding: 10px 14px;
   border-radius: var(--radius-md);
   background: var(--brand-tint);
-  color: var(--brand-dark);
+  color: var(--brand-text);
 }
 
 .assistant-chat__error button {

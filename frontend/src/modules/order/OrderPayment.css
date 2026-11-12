@@ -10,14 +10,14 @@
 }
 
 .page-header h1 {
-  color: #333;
+  color: var(--ink);
   margin-bottom: 8px;
   font-size: 28px;
   font-weight: 600;
 }
 
 .page-header p {
-  color: #666;
+  color: var(--text-2);
   font-size: 16px;
   margin: 0;
 }
@@ -26,7 +26,7 @@
   text-align: center;
   padding: 60px 20px;
   font-size: 18px;
-  color: #666;
+  color: var(--text-2);
 }
 
 .error-message {
@@ -60,21 +60,21 @@
 
 .order-info-card,
 .payment-summary-card {
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 24px;
-  border: 1px solid #e1e8ed;
+  border: 1px solid var(--line);
 }
 
 .order-info-card h2,
 .payment-summary-card h2 {
-  color: #333;
+  color: var(--ink);
   margin-bottom: 20px;
   font-size: 20px;
   font-weight: 600;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--line);
 }
 
 .order-details {
@@ -91,13 +91,13 @@
 
 .order-id .label,
 .order-date .label {
-  color: #666;
+  color: var(--text-2);
   font-weight: 500;
 }
 
 .order-id .value,
 .order-date .value {
-  color: #333;
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -106,7 +106,7 @@
   gap: 16px;
   margin-bottom: 24px;
   padding: 16px;
-  background-color: #f8f9fa;
+  background-color: var(--surface-2);
   border-radius: 8px;
 }
 
@@ -125,7 +125,7 @@
 }
 
 .product-details h3 {
-  color: #333;
+  color: var(--ink);
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 8px;
@@ -134,18 +134,18 @@
 
 .product-condition,
 .product-location {
-  color: #666;
+  color: var(--text-2);
   font-size: 14px;
   margin-bottom: 4px;
 }
 
 .seller-info {
   padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--line);
 }
 
 .seller-info h4 {
-  color: #333;
+  color: var(--ink);
   margin-bottom: 12px;
   font-size: 16px;
   font-weight: 600;
@@ -185,7 +185,7 @@
 
 .seller-name {
   font-weight: 600;
-  color: #333;
+  color: var(--ink);
   margin-bottom: 4px;
   display: flex;
   align-items: center;
@@ -206,7 +206,7 @@
 }
 
 .seller-contact {
-  color: #666;
+  color: var(--text-2);
   font-size: 14px;
 }
 
@@ -223,7 +223,7 @@
 }
 
 .price-item.total {
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--line);
   padding-top: 16px;
   margin-top: 16px;
   font-weight: 600;
@@ -231,11 +231,11 @@
 }
 
 .price-item .label {
-  color: #666;
+  color: var(--text-2);
 }
 
 .price-item .value {
-  color: #333;
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -247,12 +247,12 @@
 .wallet-info {
   margin-bottom: 24px;
   padding: 16px;
-  background-color: #f8f9fa;
+  background-color: var(--surface-2);
   border-radius: 8px;
 }
 
 .wallet-info h4 {
-  color: #333;
+  color: var(--ink);
   margin-bottom: 12px;
   font-size: 16px;
   font-weight: 600;
@@ -266,7 +266,7 @@
 }
 
 .balance-info .label {
-  color: #666;
+  color: var(--text-2);
 }
 
 .balance.sufficient {
@@ -343,16 +343,16 @@
 }
 
 .payment-notice {
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 24px;
-  border: 1px solid #e1e8ed;
+  border: 1px solid var(--line);
   border-left: 4px solid var(--brand);
 }
 
 .payment-notice h4 {
-  color: #333;
+  color: var(--ink);
   margin-bottom: 16px;
   font-size: 16px;
   font-weight: 600;
@@ -364,7 +364,7 @@
 }
 
 .payment-notice li {
-  color: #666;
+  color: var(--text-2);
   line-height: 1.6;
   margin-bottom: 8px;
 }
@@ -380,7 +380,7 @@
   display: flex;
   align-items: center;
   padding: 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--line);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
@@ -389,6 +389,7 @@
 .method-card.active {
   border-color: var(--brand);
   background-color: #ffedec;
+  color: #1a1a1a;
 }
 
 .method-logo {
@@ -399,7 +400,7 @@
   padding: 6px;
   border: 1px solid #d1fae5;
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .method-info {
@@ -408,13 +409,13 @@
 
 .method-info h4 {
   font-size: 16px;
-  color: #2c3e50;
+  color: var(--ink);
   margin: 0 0 5px 0;
 }
 
 .method-info p {
   font-size: 14px;
-  color: #7f8c8d;
+  color: var(--text-2);
   margin: 0;
 }
 

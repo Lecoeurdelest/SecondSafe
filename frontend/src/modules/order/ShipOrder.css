@@ -22,7 +22,7 @@
 
 .ship-order-content {
   position: relative;
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   width: 100%;
   max-width: 600px;
@@ -36,13 +36,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid #e1e8ed;
-  background-color: #f8f9fa;
+  border-bottom: 1px solid var(--line);
+  background-color: var(--surface-2);
   border-radius: 12px 12px 0 0;
 }
 
 .ship-order-header h3 {
-  color: #333;
+  color: var(--ink);
   margin: 0;
   font-size: 20px;
   font-weight: 600;
@@ -52,7 +52,7 @@
   background: none;
   border: none;
   font-size: 18px;
-  color: #666;
+  color: var(--text-2);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -60,18 +60,18 @@
 }
 
 .close-button:hover {
-  background-color: #e9ecef;
-  color: #333;
+  background-color: var(--surface-3);
+  color: var(--ink);
 }
 
 .order-summary {
   padding: 20px 24px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e1e8ed;
+  background-color: var(--surface-2);
+  border-bottom: 1px solid var(--line);
 }
 
 .order-info h4 {
-  color: #333;
+  color: var(--ink);
   margin-bottom: 12px;
   font-size: 16px;
   font-weight: 600;
@@ -94,13 +94,13 @@
 }
 
 .detail-item .label {
-  color: #666;
+  color: var(--text-2);
   font-size: 14px;
   font-weight: 500;
 }
 
 .detail-item .value {
-  color: #333;
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -115,7 +115,7 @@
 .form-group label {
   display: block;
   margin-bottom: 6px;
-  color: #333;
+  color: var(--ink);
   font-weight: 600;
   font-size: 14px;
 }
@@ -129,7 +129,7 @@
 .form-group textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--line-strong);
   border-radius: 6px;
   font-size: 14px;
   transition: border-color 0.2s ease;
@@ -169,16 +169,17 @@
   padding: 12px;
   margin-bottom: 16px;
   font-size: 14px;
+  color: #1a1a1a;
 }
 
 .form-hint {
-  color: #666;
+  color: var(--text-2);
   font-size: 12px;
   margin-top: 4px;
 }
 
 .character-count {
-  color: #666;
+  color: var(--text-2);
   font-size: 12px;
   margin-top: 4px;
   text-align: right;
@@ -187,9 +188,9 @@
 .shipping-address-panel {
   margin-bottom: 20px;
   padding: 16px;
-  border: 1px solid #e1e8ed;
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #f8fafc;
+  background: var(--surface-2);
 }
 
 .shipping-address-panel__header {
@@ -202,13 +203,13 @@
 
 .shipping-address-panel__header h4 {
   margin: 0 0 4px;
-  color: #1f2937;
+  color: var(--ink);
   font-size: 15px;
 }
 
 .shipping-address-panel__header p {
   margin: 0;
-  color: #6b7280;
+  color: var(--text-2);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -217,7 +218,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #1f2937;
+  color: var(--ink);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -233,8 +234,8 @@
   gap: 12px;
   padding: 14px;
   border-radius: 8px;
-  background: #fff;
-  border: 1px dashed #cbd5e1;
+  background: var(--surface);
+  border: 1px dashed var(--line-strong);
 }
 
 .shipping-custom-grid {
@@ -252,7 +253,7 @@
   gap: 12px;
   justify-content: flex-end;
   padding-top: 16px;
-  border-top: 1px solid #e1e8ed;
+  border-top: 1px solid var(--line);
 }
 
 .btn {
@@ -299,6 +300,7 @@
   background-color: #ffe9e7;
   border-top: 1px solid #ffb8b3;
   border-radius: 0 0 12px 12px;
+  color: #1a1a1a;
 }
 
 .shipping-notice h5 {
@@ -385,7 +387,7 @@
   
   .detail-item {
     padding: 8px 0;
-    border-bottom: 1px solid #e1e8ed;
+    border-bottom: 1px solid var(--line);
   }
   
   .detail-item:last-child {
