@@ -1,0 +1,37 @@
+{
+  "task_id": "TASK-079",
+  "run": "run-03",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "Storefront dark theme merged with the conversational assistant now on main; frontend tests and build pass; the 20 canned-data pages were scanned again in dark mode including the new chat page; the real-backend pass is in run-02; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Run-03 follows the merge of the conversational assistant (PR 150) into main. The dark theme branch took `main` as its base for `project.yaml`, `plan.md` and `.project/state.json` and re-added its own requirement, task, plan section and state entry; the assistant stylesheet was taken from `main` and the colour tokens re-applied (white and grey values were already tokens, the five `var(--brand-dark)` text colours became `var(--brand-text)`).\n\nThe 20 canned-data pages of `run-01` were scanned again in dark mode against the rebuilt merged tree (`fixture-capture.js` is the run-01 script; `contrast-dark.json` is its output for this run). The assistant page is now the chat: `screenshots/dark-assistant.png` shows the conversation, listing cards and composer in dark. The scan found one regression of my own making: re-running the colour sweep rewrote two dark-theme exception rules in `index.css` to tokens, which put light text on the pale payment-method card again (1.0:1 on the top-up page). The rules were restored to fixed colours and the rescan is clean except the green \"Hoàn thành\" badge (2.87, also in the light theme). Screenshots kept: assistant, top-up, home and orders.\n\nThe pass against a real backend (`run-02`) was made before the merge and covers the storefront and staff pages; the chat page was not run against the real backend or a real Gemini.\n\nNot observed: a real phone, Firefox or WebKit, open modals, form errors, hover and focus styles.",
+  "history": [
+    [
+      "verifying",
+      "Merged main (conversational assistant, TASK-078) into the dark theme branch, rebuilt the model files from main, re-applied the colour tokens to the new assistant stylesheet and rescanned the pages in dark mode"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 1280 and 390 px",
+    "The contrast scan skips text over gradients and images and covers only the states that were rendered",
+    "Admin, moderator and dashboard pages have no dark theme by design",
+    "Run-03 rescanned only the canned-data pages after the merge; the real-backend pass is the earlier run-02",
+    "The chat page was not observed against a real backend or a real Gemini"
+  ],
+  "criteria": {
+    "AC-WEB-23-1": {
+      "observed": "pass",
+      "note": "Theme tests and App tests pass; the build passes; after merging the conversational assistant, 20 pages scanned in dark mode with canned data show no text below 3:1 except one badge that was already low in the light theme; the earlier real-backend pass (run-02) covered the storefront and staff pages; states that were not rendered were not scanned",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

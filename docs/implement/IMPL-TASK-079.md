@@ -28,10 +28,10 @@ The `mercari-clone` reference has a dark mode toggle; `ReMarket webapp` has none
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-079/run-02/frontend-test.txt` |
+| Tests | `.project/evidence/TASK-079/run-03/frontend-test.txt` |
 | Static analysis | N/A — the production build runs the CRA lint step with `CI=true` |
-| Build/typecheck | `.project/evidence/TASK-079/run-02/frontend-build.txt` |
-| Behavioral/manual | `.project/evidence/TASK-079/run-02/manual-review.md` and `screenshots/`; the canned-data pass is in `run-01` (`screenshots/`, `contrast-*.json`), the pass against a real backend in `run-02` (`real-backend-scan.json`) |
+| Build/typecheck | `.project/evidence/TASK-079/run-03/frontend-build.txt` |
+| Behavioral/manual | `.project/evidence/TASK-079/run-03/manual-review.md` and `screenshots/`; the pass after merging the assistant chat is `run-03`, the canned-data pass is in `run-01` (`screenshots/`, `contrast-*.json`), the pass against a real backend in `run-02` (`real-backend-scan.json`) |
 
 ## Deviations
 
@@ -43,7 +43,7 @@ None.
 - Elements over gradients or images are skipped by the scan, so text on the home hero and over product photos was judged from screenshots only.
 - Native controls follow `color-scheme: dark`; their look differs a little between browsers and only Chromium was used.
 - White text on the green "Hoàn thành" badge is 2.9:1 in both themes (already so before this task).
-- `Assistant.css` was swept here as well; when the conversational assistant (TASK-078) lands, its stylesheet still uses `var(--brand-dark)` for some text, which should become `var(--brand-text)` in dark.
+- After the conversational assistant (TASK-078) reached `main`, its stylesheet was taken from `main` and its `var(--brand-dark)` text colours became `var(--brand-text)`; the chat page was scanned in dark mode with canned data (`run-03`) but not against a real backend.
 - Admin, moderator and dashboard pages have no dark theme by design.
 - Run-02 used the real backend and a disposable MongoDB seeded with 80 listings, three orders, a conversation and a report, but seeded data and Chromium only: no real phone, no other browser (Firefox and WebKit are not installed here), no real payment provider.
 - The real-backend run found one defect the canned run missed: `MyProducts.css` declares its own `--bg`, `--card` and `--muted` colours, which left a pale panel around dark cards. It now has dark values.

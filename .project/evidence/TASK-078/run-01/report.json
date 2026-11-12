@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-078",
+  "spec_hash": "d79f79e7d7c86edb4f4476bb01e7672a0cdc2a232af7a5c05a6ba9e810c482e7",
+  "source_hash": "e55f4912f8ffed354d25635d0f09d13434cee57782492f327be5ecb49dfb6874",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "The Gemini request and function-calling exchange were never sent to the real API; they are verified against mocks only",
+    "The listing search was tested with a mocked Product model, not against MongoDB",
+    "Browser observation used canned API responses in headless Chromium at 360, 1280 and 1920 px; no real phone or other browser",
+    "Answer quality and tone from the real model were not judged"
+  ],
+  "criteria": [
+    {
+      "id": "AC-CHAT-06-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Backend tests pass: the conversation is sent as alternating roles with the system instruction and tool, the tool query filters on active status, eligible sellers, price and condition, a text-index miss falls back to a keyword match, and the listings come back as cards; the real provider and database were not involved",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-078/run-01/jest.txt",
+            ".project/evidence/TASK-078/run-01/frontend-test.txt",
+            ".project/evidence/TASK-078/run-01/frontend-build.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-CHAT-06-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Backend tests pass: emails, phone numbers and links are absent from what the provider receives, tool results contain only category, condition, description, price and title with the redaction placeholders, unknown tools are refused, the provider failing returns a local answer with degraded true, and the switch restores topic-only requests",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-078/run-01/jest.txt",
+            ".project/evidence/TASK-078/run-01/frontend-test.txt",
+            ".project/evidence/TASK-078/run-01/frontend-build.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-WEB-22-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "11 component tests pass (starters, Enter and Shift+Enter, IME, cards, retry, persistence across a remount, new conversation, sign-out); the screen was observed with canned responses at 360, 1280 and 1920 px without horizontal overflow",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-078/run-01/jest.txt",
+            ".project/evidence/TASK-078/run-01/frontend-test.txt",
+            ".project/evidence/TASK-078/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-078/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+[
+ {
+  "name": "home",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "product-detail",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "favorites",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "cart",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "orders",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "order-detail",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "seller-orders",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "wallet",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 1,
+  "bad": [
+   {
+    "sel": "span.status-badge.status-completed",
+    "text": "Hoàn thành",
+    "ratio": 2.87,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(39,174,96)"
+   }
+  ]
+ },
+ {
+  "name": "topup",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "chat",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "assistant",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "support",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "profile",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "profile-edit",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "my-products",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "create-product",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "login",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "register",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "forgot",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "change-password",
+  "theme": "dark",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ }
+]

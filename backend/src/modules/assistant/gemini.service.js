@@ -6,58 +6,75 @@ function providerError(status) {
   return 'Không thể nhận phản hồi từ dịch vụ AI lúc này.';
 }
 
-async function generateText(prompt) {
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-  if (!apiKey) {
-    throw Object.assign(new Error('Trợ lý AI chưa được cấu hình GEMINI_API_KEY trong backend/.env'), {
-      statusCode: 503,
-      expose: true
-    });
-  }
+function exposedError(message, statusCode) {
+  return Object.assign(new Error(message), { statusCode, expose: true });
+}
 
-  const model = process.env.GEMINI_MODEL?.trim() || 'gemini-2.5-flash';
+function modelName() {
+  return process.env.GEMINI_MODEL?.trim() || 'gemini-2.5-flash';
+}
+
+async function callGemini(body, timeoutMs = 20000) {
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) throw exposedError('Trợ lý AI chưa được cấu hình GEMINI_API_KEY trong backend/.env', 503);
+
   let response;
   try {
-    response = await fetch(`${GEMINI_API_BASE}/models/${encodeURIComponent(model)}:generateContent`, {
+    response = await fetch(`${GEMINI_API_BASE}/models/${encodeURIComponent(modelName())}:generateContent`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         'x-goog-api-key': apiKey
       },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { maxOutputTokens: 700, temperature: 0.3 }
-      }),
-      signal: AbortSignal.timeout(20000)
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(timeoutMs)
     });
   } catch {
-    throw Object.assign(new Error('Không thể kết nối dịch vụ AI. Vui lòng thử lại sau.'), {
-      statusCode: 503,
-      expose: true
-    });
+    throw exposedError('Không thể kết nối dịch vụ AI. Vui lòng thử lại sau.', 503);
   }
 
-  if (!response.ok) {
-    throw Object.assign(new Error(providerError(response.status)), { statusCode: 503, expose: true });
-  }
+  if (!response.ok) throw exposedError(providerError(response.status), 503);
 
-  let payload;
   try {
-    payload = await response.json();
+    return await response.json();
   } catch {
-    throw Object.assign(new Error('Dịch vụ AI trả về dữ liệu không hợp lệ.'), { statusCode: 502, expose: true });
+    throw exposedError('Dịch vụ AI trả về dữ liệu không hợp lệ.', 502);
   }
+}
+
+async function generateText(prompt) {
+  const payload = await callGemini({
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: { maxOutputTokens: 700, temperature: 0.3 }
+  });
   const answer = payload.candidates?.[0]?.content?.parts
     ?.map(part => part.text || '')
     .join('')
     .trim();
-  if (!answer) {
-    throw Object.assign(new Error('Dịch vụ AI chưa tạo được câu trả lời. Vui lòng thử lại.'), {
-      statusCode: 502,
-      expose: true
-    });
-  }
+  if (!answer) throw exposedError('Dịch vụ AI chưa tạo được câu trả lời. Vui lòng thử lại.', 502);
   return answer;
 }
 
-module.exports = { generateText };
+async function generateChat({ systemInstruction, contents, tools }) {
+  const generationConfig = { maxOutputTokens: 1024, temperature: 0.4 };
+  if (/2\.5-flash/.test(modelName())) generationConfig.thinkingConfig = { thinkingBudget: 0 };
+
+  const body = {
+    systemInstruction: { parts: [{ text: systemInstruction }] },
+    contents,
+    generationConfig
+  };
+  if (tools?.length) {
+    body.tools = tools;
+    body.toolConfig = { functionCallingConfig: { mode: 'AUTO' } };
+  }
+
+  const payload = await callGemini(body, 15000);
+  const content = payload.candidates?.[0]?.content;
+  if (!content?.parts?.length) {
+    throw exposedError('Dịch vụ AI chưa tạo được câu trả lời. Vui lòng thử lại.', 502);
+  }
+  return content;
+}
+
+module.exports = { generateText, generateChat };

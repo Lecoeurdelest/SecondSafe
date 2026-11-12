@@ -56,3 +56,12 @@ Baseline: `POST /api/orders/seller-offer`, `POST /api/orders/buyer-offer`
 |---|---|---|---|
 | `AC-CHAT-05-1` | A seller offer can be sent only by the conversation's unrestricted seller and a buyer offer only by its buyer; the price must be positive and the listing available. | behavioral test | [TASK-031](../task/TASK-031.md) `[]` |
 | `AC-CHAT-05-2` | Each side has at most one pending offer per conversation, and an offer is stored as a message of type offer. | behavioral test | [TASK-031](../task/TASK-031.md) `[]` |
+
+### FR-CHAT-06 — AI assistant conversation
+
+Risk: `standard` · Component: `CMP-CHAT` · Source: `plan.md` § 15. Conversational assistant amendment (2026-11-12)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-CHAT-06-1` | A signed-in user can hold a multi-turn conversation with the assistant; each reply takes the conversation so far into account, and the listings it recommends come from active listings of eligible sellers. | behavioral test | [TASK-078](../task/TASK-078.md) `[!]` |
+| `AC-CHAT-06-2` | Email addresses, phone numbers, long digit sequences, links and credential-like text are redacted before anything reaches the provider; listing data sent to the provider excludes seller identity and location; when the provider is unavailable or the switch is off, the user still gets a local answer. | behavioral test | [TASK-078](../task/TASK-078.md) `[!]` |
