@@ -1,0 +1,3 @@
+# Flow review
+
+Files and functions inspected for AC-WEB-24-1: `frontend/src/iconPolicy.test.js` (scans every source and stylesheet outside comments for icon package imports, Font Awesome classes and glyph characters), `frontend/src/antdIcons.test.jsx` (renders the Ant Design components that draw icons and asserts the glyph viewBox), `frontend/vendor/ant-design-icons/build.js` (maps the 51 icons Ant Design imports to Phosphor icons and fails on an unknown Phosphor name) and `.project/evidence/TASK-080/run-01/icon-audit.txt` (grep results over `frontend/src`: no icon package import, no icon class, one arrow in a comment, four exempt option arrows).

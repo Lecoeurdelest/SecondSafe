@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { connectChatSocket } from '../../services/chat.service';
 import supportService from '../../services/support.service';
 import './Support.css';
+import { Sparkle } from '@phosphor-icons/react';
 
 const SUPPORT_SUBJECT_SUGGESTIONS = [
   'Đơn hàng và thanh toán',
@@ -258,7 +259,7 @@ export default function Support() {
         </aside>
         <div className="support-thread">
           {!conversationId ? (
-            <div className="support-thread__empty"><span aria-hidden="true">✦</span><strong>Trao đổi cùng đội ngũ hỗ trợ</strong><p>Chọn một yêu cầu hoặc mở yêu cầu mới để bắt đầu.</p></div>
+            <div className="support-thread__empty"><span aria-hidden="true"><Sparkle weight="fill" /></span><strong>Trao đổi cùng đội ngũ hỗ trợ</strong><p>Chọn một yêu cầu hoặc mở yêu cầu mới để bắt đầu.</p></div>
           ) : (
             <>
               <header className="support-thread__header">

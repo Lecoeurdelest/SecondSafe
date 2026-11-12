@@ -123,8 +123,12 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.55;
+  color: var(--text-2);
   pointer-events: none;
+}
+
+.search-advanced__location-icon {
+  color: var(--text-2);
 }
 
 .search-advanced__input {

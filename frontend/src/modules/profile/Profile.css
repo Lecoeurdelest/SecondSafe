@@ -253,7 +253,7 @@
   text-decoration: none;
 }
 
-.action-item i {
+.action-item svg {
   font-size: 1.2rem;
   color: var(--brand);
   width: 20px;

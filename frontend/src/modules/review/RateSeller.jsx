@@ -3,6 +3,7 @@ import { createReview } from '../../services/review.service';
 import { uploadEvidenceMedia } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './RateSeller.css';
+import { Star, X } from '@phosphor-icons/react';
 
 const RateSeller = ({ order, onSuccess, onCancel }) => {
   const [rating, setRating] = useState(0);
@@ -76,7 +77,7 @@ const RateSeller = ({ order, onSuccess, onCancel }) => {
           onMouseEnter={() => setHoveredRating(i)}
           onMouseLeave={() => setHoveredRating(0)}
         >
-          ★
+          <Star weight="fill" />
         </button>
       );
     }
@@ -99,7 +100,7 @@ const RateSeller = ({ order, onSuccess, onCancel }) => {
       <div className="rate-seller-content">
         <div className="rate-seller-header">
           <h3>Đánh giá người bán</h3>
-          <button className="close-btn" onClick={onCancel}>×</button>
+          <button className="close-btn" onClick={onCancel}><X /></button>
         </div>
 
         <div className="order-info">
@@ -187,7 +188,7 @@ const RateSeller = ({ order, onSuccess, onCancel }) => {
                       onClick={() => removeEvidence(index)}
                       disabled={loading}
                     >
-                      ×
+                      <X />
                     </button>
                   </div>
                 ))}

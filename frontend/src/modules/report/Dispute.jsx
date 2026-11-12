@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createDispute, uploadEvidenceMedia } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './Dispute.css';
+import { Warning, X } from '@phosphor-icons/react';
 
 const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
   const [reason, setReason] = useState(initialReason);
@@ -86,7 +87,7 @@ const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
       <div className="dispute-content">
         <div className="dispute-header">
           <h3>Tạo khiếu nại</h3>
-          <button className="close-btn" onClick={onCancel}>×</button>
+          <button className="close-btn" onClick={onCancel}><X /></button>
         </div>
 
         <div className="order-info">
@@ -191,7 +192,7 @@ const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
                       className="remove-image"
                       onClick={() => removeImage(index)}
                     >
-                      ×
+                      <X />
                     </button>
                   </div>
                 ))}
@@ -200,7 +201,7 @@ const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
           </div>
 
           <div className="dispute-warning">
-            <div className="warning-icon">⚠️</div>
+            <div className="warning-icon"><Warning /></div>
             <div className="warning-text">
               <strong>Lưu ý quan trọng:</strong>
               <ul>

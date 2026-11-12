@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getOrdersAsSeller } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './SellerOrders.css';
+import { ArrowRight, HourglassMedium, Package, Tray, Truck, WarningCircle } from '@phosphor-icons/react';
 
 const SellerOrders = () => {
   const navigate = useNavigate();
@@ -137,7 +138,7 @@ const SellerOrders = () => {
           className={`filter-btn ${filter === 'pending_shipment' ? 'active' : ''}`}
           onClick={() => setFilter('pending_shipment')}
         >
-          <i className="fas fa-hourglass-half"></i>
+          <HourglassMedium />
           Chờ giao
           <span className="filter-count">
             {orders.filter(o => ['awaiting_seller_confirmation', 'awaiting_payment', 'paid'].includes(getOrderStatus(o))).length}
@@ -148,7 +149,7 @@ const SellerOrders = () => {
           className={`filter-btn ${filter === 'shipping' ? 'active' : ''}`}
           onClick={() => setFilter('shipping')}
         >
-          <i className="fas fa-truck"></i>
+          <Truck />
           Đang giao
           <span className="filter-count">
             {orders.filter(o => getOrderStatus(o) === 'shipped').length}
@@ -159,7 +160,7 @@ const SellerOrders = () => {
           className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
           onClick={() => setFilter('completed')}
         >
-          <i className="fas fa-box"></i>
+          <Package />
           Hoàn thành
           <span className="filter-count">
             {orders.filter(o => ['delivered', 'completed', 'cancelled', 'disputed'].includes(getOrderStatus(o))).length}
@@ -169,7 +170,7 @@ const SellerOrders = () => {
 
       {error && (
         <div className="error-message">
-          <i className="fas fa-exclamation-circle"></i>
+          <WarningCircle />
           {error}
           <button onClick={fetchOrders} className="retry-btn">Thử lại</button>
         </div>
@@ -177,7 +178,7 @@ const SellerOrders = () => {
 
       {filteredOrders.length === 0 ? (
         <div className="empty-state">
-          <i className="fas fa-inbox"></i>
+          <Tray />
           <h3>Không có đơn hàng</h3>
           <p>
             {filter === 'pending_shipment' && 'Bạn không có đơn hàng nào chờ giao'}
@@ -243,7 +244,7 @@ const SellerOrders = () => {
                     onClick={() => handleViewDetails(order._id)}
                     title="Xem chi tiết đơn hàng"
                   >
-                    <i className="fas fa-arrow-right"></i>
+                    <ArrowRight />
                     Chi tiết
                   </button>
                 </div>

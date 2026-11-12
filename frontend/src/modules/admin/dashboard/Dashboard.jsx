@@ -1,21 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  TeamOutlined,
-  SafetyOutlined,
-  UserDeleteOutlined,
-  WalletOutlined,
-  FlagOutlined,
-  StarOutlined,
-  AlertOutlined,
-  UserOutlined,
-  CheckCircleOutlined,
-  ArrowRightOutlined,
-  ReloadOutlined,
-  BarChartOutlined,
-  FileSearchOutlined,
-  IssuesCloseOutlined
-} from '@ant-design/icons';
+import { ArrowClockwise, ArrowRight, ChartBar, CheckCircle, FileMagnifyingGlass, Flag, ListChecks, ShieldCheck, Siren, Star, User, UserMinus, UsersThree, Wallet } from '@phosphor-icons/react';
 import { useAuth } from '../../../hooks/useAuth';
 import { adminUserApi } from '../../../services/adminApi';
 import './Dashboard.css';
@@ -81,7 +66,7 @@ const AdminDashboard = () => {
       value: totalUsers,
       subtitle: `${activeUsers} đang hoạt động`,
       tone: 'ocean',
-      icon: <TeamOutlined />,
+      icon: <UsersThree />,
       route: '/admin/users'
     },
     {
@@ -90,7 +75,7 @@ const AdminDashboard = () => {
       value: unresolvedReports,
       subtitle: `${pendingReports} chờ duyệt, ${reviewingReports} đang xử lý`,
       tone: 'amber',
-      icon: <SafetyOutlined />,
+      icon: <ShieldCheck />,
       route: '/admin/reports'
     },
     {
@@ -99,7 +84,7 @@ const AdminDashboard = () => {
       value: suspendedUsers,
       subtitle: 'Theo dõi vi phạm đang áp dụng',
       tone: 'rose',
-      icon: <UserDeleteOutlined />,
+      icon: <UserMinus />,
       route: '/admin/users?status=selling_restricted'
     },
     {
@@ -108,7 +93,7 @@ const AdminDashboard = () => {
       value: pendingWithdrawals,
       subtitle: 'Ưu tiên SLA tài chính',
       tone: 'teal',
-      icon: <WalletOutlined />,
+      icon: <Wallet />,
       route: '/admin/withdrawals'
     }
   ];
@@ -121,7 +106,7 @@ const AdminDashboard = () => {
       tone: unresolvedReports > 10 ? 'critical' : unresolvedReports > 0 ? 'warning' : 'ok',
       route: '/admin/reports',
       cta: 'Mở danh sách báo cáo',
-      icon: <FlagOutlined />
+      icon: <Flag />
     },
     {
       key: 'withdrawals',
@@ -130,7 +115,7 @@ const AdminDashboard = () => {
       tone: pendingWithdrawals > 5 ? 'critical' : pendingWithdrawals > 0 ? 'warning' : 'ok',
       route: '/admin/withdrawals',
       cta: 'Đi tới duyệt rút tiền',
-      icon: <WalletOutlined />
+      icon: <Wallet />
     },
     {
       key: 'reviews',
@@ -139,7 +124,7 @@ const AdminDashboard = () => {
       tone: pendingReviews > 10 ? 'warning' : 'ok',
       route: '/admin/reviews',
       cta: 'Xử lý đánh giá',
-      icon: <StarOutlined />
+      icon: <Star />
     },
     {
       key: 'disputes',
@@ -148,7 +133,7 @@ const AdminDashboard = () => {
       tone: pendingDisputes > 0 ? 'warning' : 'ok',
       route: '/admin/disputes',
       cta: 'Mở khu vực tranh chấp',
-      icon: <AlertOutlined />
+      icon: <Siren />
     }
   ];
 
@@ -156,7 +141,7 @@ const AdminDashboard = () => {
     {
       key: 'users',
       title: 'Nhân sự hệ thống',
-      icon: <UserOutlined />,
+      icon: <User />,
       metrics: [
         { label: 'Admin', value: adminCount },
         { label: 'Moderator', value: moderatorCount },
@@ -166,7 +151,7 @@ const AdminDashboard = () => {
     {
       key: 'orders',
       title: 'Vận hành giao dịch',
-      icon: <CheckCircleOutlined />,
+      icon: <CheckCircle />,
       metrics: [
         { label: 'Đơn hàng đang mở', value: openOrders },
         { label: 'Báo cáo chờ duyệt', value: pendingReports },
@@ -181,28 +166,28 @@ const AdminDashboard = () => {
       title: 'Quản lý người dùng',
       desc: 'Theo dõi trạng thái, phân quyền và xử lý vi phạm.',
       route: '/admin/users',
-      icon: <UserOutlined />
+      icon: <User />
     },
     {
       key: 'reports',
       title: 'Kiểm duyệt báo cáo',
       desc: 'Ưu tiên các báo cáo mới để giảm tồn đọng.',
       route: '/admin/reports',
-      icon: <FileSearchOutlined />
+      icon: <FileMagnifyingGlass />
     },
     {
       key: 'withdrawals',
       title: 'Duyệt rút tiền',
       desc: 'Đảm bảo tiến độ thanh toán và trải nghiệm người dùng.',
       route: '/admin/withdrawals',
-      icon: <IssuesCloseOutlined />
+      icon: <ListChecks />
     },
     {
       key: 'revenue',
       title: 'Báo cáo doanh thu',
       desc: 'Xem nhanh hiệu suất và dòng tiền nền tảng.',
       route: '/admin/revenue',
-      icon: <BarChartOutlined />
+      icon: <ChartBar />
     }
   ];
 
@@ -214,7 +199,7 @@ const AdminDashboard = () => {
           <p>Xin chào {user?.fullName || 'Administrator'} </p>
         </div>
         <button className="dashboard-refresh" onClick={loadDashboardStats}>
-          <ReloadOutlined /> Làm mới dữ liệu
+          <ArrowClockwise /> Làm mới dữ liệu
         </button>
       </div>
 
@@ -255,7 +240,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <Link to={item.route} className="priority-item__link">
-                  {item.cta} <ArrowRightOutlined />
+                  {item.cta} <ArrowRight />
                 </Link>
               </div>
             ))}

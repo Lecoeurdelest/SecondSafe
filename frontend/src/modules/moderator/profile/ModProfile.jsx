@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Typography, Descriptions, Form, Input, Button, Alert, Row, Col, Tag, Divider } from "antd";
-import { UserOutlined, LockOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { FloppyDisk, Lock, PencilSimple, User } from "@phosphor-icons/react";
 import { getProfile, updateProfile, changePassword } from "../../../services/user.service";
 import { STRONG_PASSWORD_REGEX, STRONG_PASSWORD_MESSAGE } from '../../../utils/passwordValidator';
 import "./ModProfile.css";
@@ -112,7 +112,7 @@ const ModProfile = () => {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
-          <Card className="mod-panel" loading={loadingProfile} title={<><UserOutlined /> Hồ sơ cá nhân</>}>
+          <Card className="mod-panel" loading={loadingProfile} title={<><User /> Hồ sơ cá nhân</>}>
             <Descriptions column={1} size="middle" className="mod-profile-summary">
               <Descriptions.Item label="Vai trò">
                 <Tag color="default">
@@ -139,7 +139,7 @@ const ModProfile = () => {
                   { max: 80, message: "Họ tên không được vượt quá 80 ký tự" }
                 ]}
               >
-                <Input placeholder="Nhập họ tên" prefix={<EditOutlined />} maxLength={80} />
+                <Input placeholder="Nhập họ tên" prefix={<PencilSimple />} maxLength={80} />
               </Form.Item>
 
               <Form.Item name="email" label="Email" tooltip="Email không thể chỉnh sửa từ trang này">
@@ -173,7 +173,7 @@ const ModProfile = () => {
                 <Input.TextArea rows={3} placeholder="Nhập địa chỉ" maxLength={255} showCount />
               </Form.Item>
 
-              <Button type="primary" htmlType="submit" loading={savingProfile} icon={<SaveOutlined />}>
+              <Button type="primary" htmlType="submit" loading={savingProfile} icon={<FloppyDisk />}>
                 Lưu thông tin
               </Button>
             </Form>
@@ -181,7 +181,7 @@ const ModProfile = () => {
         </Col>
 
         <Col xs={24} lg={12}>
-          <Card className="mod-panel" title={<><LockOutlined /> Bảo mật tài khoản</>}>
+          <Card className="mod-panel" title={<><Lock /> Bảo mật tài khoản</>}>
             <Text className="mod-page-subtitle">Mật khẩu mới phải có tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</Text>
             <Divider style={{ margin: "12px 0 16px" }} />
 

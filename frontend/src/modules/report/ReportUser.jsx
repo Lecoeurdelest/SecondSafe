@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createUserReport, uploadEvidenceImages } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './ReportProduct.css';
+import { X } from '@phosphor-icons/react';
 
 const ReportUser = ({ reportedUser, onSuccess, onCancel }) => {
   const [reason, setReason] = useState('');
@@ -76,7 +77,7 @@ const ReportUser = ({ reportedUser, onSuccess, onCancel }) => {
       <div className="report-content">
         <div className="report-header">
           <h3>Báo cáo người dùng</h3>
-          <button className="close-btn" onClick={onCancel}>×</button>
+          <button className="close-btn" onClick={onCancel}><X /></button>
         </div>
 
         <div className="product-info">
@@ -151,7 +152,7 @@ const ReportUser = ({ reportedUser, onSuccess, onCancel }) => {
                       <img src={getImageUrl(url)} alt={`Bằng chứng ${index + 1}`} />
                     )}
                     <button type="button" className="remove-image" onClick={() => removeImage(index)}>
-                      ×
+                      <X />
                     </button>
                   </div>
                 ))}

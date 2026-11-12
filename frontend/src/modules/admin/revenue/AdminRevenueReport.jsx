@@ -17,6 +17,7 @@ import {
   Bar
 } from 'recharts';
 import '../AdminModules.css';
+import { ArrowClockwise, CircleNotch, Funnel, X } from '@phosphor-icons/react';
 
 const AdminRevenueReport = () => {
   const today = useMemo(() => new Date(), []);
@@ -151,7 +152,7 @@ const AdminRevenueReport = () => {
       {error && (
         <div className="alert alert-error">
           {error}
-          <button onClick={() => setError('')} className="alert-close">×</button>
+          <button onClick={() => setError('')} className="alert-close"><X /></button>
         </div>
       )}
 
@@ -179,11 +180,11 @@ const AdminRevenueReport = () => {
 
           <div className="filter-actions revenue-filter-actions">
             <button type="button" className="btn btn-primary" onClick={handleApplyFilter}>
-              <i className="fas fa-filter"></i>
+              <Funnel />
               Áp dụng
             </button>
             <button type="button" className="btn btn-secondary" onClick={handleResetFilter}>
-              <i className="fas fa-redo"></i>
+              <ArrowClockwise />
               Mặc định
             </button>
           </div>
@@ -192,7 +193,7 @@ const AdminRevenueReport = () => {
 
       {loading ? (
         <div className="loading">
-          <i className="fas fa-spinner fa-spin"></i>
+          <CircleNotch className="icon-spin" />
           Đang tải báo cáo...
         </div>
       ) : (

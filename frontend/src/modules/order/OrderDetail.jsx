@@ -12,6 +12,7 @@ import ConfirmReceipt from './ConfirmReceipt';
 import RateSeller from '../review/RateSeller';
 import Dispute from '../report/Dispute';
 import './OrderDetail.css';
+import { ArrowBendUpLeft, ArrowLeft, ChatCircle, Check, CheckCircle, Circle, CreditCard, Package, Paperclip, Star, Truck, Warning, X } from '@phosphor-icons/react';
 
 const AVATAR_PLACEHOLDER = '/images/placeholders/avatar-placeholder.svg';
 
@@ -737,7 +738,7 @@ const OrderDetail = () => {
         className="btn btn-outline"
         onClick={openOrderChat}
       >
-        <i className="fas fa-comment"></i>
+        <ChatCircle />
         Chat
       </button>
     );
@@ -753,7 +754,7 @@ const OrderDetail = () => {
                 className="btn btn-primary"
                 onClick={() => navigate(`/orders/${order._id}/pay`)}
               >
-                <i className="fas fa-credit-card"></i>
+                <CreditCard />
                 Thanh toán
               </button>
               <button
@@ -762,7 +763,7 @@ const OrderDetail = () => {
                 onClick={handleCancelOrder}
                 style={{ marginLeft: '8px' }}
               >
-                <i className="fas fa-times"></i>
+                <X />
                 Hủy đơn
               </button>
             </React.Fragment>
@@ -775,7 +776,7 @@ const OrderDetail = () => {
               className="btn btn-danger"
               onClick={handleCancelOrder}
             >
-              <i className="fas fa-times"></i>
+              <X />
               Hủy đơn (Hoàn tiền)
             </button>
           );
@@ -789,7 +790,7 @@ const OrderDetail = () => {
                 className="btn btn-success"
                 onClick={() => setShowReceiptModal(true)}
               >
-                <i className="fas fa-check-circle"></i>
+                <CheckCircle weight="fill" />
                 Xác nhận nhận hàng
               </button>
             );
@@ -804,7 +805,7 @@ const OrderDetail = () => {
                 setShowDisputeModal(true);
               }}
             >
-              <i className="fas fa-exclamation-triangle"></i>
+              <Warning />
               Khiếu nại và hoàn tiền
             </button>
           );
@@ -819,7 +820,7 @@ const OrderDetail = () => {
                 className="btn btn-warning"
                 onClick={() => setShowRatingModal(true)}
               >
-                <i className="fas fa-star"></i>
+                <Star weight="fill" />
                 Đánh giá người bán
               </button>
             );
@@ -834,7 +835,7 @@ const OrderDetail = () => {
                 className="btn btn-warning"
                 onClick={() => setShowBuyerFollowUpModal(true)}
               >
-                <i className="fas fa-paperclip"></i>
+                <Paperclip />
                 Bổ sung bằng chứng
               </button>
             );
@@ -854,7 +855,7 @@ const OrderDetail = () => {
               className="btn btn-primary"
               onClick={() => setShowShipModal(true)}
             >
-              <i className="fas fa-shipping-fast"></i>
+              <Truck />
               Xác nhận giao hàng
             </button>
           );
@@ -866,7 +867,7 @@ const OrderDetail = () => {
               className="btn btn-info"
               onClick={() => handleConfirmDelivery(order._id)}
             >
-              <i className="fas fa-box-open"></i>
+              <Package />
               Xác nhận giao đến nơi
             </button>
           );
@@ -881,7 +882,7 @@ const OrderDetail = () => {
                 className="btn btn-warning"
                 onClick={() => setShowSellerResponseModal(true)}
               >
-                <i className="fas fa-reply"></i>
+                <ArrowBendUpLeft />
                 Cung cấp bằng chứng cho mod
               </button>
             );
@@ -894,7 +895,7 @@ const OrderDetail = () => {
                 className="btn btn-success"
                 onClick={() => setShowConfirmReturnModal(true)}
               >
-                <i className="fas fa-check-circle"></i>
+                <CheckCircle weight="fill" />
                 Xác nhận nhận lại hàng
               </button>
             );
@@ -948,7 +949,7 @@ const OrderDetail = () => {
     <div className="order-detail-container">
       <div className="page-header">
         <button onClick={() => navigate('/orders')} className="back-button">
-          <i className="fas fa-arrow-left"></i>
+          <ArrowLeft />
           Quay lại
         </button>
         <div className="header-info">
@@ -1136,9 +1137,7 @@ const OrderDetail = () => {
                 className={`timeline-step ${step.completed ? 'completed' : ''} ${step.isCurrent ? 'current' : ''} timeline-${step.variant || 'normal'}`}
               >
                 <div className="timeline-marker">
-                  <i
-                    className={`fas ${step.variant === 'cancelled' ? 'fa-times' : step.completed ? 'fa-check' : 'fa-circle'}`}
-                  ></i>
+                  {step.variant === 'cancelled' ? <X /> : step.completed ? <Check /> : <Circle weight="fill" />}
                 </div>
                 <div className="timeline-content">
                   <div className="timeline-label">{step.label}</div>
@@ -1163,7 +1162,7 @@ const OrderDetail = () => {
                 <div className="review-rating">
                   {[1, 2, 3, 4, 5].map(star => (
                     <span key={star} className={`star ${star <= existingReview.rating ? 'filled' : ''}`}>
-                      ★
+                      <Star weight="fill" />
                     </span>
                   ))}
                   <span className="rating-text">{existingReview.rating}/5</span>
@@ -1288,7 +1287,7 @@ const OrderDetail = () => {
           <div className="dispute-content">
             <div className="dispute-header">
               <h3>Phản hồi khiếu nại</h3>
-              <button className="close-btn" onClick={() => setShowSellerResponseModal(false)}>×</button>
+              <button className="close-btn" onClick={() => setShowSellerResponseModal(false)}><X /></button>
             </div>
             <div className="dispute-form">
               {sellerResponseError && <div className="error-message">{sellerResponseError}</div>}
@@ -1331,7 +1330,7 @@ const OrderDetail = () => {
           <div className="dispute-content">
             <div className="dispute-header">
               <h3>Gửi tin mới cho moderator</h3>
-              <button className="close-btn" onClick={() => setShowBuyerFollowUpModal(false)}>×</button>
+              <button className="close-btn" onClick={() => setShowBuyerFollowUpModal(false)}><X /></button>
             </div>
             <div className="dispute-form">
               {buyerFollowUpError && <div className="error-message">{buyerFollowUpError}</div>}
@@ -1375,7 +1374,7 @@ const OrderDetail = () => {
           <div className="dispute-content">
             <div className="dispute-header">
               <h3>Xác nhận nhận lại hàng</h3>
-              <button className="close-btn" onClick={() => setShowConfirmReturnModal(false)}>×</button>
+              <button className="close-btn" onClick={() => setShowConfirmReturnModal(false)}><X /></button>
             </div>
             <div className="dispute-form">
               <p>Bạn xác nhận đã nhận lại hàng từ người mua? Moderator sẽ tiến hành hoàn tiền cho người mua sau khi bạn xác nhận.</p>

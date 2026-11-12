@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Table, Tag, Button, Typography, Select, message } from "antd";
-import { EyeOutlined, ReloadOutlined } from "@ant-design/icons";
+import { ArrowClockwise, Eye } from "@phosphor-icons/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getModeratorDisputes } from "../../../services/moderator.service";
 
@@ -105,7 +105,7 @@ const AdminDisputeList = () => {
       title: "Hành động",
       key: "action",
       render: (_, record) => (
-        <Button type="primary" icon={<EyeOutlined />} onClick={() => navigate(`/admin/disputes/${record._id}`)}>
+        <Button type="primary" icon={<Eye />} onClick={() => navigate(`/admin/disputes/${record._id}`)}>
           Chi tiết
         </Button>
       )
@@ -129,7 +129,7 @@ const AdminDisputeList = () => {
             ]}
           />
           <div className="mod-filter-actions">
-            <Button icon={<ReloadOutlined />} className="mod-reset-btn" onClick={handleResetFilter}>Reset</Button>
+            <Button icon={<ArrowClockwise />} className="mod-reset-btn" onClick={handleResetFilter}>Reset</Button>
           </div>
         </div>
       </div>

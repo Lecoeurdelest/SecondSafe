@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-080",
+  "spec_hash": "2463dc328670efa5c13b5b93640561e42936dd31059767bd43f370fa8fe69391",
+  "source_hash": "fa7f69d5a2fabde92b0e74936ee8dcb72ab1379fb21c67cb73d9309883534ba9",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium: storefront with canned API responses, staff pages with the real backend and seeded data",
+    "Icons in states that were not rendered (open modals, error states, notification panel, mobile menu, support dialog) were not scanned",
+    "Four arrows inside option elements stay as text because an option cannot hold an icon",
+    "Ant Design's own icons are replaced through a local package that covers the 51 icons the installed Ant Design imports; a newer Ant Design that imports another icon fails the build until it is added",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-24-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The policy test and the Ant Design icon test pass; the audit finds no icon package import, icon class or glyph left; 20 staff pages show only Phosphor icons and no legacy glyph; the storefront scans found and fixed three icons that blended into the background; states that were not rendered were not scanned",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-080/run-01/clean-install.txt",
+            ".project/evidence/TASK-080/run-01/clean-install-tree.txt",
+            ".project/evidence/TASK-080/run-01/frontend-test.txt",
+            ".project/evidence/TASK-080/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "static_flow",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-080/run-01/flow-review.md"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-080/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

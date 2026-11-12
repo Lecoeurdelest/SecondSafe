@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import chatService, { chatImageUrl, connectChatSocket } from '../../services/chat.service';
 import OfferCard from './OfferCard';
 import './Chat.css';
+import { Camera, CircleNotch } from '@phosphor-icons/react';
 
 const TYPING_IDLE_MS = 1500;
 const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
@@ -296,7 +297,7 @@ export default function Chat() {
             )}
             <form className="chat-form" onSubmit={handleSubmit}>
               <label className="chat-attach" aria-disabled={uploading}>
-                <span aria-hidden="true">{uploading ? '…' : '📷'}</span>
+                <span aria-hidden="true">{uploading ? <CircleNotch className="icon-spin" /> : <Camera />}</span>
                 <input type="file" aria-label="Gửi ảnh" accept="image/jpeg,image/png,image/webp,image/gif"
                   onChange={handleImageChange} disabled={uploading} className="visually-hidden" />
               </label>

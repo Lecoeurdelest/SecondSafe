@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.css';
+import { Bank, CreditCard, DeviceMobile } from '@phosphor-icons/react';
 
 /**
  * Footer Component
@@ -55,9 +56,9 @@ function Footer() {
           <div className="footer__payment">
             <span>Phương thức thanh toán:</span>
             <div className="footer__payment-icons">
-              <span>💳</span>
-              <span>🏦</span>
-              <span>📱</span>
+              <span><CreditCard /></span>
+              <span><Bank /></span>
+              <span><DeviceMobile /></span>
             </div>
           </div>
         </div>

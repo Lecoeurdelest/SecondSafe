@@ -8,6 +8,7 @@ import PurchaseRequest from '../order/PurchaseRequest';
 import ReportProduct from '../report/ReportProduct';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import './ProductDetail.css';
+import { ArrowLeft, Heart } from '@phosphor-icons/react';
 
 const CONDITION_LABELS = {
   new: 'Mới',
@@ -181,7 +182,7 @@ export default function ProductDetail() {
 
   return (
     <article className="product-detail container">
-      <Link className="product-detail__back" to="/">← Quay lại danh sách</Link>
+      <Link className="product-detail__back" to="/"><ArrowLeft /> Quay lại danh sách</Link>
       <div className="product-detail__layout">
         <div className="product-detail__image">
           <img
@@ -225,7 +226,7 @@ export default function ProductDetail() {
               disabled={actionLoading}
               onClick={handleFavorite}
             >
-              {isFavorite ? '♥ Đã yêu thích' : '♡ Thêm yêu thích'}
+              {isFavorite ? <><Heart weight="fill" /> Đã yêu thích</> : <><Heart /> Thêm yêu thích</>}
             </button>
             <button
               type="button"

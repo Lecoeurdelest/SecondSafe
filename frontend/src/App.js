@@ -8,6 +8,7 @@ import LanguageSwitcher from './components/LanguageSwitcher';
 import ThemeToggle from './components/ThemeToggle';
 import { applyTheme, canChooseTheme, effectiveTheme, preferredTheme, savePreferredTheme } from './utils/theme';
 import { applySystemLanguage, observeSystemLanguage } from './services/language.service';
+import { ChatCircleText, Question, ShoppingCart, Sparkle, X } from '@phosphor-icons/react';
 
 const NotificationPanel = lazy(() => import('./components/NotificationPanel'));
 
@@ -103,7 +104,7 @@ export default function App() {
           </Link>
           <nav className="site-header__links" aria-label="Điều hướng chính">
             <Link to="/favorites">Yêu thích</Link>
-            <Link className="site-header__cart" to="/cart" aria-label="Giỏ hàng">🛒<span>Giỏ hàng</span></Link>
+            <Link className="site-header__cart" to="/cart" aria-label="Giỏ hàng"><ShoppingCart aria-hidden="true" /><span>Giỏ hàng</span></Link>
             <Link to="/assistant">Trợ lý AI</Link>
             <Link to="/support">Hỗ trợ</Link>
             {isAuthenticated && !adminRole && !staffRole && <Link className="site-header__sell" to="/product/create">Đăng tin</Link>}
@@ -140,17 +141,17 @@ export default function App() {
         {logoutError && <p className="site-header__error" role="alert">{logoutError}</p>}
         <PageContent />
         <Link className="floating-chat" to="/support" aria-label="Chat hỗ trợ">
-          <span aria-hidden="true">💬</span>
+          <span aria-hidden="true"><ChatCircleText weight="fill" /></span>
           <strong>Chat</strong>
         </Link>
         {supportOpen && (
           <div className="support-contact-modal" role="dialog" aria-modal="true" aria-labelledby="support-contact-title" onMouseDown={event => { if (event.target === event.currentTarget) setSupportOpen(false); }}>
             <div className="support-contact-modal__card">
-              <button type="button" className="support-contact-modal__close" aria-label="Đóng cửa sổ hỗ trợ" onClick={() => setSupportOpen(false)}>×</button>
+              <button type="button" className="support-contact-modal__close" aria-label="Đóng cửa sổ hỗ trợ" onClick={() => setSupportOpen(false)}><X /></button>
               <h2 id="support-contact-title">Liên hệ SecondSafe</h2>
-              <Link to="/assistant" onClick={() => setSupportOpen(false)}><span aria-hidden="true">✦</span><div><strong>Hỏi trợ lý AI</strong><small>Gợi ý sản phẩm và câu hỏi thường gặp</small></div></Link>
-              <Link to="/support" onClick={() => setSupportOpen(false)}><span aria-hidden="true">💬</span><div><strong>Trò chuyện với nhân viên</strong><small>Mở cuộc hỗ trợ trong tài khoản</small></div></Link>
-              <Link to="/support" onClick={() => setSupportOpen(false)}><span aria-hidden="true">?</span><div><strong>Trung tâm trợ giúp</strong><small>Xem hướng dẫn sử dụng SecondSafe</small></div></Link>
+              <Link to="/assistant" onClick={() => setSupportOpen(false)}><span aria-hidden="true"><Sparkle weight="fill" /></span><div><strong>Hỏi trợ lý AI</strong><small>Gợi ý sản phẩm và câu hỏi thường gặp</small></div></Link>
+              <Link to="/support" onClick={() => setSupportOpen(false)}><span aria-hidden="true"><ChatCircleText /></span><div><strong>Trò chuyện với nhân viên</strong><small>Mở cuộc hỗ trợ trong tài khoản</small></div></Link>
+              <Link to="/support" onClick={() => setSupportOpen(false)}><span aria-hidden="true"><Question /></span><div><strong>Trung tâm trợ giúp</strong><small>Xem hướng dẫn sử dụng SecondSafe</small></div></Link>
             </div>
           </div>
         )}

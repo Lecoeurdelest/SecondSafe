@@ -1662,6 +1662,35 @@
       "criteria": {
         "AC-WEB-23-1": "inconclusive"
       }
+    },
+    "TASK-080": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "Every icon is now Phosphor: Font Awesome, Ant Design icon imports and glyph icons were converted, Ant Design's own icons go through a local replacement package, and tests keep the old sets out; frontend tests and build pass; pages scanned in both themes and against the real backend for the staff pages; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "New goal: Phosphor icons and Ant Design; icons are the first slice"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Convert Font Awesome, Ant Design icon imports and glyph icons to Phosphor components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Converted Font Awesome, Ant Design icon imports and glyph icons to Phosphor, replaced Ant Design's own icons through a local package, added the policy and icon tests, and scanned the storefront and staff pages"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-080/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-080.md",
+      "criteria": {
+        "AC-WEB-24-1": "inconclusive"
+      }
     }
   }
 }

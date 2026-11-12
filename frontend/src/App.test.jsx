@@ -573,8 +573,8 @@ test('authenticated buyers can add a product to the persistent cart and favorite
   expect(await screen.findByText(/Đã thêm sản phẩm vào giỏ hàng/)).toBeInTheDocument();
   expect(cartService.addToCart).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
 
-  fireEvent.click(screen.getByRole('button', { name: '♡ Thêm yêu thích' }));
-  expect(await screen.findByRole('button', { name: '♥ Đã yêu thích' })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Thêm yêu thích' }));
+  expect(await screen.findByRole('button', { name: 'Đã yêu thích' })).toBeInTheDocument();
   expect(favoriteService.addFavorite).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
 });
 

@@ -6,6 +6,7 @@ import { getImageUrl, getUserAvatarUrl, handleImageError } from '../../utils/ima
 import { useAuth } from '../../hooks/useAuth';
 import ReportUser from '../report/ReportUser';
 import './UserProfile.css';
+import { MapPin, Package, Star, User } from '@phosphor-icons/react';
 
 const PRODUCT_PLACEHOLDER = '/images/placeholders/product-placeholder.svg';
 
@@ -123,13 +124,13 @@ const UserProfile = () => {
             </h1>
             <div className="user-meta">
               <span className="meta-item">
-                👤 Thành viên từ {formatDate(user.createdAt)}
+                <User /> Thành viên từ {formatDate(user.createdAt)}
               </span>
               <span className="meta-item">
-                📦 {products.length} sản phẩm đang bán
+                <Package /> {products.length} sản phẩm đang bán
               </span>
               <span className="meta-item">
-                ⭐ {Number(stats?.rating || user.rating || 0).toFixed(1)}/5 · {Number(stats?.totalReviews || user.totalReviews || 0)} đánh giá
+                <Star weight="fill" /> {Number(stats?.rating || user.rating || 0).toFixed(1)}/5 · {Number(stats?.totalReviews || user.totalReviews || 0)} đánh giá
               </span>
             </div>
           </div>
@@ -184,7 +185,7 @@ const UserProfile = () => {
                   <h3 className="product-title">{product.title}</h3>
                   <div className="product-price">{formatPrice(product.price)}</div>
                   <div className="product-location">
-                    📍 {product.location?.district}, {product.location?.city}
+                    <MapPin /> {product.location?.district}, {product.location?.city}
                   </div>
                 </div>
               </Link>

@@ -6,6 +6,8 @@ import api from '../../services/api';
 import { getProfile } from '../../services/user.service';
 import LocationSelector from '../../components/LocationSelector';
 import './CreateProduct.css';
+import { Check, MapPin, X } from '@phosphor-icons/react';
+import CategoryIcon from '../../utils/categoryIcons';
 
 const CONDITION_LABELS = {
   new: 'Mới',
@@ -386,7 +388,7 @@ const CreateProduct = () => {
                         title="Xóa ảnh"
                         onClick={() => removeImage(index)}
                       >
-                        ✕
+                        <X />
                       </button>
                     </div>
                   ))}
@@ -458,8 +460,8 @@ const CreateProduct = () => {
                             className={`category-chip ${isSelected ? 'is-selected' : ''}`}
                             onClick={() => handleCategoryToggle(cat._id)}
                           >
-                            <span className="category-chip-check">{isSelected ? '✓' : ''}</span>
-                            <span className="category-chip-label">{cat.icon} {cat.name}</span>
+                            <span className="category-chip-check">{isSelected ? <Check /> : null}</span>
+                            <span className="category-chip-label"><CategoryIcon slug={cat.slug} /> {cat.name}</span>
                           </button>
                         );
                       })
@@ -535,7 +537,7 @@ const CreateProduct = () => {
                 {profileLocation && (
                   <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: '#fff1f0', border: '1px solid #fdbeba', borderRadius: '8px' }}>
                     <span style={{ flex: 1, fontSize: '14px', color: 'var(--brand-dark)' }}>
-                      📍 Mặc định từ hồ sơ: <strong>{[profileLocation.ward, profileLocation.district, profileLocation.city].filter(Boolean).join(', ')}</strong>
+                      <MapPin /> Mặc định từ hồ sơ: <strong>{[profileLocation.ward, profileLocation.district, profileLocation.city].filter(Boolean).join(', ')}</strong>
                     </span>
                     <button
                       type="button"

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import walletService from '../../services/wallet.service';
 import './Wallet.css';
+import { ArrowDownLeft, ArrowUUpLeft, ArrowUpRight, Bank, CaretLeft, CaretRight, Coins, CreditCard, CurrencyCircleDollar } from '@phosphor-icons/react';
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -116,14 +117,14 @@ const Wallet = () => {
 
   const getTransactionIcon = (type) => {
     const icons = {
-      'deposit': '↗️',
-      'withdrawal': '↙️',
-      'payment': '💳',
-      'refund': '↩️',
-      'earning': '💰',
-      'fee': '🏦'
+      'deposit': <ArrowUpRight />,
+      'withdrawal': <ArrowDownLeft />,
+      'payment': <CreditCard />,
+      'refund': <ArrowUUpLeft />,
+      'earning': <Coins />,
+      'fee': <Bank />
     };
-    return icons[type] || '💱';
+    return icons[type] || <CurrencyCircleDollar />;
   };
 
   const getStatusBadge = (status) => {
@@ -402,7 +403,7 @@ const Wallet = () => {
                   disabled={pagination.page === 1}
                   className="pagination-btn"
                 >
-                  ← Trước
+                  <CaretLeft /> Trước
                 </button>
 
                 <span className="pagination-info">
@@ -414,7 +415,7 @@ const Wallet = () => {
                   disabled={pagination.page === pagination.totalPages}
                   className="pagination-btn"
                 >
-                  Sau →
+                  Sau <CaretRight />
                 </button>
               </div>
             )}

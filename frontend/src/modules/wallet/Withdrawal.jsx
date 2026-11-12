@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import walletService from '../../services/wallet.service';
 import './Withdrawal.css';
+import { ArrowLeft, Warning } from '@phosphor-icons/react';
 
 const Withdrawal = () => {
   const navigate = useNavigate();
@@ -186,7 +187,7 @@ const Withdrawal = () => {
     <div className="withdrawal-container">
       <div className="withdrawal-header">
         <button onClick={() => navigate('/wallet')} className="back-btn">
-          ← Quay lại
+          <ArrowLeft /> Quay lại
         </button>
         <h1>Rút tiền từ ví</h1>
         <p>Tạo yêu cầu rút tiền về tài khoản ngân hàng</p>
@@ -361,7 +362,7 @@ const Withdrawal = () => {
 
         {/* Important Notice */}
         <div className="withdrawal-notice">
-          <h3>⚠️ Lưu ý quan trọng</h3>
+          <h3><Warning /> Lưu ý quan trọng</h3>
           <ul>
             <li>Thời gian xử lý: 1-3 ngày làm việc</li>
             <li>Kiểm tra kỹ thông tin tài khoản trước khi gửi</li>

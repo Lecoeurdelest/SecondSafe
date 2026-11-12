@@ -1,5 +1,5 @@
 import { Card, Descriptions, Button, Space, Tag, message, Popconfirm, Input, Alert, Select } from "antd";
-import { StopOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeft, Prohibit } from "@phosphor-icons/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
@@ -106,7 +106,7 @@ const ModOrderDetail = () => {
 
   return (
     <Space direction="vertical" style={{ width: "100%" }} size="large">
-      <Button icon={<ArrowLeftOutlined />} onClick={() => navigate("/moderator/orders")}>
+      <Button icon={<ArrowLeft />} onClick={() => navigate("/moderator/orders")}>
         Quay lại danh sách
       </Button>
 
@@ -181,7 +181,7 @@ const ModOrderDetail = () => {
               placeholder="Nhập lý do hủy đơn (tối thiểu 10 ký tự)"
             />
             <Popconfirm title="Xác nhận ép hủy đơn hàng này?" onConfirm={handleForceCancel}>
-              <Button type="primary" danger icon={<StopOutlined />} disabled={order?.status === "cancelled" || order?.status === "completed"}>
+              <Button type="primary" danger icon={<Prohibit />} disabled={order?.status === "cancelled" || order?.status === "completed"}>
                 Ép hủy đơn hàng
               </Button>
             </Popconfirm>

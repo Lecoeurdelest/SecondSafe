@@ -1,0 +1,22 @@
+# Icon audit of frontend/src and frontend/package.json on 2026-11-12
+
+## Icon packages and icon classes (expect no matches outside vendor/ant-design-icons and the policy tests)
+(end)
+
+## Emoji and symbol glyphs in sources outside comments and option elements
+frontend/src/services/order.service.js:165: * Confirm delivery (seller action - shipped → delivered)
+(end, 1 matches)
+
+## Dependencies
+16:    "@phosphor-icons/react": "2.1.10",
+17:    "@ant-design/icons": "file:./vendor/ant-design-icons"
+
+## Phosphor imports
+files importing @phosphor-icons/react: 69
+distinct icons used: 95
+
+## Exempt: text arrows inside option elements
+frontend/src/modules/home/Home.jsx:332:            <option value="price_asc">Giá: thấp → cao</option>
+frontend/src/modules/home/Home.jsx:333:            <option value="price_desc">Giá: cao → thấp</option>
+frontend/src/modules/home/Home.jsx:334:            <option value="name_asc">Tên: A → Z</option>
+frontend/src/modules/home/Home.jsx:335:            <option value="name_desc">Tên: Z → A</option>

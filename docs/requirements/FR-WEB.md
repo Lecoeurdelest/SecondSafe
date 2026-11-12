@@ -185,3 +185,11 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 16. Dark theme 
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-23-1` | Visitors and customers can switch the storefront between a light and a dark theme from the header; the first choice follows the browser preference, the choice is remembered, text stays readable on the pages observed, and admin and moderator sessions always use the light theme and are not offered the switch. | behavioral test, manual review | [TASK-079](../task/TASK-079.md) `[!]` |
+
+### FR-WEB-24 — Web icon set
+
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 17. Icon set and component library amendment (2026-11-12)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-WEB-24-1` | Every icon in the web application comes from the Phosphor icon set; the Font Awesome and Ant Design icon packages, icon classes and emoji or symbol glyphs used as icons are gone, icons keep a visible colour and size in the light and dark themes, and loading indicators still spin. | behavioral test, static flow review, manual review | [TASK-080](../task/TASK-080.md) `[!]` |

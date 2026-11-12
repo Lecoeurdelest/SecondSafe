@@ -1,0 +1,4 @@
+import { XCircle } from '@phosphor-icons/react';
+import createIcon from '../components/createIcon';
+
+export default createIcon('close-circle', XCircle, 'fill');

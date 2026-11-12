@@ -1,0 +1,13 @@
+{
+  "name": "@ant-design/icons",
+  "version": "6.3.4",
+  "description": "Local replacement for @ant-design/icons that renders the Phosphor icons for the icons Ant Design itself uses",
+  "private": true,
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "sideEffects": false,
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  }
+}

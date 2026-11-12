@@ -1,12 +1,5 @@
 import { Menu, Typography } from "antd";
-import {
-  DashboardOutlined,
-  FlagOutlined,
-  ShoppingOutlined,
-  StarOutlined,
-  SafetyCertificateOutlined,
-  WalletOutlined
-} from "@ant-design/icons";
+import { Flag, Gauge, SealCheck, ShoppingBag, Star, Wallet } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const { Text } = Typography;
@@ -53,32 +46,32 @@ const ModeratorSidebar = ({ onNavigate }) => {
         items={[
           {
             key: "/moderator/dashboard",
-            icon: <DashboardOutlined />,
+            icon: <Gauge />,
             label: "Tổng quan",
           },
           {
             key: "/moderator/reports",
-            icon: <FlagOutlined />,
+            icon: <Flag />,
             label: "Quản lý Báo cáo",
           },
           {
             key: "/moderator/orders",
-            icon: <ShoppingOutlined />,
+            icon: <ShoppingBag />,
             label: "Quản lý Đơn hàng",
           },
           {
             key: "/moderator/reviews",
-            icon: <StarOutlined />,
+            icon: <Star />,
             label: "Đánh giá & Nhận xét",
           },
           {
             key: "/moderator/disputes",
-            icon: <SafetyCertificateOutlined />,
+            icon: <SealCheck />,
             label: "Giải quyết Tranh chấp",
           },
           {
             key: "/moderator/withdrawals",
-            icon: <WalletOutlined />,
+            icon: <Wallet />,
             label: "Yêu cầu Rút tiền",
           },
         ]}

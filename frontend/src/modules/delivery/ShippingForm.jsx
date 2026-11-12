@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ShippingForm.css';
+import { X } from '@phosphor-icons/react';
 
 const ShippingForm = ({ orderId, onSubmit, onCancel, initialData = {} }) => {
   const [formData, setFormData] = useState({
@@ -114,7 +115,7 @@ const ShippingForm = ({ orderId, onSubmit, onCancel, initialData = {} }) => {
             onClick={onCancel}
             disabled={loading}
           >
-            <i className="fas fa-times"></i>
+            <X />
           </button>
         </div>
 

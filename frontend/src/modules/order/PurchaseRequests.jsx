@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getReceivedPurchaseRequests, acceptPurchaseRequest, rejectPurchaseRequest } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './PurchaseRequests.css';
+import { ClipboardText } from '@phosphor-icons/react';
 
 const PurchaseRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -129,7 +130,7 @@ const PurchaseRequests = () => {
 
       {requests.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📋</div>
+          <div className="empty-icon"><ClipboardText /></div>
           <h3>Chưa có yêu cầu mua hàng nào</h3>
           <p>Khi có khách hàng quan tâm đến sản phẩm của bạn, yêu cầu sẽ hiển thị ở đây.</p>
         </div>

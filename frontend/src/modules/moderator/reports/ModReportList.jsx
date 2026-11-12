@@ -1,5 +1,5 @@
 import { Card, Table, Tag, Button, Typography, Space, Select, Input, message } from "antd";
-import { EyeOutlined, SearchOutlined, ReloadOutlined } from "@ant-design/icons";
+import { ArrowClockwise, Eye, MagnifyingGlass } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getModeratorReports } from "../../../services/moderator.service";
@@ -211,7 +211,7 @@ const ModReportList = () => {
       render: (_, record) => (
         <Button 
           type="primary" 
-          icon={<EyeOutlined />} 
+          icon={<Eye />} 
           onClick={() => navigate(`/moderator/reports/${record._id}`)}
         >
           Chi tiết
@@ -227,7 +227,7 @@ const ModReportList = () => {
         <div className="mod-filter-row">
           <Input
             placeholder="Tìm theo nội dung..."
-            prefix={<SearchOutlined />}
+            prefix={<MagnifyingGlass />}
             value={filters.keyword}
             onChange={(e) => setFilters((prev) => ({ ...prev, keyword: e.target.value }))}
             onPressEnter={() => fetchReports(1, pagination.pageSize)}
@@ -257,7 +257,7 @@ const ModReportList = () => {
           />
           <div className="mod-filter-actions">
             <Button type="primary" onClick={() => fetchReports(1, pagination.pageSize)}>Lọc</Button>
-            <Button icon={<ReloadOutlined />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
+            <Button icon={<ArrowClockwise />} className="mod-reset-btn" onClick={handleResetFilters}>Reset</Button>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { Layout, Typography } from "antd";
-import { SafetyCertificateOutlined } from "@ant-design/icons";
+import { SealCheck } from "@phosphor-icons/react";
 
 const { Footer } = Layout;
 const { Text } = Typography;
@@ -9,7 +9,7 @@ const ModeratorFooter = () => {
     <Footer className="moderator-footer">
       <div className="moderator-footer-inner">
         <div className="moderator-footer-brand">
-          <SafetyCertificateOutlined className="moderator-footer-icon" />
+          <SealCheck className="moderator-footer-icon" />
           <Text className="moderator-footer-text">SecondSafe Moderation</Text>
         </div>
         <Text className="moderator-footer-divider">|</Text>

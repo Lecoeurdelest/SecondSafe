@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 6/78 tasks done (6 done, 3 in_progress, 31 verifying, 38 todo). 158 active requirements, 237 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 6/79 tasks done (6 done, 3 in_progress, 32 verifying, 38 todo). 159 active requirements, 238 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
@@ -206,5 +206,13 @@ D-013 records the data-flow change: the redacted conversation now reaches the pr
 ## 16. Dark theme amendment (2026-11-12)
 
 The visual restyle of TASK-077 followed two reference projects. One of them, `mercari-clone`, offers a dark mode toggle; the other does not. The restyle left it out and recorded it as not implemented. TASK-079 adds it for the storefront only: customers and visitors get a switch in the header, the first choice follows the browser preference, and the choice is remembered in the browser. Admin and moderator sessions always use the light theme and are not offered the switch, because their pages use Ant Design and were not designed or observed in a dark palette.
+
+No behaviour, route, service or data model changes, and no existing task ID, criterion or evidence is altered.
+
+## 17. Icon set and component library amendment (2026-11-12)
+
+The user sets a new goal: change every icon to the Phosphor set (phosphoricons.com) and move the code to Ant Design. The icon half is unambiguous and is delivered by TASK-080: Font Awesome icon classes, the direct Ant Design icon imports in the admin and moderator pages and the emoji and symbol glyphs that stood in for icons all become Phosphor components, the two icon packages leave the dependencies, and a policy test keeps them out.
+
+The Ant Design half is read as moving the storefront interface from hand-written components and stylesheets to Ant Design components, since the admin and moderator pages already use it. That is a large change across about a hundred components and is planned as separate tasks by area, each with its own review and evidence, starting from one shared theme that follows the light and dark themes of TASK-079. If another reading was meant, such as only the icons or a different scope for Ant Design, the later tasks are adjusted before they start.
 
 No behaviour, route, service or data model changes, and no existing task ID, criterion or evidence is altered.

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
+import { CheckCircle, XCircle } from '@phosphor-icons/react';
 
 function TopUpResult() {
   const location = useLocation();
@@ -39,9 +39,9 @@ function TopUpResult() {
         {/* Icon trạng thái */}
         <div style={{ fontSize: 64, marginBottom: 16 }}>
           {success ? (
-            <CheckCircleFilled style={{ color: '#52c41a' }} />
+            <CheckCircle weight="fill" style={{ color: '#52c41a' }} />
           ) : (
-            <CloseCircleFilled style={{ color: '#ff4d4f' }} />
+            <XCircle weight="fill" style={{ color: '#ff4d4f' }} />
           )}
         </div>
 

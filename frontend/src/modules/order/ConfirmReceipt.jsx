@@ -4,6 +4,7 @@ import { createReview } from '../../services/review.service';
 import { uploadEvidenceMedia } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './ConfirmReceipt.css';
+import { CheckCircle, CircleNotch, Star, ThumbsDown, ThumbsUp, X } from '@phosphor-icons/react';
 
 const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
   const productImageSrc = getImageUrl(order.listing?.images?.[0]) || '/images/placeholder.png';
@@ -206,7 +207,7 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
         onClick={() => handleRatingChange(star)}
       >
         <span className="star-button__icon">
-          <i className="fas fa-star"></i>
+          <Star weight="fill" />
         </span>
         <span className="star-button__value">{star}</span>
       </button>
@@ -231,7 +232,7 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
         <div className="confirm-receipt-header">
           <h3>Xác nhận nhận hàng</h3>
           <button className="close-button" onClick={onClose}>
-            <i className="fas fa-times"></i>
+            <X />
           </button>
         </div>
 
@@ -332,7 +333,7 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
                   className={`satisfaction-card ${formData.satisfied ? 'active' : ''}`}
                   onClick={() => handleSatisfiedChange(true)}
                 >
-                  <span className="satisfaction-card__icon">👍</span>
+                  <span className="satisfaction-card__icon"><ThumbsUp /></span>
                   <span className="satisfaction-card__title">Hài lòng</span>
                   <span className="satisfaction-card__desc">Sản phẩm và trải nghiệm đúng kỳ vọng</span>
                 </button>
@@ -341,7 +342,7 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
                   className={`satisfaction-card ${!formData.satisfied ? 'active' : ''}`}
                   onClick={() => handleSatisfiedChange(false)}
                 >
-                  <span className="satisfaction-card__icon">👎</span>
+                  <span className="satisfaction-card__icon"><ThumbsDown /></span>
                   <span className="satisfaction-card__title">Chưa hài lòng</span>
                   <span className="satisfaction-card__desc">Có điểm chưa ổn trong giao dịch hoặc sản phẩm</span>
                 </button>
@@ -438,7 +439,7 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
                         disabled={loading}
                         aria-label="Xóa tệp bằng chứng"
                       >
-                        ×
+                        <X />
                       </button>
                     </div>
                   ))}
@@ -469,12 +470,12 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
             >
               {loading ? (
                 <>
-                  <i className="fas fa-spinner fa-spin"></i>
+                  <CircleNotch className="icon-spin" />
                   Đang xử lý...
                 </>
               ) : (
                 <>
-                  <i className="fas fa-check-circle"></i>
+                  <CheckCircle weight="fill" />
                   Xác nhận nhận hàng
                 </>
               )}

@@ -129,6 +129,24 @@ body {
   transition: background-color var(--transition-base), color var(--transition-base);
 }
 
+/* Phosphor icons: align with text and spin for loading states */
+svg[viewBox="0 0 256 256"] {
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+.icon-spin {
+  animation: icon-spin 1s linear infinite;
+}
+
+@keyframes icon-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-spin { animation-duration: 3s; }
+}
+
 /* Reset & Base Styles */
 * {
   margin: 0;

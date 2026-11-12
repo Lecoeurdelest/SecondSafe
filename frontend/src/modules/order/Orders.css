@@ -91,7 +91,7 @@
   box-shadow: 0 12px 24px rgba(255, 59, 59, 0.24);
 }
 
-.orders-container .tab-button i {
+.orders-container .tab-button svg {
   font-size: 16px;
 }
 
@@ -433,7 +433,7 @@
   box-shadow: 0 10px 20px rgba(255, 59, 59, 0.2);
 }
 
-.orders-container .btn-pay i {
+.orders-container .btn-pay svg {
   font-size: 13px;
 }
 

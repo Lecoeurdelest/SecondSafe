@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { getImageUrl } from '../../utils/imageHelper';
 import LocationSelector from '../../components/LocationSelector';
 import './EditProfile.css';
+import { ArrowLeft, Camera } from '@phosphor-icons/react';
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -176,7 +177,7 @@ const EditProfile = () => {
     <div className="edit-profile-container">
       <div className="page-header">
         <button onClick={() => navigate('/profile')} className="back-button">
-          <i className="fas fa-arrow-left"></i>
+          <ArrowLeft />
           Quay lại
         </button>
         <h1>Chỉnh sửa thông tin</h1>
@@ -206,7 +207,7 @@ const EditProfile = () => {
                   className="avatar-input"
                 />
                 <label htmlFor="avatar" className="btn btn-outline">
-                  <i className="fas fa-camera"></i>
+                  <Camera />
                   Chọn ảnh
                 </label>
                 <div className="upload-note">

@@ -5,6 +5,7 @@ import productService from '../../services/product.service';
 import api from '../../services/api';
 import { getImageUrl, handleImageError } from '../../utils/imageHelper';
 import './CreateProduct.css';
+import { X } from '@phosphor-icons/react';
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -280,7 +281,7 @@ const EditProduct = () => {
                     className="remove-image"
                     onClick={() => removeExistingImage(index)}
                   >
-                    ×
+                    <X />
                   </button>
                 </div>
               ))}
@@ -294,7 +295,7 @@ const EditProduct = () => {
                     className="remove-image"
                     onClick={() => removeNewImage(index)}
                   >
-                    ×
+                    <X />
                   </button>
                 </div>
               ))}

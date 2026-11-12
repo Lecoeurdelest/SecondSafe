@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getProductImageUrl, handleImageError } from '../utils/imageHelper';
 import './ProductComponents.css';
+import { Camera } from '@phosphor-icons/react';
 
 /**
  * ProductCard Component
@@ -67,7 +68,7 @@ function ProductCard({ product }) {
         {isIllustration && <span className="product-card__image-label">Ảnh minh họa</span>}
         {images && images.length > 1 && (
           <div className="product-card__image-count">
-            📷 {images.length}
+            <Camera /> {images.length}
           </div>
         )}
       </div>

@@ -1,11 +1,5 @@
 import { Layout, Space, Dropdown, Typography, Button, Tag } from "antd";
-import {
-  LogoutOutlined,
-  UserOutlined,
-  MenuOutlined,
-  SafetyCertificateOutlined,
-  DownOutlined
-} from "@ant-design/icons";
+import { CaretDown, List, SealCheck, SignOut, User } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { getUserAvatarUrl } from "../../../utils/imageHelper";
@@ -34,13 +28,13 @@ const ModeratorHeader = ({ onOpenMenu, isMobile }) => {
     {
       key: "profile",
       label: "Profile",
-      icon: <UserOutlined />,
+      icon: <User />,
       onClick: handleGoProfile,
     },
     {
       key: "logout",
       label: "Đăng xuất",
-      icon: <LogoutOutlined />,
+      icon: <SignOut />,
       onClick: handleLogout,
     },
   ];
@@ -52,13 +46,13 @@ const ModeratorHeader = ({ onOpenMenu, isMobile }) => {
           <Button
             className="moderator-menu-trigger"
             type="text"
-            icon={<MenuOutlined />}
+            icon={<List />}
             onClick={onOpenMenu}
           />
         )}
 
         <div className="moderator-header-badge">
-          <SafetyCertificateOutlined />
+          <SealCheck />
         </div>
 
         <div className="moderator-header-text">
@@ -88,7 +82,7 @@ const ModeratorHeader = ({ onOpenMenu, isMobile }) => {
               ) : (
                 // Fallback khi user chưa upload avatar.
                 <div className="moderator-avatar-fallback">
-                  <UserOutlined />
+                  <User />
                 </div>
               )}
             </div>
@@ -97,7 +91,7 @@ const ModeratorHeader = ({ onOpenMenu, isMobile }) => {
               <Text strong>{user?.fullName || "Kiểm duyệt viên"}</Text>
             )}
 
-            {!isMobile && <DownOutlined className="moderator-user-arrow" />}
+            {!isMobile && <CaretDown className="moderator-user-arrow" />}
           </Space>
         </Dropdown>
       </Space>

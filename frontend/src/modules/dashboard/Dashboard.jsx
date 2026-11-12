@@ -4,6 +4,7 @@ import DashboardLayout from './DashboardLayout';
 import dashboardService from '../../services/dashboard.service';
 import abandonedCheckoutService from '../../services/abandonedCheckout.service';
 import './Dashboard.css';
+import { ArrowUpRight, ChartPieSlice, Flag, ListChecks, Package, Receipt, Truck, Users } from '@phosphor-icons/react';
 
 function formatNumber(value) {
   return new Intl.NumberFormat('vi-VN').format(value || 0);
@@ -70,9 +71,9 @@ function AdminOverview({ data }) {
   return (
     <>
       <div className="dashboard-metrics">
-        <MetricCard icon="♙" label="Tài khoản" value={formatNumber(data.users.total)} hint={`${formatNumber(data.users.byRole?.user || 0)} người mua / người bán`} tone="blue" />
-        <MetricCard icon="◇" label="Sản phẩm" value={formatNumber(data.products.total)} hint={`${formatNumber(data.products.byStatus?.active || 0)} sản phẩm đang bán`} tone="purple" />
-        <MetricCard icon="▤" label="Đơn hàng" value={formatNumber(data.orders.total)} hint={`${formatNumber(data.orders.byStatus?.completed || 0)} đơn hoàn tất`} tone="green" />
+        <MetricCard icon={<Users />} label="Tài khoản" value={formatNumber(data.users.total)} hint={`${formatNumber(data.users.byRole?.user || 0)} người mua / người bán`} tone="blue" />
+        <MetricCard icon={<Package />} label="Sản phẩm" value={formatNumber(data.products.total)} hint={`${formatNumber(data.products.byStatus?.active || 0)} sản phẩm đang bán`} tone="purple" />
+        <MetricCard icon={<Receipt />} label="Đơn hàng" value={formatNumber(data.orders.total)} hint={`${formatNumber(data.orders.byStatus?.completed || 0)} đơn hoàn tất`} tone="green" />
         <MetricCard icon="₫" label="Phí nền tảng" value={formatVnd(data.transactions.feeRevenueVnd)} hint="Tổng phí giao dịch đã hoàn tất" tone="orange" />
       </div>
       <div className="dashboard-panels">
@@ -81,11 +82,11 @@ function AdminOverview({ data }) {
           <Bars items={monthly} />
         </section>
         <section className="dashboard-panel">
-          <div className="dashboard-panel__heading"><div><h2>Danh mục nổi bật</h2><p>Sản phẩm theo danh mục</p></div><span aria-hidden="true">◉</span></div>
+          <div className="dashboard-panel__heading"><div><h2>Danh mục nổi bật</h2><p>Sản phẩm theo danh mục</p></div><span aria-hidden="true"><ChartPieSlice /></span></div>
           <Bars items={categories} />
         </section>
         <section className="dashboard-panel">
-          <div className="dashboard-panel__heading"><div><h2>Trạng thái đơn</h2><p>Tổng quan xử lý đơn hàng</p></div><span aria-hidden="true">↗</span></div>
+          <div className="dashboard-panel__heading"><div><h2>Trạng thái đơn</h2><p>Tổng quan xử lý đơn hàng</p></div><span aria-hidden="true"><ArrowUpRight /></span></div>
           <Bars items={orderStatus} />
         </section>
         <section className="dashboard-panel">
@@ -145,17 +146,17 @@ function StaffOverview({ data }) {
   return (
     <>
       <div className="dashboard-metrics dashboard-metrics--staff">
-        <MetricCard icon="⚑" label="Tranh chấp mở" value={formatNumber(data.openDisputes)} hint="Cần theo dõi và điều phối" tone="orange" />
-        <MetricCard icon="↗" label="Yêu cầu mua chờ" value={formatNumber(data.pendingPurchaseRequests)} hint="Đang chờ phản hồi" tone="blue" />
-        <MetricCard icon="▤" label="Đơn chưa hoàn tất" value={formatNumber(data.openOrders)} hint="Bao gồm đơn đang giao" tone="purple" />
-        <MetricCard icon="⇢" label="Đang vận chuyển" value={formatNumber(data.activeDeliveries)} hint="Đang chuẩn bị hoặc giao hàng" tone="green" />
+        <MetricCard icon={<Flag />} label="Tranh chấp mở" value={formatNumber(data.openDisputes)} hint="Cần theo dõi và điều phối" tone="orange" />
+        <MetricCard icon={<ArrowUpRight />} label="Yêu cầu mua chờ" value={formatNumber(data.pendingPurchaseRequests)} hint="Đang chờ phản hồi" tone="blue" />
+        <MetricCard icon={<Receipt />} label="Đơn chưa hoàn tất" value={formatNumber(data.openOrders)} hint="Bao gồm đơn đang giao" tone="purple" />
+        <MetricCard icon={<Truck />} label="Đang vận chuyển" value={formatNumber(data.activeDeliveries)} hint="Đang chuẩn bị hoặc giao hàng" tone="green" />
       </div>
       <section className="dashboard-panel dashboard-queue">
         <div className="dashboard-panel__heading"><div><h2>Hàng đợi vận hành</h2><p>Các nhóm việc đang chờ xử lý trong hệ thống</p></div><span className="dashboard-panel__tag">Tổng quan</span></div>
         <div className="dashboard-queue__list">
           {queue.map(item => (
             <div className="dashboard-queue__item" key={item.label}>
-              <span className="dashboard-queue__icon" aria-hidden="true">◈</span>
+              <span className="dashboard-queue__icon" aria-hidden="true"><ListChecks /></span>
               <span>{item.label}</span>
               <strong>{formatNumber(item.count)}</strong>
               <span className="dashboard-queue__status">{item.count ? 'Cần chú ý' : 'Đã ổn định'}</span>

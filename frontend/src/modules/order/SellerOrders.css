@@ -70,7 +70,7 @@
   box-shadow: var(--brand-glow-sm);
 }
 
-.seller-orders-container .filter-btn i {
+.seller-orders-container .filter-btn svg {
   font-size: 16px;
 }
 
@@ -285,8 +285,8 @@
   min-width: 0;
 }
 
-.seller-orders-container .btn-view-details i,
-.seller-orders-container .btn-confirm i {
+.seller-orders-container .btn-view-details svg,
+.seller-orders-container .btn-confirm svg {
   flex-shrink: 0;
 }
 
@@ -327,7 +327,7 @@
   text-align: center;
 }
 
-.seller-orders-container .empty-state i {
+.seller-orders-container .empty-state svg {
   display: block;
   margin-bottom: 16px;
   color: var(--text-3);
@@ -358,7 +358,7 @@
   color: #b91c1c;
 }
 
-.seller-orders-container .error-message i {
+.seller-orders-container .error-message svg {
   font-size: 18px;
   flex-shrink: 0;
 }

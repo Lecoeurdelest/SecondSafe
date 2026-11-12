@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircleFilled } from '@ant-design/icons';
+import { CheckCircle } from '@phosphor-icons/react';
 
 const formatMoney = (value) => {
   const number = Number(value || 0);
@@ -47,7 +47,7 @@ function VNPaySuccess() {
         /> */}
 
         {/* Icon success */}
-        <CheckCircleFilled
+        <CheckCircle weight="fill"
           style={{
             fontSize: 70,
             color: '#52c41a',
