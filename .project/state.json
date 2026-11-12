@@ -1505,7 +1505,7 @@
     "TASK-077": {
       "execution": "verifying",
       "relevance": "current",
-      "detail": "Restyle merged to main in PR 148; a follow-up fixes the defects of a second page-by-page review (staff detail pages at 390 px, notification panel on mobile, staff tags and buttons, seller order tabs); build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend",
+      "detail": "Restyle merged to main in PR 148 and PR 149; a second follow-up makes the seller order list open on its first tab and observes the staff notification panel; build and 60 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend",
       "history": [
         {
           "date": "2026-11-12",
@@ -1556,6 +1556,11 @@
           "date": "2026-11-12",
           "execution": "verifying",
           "note": "Closed four small presentation items left from the second review: dispute modal, timeline current step, moderator sidebar highlight, admin section title"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Seller order list now opens on the Chờ giao tab with two tests; observed the notification panel for a staff account at 1280 and 390 px"
         }
       ],
       "evidence": [
@@ -1566,7 +1571,8 @@
         ".project/evidence/TASK-077/run-05/report.json",
         ".project/evidence/TASK-077/run-06/report.json",
         ".project/evidence/TASK-077/run-07/report.json",
-        ".project/evidence/TASK-077/run-08/report.json"
+        ".project/evidence/TASK-077/run-08/report.json",
+        ".project/evidence/TASK-077/run-09/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-077.md",
       "criteria": {

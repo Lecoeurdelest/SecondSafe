@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-077",
+  "run": "run-09",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "Restyle merged to main in PR 148 and PR 149; a second follow-up makes the seller order list open on its first tab and observes the staff notification panel; build and 60 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build of this branch, served locally. The API was replaced by canned responses; `fixture-capture.js` holds the script and the data. No real backend or database was involved.\n\n| File | Viewport | What it shows |\n|---|---|---|\n| `w1280-staff-notifications.png` | 1280 px | A moderator account on the home page with the notification panel open: four notifications, two unread with a red dot, \"Thông báo (2)\" in the header |\n| `w390-staff-notifications.png` | 390 px | The same panel on a phone-width screen, full width below the header, no clipping |\n| `w1280-seller-orders-default.png` | 1280 px | Seller orders on first load: the \"Chờ giao\" tab is the only active tab and two orders are listed |\n| `w390-seller-orders-default.png` | 390 px | The same page on a phone-width screen with the tabs stacked |\n| `w1280-seller-orders-shipping.png` | 1280 px | After choosing \"Đang giao\": one order |\n| `w390-seller-orders-shipping.png` | 390 px | The same on a phone-width screen |\n\nThe script also checked that exactly one tab was active on first load (before the fix none was) and that the document had no horizontal overflow at either width.\n\nFindings: staff accounts see the notification control only on storefront pages, because the admin and moderator shells have none, so the earlier note that the panel was unobservable was only true inside the shells. A dispute notification opens the buyer order list for any account, staff included; this was left alone.\n\nStill open: dark mode (not implemented), a real backend, browsers other than Chromium, and a real phone.",
+  "history": [
+    [
+      "verifying",
+      "Seller order list now opens on the Chờ giao tab with two tests; observed the notification panel for a staff account at 1280 and 390 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 1280 and 390 px for this run",
+    "Dark mode is not implemented",
+    "No page was observed against a real backend",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": {
+    "AC-NFR-USA-02-1": {
+      "observed": "pass",
+      "note": "The seller order list opens on its first tab with exactly one tab active and the staff notification panel renders without overflow at 1280 and 390 px; the build and the 60 frontend tests pass; every page and a real backend were not observed",
+      "checks": {
+        "manual_review": "pass"
+      }
+    }
+  }
+}

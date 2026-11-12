@@ -10,7 +10,7 @@ const SellerOrders = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('pending'); // pending, confirmed, completed
+  const [filter, setFilter] = useState('pending_shipment'); // pending_shipment, shipping, completed
 
   const getOrderStatus = (order) => {
     return order.status;

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "f82e35046cf75d7ce2c4a1225728e82508c63cc8b23adc0475b87790c7212acc",
+  "source_hash": "5bd7206efd13ab3d2ea30c9de14cd5b2508a7a099bb6221331393f992c43aa5e",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, at 1280 and 390 px for this run",
+    "Dark mode is not implemented",
+    "No page was observed against a real backend",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The seller order list opens on its first tab with exactly one tab active and the staff notification panel renders without overflow at 1280 and 390 px; the build and the 60 frontend tests pass; every page and a real backend were not observed",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-09/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
