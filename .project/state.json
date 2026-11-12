@@ -2126,6 +2126,35 @@
       "criteria": {
         "AC-WEB-25-15": "inconclusive"
       }
+    },
+    "TASK-096": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The administrator sidebar, header and revenue report, the route guard loading screens and the page error screen are rebuilt from Ant Design components; the new tests and the existing suites pass and the shell and report were observed at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Seventeenth slice of the Ant Design goal: administrator shell and revenue report"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the administrator sidebar, header and revenue report, the route guard loading screens and the page error screen with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the administrator shell and revenue report, the route guard loading screens and the page error screen with Ant Design components and removed the legacy admin stylesheet and unrouted dashboard; tests and build pass; observed at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-096/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-096.md",
+      "criteria": {
+        "AC-WEB-25-16": "inconclusive"
+      }
     }
   }
 }

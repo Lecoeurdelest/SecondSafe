@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-096",
+  "spec_hash": "bb0659addc49a720757cc310614fa98ef5abf7334a8bd1cff42651acda3276d8",
+  "source_hash": "df9b7827ab9dd873cafe56d532c83005b046d484eb0a9405841b2565a5ffa227",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The other administrator pages, the sign-out and the guard screens were not observed in the browser",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-16",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new AdminLayout and AdminRevenueReport tests and the existing suites pass; the build passes; the administrator shell and revenue report show their menu, account menu, filters, figures, charts and tables with no overflow or error at 390 and 1280 px",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-096/run-01/frontend-test.txt",
+            ".project/evidence/TASK-096/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-096/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

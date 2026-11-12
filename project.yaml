@@ -3169,6 +3169,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-16
+      statement: The administrator shell (sidebar and header), the revenue report, the loading screens of the route guards and the
+        page error screen are built from Ant Design components with the same menu, account actions, filters, tables, charts and
+        messages, and work from 360 px to 1920 px wide.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7683,6 +7690,46 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: The shell keeps its sidebar and top bar and uses Menu, Breadcrumb and Avatar. The dashboards use Card, Statistic, Progress bars, Badge, Tag, Alert, Spin and a Row and Col grid, and the product page uses Form, Input, Select, Table, Pagination and Tag. Figures, requests and messages are unchanged. The stylesheets use the shared colour tokens instead of fixed colours, and the leftover symbol glyphs become Phosphor icons.
+  - id: TASK-096
+    title: Ant Design administrator shell and revenue report
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-16
+    objective: Rebuild the administrator sidebar, header and revenue report, the route guard loading screens and the page error screen from Ant Design components, and remove the legacy admin stylesheet and unrouted dashboard.
+    in_scope:
+    - frontend/src/modules/admin/layout
+    - frontend/src/modules/admin/revenue
+    - frontend/src/modules/admin/AdminModules.css
+    - frontend/src/modules/admin/dashboard/Dashboard.jsx
+    - frontend/src/modules/admin/dashboard/Dashboard.css
+    - frontend/src/routes
+    - frontend/src/components/AppErrorBoundary.jsx
+    - frontend/src/ui/PageLoading.jsx
+    out_of_scope:
+    - Services, routes and role rules
+    - The admin and moderator pages that already use Ant Design
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/ui/PageLoading.jsx
+    - frontend/src/modules/admin/layout/AdminLayout.test.jsx
+    - frontend/src/modules/admin/revenue/AdminRevenueReport.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: The sidebar becomes an Ant Design Menu with the same entries, descriptions and selection rules, and the header uses Button, Avatar, Tag and a Dropdown for the account menu; the slide-in sidebar and overlay stay. The revenue report uses Card, Statistic, Input, Table, Alert, Spin and Empty around the unchanged charts. The route guards share one Spin loading screen and the page error screen uses Result. The 1,950-line admin stylesheet that only the revenue report imported and the unrouted legacy dashboard, whose rules collided with the live dashboard, are deleted.
 verification:
   thresholds:
     standard: 0.95

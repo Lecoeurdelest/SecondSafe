@@ -1,12 +1,13 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import PageLoading from '../ui/PageLoading';
 
 const AdminRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div className="loading">Đang tải...</div>;
+    return <PageLoading />;
   }
 
   if (!user) {

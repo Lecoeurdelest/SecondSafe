@@ -16,8 +16,9 @@ import {
   BarChart,
   Bar
 } from 'recharts';
-import '../AdminModules.css';
-import { ArrowClockwise, CircleNotch, Funnel, X } from '@phosphor-icons/react';
+import './AdminRevenueReport.css';
+import { Alert, Button, Card, Col, Empty, Flex, Input, Row, Spin, Statistic, Table, Typography } from 'antd';
+import { ArrowClockwise, Funnel } from '@phosphor-icons/react';
 
 const AdminRevenueReport = () => {
   const today = useMemo(() => new Date(), []);
@@ -143,305 +144,170 @@ const AdminRevenueReport = () => {
 
   const splitColors = ['#ef4444', '#22c55e'];
 
+  const countText = (value) => Number(value || 0).toLocaleString('vi-VN');
+  const money = (value) => formatCurrency(value);
+  const tableText = { emptyText: 'Không có dữ liệu' };
+
+  const monthlyColumns = [
+    { title: 'Kỳ', dataIndex: 'period' },
+    { title: 'Số đơn', dataIndex: 'completedOrders', render: countText },
+    { title: 'Doanh thu gộp', dataIndex: 'grossRevenue', render: money },
+    { title: 'Doanh thu hệ thống', dataIndex: 'platformRevenue', render: money },
+    { title: 'Chi trả người bán', dataIndex: 'sellerPayout', render: money }
+  ];
+
+  const productColumns = [
+    { title: 'Sản phẩm', dataIndex: 'title' },
+    ...monthlyColumns.slice(1)
+  ];
+
+  const recentColumns = [
+    { title: 'Mã đơn', key: 'code', render: (_, order) => order.orderCode || String(order.orderId).slice(-8).toUpperCase() },
+    { title: 'Sản phẩm', dataIndex: 'productTitle' },
+    { title: 'Người mua', dataIndex: 'buyerName' },
+    { title: 'Người bán', dataIndex: 'sellerName' },
+    { title: 'Doanh thu gộp', dataIndex: 'grossRevenue', render: money },
+    { title: 'Doanh thu hệ thống', dataIndex: 'platformRevenue', render: money },
+    { title: 'Chi trả người bán', dataIndex: 'sellerPayout', render: money },
+    { title: 'Hoàn tất lúc', dataIndex: 'completedAt', render: formatDateTime }
+  ];
+
+  const overview = [
+    { key: 'orders', title: 'Tổng đơn hoàn tất', value: countText(summary.completedOrders), meta: 'Đơn đã hoàn thành trong kỳ lọc' },
+    { key: 'gross', title: 'Doanh thu gộp', value: formatCurrency(summary.grossRevenue), meta: 'Tổng tiền người mua đã thanh toán' },
+    { key: 'system', title: 'Doanh thu hệ thống (5%)', value: formatCurrency(summary.platformRevenue), meta: `Tỷ lệ thực tế: ${platformRatePercent.toFixed(2)}%` },
+    { key: 'seller', title: 'Chi trả người bán (95%)', value: formatCurrency(summary.sellerPayout), meta: 'Doanh thu chuyển về ví người bán' }
+  ];
+
+  const chartCard = (title, children) => (
+    <Col xs={24} xl={12}>
+      <Card className="revenue-card" title={<Typography.Title level={3}>{title}</Typography.Title>}>
+        <div className="revenue-chart-wrap">{children}</div>
+      </Card>
+    </Col>
+  );
+
+  const noChartData = <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Không có dữ liệu biểu đồ" />;
+
   return (
-    <div className="admin-module admin-revenue-report">
-      <div className="admin-module__header">
-        <h1>Báo cáo doanh thu</h1>
-      </div>
+    <div className="admin-revenue-report">
+      <Typography.Title level={1}>Báo cáo doanh thu</Typography.Title>
 
-      {error && (
-        <div className="alert alert-error">
-          {error}
-          <button onClick={() => setError('')} className="alert-close"><X /></button>
-        </div>
-      )}
+      {error && <Alert className="revenue-alert" type="error" showIcon closable role="alert" title={error} onClose={() => setError('')} />}
 
-      <div className="admin-module__filters revenue-filter-panel">
-        <div className="revenue-filter-grid">
-          <div className="form-group revenue-filter-field">
-            <label>Từ ngày</label>
-            <input
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              className="filter-input"
-            />
+      <Card className="revenue-card revenue-filter-panel">
+        <Flex wrap gap={16} align="flex-end">
+          <div className="revenue-filter-field">
+            <label htmlFor="revenue-from">Từ ngày</label>
+            <Input id="revenue-from" type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
           </div>
-
-          <div className="form-group revenue-filter-field">
-            <label>Đến ngày</label>
-            <input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="filter-input"
-            />
+          <div className="revenue-filter-field">
+            <label htmlFor="revenue-to">Đến ngày</label>
+            <Input id="revenue-to" type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
           </div>
-
-          <div className="filter-actions revenue-filter-actions">
-            <button type="button" className="btn btn-primary" onClick={handleApplyFilter}>
-              <Funnel />
-              Áp dụng
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={handleResetFilter}>
-              <ArrowClockwise />
-              Mặc định
-            </button>
-          </div>
-        </div>
-      </div>
+          <Flex gap={8}>
+            <Button type="primary" icon={<Funnel />} onClick={handleApplyFilter}>Áp dụng</Button>
+            <Button icon={<ArrowClockwise />} onClick={handleResetFilter}>Mặc định</Button>
+          </Flex>
+        </Flex>
+      </Card>
 
       {loading ? (
-        <div className="loading">
-          <CircleNotch className="icon-spin" />
-          Đang tải báo cáo...
-        </div>
+        <Flex justify="center" gap={12} className="revenue-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải báo cáo...</Typography.Text>
+        </Flex>
       ) : (
         <>
-          <div className="revenue-overview-grid">
-            <div className="revenue-overview-card revenue-overview-card--orders">
-              <div className="label">Tổng đơn hoàn tất</div>
-              <div className="value revenue-value--orders">{Number(summary.completedOrders || 0).toLocaleString('vi-VN')}</div>
-              <div className="meta">Đơn đã hoàn thành trong kỳ lọc</div>
-            </div>
-            <div className="revenue-overview-card revenue-overview-card--gross">
-              <div className="label">Doanh thu gộp</div>
-              <div className="value revenue-value--gross">{formatCurrency(summary.grossRevenue)}</div>
-              <div className="meta">Tổng tiền người mua đã thanh toán</div>
-            </div>
-            <div className="revenue-overview-card revenue-overview-card--system">
-              <div className="label">Doanh thu hệ thống (5%)</div>
-              <div className="value revenue-value--system">{formatCurrency(summary.platformRevenue)}</div>
-              <div className="meta">Tỷ lệ thực tế: {platformRatePercent.toFixed(2)}%</div>
-            </div>
-            <div className="revenue-overview-card revenue-overview-card--seller">
-              <div className="label">Chi trả người bán (95%)</div>
-              <div className="value revenue-value--seller">{formatCurrency(summary.sellerPayout)}</div>
-              <div className="meta">Doanh thu chuyển về ví người bán</div>
-            </div>
-          </div>
+          <Row gutter={[16, 16]} className="revenue-overview">
+            {overview.map(({ key, title, value, meta }) => (
+              <Col key={key} xs={24} sm={12} xl={6}>
+                <Card className={`revenue-card revenue-overview-card revenue-overview-card--${key}`}>
+                  <Statistic title={title} value={value} formatter={(text) => text} />
+                  <Typography.Text type="secondary">{meta}</Typography.Text>
+                </Card>
+              </Col>
+            ))}
+          </Row>
 
-          <div className="revenue-chart-grid">
-            <div className="admin-module__content revenue-chart-card">
-              <h3>Xu hướng doanh thu theo tháng</h3>
-              <div className="revenue-chart-wrap">
-                <ResponsiveContainer width="100%" height={280}>
-                  <ComposedChart data={monthlyChartData} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="grossRevenueFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#111827" stopOpacity={0.32} />
-                        <stop offset="95%" stopColor="#111827" stopOpacity={0.02} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="periodLabel" tick={{ fontSize: 12, fill: '#64748b' }} />
-                    <YAxis
-                      yAxisId="gross"
-                      tick={{ fontSize: 12, fill: '#64748b' }}
-                      tickFormatter={formatCompactCurrencyTick}
-                    />
-                    <YAxis
-                      yAxisId="system"
-                      orientation="right"
-                      tick={{ fontSize: 12, fill: '#ef4444' }}
-                      tickFormatter={formatCompactCurrencyTick}
-                    />
-                    <Tooltip formatter={(value) => formatCurrency(value)} />
-                    <Legend />
-                    <Area
-                      yAxisId="gross"
-                      type="monotone"
-                      dataKey="grossRevenue"
-                      name="Doanh thu gộp"
-                      stroke="#111827"
-                      fill="url(#grossRevenueFill)"
-                      strokeWidth={2}
-                    />
-                    <Line
-                      yAxisId="system"
-                      type="monotone"
-                      dataKey="systemRevenue"
-                      name="Doanh thu hệ thống"
-                      stroke="#ef4444"
-                      strokeWidth={2.5}
-                      dot={{ r: 3 }}
-                    />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+          <Row gutter={[16, 16]} className="revenue-charts">
+            {chartCard('Xu hướng doanh thu theo tháng', (
+              <ResponsiveContainer width="100%" height={280}>
+                <ComposedChart data={monthlyChartData} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="grossRevenueFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#111827" stopOpacity={0.32} />
+                      <stop offset="95%" stopColor="#111827" stopOpacity={0.02} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="periodLabel" tick={{ fontSize: 12, fill: '#64748b' }} />
+                  <YAxis yAxisId="gross" tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={formatCompactCurrencyTick} />
+                  <YAxis yAxisId="system" orientation="right" tick={{ fontSize: 12, fill: '#ef4444' }} tickFormatter={formatCompactCurrencyTick} />
+                  <Tooltip formatter={(value) => formatCurrency(value)} />
+                  <Legend />
+                  <Area yAxisId="gross" type="monotone" dataKey="grossRevenue" name="Doanh thu gộp" stroke="#111827" fill="url(#grossRevenueFill)" strokeWidth={2} />
+                  <Line yAxisId="system" type="monotone" dataKey="systemRevenue" name="Doanh thu hệ thống" stroke="#ef4444" strokeWidth={2.5} dot={{ r: 3 }} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            ))}
 
-            <div className="admin-module__content revenue-chart-card">
-              <h3>Cơ cấu phân bổ doanh thu</h3>
-              <div className="revenue-chart-wrap">
-                <ResponsiveContainer width="100%" height={280}>
-                  <PieChart>
-                    <Tooltip formatter={(value) => formatCurrency(value)} />
-                    <Legend />
-                    <Pie data={revenueSplitData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={52} label>
-                      {revenueSplitData.map((entry, index) => (
-                        <Cell key={`${entry.name}-${index}`} fill={splitColors[index % splitColors.length]} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
+            {chartCard('Cơ cấu phân bổ doanh thu', (
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart>
+                  <Tooltip formatter={(value) => formatCurrency(value)} />
+                  <Legend />
+                  <Pie data={revenueSplitData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={52} label>
+                    {revenueSplitData.map((entry, index) => (
+                      <Cell key={`${entry.name}-${index}`} fill={splitColors[index % splitColors.length]} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            ))}
 
-          <div className="revenue-chart-grid">
-            <div className="admin-module__content revenue-chart-card">
-              <h3>Top sản phẩm: cơ cấu doanh thu và số đơn</h3>
-              <div className="revenue-chart-wrap">
-                {(report?.topProducts || []).length === 0 ? (
-                  <div className="no-data no-data-chart">Không có dữ liệu biểu đồ</div>
-                ) : (
-                  <ResponsiveContainer width="100%" height={320}>
-                    <ComposedChart data={topProductChartData} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                      <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#64748b' }} />
-                      <YAxis tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => `${Math.round(v / 1000000)}M`} />
-                      <Tooltip formatter={(value) => formatCurrency(value)} />
-                      <Legend />
-                      <Bar dataKey="sellerPayout" name="Chi trả người bán" stackId="rev" fill="#22c55e" radius={[6, 6, 0, 0]} />
-                      <Bar dataKey="platformRevenue" name="Doanh thu hệ thống" stackId="rev" fill="#ef4444" radius={[6, 6, 0, 0]} />
-                      <Line type="monotone" dataKey="completedOrders" name="Số đơn" stroke="#111827" strokeWidth={2} dot={{ r: 3 }} />
-                    </ComposedChart>
-                  </ResponsiveContainer>
-                )}
-              </div>
-            </div>
+            {chartCard('Top sản phẩm: cơ cấu doanh thu và số đơn', (report?.topProducts || []).length === 0 ? noChartData : (
+              <ResponsiveContainer width="100%" height={320}>
+                <ComposedChart data={topProductChartData} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#64748b' }} />
+                  <YAxis tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => `${Math.round(v / 1000000)}M`} />
+                  <Tooltip formatter={(value) => formatCurrency(value)} />
+                  <Legend />
+                  <Bar dataKey="sellerPayout" name="Chi trả người bán" stackId="rev" fill="#22c55e" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="platformRevenue" name="Doanh thu hệ thống" stackId="rev" fill="#ef4444" radius={[6, 6, 0, 0]} />
+                  <Line type="monotone" dataKey="completedOrders" name="Số đơn" stroke="#111827" strokeWidth={2} dot={{ r: 3 }} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            ))}
 
-            <div className="admin-module__content revenue-chart-card">
-              <h3>Đơn hoàn tất gần đây: so sánh phân bổ tiền</h3>
-              <div className="revenue-chart-wrap">
-                {(report?.recentOrders || []).length === 0 ? (
-                  <div className="no-data no-data-chart">Không có dữ liệu biểu đồ</div>
-                ) : (
-                  <ResponsiveContainer width="100%" height={320}>
-                    <BarChart data={recentOrdersChartData} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                      <XAxis dataKey="orderCode" tick={{ fontSize: 11, fill: '#64748b' }} />
-                      <YAxis tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => `${Math.round(v / 1000)}K`} />
-                      <Tooltip formatter={(value) => formatCurrency(value)} />
-                      <Legend />
-                      <Bar dataKey="grossRevenue" name="Doanh thu gộp" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="platformRevenue" name="Doanh thu hệ thống" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="sellerPayout" name="Chi trả người bán" fill="#16a34a" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
-              </div>
-            </div>
-          </div>
+            {chartCard('Đơn hoàn tất gần đây: so sánh phân bổ tiền', (report?.recentOrders || []).length === 0 ? noChartData : (
+              <ResponsiveContainer width="100%" height={320}>
+                <BarChart data={recentOrdersChartData} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="orderCode" tick={{ fontSize: 11, fill: '#64748b' }} />
+                  <YAxis tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => `${Math.round(v / 1000)}K`} />
+                  <Tooltip formatter={(value) => formatCurrency(value)} />
+                  <Legend />
+                  <Bar dataKey="grossRevenue" name="Doanh thu gộp" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="platformRevenue" name="Doanh thu hệ thống" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="sellerPayout" name="Chi trả người bán" fill="#16a34a" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ))}
+          </Row>
 
-          <div className="admin-module__content revenue-section">
-            <h3>Doanh thu theo tháng</h3>
-            <div className="table-container">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Kỳ</th>
-                    <th>Số đơn</th>
-                    <th>Doanh thu gộp</th>
-                    <th>Doanh thu hệ thống</th>
-                    <th>Chi trả người bán</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(report?.breakdown || []).length === 0 ? (
-                    <tr>
-                      <td colSpan="5" className="no-data">Không có dữ liệu</td>
-                    </tr>
-                  ) : (
-                    (report?.breakdown || []).map((item) => (
-                      <tr key={item.period}>
-                        <td>{item.period}</td>
-                        <td>{Number(item.completedOrders || 0).toLocaleString('vi-VN')}</td>
-                        <td>{formatCurrency(item.grossRevenue)}</td>
-                        <td>{formatCurrency(item.platformRevenue)}</td>
-                        <td>{formatCurrency(item.sellerPayout)}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Card className="revenue-card revenue-section" title={<Typography.Title level={3}>Doanh thu theo tháng</Typography.Title>}>
+            <Table rowKey="period" columns={monthlyColumns} dataSource={report?.breakdown || []} pagination={false} locale={tableText} scroll={{ x: 'max-content' }} />
+          </Card>
 
-          <div className="admin-module__content revenue-section">
-            <h3>Top sản phẩm mang doanh thu cao</h3>
-            <div className="table-container">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Sản phẩm</th>
-                    <th>Số đơn</th>
-                    <th>Doanh thu gộp</th>
-                    <th>Doanh thu hệ thống</th>
-                    <th>Chi trả người bán</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(report?.topProducts || []).length === 0 ? (
-                    <tr>
-                      <td colSpan="5" className="no-data">Không có dữ liệu</td>
-                    </tr>
-                  ) : (
-                    (report?.topProducts || []).map((item) => (
-                      <tr key={String(item.productId)}>
-                        <td>{item.title}</td>
-                        <td>{Number(item.completedOrders || 0).toLocaleString('vi-VN')}</td>
-                        <td>{formatCurrency(item.grossRevenue)}</td>
-                        <td>{formatCurrency(item.platformRevenue)}</td>
-                        <td>{formatCurrency(item.sellerPayout)}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Card className="revenue-card revenue-section" title={<Typography.Title level={3}>Top sản phẩm mang doanh thu cao</Typography.Title>}>
+            <Table rowKey={(item) => String(item.productId)} columns={productColumns} dataSource={report?.topProducts || []} pagination={false} locale={tableText} scroll={{ x: 'max-content' }} />
+          </Card>
 
-          <div className="admin-module__content revenue-section">
-            <h3>Đơn hoàn tất gần đây</h3>
-            <div className="table-container">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Mã đơn</th>
-                    <th>Sản phẩm</th>
-                    <th>Người mua</th>
-                    <th>Người bán</th>
-                    <th>Doanh thu gộp</th>
-                    <th>Doanh thu hệ thống</th>
-                    <th>Chi trả người bán</th>
-                    <th>Hoàn tất lúc</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(report?.recentOrders || []).length === 0 ? (
-                    <tr>
-                      <td colSpan="8" className="no-data">Không có dữ liệu</td>
-                    </tr>
-                  ) : (
-                    (report?.recentOrders || []).map((order) => (
-                      <tr key={String(order.orderId)}>
-                        <td>{order.orderCode || String(order.orderId).slice(-8).toUpperCase()}</td>
-                        <td>{order.productTitle}</td>
-                        <td>{order.buyerName}</td>
-                        <td>{order.sellerName}</td>
-                        <td>{formatCurrency(order.grossRevenue)}</td>
-                        <td>{formatCurrency(order.platformRevenue)}</td>
-                        <td>{formatCurrency(order.sellerPayout)}</td>
-                        <td>{formatDateTime(order.completedAt)}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Card className="revenue-card revenue-section" title={<Typography.Title level={3}>Đơn hoàn tất gần đây</Typography.Title>}>
+            <Table rowKey={(order) => String(order.orderId)} columns={recentColumns} dataSource={report?.recentOrders || []} pagination={false} locale={tableText} scroll={{ x: 'max-content' }} />
+          </Card>
         </>
       )}
     </div>

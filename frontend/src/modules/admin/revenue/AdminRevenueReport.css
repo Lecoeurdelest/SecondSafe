@@ -1,0 +1,64 @@
+.admin-revenue-report .ant-typography {
+  margin: 0;
+}
+
+.admin-revenue-report h1.ant-typography {
+  margin-bottom: 16px;
+  font-size: 26px;
+}
+
+.revenue-alert,
+.revenue-filter-panel,
+.revenue-overview,
+.revenue-charts,
+.revenue-section {
+  margin-bottom: 16px;
+}
+
+.revenue-card.ant-card {
+  height: 100%;
+  border-color: #e5e7eb;
+  border-radius: 14px;
+}
+
+.revenue-filter-panel.ant-card {
+  height: auto;
+}
+
+.revenue-section.ant-card {
+  height: auto;
+}
+
+.revenue-filter-field {
+  display: flex;
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.revenue-filter-field label {
+  font-weight: 600;
+}
+
+.revenue-loading {
+  padding: 56px 16px;
+}
+
+.revenue-overview-card .ant-statistic-content-value {
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+.revenue-overview-card--orders { border-top: 3px solid #111827; }
+.revenue-overview-card--gross { border-top: 3px solid #f59e0b; }
+.revenue-overview-card--system { border-top: 3px solid #ef4444; }
+.revenue-overview-card--seller { border-top: 3px solid #16a34a; }
+
+.revenue-card .ant-card-head-title h3.ant-typography {
+  font-size: 16px;
+}
+
+.revenue-chart-wrap {
+  width: 100%;
+  min-width: 0;
+}

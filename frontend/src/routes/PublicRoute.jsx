@@ -1,17 +1,14 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import PageLoading from '../ui/PageLoading';
 
 function PublicRoute({ children }) {
   const { isAuthenticated, loading, user } = useAuth();
 
   // Hien thi trang thai tai trong luc kiem tra dang nhap
   if (loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
-        <p>Đang tải...</p>
-      </div>
-    );
+    return <PageLoading />;
   }
 
   // Chuyen ve trang chu neu da dang nhap

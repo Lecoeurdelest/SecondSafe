@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-096",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The administrator sidebar, header and revenue report, the route guard loading screens and the page error screen are rebuilt from Ant Design components; the new tests and the existing suites pass and the shell and report were observed at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the administrator shell and revenue report, the route guard loading screens and the page error screen with Ant Design components and removed the legacy admin stylesheet and unrouted dashboard; tests and build pass; observed at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The other administrator pages, the sign-out and the guard screens were not observed in the browser",
+    "No real phone, no other browser"
+  ],
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`admin-capture.js`, original output in `capture-output.txt`). At 1280 and 390 px the script signs in as an administrator, opens the revenue report (four figures, four charts, three tables with six months, two products and one order), opens the account menu and, on the phone, the slide-in sidebar. Table rows, menu entries, overflow and page errors are recorded.\n\n| File | What it shows |\n|---|---|\n| `w1280-revenue.png` | Sidebar, header, filters, figures, charts and tables |\n| `w390-revenue.png` | The same on a phone |\n| `w390-menu-open.png` | The slide-in sidebar with the current entry selected |\n| `w1280-account-menu.png` | The account menu with \"Đăng xuất\" |\n\nResults: at both widths the page showed the revenue heading, 9 table rows and 8 menu entries, the account menu offered \"Đăng xuất\", no page overflowed horizontally and none raised an error.\n\nNot observed: the other administrator pages, a real sign-out, real revenue figures, dark theme (staff roles are light only), other browsers or a real phone.",
+  "criteria": {
+    "AC-WEB-25-16": {
+      "observed": "pass",
+      "note": "The new AdminLayout and AdminRevenueReport tests and the existing suites pass; the build passes; the administrator shell and revenue report show their menu, account menu, filters, figures, charts and tables with no overflow or error at 390 and 1280 px",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}
