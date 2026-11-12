@@ -2068,6 +2068,35 @@
       "criteria": {
         "AC-WEB-25-13": "inconclusive"
       }
+    },
+    "TASK-094": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The order detail page and its seller reply, buyer follow-up, return confirmation and cancellation dialogs are rebuilt from Ant Design components; the new tests and the existing suites pass and the page was observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Fifteenth slice of the Ant Design goal: order detail"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the order detail page and its dialogs with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the order detail page and its dialogs with Ant Design components, replacing the browser prompt, confirm and alerts; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-094/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-094.md",
+      "criteria": {
+        "AC-WEB-25-14": "inconclusive"
+      }
     }
   }
 }
