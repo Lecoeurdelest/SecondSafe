@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `verifying` — Storefront dark theme implemented with a header switch, remembered choice and forced light theme for staff; frontend tests and build pass; 20 pages scanned for contrast and photographed in dark mode with canned data; automatic completion remains inconclusive without applicable calibration
+**Current state:** `verifying` — Storefront dark theme implemented with a header switch, remembered choice and forced light theme for staff; frontend tests and build pass; 20 pages scanned and photographed with canned data and 42 page scans against a real backend with a disposable MongoDB; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

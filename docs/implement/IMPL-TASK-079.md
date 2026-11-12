@@ -22,16 +22,16 @@ The `mercari-clone` reference has a dark mode toggle; `ReMarket webapp` has none
 
 ## Acceptance criteria
 
-- [ ] `AC-WEB-23-1` — inconclusive without a calibrated evaluator; 4 new theme tests and 3 new App tests pass, and 20 storefront pages were scanned for low text contrast in dark mode, see `.project/evidence/TASK-079/run-01/manual-review.md`
+- [ ] `AC-WEB-23-1` — inconclusive without a calibrated evaluator; 4 new theme tests and 3 new App tests pass, and 20 storefront pages with canned data and 42 page scans against a real backend were checked for low text contrast, see `.project/evidence/TASK-079/run-01/manual-review.md` and `.project/evidence/TASK-079/run-02/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-079/run-01/frontend-test.txt` |
+| Tests | `.project/evidence/TASK-079/run-02/frontend-test.txt` |
 | Static analysis | N/A — the production build runs the CRA lint step with `CI=true` |
-| Build/typecheck | `.project/evidence/TASK-079/run-01/frontend-build.txt` |
-| Behavioral/manual | `.project/evidence/TASK-079/run-01/manual-review.md`, `screenshots/` and the `contrast-*.json` scans |
+| Build/typecheck | `.project/evidence/TASK-079/run-02/frontend-build.txt` |
+| Behavioral/manual | `.project/evidence/TASK-079/run-02/manual-review.md` and `screenshots/`; the canned-data pass is in `run-01` (`screenshots/`, `contrast-*.json`), the pass against a real backend in `run-02` (`real-backend-scan.json`) |
 
 ## Deviations
 
@@ -45,7 +45,9 @@ None.
 - White text on the green "Hoàn thành" badge is 2.9:1 in both themes (already so before this task).
 - `Assistant.css` was swept here as well; when the conversational assistant (TASK-078) lands, its stylesheet still uses `var(--brand-dark)` for some text, which should become `var(--brand-text)` in dark.
 - Admin, moderator and dashboard pages have no dark theme by design.
-- Dark theme was observed only against canned API responses, never a real backend, a real phone or another browser.
+- Run-02 used the real backend and a disposable MongoDB seeded with 80 listings, three orders, a conversation and a report, but seeded data and Chromium only: no real phone, no other browser (Firefox and WebKit are not installed here), no real payment provider.
+- The real-backend run found one defect the canned run missed: `MyProducts.css` declares its own `--bg`, `--card` and `--muted` colours, which left a pale panel around dark cards. It now has dark values.
+- With real data the admin and moderator pages stayed light as intended, and showed existing low-contrast text in their light theme (sidebar descriptions and section labels at about 2.5:1, Ant Design placeholders and warning tags); they were not part of this task and were left unchanged.
 
 ## Invariant check
 
