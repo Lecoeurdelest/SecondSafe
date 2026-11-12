@@ -13,6 +13,7 @@ const assistantLimiter = createAuthRateLimit({
 
 router.use(authenticate);
 router.post('/ask', assistantLimiter, controller.ask);
+router.post('/chat', assistantLimiter, controller.chat);
 router.post('/moderation/reports/:reportId/guidance', requireRole('moderator'), assistantLimiter, controller.getModerationGuidance);
 
 module.exports = router;

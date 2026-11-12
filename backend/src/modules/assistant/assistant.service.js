@@ -157,4 +157,12 @@ async function getModerationGuidance(reportId) {
   return { guidance, humanDecisionRequired: true };
 }
 
-module.exports = { ask, getModerationGuidance, normalizeQuestion, redactSensitiveText };
+module.exports = {
+  ask,
+  getModerationGuidance,
+  normalizeQuestion,
+  redactSensitiveText,
+  faqTopic,
+  faqFallback,
+  productFallback
+};
