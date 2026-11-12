@@ -24,18 +24,20 @@ The two reference projects (`itsnotvii/mercari-clone`, `ReMarket-SE2/webapp`) ha
 
 A follow-up after the merge of PR 148 fixes what a second review found: the staff order detail table and dispute detail at 390 px, the notification panel that the one-row scrolling header clipped on mobile, off-palette Ant Design tags, the primary button shadow, Ant Design texts in Vietnamese through a shared locale, the moderator header chip, and the seller order tabs.
 
+A second follow-up (`run-09`) makes the seller order list open on its first tab, "Chờ giao" (`SellerOrders.jsx` started on a filter named `pending` that matched no tab, so every order was listed and no tab was marked), and records the first observation of the notification panel for a staff account.
+
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-08/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-08/manual-review.md` and, for the seller order tabs and the staff notification panel, `.project/evidence/TASK-077/run-09/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-08/frontend-test.txt` — 9 suites, 58 tests pass |
+| Tests | `.project/evidence/TASK-077/run-09/frontend-test.txt` — 10 suites, 60 tests pass (2 new for the seller order tabs) |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-08/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-08/manual-review.md` and `screenshots/` (`run-01` to `run-07` are the earlier passes; `run-08` closes four small items) |
+| Build/typecheck | `.project/evidence/TASK-077/run-09/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-08/manual-review.md` and `screenshots/` (`run-01` to `run-07` are the earlier passes; `run-08` closes four small items; `run-09` covers the seller order tabs and the staff notification panel) |
 
 ## Deviations
 
@@ -53,7 +55,8 @@ The task has no dependencies on other tasks because it changes presentation only
 - Dark mode is not implemented.
 - The dashboards under `frontend/src/modules/dashboard/` and the legacy `Footer.jsx` were not redesigned.
 
-- Not changed on purpose: `SellerOrders.jsx` starts with the filter `pending`, which matches none of its tabs (behaviour, not presentation). Also left: the staff notification panel, which was not observed. The admin order section title, the moderator sidebar highlight on `/moderator/profile`, the dispute modal header and file input, and the current timeline step were fixed in `run-08`.
+- Staff accounts reach the notification panel only from storefront pages (home, chat, profile): the admin and moderator shells have no notification control. It renders correctly at 1280 and 390 px with canned notifications, but clicking a dispute notification sends a staff account to the buyer order list (`/orders`). Whether the shells should get a panel is a product decision and was not changed here.
+- The seller order tabs open on "Chờ giao" (decided without a product owner: it is the tab that needs the seller to act). The empty message for that tab shows when the seller has only shipped or completed orders.
 
 ## Invariant check
 
