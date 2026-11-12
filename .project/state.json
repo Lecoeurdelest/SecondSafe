@@ -1749,6 +1749,35 @@
       "criteria": {
         "AC-WEB-25-2": "inconclusive"
       }
+    },
+    "TASK-083": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The home page, the product list and the product card are rebuilt from Ant Design components; the new Home tests and the App tests pass and the page was observed in both themes at 390, 1280 and 1920 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Fourth slice of the Ant Design goal: home page and product list"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the home page, product list and product card with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the home page, product list and product card with Ant Design components and removed three unused components; tests and build pass; observed in both themes at 390, 1280 and 1920 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-083/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-083.md",
+      "criteria": {
+        "AC-WEB-25-3": "inconclusive"
+      }
     }
   }
 }

@@ -2,8 +2,37 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import productService from '../../services/product.service';
 import ProductList from '../../components/ProductList';
 import './Home.css';
+import { Alert, Button, Flex, Input, Select, Typography } from 'antd';
 import { MagnifyingGlass, MapPin } from '@phosphor-icons/react';
 import CategoryIcon from '../../utils/categoryIcons';
+
+const CATEGORIES = [
+  { id: 'books', name: 'Sách' },
+  { id: 'fashion', name: 'Quần áo' },
+  { id: 'electronics', name: 'Đồ điện tử' },
+  { id: 'home', name: 'Đồ gia dụng' },
+  { id: 'beauty', name: 'Làm đẹp' },
+  { id: 'sports', name: 'Thể thao' },
+  { id: 'toys', name: 'Đồ chơi' },
+  { id: 'pets', name: 'Thú cưng' }
+];
+
+const CATEGORY_OPTIONS = CATEGORIES.map(({ id, name }) => ({ value: id, label: name }));
+
+const CONDITION_OPTIONS = [
+  { value: 'new', label: 'Mới' },
+  { value: 'like-new', label: 'Như mới' },
+  { value: 'good', label: 'Tốt' },
+  { value: 'fair', label: 'Khá' },
+  { value: 'poor', label: 'Cũ' }
+];
+
+const SORT_OPTIONS = [
+  { value: 'price_asc', label: 'Giá: thấp đến cao' },
+  { value: 'price_desc', label: 'Giá: cao đến thấp' },
+  { value: 'name_asc', label: 'Tên: A đến Z' },
+  { value: 'name_desc', label: 'Tên: Z đến A' }
+];
 
 /**
  * Home Component (Landing Page)
@@ -31,6 +60,8 @@ function Home() {
     sort: null,
     condition: null
   });
+
+  const [draft, setDraft] = useState({ search: '', city: '' });
 
   // State phan trang (Yeu cau 5)
   const [pagination, setPagination] = useState({
@@ -177,13 +208,11 @@ function Home() {
     fetchProducts(nextPage, false);
   };
 
-  /**
-   * Handle search
-   * Implements Requirement 6: Search Products
-   * Resets pagination to page 1 when search changes
-   */
-  const handleSearch = (searchValue) => {
-    setFilters(prev => ({ ...prev, search: searchValue }));
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const search = draft.search.trim();
+    const city = draft.city.trim();
+    setFilters(prev => ({ ...prev, search, cities: city ? [city] : [] }));
     setPagination(prev => ({ ...prev, page: 1 }));
   };
 
@@ -196,171 +225,130 @@ function Home() {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
 
-  // Categories data - Updated to match seed data
-  const categories = [
-    { id: 'books', name: 'Sách' },
-    { id: 'fashion', name: 'Quần áo' },
-    { id: 'electronics', name: 'Đồ điện tử' },
-    { id: 'home', name: 'Đồ gia dụng' },
-    { id: 'beauty', name: 'Làm đẹp' },
-    { id: 'sports', name: 'Thể thao' },
-    { id: 'toys', name: 'Đồ chơi' },
-    { id: 'pets', name: 'Thú cưng' }
-  ];
-
   return (
     <div className="home">
-      {/* Hero Banner */}
-      <div className="home__hero">
+      <section className="home__hero">
         <div className="home__hero-background" aria-hidden="true">
           <div className="home__hero-overlay"></div>
         </div>
 
-        <div className="home__hero-content" style={{ marginTop: '60px' }}>
-          <h1>Giá tốt, gần bạn, chốt nhanh!</h1>
+        <div className="home__hero-content">
+          <Typography.Title level={1} className="home__title">Giá tốt, gần bạn, chốt nhanh!</Typography.Title>
 
-          {/* Advanced Search Bar */}
-          <div className="home__search-advanced">
-            <div className="search-advanced">
-              {/* Category Dropdown */}
-              <div className="search-advanced__category">
-                <select
-                  className="search-advanced__select"
-                  onChange={(e) => handleFilterChange({ category: e.target.value || null })}
-                  value={filters.category || ''}
-                >
-                  <option value="">Danh mục</option>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Search Input */}
-              <div className="search-advanced__input-wrapper">
-                <span className="search-advanced__icon"><MagnifyingGlass /></span>
-                <input
-                  type="text"
-                  className="search-advanced__input"
-                  placeholder="Tìm sản phẩm..."
-                  value={filters.search}
-                  onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleSearch(filters.search);
-                    }
-                  }}
-                />
-              </div>
-
-              {/* City filter */}
-              <label className="search-advanced__location">
-                <span className="search-advanced__location-icon"><MapPin /></span>
-                <input
-                  className="search-advanced__city"
-                  type="text"
-                  placeholder="Tỉnh/thành"
-                  aria-label="Lọc theo tỉnh/thành"
-                  value={filters.cities[0] || ''}
-                  onChange={(event) => handleFilterChange({
-                    cities: event.target.value ? [event.target.value] : []
-                  })}
-                />
-              </label>
-
-              {/* (Sort removed from search bar - moved below categories) */}
-              {/* Search Button */}
-              <button
-                className="search-advanced__button"
-                onClick={() => handleSearch(filters.search)}
-              >
-                Tìm kiếm
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Category Icons */}
-      <section className="home__categories" aria-labelledby="category-heading">
-        <div className="home__categories-container">
-          <div className="home__categories-heading">
-            <div><p>KHÁM PHÁ</p><h2 id="category-heading">Danh mục đa dạng</h2></div>
-            <span>Cập nhật sản phẩm đang bán</span>
-          </div>
-          <div className="home__categories-grid">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                className={`category-item${filters.category === cat.id ? ' is-active' : ''}`}
-                onClick={() => handleFilterChange({ category: cat.id })}
-              >
-                <span className="category-item__icon" aria-hidden="true"><CategoryIcon slug={cat.id} /></span>
-                <span className="category-item__name">{cat.name}</span>
-              </button>
-            ))}
-          </div>
+          <form className="home__search" role="search" aria-label="Tìm sản phẩm" onSubmit={handleSearch}>
+            <Select
+              className="home__search-category"
+              size="large"
+              variant="filled"
+              allowClear
+              placeholder="Danh mục"
+              aria-label="Danh mục"
+              options={CATEGORY_OPTIONS}
+              value={filters.category ?? undefined}
+              onChange={(value) => handleFilterChange({ category: value || null })}
+            />
+            <Input
+              className="home__search-query"
+              size="large"
+              variant="filled"
+              allowClear
+              prefix={<MagnifyingGlass />}
+              placeholder="Tìm sản phẩm..."
+              aria-label="Tìm sản phẩm"
+              value={draft.search}
+              onChange={(event) => setDraft(prev => ({ ...prev, search: event.target.value }))}
+            />
+            <Input
+              className="home__search-city"
+              size="large"
+              variant="filled"
+              prefix={<MapPin />}
+              placeholder="Tỉnh/thành"
+              aria-label="Lọc theo tỉnh/thành"
+              value={draft.city}
+              onChange={(event) => setDraft(prev => ({ ...prev, city: event.target.value }))}
+            />
+            <Button className="home__search-submit" type="primary" htmlType="submit" size="large" shape="round">
+              Tìm kiếm
+            </Button>
+          </form>
         </div>
       </section>
 
-      {/* Sort control: placed below categories and above products */}
-      <div className="home__sort-container" style={{ maxWidth: 1200, margin: '16px auto', padding: '0 20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-          <select
-            className="search-advanced__select"
-            onChange={(e) => handleFilterChange({ condition: e.target.value || null })}
-            value={filters.condition || ''}
-            style={{ minWidth: 160 }}
-          >
-            <option value="">Tình trạng</option>
-            <option value="new">Mới</option>
-            <option value="like-new">Như mới</option>
-            <option value="good">Tốt</option>
-            <option value="fair">Khá</option>
-            <option value="poor">Cũ</option>
-          </select>
-          <select
-            className="search-advanced__select"
-            onChange={(e) => handleFilterChange({ sort: e.target.value || null })}
-            value={filters.sort || ''}
-            style={{ minWidth: 180 }}
-          >
-            <option value="">Sắp xếp</option>
-            <option value="price_asc">Giá: thấp → cao</option>
-            <option value="price_desc">Giá: cao → thấp</option>
-            <option value="name_asc">Tên: A → Z</option>
-            <option value="name_desc">Tên: Z → A</option>
-          </select>
+      <section className="home__categories" aria-labelledby="category-heading">
+        <div className="home__container">
+          <Flex justify="space-between" align="flex-end" gap={16} className="home__categories-heading">
+            <div>
+              <Typography.Text strong className="home__eyebrow">KHÁM PHÁ</Typography.Text>
+              <Typography.Title level={2} id="category-heading" className="home__section-title">Danh mục đa dạng</Typography.Title>
+            </div>
+            <Typography.Text type="secondary" className="home__categories-note">Cập nhật sản phẩm đang bán</Typography.Text>
+          </Flex>
+          <Flex gap={10} className="home__chips" role="group" aria-label="Danh mục sản phẩm">
+            {CATEGORIES.map((cat) => {
+              const active = filters.category === cat.id;
+              return (
+                <Button
+                  key={cat.id}
+                  size="large"
+                  shape="round"
+                  type={active ? 'primary' : 'default'}
+                  icon={<CategoryIcon slug={cat.id} />}
+                  aria-pressed={active}
+                  onClick={() => handleFilterChange({ category: active ? null : cat.id })}
+                >
+                  {cat.name}
+                </Button>
+              );
+            })}
+          </Flex>
         </div>
+      </section>
+
+      <div className="home__container">
+        <Flex justify="flex-end" gap={10} wrap className="home__filters">
+          <Select
+            className="home__filter"
+            allowClear
+            placeholder="Tình trạng"
+            aria-label="Lọc theo tình trạng"
+            options={CONDITION_OPTIONS}
+            value={filters.condition ?? undefined}
+            onChange={(value) => handleFilterChange({ condition: value || null })}
+          />
+          <Select
+            className="home__filter home__filter--sort"
+            allowClear
+            placeholder="Sắp xếp"
+            aria-label="Sắp xếp sản phẩm"
+            options={SORT_OPTIONS}
+            value={filters.sort ?? undefined}
+            onChange={(value) => handleFilterChange({ sort: value || null })}
+          />
+        </Flex>
       </div>
 
       <div className="home__content">
-        {/* Products Section */}
-        <div className="home__products-container">
+        <div className="home__container">
           <section className="home__main" aria-label="Sản phẩm đang được rao bán">
-            {/* Error Message */}
             {error && (
-              <div className="home__error">
-                <p>{error}</p>
-                <button onClick={() => fetchProducts(1, true)} className="home__retry-button">
-                  Thử lại
-                </button>
-              </div>
+              <Alert
+                type="error"
+                showIcon
+                className="home__error"
+                title={error}
+                action={<Button size="small" type="primary" onClick={() => fetchProducts(1, true)}>Thử lại</Button>}
+              />
             )}
 
-            {/* Product List - Requirement 5 */}
             <ProductList products={products} loading={loading && products.length === 0} />
 
-            {/* Load More Button */}
             {!error && hasMore && products.length > 0 && (
-              <div className="home__load-more">
-                <button onClick={handleLoadMore} className="home__load-more-button" disabled={loading}>
+              <Flex justify="center" className="home__load-more">
+                <Button size="large" shape="round" onClick={handleLoadMore} disabled={loading}>
                   {loading ? 'Đang tải sản phẩm...' : 'Xem thêm'}
-                </button>
-              </div>
+                </Button>
+              </Flex>
             )}
           </section>
         </div>

@@ -36,7 +36,12 @@ window.getComputedStyle = (...args) => {
   try {
     return computedStyle(...args);
   } catch {
-    return { getPropertyValue: () => '' };
+    const inline = (args[0] && args[0].style) || {};
+    return {
+      display: inline.display || 'block',
+      visibility: inline.visibility || 'visible',
+      getPropertyValue: name => (inline.getPropertyValue ? inline.getPropertyValue(name) : '')
+    };
   }
 };
 

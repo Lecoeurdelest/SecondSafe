@@ -3,8 +3,8 @@ import { theme as antdTheme } from 'antd';
 const FONT_FAMILY = "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif";
 
 const SURFACES = {
-  light: { layout: '#f5f5f7', container: '#ffffff', elevated: '#ffffff', text: '#1a1a1a', border: '#e5e7eb' },
-  dark: { layout: '#0f1012', container: '#17181b', elevated: '#1d1f23', text: '#f2f3f5', border: '#2e3035' }
+  light: { layout: '#f5f5f7', container: '#ffffff', elevated: '#ffffff', text: '#1a1a1a', border: '#e5e7eb', muted: 'rgba(0, 0, 0, 0.6)' },
+  dark: { layout: '#0f1012', container: '#17181b', elevated: '#1d1f23', text: '#f2f3f5', border: '#2e3035', muted: 'rgba(255, 255, 255, 0.6)' }
 };
 
 export function storefrontTheme(mode) {
@@ -24,6 +24,8 @@ export function storefrontTheme(mode) {
       colorBgContainer: surface.container,
       colorBgElevated: surface.elevated,
       colorText: surface.text,
+      colorTextDescription: surface.muted,
+      colorTextPlaceholder: surface.muted,
       colorBorder: surface.border,
       colorBorderSecondary: surface.border,
       borderRadius: 10,
