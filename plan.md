@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 6/76 tasks done (6 done, 3 in_progress, 29 verifying, 38 todo). 155 active requirements, 233 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 6/77 tasks done (6 done, 3 in_progress, 30 verifying, 38 todo). 157 active requirements, 236 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
@@ -132,7 +132,7 @@ Baseline values become configuration defaults (NFR-BIZ-01, NFR-BIZ-02).
 
 ## 8. Decisions
 
-Accepted: D-001 stack, D-003 schema contract, D-004 historical empty logic stubs, D-005 English artifacts, D-006 control framework, D-007 single author, D-008 baseline API prefixes, D-009 full-stack scope, D-010 adaptation with defect review, D-011 Gitflow and D-012 baseline parity. D-002 backend-only scope is superseded by D-009.
+Accepted: D-001 stack, D-003 schema contract, D-004 historical empty logic stubs, D-005 English artifacts, D-006 control framework, D-007 single author, D-008 baseline API prefixes, D-009 full-stack scope, D-010 adaptation with defect review, D-011 Gitflow, D-012 baseline parity and D-013 assistant conversation data flow. D-002 backend-only scope is superseded by D-009.
 
 The earlier recommendations are preserved in `project.yaml`. The user accepted the WDP baseline choices on 2026-10-11; none of these product decisions remains open:
 
@@ -196,3 +196,9 @@ The user states "Làm y như dự án cũ là được" (matching the old projec
 The inspected choices and exact source paths are recorded in `docs/technical/baseline-choices.md`. D-101 through D-109 are accepted accordingly. TASK-015, TASK-043 and TASK-048 are retired, not completed: their original criteria and IDs stay in the model and their state/history remains visible. Their legacy schema fields and dormant compatibility paths are not removed. TASK-027, TASK-029 and TASK-047 no longer wait for a product decision, but still wait for their existing implementation dependencies.
 
 This amendment changes product scope explicitly. It does not copy reviewed security defects, weaken the accepted wallet/escrow invariants, authorize merges or rewrite contributor history. Behavioral task completion remains subject to the existing verification policy; the parity instruction alone does not supply a calibrated evaluator or amend that policy.
+
+## 15. Conversational assistant amendment (2026-11-12)
+
+The user asks for an assistant in the system that advises like a modern chat assistant rather than a one-shot form. The current assistant is part of the baseline but outside the requirements model: it sends Gemini only a fixed FAQ topic, or the category, condition and price of a few listings, so it cannot hold a conversation. TASK-078 adds a multi-turn chat endpoint and a chat screen. Gemini receives the redacted conversation, looks listings up through a server-side search tool limited to active listings of eligible sellers that exposes only title, description, price, condition and category (never seller identity or location), and answers from platform facts in its instructions.
+
+D-013 records the data-flow change: the redacted conversation now reaches the provider, where `/api/assistant/ask` sent none of it. `ASSISTANT_LLM_SEES_MESSAGES=false` restores the earlier behaviour. There is no schema change because the conversation lives in the browser tab. The design is in `docs/technical/assistant-chat.md`. Existing task IDs, criteria and evidence are unchanged.

@@ -1578,6 +1578,43 @@
       "criteria": {
         "AC-NFR-USA-02-1": "inconclusive"
       }
+    },
+    "TASK-078": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "Conversational assistant implemented and verified with a mocked provider, a canned-API browser observation and the listing search run against a real MongoDB replica set; no live Gemini call; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Conversational assistant requested on 2026-11-12"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Implement the chat endpoint, the chat screen and their tests"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Chat endpoint with function calling, redaction and local fallback, and the chat screen implemented; backend and frontend suites and the build pass; observed at 360, 1280 and 1920 px with canned responses"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Ran the listing search against a disposable MongoDB replica set with seeded listings and tightened the keyword fallback it showed to be too wide; backend and frontend suites and the build pass"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-078/run-01/report.json",
+        ".project/evidence/TASK-078/run-02/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-078.md",
+      "criteria": {
+        "AC-CHAT-06-1": "inconclusive",
+        "AC-CHAT-06-2": "inconclusive",
+        "AC-WEB-22-1": "inconclusive"
+      }
     }
   }
 }

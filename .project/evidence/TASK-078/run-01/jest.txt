@@ -1,0 +1,21 @@
+Command: npm test
+
+> secondsafe-backend@0.1.0 test
+> jest --runInBand
+
+{"timestamp":"2026-11-12T08:31:41.864Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/missing","error":"Error"}]}
+{"timestamp":"2026-11-12T08:31:41.866Z","level":"error","message":"HTTP request failed","context":[{"status":404,"method":"GET","path":"/api/categories/inactive","error":"Error"}]}
+{"timestamp":"2026-11-12T08:31:41.867Z","level":"error","message":"HTTP request failed","context":[{"status":500,"method":"GET","path":"/api/categories/books","error":"Error"}]}
+{"timestamp":"2026-11-12T08:31:42.337Z","level":"error","message":"HTTP request failed","context":[{"status":401,"method":"GET","path":"/api/users/admin/dashboard","error":"Error"}]}
+{"timestamp":"2026-11-12T08:31:42.340Z","level":"error","message":"HTTP request failed","context":[{"status":401,"method":"GET","path":"/api/moderator/dashboard","error":"Error"}]}
+{"timestamp":"2026-11-12T08:31:42.343Z","level":"error","message":"HTTP request failed","context":[{"status":401,"method":"GET","path":"/api/products/admin","error":"Error"}]}
+{"timestamp":"2026-11-12T08:31:43.622Z","level":"error","message":"HTTP request failed","context":[{"status":503,"method":"POST","path":"/send","error":"Error"}]}
+{"timestamp":"2026-11-12T08:31:44.433Z","level":"error","message":"Abandoned checkout notification failed","context":[{"error":"socket down"}]}
+
+Test Suites: 44 passed, 44 total
+Tests:       374 passed, 374 total
+Snapshots:   0 total
+Time:        14.565 s, estimated 18 s
+Ran all test suites.
+
+exit_code=0
