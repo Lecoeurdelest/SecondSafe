@@ -83,7 +83,7 @@ const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
   };
 
   return (
-    <Modal open centered footer={null} title="Tạo khiếu nại" width={640} onCancel={onCancel} maskClosable={false}>
+    <Modal open centered footer={null} title="Tạo khiếu nại" width={640} onCancel={onCancel} mask={{ closable: false }}>
       <Flex gap={12} align="center" className="report-subject">
         <img
           src={getImageUrl(order?.listing?.images?.[0]) || '/images/placeholders/product-placeholder.svg'}

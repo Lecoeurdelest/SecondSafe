@@ -73,7 +73,7 @@ const RateSeller = ({ order, onSuccess, onCancel }) => {
   };
 
   return (
-    <Modal open centered footer={null} title="Đánh giá người bán" width={560} onCancel={onCancel} maskClosable={false}>
+    <Modal open centered footer={null} title="Đánh giá người bán" width={560} onCancel={onCancel} mask={{ closable: false }}>
       <Flex vertical gap={12} className="report-subject">
         <Flex gap={12} align="center">
           <img

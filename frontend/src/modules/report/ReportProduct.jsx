@@ -70,7 +70,7 @@ const ReportProduct = ({ product, onSuccess, onCancel }) => {
   };
 
   return (
-    <Modal open centered footer={null} title="Báo cáo sản phẩm" width={560} onCancel={onCancel} maskClosable={false}>
+    <Modal open centered footer={null} title="Báo cáo sản phẩm" width={560} onCancel={onCancel} mask={{ closable: false }}>
       <Flex gap={12} align="center" className="report-subject">
         <img
           src={getImageUrl(product?.images?.[0]) || '/images/placeholders/product-placeholder.svg'}
