@@ -201,3 +201,4 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 17. Icon set an
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-25-1` | The storefront shell (announcement bar, header, navigation, notification panel, support dialog, floating chat button and footer) is built from Ant Design components inside one theme that follows the light or dark choice and the interface language, keeps the brand colours, and works from 360 px to 1920 px wide. | behavioral test, manual review | [TASK-081](../task/TASK-081.md) `[!]` |
+| `AC-WEB-25-2` | The sign-in, registration, password recovery and password change pages are built from Ant Design form components with inline validation messages, a show and hide toggle on password fields, success and error alerts and the emailed-code and Google steps, and work from 360 px to 1920 px wide in both themes. | behavioral test, manual review | [TASK-082](../task/TASK-082.md) `[!]` |

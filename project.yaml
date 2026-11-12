@@ -3074,6 +3074,14 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-2
+      statement: The sign-in, registration, password recovery and password change pages are built from Ant Design form components with
+        inline validation messages, a show and hide toggle on password fields, success and error alerts and the emailed-code and
+        Google steps, and work from 360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
+
 tasks:
   - id: TASK-001
     title: Scaffold the backend database layer and control framework
@@ -7080,6 +7088,41 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: One ConfigProvider wraps the app with the brand tokens, the light or dark algorithm chosen by the existing theme state and the Vietnamese or English locale, plus Ant Design's App context. The shell uses Layout, Menu, Button, Badge, Popover, Dropdown, Modal, List, FloatButton and Flex; links that look like buttons go through a small LinkButton that keeps a real anchor and navigates with the router. The notification panel becomes an Ant Design list inside a popover. Test setup gains the browser stubs Ant Design needs and removes the style tags it injects after each test.
+  - id: TASK-082
+    title: Ant Design authentication pages
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-2
+    objective: Rebuild the sign-in, registration, password recovery and password change pages from Ant Design form components, keeping every step and message.
+    in_scope:
+    - frontend/src/modules/auth
+    - frontend/src/App.test.jsx
+    - frontend/src/setupTests.js
+    out_of_scope:
+    - The profile password page (profile area task)
+    - Services, routes and the sign-in rules
+    - Other page areas
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/auth/AuthShell.jsx
+    - frontend/src/modules/auth/PasswordField.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: One AuthShell (Card, Typography, Alert, Flex) holds the title, intro, notice, error and footer links. Each page uses an Ant Design Form with rules for required fields, email, phone, six-digit code and password length; PasswordField keeps the "Hiện/Ẩn mật khẩu" toggle as a button inside the input. Service calls, step order and texts are unchanged. Test setup gains a timer-based MessageChannel because Ant Design forms use it.
 verification:
   thresholds:
     standard: 0.95
