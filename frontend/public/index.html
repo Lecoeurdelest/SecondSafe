@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ff3b3b" />
     <meta name="description" content="SecondSafe — Mua bán đồ đã qua sử dụng, an tâm mỗi giao dịch." />
+    <script>
+      (function () {
+        try {
+          var staff = ['admin', 'moderator'].indexOf(window.localStorage.getItem('token') && window.localStorage.getItem('secondsafe:role')) !== -1;
+          var saved = window.localStorage.getItem('secondsafe:theme');
+          var dark = saved ? saved === 'dark' : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.setAttribute('data-theme', dark && !staff ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
     <title>SecondSafe — Mua bán an tâm</title>
   </head>
   <body>

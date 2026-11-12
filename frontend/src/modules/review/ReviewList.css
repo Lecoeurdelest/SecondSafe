@@ -6,11 +6,11 @@
 .loading {
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: var(--text-2);
 }
 
 .rating-summary {
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
@@ -32,7 +32,7 @@
 .score {
   font-size: 3rem;
   font-weight: 700;
-  color: #333;
+  color: var(--ink);
   display: block;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .total-reviews {
-  color: #666;
+  color: var(--text-2);
   font-size: 14px;
 }
 
@@ -62,9 +62,9 @@
 
 .rating-filter {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--line-strong);
   border-radius: 6px;
-  background: white;
+  background: var(--surface);
   font-size: 14px;
   cursor: pointer;
 }
@@ -83,12 +83,12 @@
 }
 
 .review-item {
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--line);
 }
 
 .review-header {
@@ -109,7 +109,7 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #f0f0f0;
+  border: 2px solid var(--line);
 }
 
 .reviewer-details {
@@ -120,7 +120,7 @@
 
 .reviewer-name {
   font-weight: 500;
-  color: #333;
+  color: var(--ink);
   font-size: 14px;
 }
 
@@ -129,12 +129,12 @@
 }
 
 .review-date {
-  color: #666;
+  color: var(--text-2);
   font-size: 12px;
 }
 
 .review-comment {
-  color: #333;
+  color: var(--ink);
   line-height: 1.5;
   margin-bottom: 12px;
   font-size: 14px;
@@ -153,7 +153,7 @@
   border-radius: 10px;
   overflow: hidden;
   background: #0f172a;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--line);
 }
 
 .review-evidence-media {
@@ -168,9 +168,9 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: #f8f9fa;
+  background: var(--surface-2);
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--line);
 }
 
 .product-thumb {
@@ -182,15 +182,15 @@
 
 .product-title {
   font-size: 13px;
-  color: #666;
+  color: var(--text-2);
   flex: 1;
 }
 
 .no-reviews {
   text-align: center;
   padding: 40px;
-  color: #666;
-  background: white;
+  color: var(--text-2);
+  background: var(--surface);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -206,8 +206,8 @@
 
 .page-btn {
   padding: 8px 16px;
-  border: 1px solid #ddd;
-  background: white;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
@@ -215,7 +215,7 @@
 }
 
 .page-btn:hover:not(:disabled) {
-  background: #f8f9fa;
+  background: var(--surface-2);
   border-color: var(--brand);
 }
 
@@ -225,7 +225,7 @@
 }
 
 .page-info {
-  color: #666;
+  color: var(--text-2);
   font-size: 14px;
 }
 

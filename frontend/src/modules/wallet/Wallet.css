@@ -24,7 +24,7 @@
 
 .wallet-header h1 {
   font-size: 32px;
-  color: #2c3e50;
+  color: var(--ink);
   margin: 0;
 }
 
@@ -145,7 +145,7 @@
 
 /* Transactions Section */
 .transactions-section {
-  background-color: white;
+  background-color: var(--surface);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -153,7 +153,7 @@
 
 .section-header {
   padding: 20px 30px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -163,7 +163,7 @@
 
 .section-header h2 {
   font-size: 24px;
-  color: #2c3e50;
+  color: var(--ink);
   margin: 0;
 }
 
@@ -176,7 +176,7 @@
 .filter-select,
 .filter-input {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--line-strong);
   border-radius: 4px;
   font-size: 14px;
   min-width: 120px;
@@ -203,7 +203,7 @@
 }
 
 .transaction-item:hover {
-  background-color: #f8f9fa;
+  background-color: var(--surface-2);
 }
 
 .transaction-item:last-child {
@@ -224,13 +224,13 @@
 .transaction-type {
   font-size: 16px;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--ink);
   margin-bottom: 4px;
 }
 
 .transaction-description {
   font-size: 14px;
-  color: #7f8c8d;
+  color: var(--text-2);
   margin-bottom: 4px;
 }
 
@@ -307,7 +307,7 @@
 
 .empty-state p {
   font-size: 18px;
-  color: #7f8c8d;
+  color: var(--text-2);
   margin: 0;
 }
 
@@ -318,17 +318,17 @@
   align-items: center;
   gap: 20px;
   padding: 20px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--line);
 }
 
 .pagination-btn {
   padding: 8px 16px;
-  background-color: white;
-  border: 2px solid #e0e0e0;
+  background-color: var(--surface);
+  border: 2px solid var(--line);
   border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--ink);
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -346,7 +346,7 @@
 
 .pagination-info {
   font-size: 14px;
-  color: #7f8c8d;
+  color: var(--text-2);
 }
 
 /* Responsive */

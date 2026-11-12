@@ -3,7 +3,7 @@
 SecondSafe is a second-hand marketplace where the buyer's money is held in escrow until the buyer confirms receipt. Moderators handle reports and disputes. This plan is the maintained statement of intent. `project.yaml` compiles it into requirements, decisions and tasks, and `.project/state.json` records execution.
 
 <!-- BEGIN GENERATED: progress -->
-**Progress (generated):** 6/76 tasks done (6 done, 3 in_progress, 29 verifying, 38 todo). 155 active requirements, 233 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
+**Progress (generated):** 6/77 tasks done (6 done, 3 in_progress, 30 verifying, 38 todo). 156 active requirements, 234 acceptance criteria. See [docs/task/README.md](docs/task/README.md).
 <!-- END GENERATED: progress -->
 
 ## 1. Purpose
@@ -196,3 +196,9 @@ The user states "Làm y như dự án cũ là được" (matching the old projec
 The inspected choices and exact source paths are recorded in `docs/technical/baseline-choices.md`. D-101 through D-109 are accepted accordingly. TASK-015, TASK-043 and TASK-048 are retired, not completed: their original criteria and IDs stay in the model and their state/history remains visible. Their legacy schema fields and dormant compatibility paths are not removed. TASK-027, TASK-029 and TASK-047 no longer wait for a product decision, but still wait for their existing implementation dependencies.
 
 This amendment changes product scope explicitly. It does not copy reviewed security defects, weaken the accepted wallet/escrow invariants, authorize merges or rewrite contributor history. Behavioral task completion remains subject to the existing verification policy; the parity instruction alone does not supply a calibrated evaluator or amend that policy.
+
+## 16. Dark theme amendment (2026-11-12)
+
+The visual restyle of TASK-077 followed two reference projects. One of them, `mercari-clone`, offers a dark mode toggle; the other does not. The restyle left it out and recorded it as not implemented. TASK-079 adds it for the storefront only: customers and visitors get a switch in the header, the first choice follows the browser preference, and the choice is remembered in the browser. Admin and moderator sessions always use the light theme and are not offered the switch, because their pages use Ant Design and were not designed or observed in a dark palette.
+
+No behaviour, route, service or data model changes, and no existing task ID, criterion or evidence is altered.

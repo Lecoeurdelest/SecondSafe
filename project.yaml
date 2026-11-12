@@ -2984,6 +2984,22 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+  - id: FR-WEB-23
+    title: Web storefront dark theme
+    kind: functional
+    risk: standard
+    component: CMP-WEB
+    source:
+      file: plan.md
+      section: 16. Dark theme amendment (2026-11-12)
+    acceptance:
+    - id: AC-WEB-23-1
+      statement: Visitors and customers can switch the storefront between a light and a dark theme from the header; the first choice
+        follows the browser preference, the choice is remembered, text stays readable on the pages observed, and admin and moderator
+        sessions always use the light theme and are not offered the switch.
+      verification:
+      - behavioral_test
+      - manual_review
 tasks:
   - id: TASK-001
     title: Scaffold the backend database layer and control framework
@@ -6806,6 +6822,49 @@ tasks:
       pages, and the saturated blues of the old theme are recoloured to the brand hue across the module stylesheets. Staff
       consoles use a neutral palette and one shared Ant Design theme, and hide the storefront header while mounted. The
       two reference projects are visual references only; no code was copied from them.
+  - id: TASK-079
+    title: Storefront dark theme
+    requirement_ids:
+    - FR-WEB-23
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-23-1
+    objective: Customers and visitors can switch the storefront to a dark theme that follows their browser preference until they choose,
+      stays readable on every storefront page observed, and never reaches the admin and moderator consoles.
+    in_scope:
+    - frontend/src/assets/styles/global.css
+    - frontend/src/index.css
+    - frontend/public/index.html
+    - frontend/src/App.js
+    - frontend/src/App.test.jsx
+    - frontend/src/components/ThemeToggle.jsx
+    - frontend/src/utils/theme.js
+    - frontend/src/utils/theme.test.js
+    - Storefront module and component stylesheets under frontend/src (colour values only)
+    out_of_scope:
+    - Admin, moderator and dashboard pages and their stylesheets
+    - Behaviour, routes, services and API calls
+    - Server-side storage of the preference
+    inputs:
+    - plan.md#16. Dark theme amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/utils/theme.js
+    - frontend/src/components/ThemeToggle.jsx
+    - frontend/src/assets/styles/global.css
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: Light and dark values live as custom properties on the root element, switched by a data-theme attribute that an inline script sets before the first paint. Neutral surfaces, text and borders in storefront stylesheets use the tokens; pastel status chips keep their own colours. Staff roles force the light theme, so the Ant Design consoles are untouched. The choice is kept in localStorage.
 verification:
   thresholds:
     standard: 0.95

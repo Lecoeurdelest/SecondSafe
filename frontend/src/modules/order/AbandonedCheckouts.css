@@ -3,7 +3,7 @@
   padding: 16px;
   border: 1px solid #f5c26b;
   border-radius: 12px;
-  background: #fffaf0;
+  background: var(--surface-2);
 }
 
 .abandoned-checkouts h2 {
@@ -44,7 +44,7 @@
 
 .abandoned-checkouts__body p {
   margin: 4px 0 0;
-  color: #555;
+  color: var(--text-2);
   font-size: 0.875rem;
 }
 
@@ -70,6 +70,6 @@
   padding: 8px 12px;
   border: 1px solid #c9c9c9;
   border-radius: 8px;
-  background: #fff;
+  background: var(--surface);
   cursor: pointer;
 }

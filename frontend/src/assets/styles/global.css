@@ -23,6 +23,15 @@
   --hairline: rgba(0, 0, 0, 0.08);
   --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.05);
   --shadow-card-hover: 0 12px 32px -8px rgba(0, 0, 0, 0.12);
+  --surface-2: #fafafa;
+  --surface-3: #eeeeee;
+  --surface-glass: rgba(255, 255, 255, 0.9);
+  --line: #e5e7eb;
+  --line-strong: #d9dde3;
+  --text-2: #666666;
+  --text-3: #8a8f98;
+  --brand-text: #c42222;
+  color-scheme: light;
 
   /* Neutral Colors */
   --white: #ffffff;
@@ -78,6 +87,46 @@
   --transition-fast: 0.15s ease;
   --transition-base: 0.2s ease;
   --transition-slow: 0.3s ease;
+}
+
+/* Dark theme: storefront only. Staff sessions are always light (see utils/theme.js). */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-bg: #0f1012;
+  --surface: #17181b;
+  --surface-2: #1d1f23;
+  --surface-3: #2a2c31;
+  --surface-glass: rgba(23, 24, 27, 0.88);
+  --ink: #f2f3f5;
+  --ink-muted: rgba(255, 255, 255, 0.55);
+  --fill-subtle: rgba(255, 255, 255, 0.06);
+  --hairline: rgba(255, 255, 255, 0.1);
+  --border-color: #2e3035;
+  --line: #2e3035;
+  --line-strong: #3d4046;
+  --text-2: #b4b8c0;
+  --text-3: #8b9099;
+  --brand-text: #ff7b7b;
+  --brand-tint: rgba(255, 59, 59, 0.16);
+  --gray-50: #1a1b1e;
+  --gray-100: #1f2024;
+  --gray-200: #26282c;
+  --gray-300: #34363b;
+  --gray-400: #4a4d54;
+  --gray-500: #7a7e87;
+  --gray-600: #9a9ea7;
+  --gray-700: #b8bcc4;
+  --gray-800: #d3d6dc;
+  --gray-900: #eceef1;
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 12px 32px -8px rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+}
+
+body {
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 /* Reset & Base Styles */

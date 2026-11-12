@@ -1,0 +1,192 @@
+[
+ {
+  "name": "home",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 2,
+  "bad": [
+   {
+    "sel": "span.search-advanced__icon",
+    "text": "🔍",
+    "ratio": 1,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "span.search-advanced__location-icon",
+    "text": "📍",
+    "ratio": 1.09,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(245,245,245)"
+   }
+  ]
+ },
+ {
+  "name": "product-detail",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "favorites",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "cart",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "orders",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "order-detail",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "seller-orders",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "wallet",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 2,
+  "bad": [
+   {
+    "sel": "div.transaction-date",
+    "text": "05:31 12/11/2026",
+    "ratio": 2.56,
+    "fg": "rgb(149, 165, 166)",
+    "bg": "rgb(255,255,255)"
+   },
+   {
+    "sel": "span.status-badge.status-completed",
+    "text": "Hoàn thành",
+    "ratio": 2.87,
+    "fg": "rgb(255, 255, 255)",
+    "bg": "rgb(39,174,96)"
+   }
+  ]
+ },
+ {
+  "name": "topup",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "chat",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "assistant",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "support",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "profile",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "profile-edit",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "my-products",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "create-product",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "login",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "register",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "forgot",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ },
+ {
+  "name": "change-password",
+  "theme": "light",
+  "overflow": false,
+  "errs": [],
+  "low": 0,
+  "bad": []
+ }
+]

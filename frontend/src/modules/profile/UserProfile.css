@@ -6,7 +6,7 @@
 
 /* User Info Card */
 .user-info-card {
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -26,7 +26,7 @@
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
-  background: #f0f0f0;
+  background: var(--surface-2);
 }
 
 .user-avatar-large img {
@@ -54,7 +54,7 @@
 .user-name {
   font-size: 32px;
   font-weight: 700;
-  color: #333;
+  color: var(--ink);
   margin: 0 0 16px 0;
   display: flex;
   align-items: center;
@@ -81,7 +81,7 @@
 
 .meta-item {
   font-size: 15px;
-  color: #666;
+  color: var(--text-2);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -89,7 +89,7 @@
 
 .user-bio {
   padding-top: 24px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--line);
 }
 
 .user-profile-actions {
@@ -117,6 +117,7 @@
 
 .user-profile-link-btn:hover {
   background: #fedddb;
+  color: #1a1a1a;
 }
 
 .user-profile-link-btn--danger {
@@ -127,25 +128,26 @@
 
 .user-profile-link-btn--danger:hover {
   background: #fee2e2;
+  color: #1a1a1a;
 }
 
 .user-bio h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: var(--ink);
   margin: 0 0 12px 0;
 }
 
 .user-bio p {
   font-size: 15px;
-  color: #666;
+  color: var(--text-2);
   line-height: 1.6;
   margin: 0;
 }
 
 /* Products Section */
 .user-products-section {
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -154,14 +156,14 @@
 .user-products-section h2 {
   font-size: 24px;
   font-weight: 600;
-  color: #333;
+  color: var(--ink);
   margin: 0 0 24px 0;
 }
 
 .no-products {
   text-align: center;
   padding: 60px 20px;
-  color: #999;
+  color: var(--text-3);
 }
 
 .products-grid {
@@ -191,6 +193,7 @@
   aspect-ratio: 4/3;
   overflow: hidden;
   background: #f8f8f8;
+  color: #1a1a1a;
 }
 
 .product-image img {
@@ -206,7 +209,7 @@
 .product-title {
   font-size: 15px;
   font-weight: 500;
-  color: #333;
+  color: var(--ink);
   margin: 0 0 8px 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -226,7 +229,7 @@
 
 .product-location {
   font-size: 13px;
-  color: #666;
+  color: var(--text-2);
 }
 
 /* Loading & Error */
@@ -235,7 +238,7 @@
   text-align: center;
   padding: 60px 20px;
   font-size: 16px;
-  color: #666;
+  color: var(--text-2);
 }
 
 .error-message {

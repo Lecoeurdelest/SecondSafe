@@ -169,3 +169,11 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 13. Checkout re
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-21-1` | Buyers see their unfinished checkouts above the order list and the cart with resume-payment, buy-again and dismiss actions; admin and staff dashboards show the recovery summary; a failed summary or list request never hides the page it sits on. | behavioral test, manual review | [TASK-076](../task/TASK-076.md) `[!]` |
+
+### FR-WEB-23 — Web storefront dark theme
+
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 16. Dark theme amendment (2026-11-12)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-WEB-23-1` | Visitors and customers can switch the storefront between a light and a dark theme from the header; the first choice follows the browser preference, the choice is remembered, text stays readable on the pages observed, and admin and moderator sessions always use the light theme and are not offered the switch. | behavioral test, manual review | [TASK-079](../task/TASK-079.md) `[!]` |

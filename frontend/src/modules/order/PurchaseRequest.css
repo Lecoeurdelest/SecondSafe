@@ -24,7 +24,7 @@
 
 .purchase-request-content {
   position: relative;
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   width: 100%;
@@ -50,7 +50,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px 24px 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--line);
   margin-bottom: 24px;
 }
 
@@ -58,14 +58,14 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .close-button {
   background: none;
   border: none;
   font-size: 1.25rem;
-  color: #6b7280;
+  color: var(--text-2);
   cursor: pointer;
   padding: 8px;
   border-radius: 6px;
@@ -73,8 +73,8 @@
 }
 
 .close-button:hover {
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: var(--surface-2);
+  color: var(--ink);
 }
 
 /* Product Info Section */
@@ -84,7 +84,7 @@
   padding: 0 24px;
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--line);
 }
 
 .product-image {
@@ -96,21 +96,21 @@
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line);
 }
 
 .product-details h4 {
   margin: 0 0 8px 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   line-height: 1.4;
 }
 
 .product-price {
   margin: 0 0 4px 0;
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--text-2);
 }
 
 .product-price span {
@@ -121,21 +121,21 @@
 .seller-info {
   margin: 0;
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--text-2);
 }
 
 .seller-info span {
   font-weight: 500;
-  color: #374151;
+  color: var(--ink);
 }
 
 /* Price Summary Section */
 .price-summary {
   padding: 16px 24px;
-  background-color: #f9fafb;
+  background-color: var(--surface-2);
   border-radius: 8px;
   margin-bottom: 24px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line);
 }
 
 .price-row {
@@ -144,26 +144,26 @@
   align-items: center;
   padding: 10px 0;
   font-size: 0.9rem;
-  color: #374151;
+  color: var(--ink);
 }
 
 .price-row:not(:last-child) {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--line);
 }
 
 .price-label {
   font-weight: 500;
-  color: #6b7280;
+  color: var(--text-2);
 }
 
 .price-value {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .price-row.total {
   padding-top: 12px;
-  background-color: white;
+  background-color: var(--surface);
   margin: 0 -16px -16px;
   padding: 12px 16px;
   border-radius: 0 0 8px 8px;
@@ -171,7 +171,7 @@
 }
 
 .price-row.total .price-label {
-  color: #1f2937;
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -193,7 +193,7 @@
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
-  color: #374151;
+  color: var(--ink);
   font-size: 0.9rem;
 }
 
@@ -204,7 +204,7 @@
 .form-group textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
   font-size: 0.9rem;
   font-family: inherit;
@@ -226,7 +226,7 @@
 .character-count {
   text-align: right;
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--text-2);
   margin-top: 4px;
 }
 
@@ -239,7 +239,7 @@
 .price-input-wrapper input {
   width: 100%;
   padding: 12px 50px 12px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
   font-size: 0.9rem;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -258,7 +258,7 @@
 .price-input-wrapper .currency {
   position: absolute;
   right: 12px;
-  color: #6b7280;
+  color: var(--text-2);
   font-size: 0.9rem;
   font-weight: 500;
   pointer-events: none;
@@ -266,7 +266,7 @@
 
 .price-suggestion {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--text-2);
   margin-top: 4px;
 }
 
@@ -284,6 +284,7 @@
   padding: 12px;
   margin-bottom: 16px;
   text-align: center;
+  color: #1a1a1a;
 }
 
 /* Form Actions */
@@ -293,7 +294,7 @@
   justify-content: flex-end;
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--line);
 }
 
 .btn {
@@ -317,13 +318,13 @@
 }
 
 .btn-secondary {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  background-color: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #e5e7eb;
+  background-color: var(--surface-3);
 }
 
 .btn-primary {
