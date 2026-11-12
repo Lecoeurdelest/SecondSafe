@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "f82e35046cf75d7ce2c4a1225728e82508c63cc8b23adc0475b87790c7212acc",
+  "source_hash": "2836bf09d6cbf49f04147fab97410400383ad4713d3ef08a010a1951016169d5",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, never against a real backend or another browser",
+    "Only three pages that use icons were captured; renamed Font Awesome 5 icon names were not checked one by one",
+    "Dark mode is not implemented",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "With the Font Awesome Free font bundled, the icons on the seller orders, order detail and admin user pages render; build and the 58 existing frontend tests pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-06/manual-review.md",
+            ".project/evidence/TASK-077/run-06/screenshots/admin-users.png",
+            ".project/evidence/TASK-077/run-06/screenshots/buyer-order-detail-pending.png",
+            ".project/evidence/TASK-077/run-06/screenshots/buyer-seller-orders.png",
+            ".project/evidence/TASK-077/run-06/screenshots/icons-sheet.png"
+          ]
+        }
+      ]
+    }
+  ]
+}

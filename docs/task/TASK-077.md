@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `verifying` — Restyle implemented in five passes; the last follows an independent page-by-page review and fixes its defects (leaked grid rules, competing button styles, overflow, contrast, staff palettes); build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend
+**Current state:** `verifying` — Restyle implemented in six passes; the last bundles the Font Awesome Free icon font so the blank icons render, after an independent page-by-page review fixed the other defects; build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend
 
 ## Traceability
 
@@ -39,12 +39,15 @@ The web client shares one visual language across the buyer marketplace and the s
 - frontend/src/modules/staffTheme.js
 - frontend/src/modules/admin/layout/AdminLayout.jsx
 - frontend/src/modules/moderator/layout/ModeratorLayout.jsx
+- frontend/src/index.js
+- frontend/package.json
+- frontend/package-lock.json
 - Colour, radius, shadow and typography values in the other module stylesheets
 
 ## Out of scope
 
 - Routes, services, API contracts and business rules
-- New runtime dependencies
+- New runtime dependencies other than the Font Awesome Free icon font
 - Unrelated modules
 - Production deployment
 

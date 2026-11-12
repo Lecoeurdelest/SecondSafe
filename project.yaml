@@ -6775,10 +6775,13 @@ tasks:
     - frontend/src/modules/staffTheme.js
     - frontend/src/modules/admin/layout/AdminLayout.jsx
     - frontend/src/modules/moderator/layout/ModeratorLayout.jsx
+    - frontend/src/index.js
+    - frontend/package.json
+    - frontend/package-lock.json
     - Colour, radius, shadow and typography values in the other module stylesheets
     out_of_scope:
     - Routes, services, API contracts and business rules
-    - New runtime dependencies
+    - New runtime dependencies other than the Font Awesome Free icon font
     - Unrelated modules
     - Production deployment
     inputs:
