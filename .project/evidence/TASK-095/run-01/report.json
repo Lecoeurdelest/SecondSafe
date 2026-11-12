@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-095",
+  "spec_hash": "5f3ff960174a69146d562878f97acebb09ee15c4b33468ed6e568d4b7f0ebec5",
+  "source_hash": "06d8c403ca7fdb5b26407007a8858cd2b6b4fbd8271c6d82dc58fcd0c470c890",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "Staff roles are always shown in the light theme, so no dark capture differs",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-15",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new Dashboard tests, the extended AdminProducts tests and the existing suites pass; the build passes; the dashboards and the product management page show their figures, charts, queue, filters and actions with no overflow or error at 390 and 1280 px",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-095/run-01/frontend-test.txt",
+            ".project/evidence/TASK-095/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-095/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

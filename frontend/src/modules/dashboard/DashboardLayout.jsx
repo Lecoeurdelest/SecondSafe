@@ -1,12 +1,33 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Dashboard.css';
-import { ArrowUpRight, Clock, Package, SquaresFour } from '@phosphor-icons/react';
+import { Avatar, Breadcrumb, Menu, Typography } from 'antd';
+import { ArrowUpRight, Clock, LockKey, Package, SquaresFour } from '@phosphor-icons/react';
 
 export default function DashboardLayout({ role, title, description, children }) {
   const isAdmin = role === 'admin';
   const { pathname } = useLocation();
   const isProductsPage = pathname === '/admin/products';
+
+  const menuItems = [
+    {
+      type: 'group',
+      label: 'KHÔNG GIAN LÀM VIỆC',
+      children: [
+        { key: 'overview', icon: <SquaresFour />, label: <Link to={isAdmin ? '/admin' : '/staff'}>Tổng quan</Link> },
+        ...(isAdmin ? [{ key: 'products', icon: <Package />, label: <Link to="/admin/products">Quản lý sản phẩm</Link> }] : [])
+      ]
+    },
+    {
+      type: 'group',
+      label: 'TRUY CẬP NHANH',
+      children: [
+        { key: 'shop', icon: <ArrowUpRight />, label: <Link to="/">Về trang mua sắm</Link> },
+        { key: 'security', icon: <LockKey />, label: <Link to="/change-password">Bảo mật tài khoản</Link> }
+      ]
+    }
+  ];
+
   return (
     <div className={`dashboard-shell ${isAdmin ? 'dashboard-shell--admin' : 'dashboard-shell--staff'}`}>
       <aside className="dashboard-sidebar">
@@ -14,28 +35,14 @@ export default function DashboardLayout({ role, title, description, children }) 
           <span className="dashboard-sidebar__brand-mark" aria-hidden="true">S</span>
           <span className="dashboard-sidebar__brand-name">SecondSafe<small>Quản trị &amp; vận hành</small></span>
         </Link>
-        <div className="dashboard-sidebar__label">KHÔNG GIAN LÀM VIỆC</div>
-        <Link className={`dashboard-sidebar__item${!isProductsPage ? ' dashboard-sidebar__item--active' : ''}`} to={isAdmin ? '/admin' : '/staff'}>
-          <span className="dashboard-sidebar__item-icon" aria-hidden="true"><SquaresFour /></span>
-          <span>Tổng quan</span>
-        </Link>
-        {isAdmin && (
-          <Link className={`dashboard-sidebar__item${isProductsPage ? ' dashboard-sidebar__item--active' : ''}`} to="/admin/products">
-            <span className="dashboard-sidebar__item-icon" aria-hidden="true"><Package /></span>
-            <span>Quản lý sản phẩm</span>
-          </Link>
-        )}
-        <div className="dashboard-sidebar__label dashboard-sidebar__label--secondary">TRUY CẬP NHANH</div>
-        <Link className="dashboard-sidebar__item" to="/">
-          <span className="dashboard-sidebar__item-icon" aria-hidden="true"><ArrowUpRight /></span>
-          <span>Về trang mua sắm</span>
-        </Link>
-        <Link className="dashboard-sidebar__item" to="/change-password">
-          <span className="dashboard-sidebar__item-icon" aria-hidden="true">⌑</span>
-          <span>Bảo mật tài khoản</span>
-        </Link>
+        <Menu
+          className="dashboard-sidebar__menu"
+          mode="inline"
+          selectedKeys={[isProductsPage ? 'products' : 'overview']}
+          items={menuItems}
+        />
         <div className="dashboard-sidebar__profile">
-          <div className="dashboard-sidebar__avatar">{isAdmin ? 'A' : 'S'}</div>
+          <Avatar>{isAdmin ? 'A' : 'S'}</Avatar>
           <div className="dashboard-sidebar__profile-copy">
             <strong>{isAdmin ? 'Quản trị viên' : 'Nhân viên'}</strong>
             <span>{isAdmin ? 'Quản lý nền tảng' : 'Điều phối vận hành'}</span>
@@ -44,9 +51,7 @@ export default function DashboardLayout({ role, title, description, children }) 
       </aside>
       <div className="dashboard-main">
         <header className="dashboard-topbar">
-          <div className="dashboard-topbar__crumb">
-            <span>SecondSafe</span><span aria-hidden="true">/</span><strong>{isAdmin ? 'Quản trị' : 'Nhân viên'}</strong>
-          </div>
+          <Breadcrumb items={[{ title: 'SecondSafe' }, { title: <strong>{isAdmin ? 'Quản trị' : 'Nhân viên'}</strong> }]} />
           <Link className="dashboard-topbar__link" to="/">
             Về cửa hàng <span aria-hidden="true"><ArrowUpRight /></span>
           </Link>
@@ -54,9 +59,9 @@ export default function DashboardLayout({ role, title, description, children }) 
         <section className="dashboard-content">
           <div className="dashboard-heading">
             <div className="dashboard-heading__copy">
-              <p className="dashboard-eyebrow">{isAdmin ? 'TỔNG QUAN NỀN TẢNG' : 'TRUNG TÂM ĐIỀU PHỐI'}</p>
-              <h1>{title}</h1>
-              <p className="dashboard-heading__description">{description}</p>
+              <Typography.Text type="secondary" className="dashboard-eyebrow">{isAdmin ? 'TỔNG QUAN NỀN TẢNG' : 'TRUNG TÂM ĐIỀU PHỐI'}</Typography.Text>
+              <Typography.Title level={1}>{title}</Typography.Title>
+              <Typography.Paragraph type="secondary" className="dashboard-heading__description">{description}</Typography.Paragraph>
             </div>
             <div className="dashboard-heading__date">
               <span aria-hidden="true"><Clock /></span>
