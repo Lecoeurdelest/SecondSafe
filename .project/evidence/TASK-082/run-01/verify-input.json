@@ -1,0 +1,36 @@
+{
+  "task_id": "TASK-082",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The sign-in, registration, recovery and password change pages are rebuilt from Ant Design forms with inline validation; App tests pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`auth-capture.js`). For light and dark at 1280 and 390 px the script opens the sign-in page, submits it empty (counts the inline errors), fills it, toggles the password (checks the input type becomes text), submits (the canned response asks for a two-factor code, so it checks that step appears), then opens registration, recovery and, signed in, the password change page, checking horizontal overflow and page errors.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-login.png` | Sign-in page |\n| `light-w1280-login-validation.png` | Inline validation after submitting an empty form |\n| `dark-w1280-login-2fa.png` | Two-factor code step in the dark theme |\n| `light-w1280-register.png` | Registration form |\n| `dark-w390-register.png` | Registration at 390 px in the dark theme |\n| `light-w390-forgot.png` | Password recovery at 390 px |\n| `dark-w1280-change-password.png` | Password change in the dark theme |\n| `dark-w390-login.png` | Sign-in at 390 px in the dark theme |\n\nResults: in all four combinations the empty form showed two inline errors, the password toggle changed the input type, the two-factor step appeared after sign-in, no page overflowed horizontally and none raised an error. The pages keep the brand gradient on the primary button, the card on the page background in both themes, and fit a 390 px screen.\n\nNot observed: the real backend, a real mail provider and Google sign-in; the registration code step and the recovery reset step in the browser (covered by the App tests); long server error messages; a real phone, Firefox or WebKit.",
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the authentication pages with Ant Design forms and a shared AuthShell; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The real backend, a real mail provider and Google sign-in were not exercised",
+    "The frontend test suite is slower with Ant Design rendering in jsdom",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-25-2": {
+      "observed": "pass",
+      "note": "The App tests pass (sign-in, two-factor, Google, registration with emailed code, recovery, password change, inline validation); the build passes; the pages show inline validation, the password toggle and the two-factor step with no overflow or error in light and dark at 390 and 1280 px; the real backend and Google were not exercised",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

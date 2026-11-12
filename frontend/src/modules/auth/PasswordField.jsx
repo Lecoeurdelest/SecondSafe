@@ -1,41 +1,31 @@
 import React, { useState } from 'react';
+import { Button, Form, Input } from 'antd';
 
-export default function PasswordField({
-  id,
-  name,
-  label,
-  value,
-  onChange,
-  autoComplete,
-  minLength,
-  required = false
-}) {
+export default function PasswordField({ name, label, autoComplete, minLength, rules = [] }) {
   const [visible, setVisible] = useState(false);
+  const lengthRule = minLength ? [{ min: Number(minLength), message: `Mật khẩu cần ít nhất ${minLength} ký tự.` }] : [];
 
   return (
-    <div className="auth-field">
-      <label htmlFor={id}>{label}</label>
-      <div className="auth-password-control">
-        <input
-          id={id}
-          name={name || id}
-          type={visible ? 'text' : 'password'}
-          autoComplete={autoComplete}
-          minLength={minLength}
-          required={required}
-          value={value}
-          onChange={onChange}
-        />
-        <button
-          className="auth-password-toggle"
-          type="button"
-          aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-          aria-pressed={visible}
-          onClick={() => setVisible(current => !current)}
-        >
-          {visible ? 'Ẩn' : 'Hiện'}
-        </button>
-      </div>
-    </div>
+    <Form.Item
+      name={name}
+      label={label}
+      rules={[{ required: true, message: `Vui lòng nhập ${label.toLowerCase()}.` }, ...lengthRule, ...rules]}
+    >
+      <Input
+        type={visible ? 'text' : 'password'}
+        autoComplete={autoComplete}
+        suffix={(
+          <Button
+            type="text"
+            size="small"
+            aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+            aria-pressed={visible}
+            onClick={() => setVisible(current => !current)}
+          >
+            {visible ? 'Ẩn' : 'Hiện'}
+          </Button>
+        )}
+      />
+    </Form.Item>
   );
 }

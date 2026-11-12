@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-082",
+  "spec_hash": "dbc037db662d7ca89fc9ef116ccea604f255c7ef5eebdbd5a668af529f81f86c",
+  "source_hash": "ec06b479ed160b634daf88d4917c1342e9f735e1896ccff022b32956e9593c31",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The real backend, a real mail provider and Google sign-in were not exercised",
+    "The frontend test suite is slower with Ant Design rendering in jsdom",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-2",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The App tests pass (sign-in, two-factor, Google, registration with emailed code, recovery, password change, inline validation); the build passes; the pages show inline validation, the password toggle and the two-factor step with no overflow or error in light and dark at 390 and 1280 px; the real backend and Google were not exercised",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-082/run-01/frontend-test.txt",
+            ".project/evidence/TASK-082/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-082/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1720,6 +1720,35 @@
       "criteria": {
         "AC-WEB-25-1": "inconclusive"
       }
+    },
+    "TASK-082": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The sign-in, registration, recovery and password change pages are rebuilt from Ant Design forms with inline validation; App tests pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Third slice of the Ant Design goal: authentication pages"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild sign-in, registration, recovery and password change with Ant Design forms"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the authentication pages with Ant Design forms and a shared AuthShell; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-082/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-082.md",
+      "criteria": {
+        "AC-WEB-25-2": "inconclusive"
+      }
     }
   }
 }

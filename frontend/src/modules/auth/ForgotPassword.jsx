@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Button, Form, Input, Typography } from 'antd';
 import authService from '../../services/auth.service';
+import LinkButton from '../../ui/LinkButton';
+import AuthShell from './AuthShell';
 import PasswordField from './PasswordField';
-import './Auth.css';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [token, setToken] = useState('');
-  const [newPassword, setNewPassword] = useState('');
   const [step, setStep] = useState('request');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function requestRecovery(event) {
-    event.preventDefault();
+  async function requestRecovery(values) {
     setError('');
     setLoading(true);
     try {
-      const result = await authService.forgotPassword({ email });
+      const result = await authService.forgotPassword({ email: values.email });
+      setEmail(values.email);
       setNotice(result.message || 'Nếu email đã đăng ký, hướng dẫn khôi phục sẽ được gửi đến hộp thư.');
       setStep('reset');
     } catch (failure) {
@@ -28,8 +28,7 @@ export default function ForgotPassword() {
     }
   }
 
-  async function resetPassword(event) {
-    event.preventDefault();
+  async function resetPassword({ token, newPassword }) {
     setError('');
     setNotice('');
     setLoading(true);
@@ -45,44 +44,33 @@ export default function ForgotPassword() {
   }
 
   return (
-    <section className="auth-page">
-      <div className="auth-card">
-        <h1>Khôi phục mật khẩu</h1>
-        {notice && <p className="auth-feedback" role="status">{notice}</p>}
-        {error && <p className="auth-feedback auth-feedback--error" role="alert">{error}</p>}
-        {step === 'request' && (
-          <form className="auth-form" onSubmit={requestRecovery}>
-            <p className="auth-card__intro">Nhập email tài khoản để nhận liên kết/mã khôi phục.</p>
-            <label className="auth-field" htmlFor="recovery-email">
-              Email
-              <input id="recovery-email" type="email" autoComplete="email" required value={email} onChange={event => setEmail(event.target.value)} />
-            </label>
-            <button className="auth-submit" type="submit" disabled={loading}>{loading ? 'Đang gửi...' : 'Gửi hướng dẫn khôi phục'}</button>
-          </form>
-        )}
-        {step === 'reset' && (
-          <form className="auth-form" onSubmit={resetPassword}>
-            <p className="auth-card__intro">Nếu email tồn tại, hãy dùng mã khôi phục trong hộp thư. Mã hết hạn sau tối đa một giờ.</p>
-            <label className="auth-field" htmlFor="recovery-token">
-              Mã khôi phục
-              <input id="recovery-token" autoComplete="one-time-code" required value={token} onChange={event => setToken(event.target.value)} />
-            </label>
-            <PasswordField
-              id="recovery-password"
-              label="Mật khẩu mới"
-              autoComplete="new-password"
-              minLength="8"
-              required
-              value={newPassword}
-              onChange={event => setNewPassword(event.target.value)}
-            />
-            <p className="auth-policy">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</p>
-            <button className="auth-submit" type="submit" disabled={loading}>{loading ? 'Đang cập nhật...' : 'Đặt lại mật khẩu'}</button>
-          </form>
-        )}
-        {step === 'complete' && <Link className="auth-submit" to="/login">Đến trang đăng nhập</Link>}
-        {step !== 'complete' && <div className="auth-links"><Link to="/login">Quay lại đăng nhập</Link></div>}
-      </div>
-    </section>
+    <AuthShell
+      title="Khôi phục mật khẩu"
+      notice={notice}
+      error={error}
+      footer={step !== 'complete' ? <Link to="/login">Quay lại đăng nhập</Link> : null}
+    >
+      {step === 'request' && (
+        <Form name="recovery" layout="vertical" requiredMark={false} onFinish={requestRecovery}>
+          <Typography.Paragraph type="secondary">Nhập email tài khoản để nhận liên kết/mã khôi phục.</Typography.Paragraph>
+          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email.' }, { type: 'email', message: 'Email không hợp lệ.' }]}>
+            <Input type="email" autoComplete="email" />
+          </Form.Item>
+          <Button type="primary" htmlType="submit" size="large" block loading={loading}>{loading ? 'Đang gửi...' : 'Gửi hướng dẫn khôi phục'}</Button>
+        </Form>
+      )}
+      {step === 'reset' && (
+        <Form name="recovery-reset" layout="vertical" requiredMark={false} onFinish={resetPassword}>
+          <Typography.Paragraph type="secondary">Nếu email tồn tại, hãy dùng mã khôi phục trong hộp thư. Mã hết hạn sau tối đa một giờ.</Typography.Paragraph>
+          <Form.Item name="token" label="Mã khôi phục" rules={[{ required: true, message: 'Vui lòng nhập mã khôi phục.' }]}>
+            <Input autoComplete="one-time-code" />
+          </Form.Item>
+          <PasswordField name="newPassword" label="Mật khẩu mới" autoComplete="new-password" minLength="8" />
+          <Typography.Paragraph type="secondary">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</Typography.Paragraph>
+          <Button type="primary" htmlType="submit" size="large" block loading={loading}>{loading ? 'Đang cập nhật...' : 'Đặt lại mật khẩu'}</Button>
+        </Form>
+      )}
+      {step === 'complete' && <LinkButton type="primary" size="large" block to="/login">Đến trang đăng nhập</LinkButton>}
+    </AuthShell>
   );
 }

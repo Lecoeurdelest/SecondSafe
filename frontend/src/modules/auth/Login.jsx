@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Button, Divider, Form, Input } from 'antd';
+import { GoogleLogo } from '@phosphor-icons/react';
 import authService from '../../services/auth.service';
 import { saveSession } from '../../services/session.service';
+import AuthShell from './AuthShell';
 import PasswordField from './PasswordField';
-import './Auth.css';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
-  const [code, setCode] = useState('');
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
 
   function finishLogin(result) {
     saveSession(result);
     navigate(result.user.role === 'admin' ? '/admin' : result.user.role === 'moderator' ? '/staff' : '/');
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  async function signIn(values = credentials) {
     setError('');
     setLoading(true);
     try {
-      const result = await authService.login({ email, password });
-      if (result.requires2FA) setVerificationEmail(result.email || email);
+      const result = await authService.login(values);
+      setCredentials(values);
+      if (result.requires2FA) setVerificationEmail(result.email || values.email);
       else finishLogin(result);
     } catch (failure) {
       setError(failure.message || 'Không thể đăng nhập. Vui lòng thử lại.');
@@ -34,8 +34,7 @@ export default function Login() {
     }
   }
 
-  async function verifyCode(event) {
-    event.preventDefault();
+  async function verifyCode({ code }) {
     setError('');
     setLoading(true);
     try {
@@ -63,41 +62,36 @@ export default function Login() {
   }
 
   return (
-    <section className="auth-page">
-      <div className="auth-card">
-        <h1>Đăng nhập</h1>
-        <p className="auth-card__intro">Đăng nhập để mua hàng và quản lý tài khoản SecondSafe.</p>
-        {error && <p className="auth-feedback auth-feedback--error" role="alert">{error}</p>}
-        {!verificationEmail ? <form className="auth-form" onSubmit={handleSubmit}>
-          <label className="auth-field" htmlFor="login-email">
-            Email
-            <input id="login-email" type="email" autoComplete="email" required value={email} onChange={event => setEmail(event.target.value)} />
-          </label>
-          <PasswordField
-            id="login-password"
-            label="Mật khẩu"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={event => setPassword(event.target.value)}
-          />
-          <button className="auth-submit" type="submit" disabled={loading}>
-            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-          </button>
-        </form> : <form className="auth-form" onSubmit={verifyCode}>
+    <AuthShell
+      title="Đăng nhập"
+      intro="Đăng nhập để mua hàng và quản lý tài khoản SecondSafe."
+      error={error}
+      footer={[<Link key="forgot" to="/forgot-password">Quên mật khẩu?</Link>, <Link key="register" to="/register">Tạo tài khoản</Link>]}
+    >
+      {!verificationEmail ? (
+        <>
+          <Form name="login" layout="vertical" requiredMark={false} onFinish={signIn}>
+            <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email.' }, { type: 'email', message: 'Email không hợp lệ.' }]}>
+              <Input type="email" autoComplete="email" />
+            </Form.Item>
+            <PasswordField name="password" label="Mật khẩu" autoComplete="current-password" />
+            <Button type="primary" htmlType="submit" size="large" block loading={loading}>
+              {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+            </Button>
+          </Form>
+          <Divider plain>hoặc</Divider>
+          <Button size="large" block icon={<GoogleLogo weight="bold" />} disabled={loading} onClick={googleLogin}>Đăng nhập với Google</Button>
+        </>
+      ) : (
+        <Form name="login-code" layout="vertical" requiredMark={false} onFinish={verifyCode}>
           <p>Mã xác thực đã được gửi tới {verificationEmail}.</p>
-          <label className="auth-field" htmlFor="login-code">Mã xác thực 6 chữ số
-            <input id="login-code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength="6" required value={code} onChange={event => setCode(event.target.value)} />
-          </label>
-          <button className="auth-submit" type="submit" disabled={loading}>Xác thực đăng nhập</button>
-          <button className="auth-submit auth-submit--secondary" type="button" disabled={loading} onClick={handleSubmit}>Gửi lại mã</button>
-        </form>}
-        {!verificationEmail && <button className="auth-submit auth-submit--secondary" type="button" disabled={loading} onClick={googleLogin}>Đăng nhập với Google</button>}
-        <div className="auth-links">
-          <Link to="/forgot-password">Quên mật khẩu?</Link>
-          <Link to="/register">Tạo tài khoản</Link>
-        </div>
-      </div>
-    </section>
+          <Form.Item name="code" label="Mã xác thực 6 chữ số" rules={[{ required: true, message: 'Vui lòng nhập mã xác thực.' }, { pattern: /^[0-9]{6}$/, message: 'Mã gồm 6 chữ số.' }]}>
+            <Input inputMode="numeric" autoComplete="one-time-code" maxLength={6} />
+          </Form.Item>
+          <Button type="primary" htmlType="submit" size="large" block loading={loading}>Xác thực đăng nhập</Button>
+          <Button size="large" block disabled={loading} style={{ marginTop: 12 }} onClick={() => signIn()}>Gửi lại mã</Button>
+        </Form>
+      )}
+    </AuthShell>
   );
 }

@@ -14,6 +14,15 @@ if (!window.matchMedia) {
   });
 }
 
+if (!global.MessageChannel) {
+  global.MessageChannel = class {
+    constructor() {
+      this.port1 = { onmessage: null };
+      this.port2 = { postMessage: data => { setTimeout(() => this.port1.onmessage && this.port1.onmessage({ data }), 0); } };
+    }
+  };
+}
+
 if (!global.ResizeObserver) {
   global.ResizeObserver = class {
     observe() {}

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button, Form, Typography } from 'antd';
 import authService from '../../services/auth.service';
+import LinkButton from '../../ui/LinkButton';
+import AuthShell from './AuthShell';
 import PasswordField from './PasswordField';
-import './Auth.css';
 
 function hasSession() {
   try {
@@ -14,9 +16,8 @@ function hasSession() {
 
 export default function ChangePassword() {
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const [authenticated, setAuthenticated] = useState(hasSession);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,16 +34,14 @@ export default function ChangePassword() {
     };
   }, []);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  async function handleSubmit({ currentPassword, newPassword }) {
     setError('');
     setNotice('');
     setLoading(true);
     try {
       const result = await authService.changePassword({ currentPassword, newPassword });
       setNotice(result.message || 'Đổi mật khẩu thành công.');
-      setCurrentPassword('');
-      setNewPassword('');
+      form.resetFields();
     } catch (failure) {
       setError(failure.message || 'Không thể đổi mật khẩu.');
     } finally {
@@ -52,46 +51,27 @@ export default function ChangePassword() {
 
   if (!authenticated) {
     return (
-      <section className="auth-page">
-        <div className="auth-card">
-          <h1>Đổi mật khẩu</h1>
-          <p>Vui lòng đăng nhập để đổi mật khẩu.</p>
-          <Link to="/login">Đăng nhập</Link>
-        </div>
-      </section>
+      <AuthShell title="Đổi mật khẩu">
+        <Typography.Paragraph>Vui lòng đăng nhập để đổi mật khẩu.</Typography.Paragraph>
+        <LinkButton type="primary" to="/login">Đăng nhập</LinkButton>
+      </AuthShell>
     );
   }
 
   return (
-    <section className="auth-page">
-      <div className="auth-card">
-        <h1>Đổi mật khẩu</h1>
-        <p className="auth-card__intro">Xác nhận mật khẩu hiện tại trước khi thiết lập mật khẩu mới.</p>
-        {notice && <p className="auth-feedback" role="status">{notice}</p>}
-        {error && <p className="auth-feedback auth-feedback--error" role="alert">{error}</p>}
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <PasswordField
-            id="current-password"
-            label="Mật khẩu hiện tại"
-            autoComplete="current-password"
-            required
-            value={currentPassword}
-            onChange={event => setCurrentPassword(event.target.value)}
-          />
-          <PasswordField
-            id="new-password"
-            label="Mật khẩu mới"
-            autoComplete="new-password"
-            minLength="8"
-            required
-            value={newPassword}
-            onChange={event => setNewPassword(event.target.value)}
-          />
-          <p className="auth-policy">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</p>
-          <button className="auth-submit" type="submit" disabled={loading}>{loading ? 'Đang cập nhật...' : 'Đổi mật khẩu'}</button>
-        </form>
-        <div className="auth-links"><button type="button" onClick={() => navigate('/')}>Về trang chủ</button></div>
-      </div>
-    </section>
+    <AuthShell
+      title="Đổi mật khẩu"
+      intro="Xác nhận mật khẩu hiện tại trước khi thiết lập mật khẩu mới."
+      notice={notice}
+      error={error}
+      footer={<Button type="link" onClick={() => navigate('/')}>Về trang chủ</Button>}
+    >
+      <Form form={form} name="change-password" layout="vertical" requiredMark={false} onFinish={handleSubmit}>
+        <PasswordField name="currentPassword" label="Mật khẩu hiện tại" autoComplete="current-password" />
+        <PasswordField name="newPassword" label="Mật khẩu mới" autoComplete="new-password" minLength="8" />
+        <Typography.Paragraph type="secondary">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</Typography.Paragraph>
+        <Button type="primary" htmlType="submit" size="large" block loading={loading}>{loading ? 'Đang cập nhật...' : 'Đổi mật khẩu'}</Button>
+      </Form>
+    </AuthShell>
   );
 }

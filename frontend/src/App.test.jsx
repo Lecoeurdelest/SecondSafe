@@ -276,6 +276,35 @@ test('assistant and support pages are reachable from navigation and prompt guest
   expect(within(screen.getByRole('main')).getByRole('link', { name: 'Đăng nhập' })).toHaveAttribute('href', '/login');
 });
 
+test('the login and registration forms validate inline before calling the service', async () => {
+  window.history.replaceState({}, '', '/login');
+  const login = render(<App />);
+  await screen.findByRole('heading', { name: 'Đăng nhập' });
+
+  fireEvent.click(within(screen.getByRole('main')).getByRole('button', { name: 'Đăng nhập' }));
+  expect(await screen.findByText('Vui lòng nhập email.')).toBeInTheDocument();
+  expect(screen.getByText('Vui lòng nhập mật khẩu.')).toBeInTheDocument();
+
+  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'not-an-email' } });
+  fireEvent.change(screen.getByLabelText('Mật khẩu'), { target: { value: 'StrongPass1!' } });
+  fireEvent.click(within(screen.getByRole('main')).getByRole('button', { name: 'Đăng nhập' }));
+  expect(await screen.findByText('Email không hợp lệ.')).toBeInTheDocument();
+  expect(authService.login).not.toHaveBeenCalled();
+  login.unmount();
+
+  window.history.replaceState({}, '', '/register');
+  render(<App />);
+  await screen.findByRole('heading', { name: 'Đăng ký' });
+  fireEvent.change(screen.getByLabelText('Họ và tên'), { target: { value: 'Test Person' } });
+  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'person@example.test' } });
+  fireEvent.change(screen.getByLabelText('Số điện thoại'), { target: { value: '12345' } });
+  fireEvent.change(screen.getByLabelText('Mật khẩu'), { target: { value: 'short' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Gửi mã xác thực' }));
+  expect(await screen.findByText(/Số điện thoại gồm 10 hoặc 11 chữ số/)).toBeInTheDocument();
+  expect(screen.getByText('Mật khẩu cần ít nhất 8 ký tự.')).toBeInTheDocument();
+  expect(authService.requestRegistrationCode).not.toHaveBeenCalled();
+});
+
 test('login stores the token, notifies the header and returns to the home page', async () => {
   productService.getProducts.mockResolvedValue({ products: [], total: 0, totalPages: 0, limit: 20 });
   authService.login.mockResolvedValue({ token: 'signed-token', user: { fullName: 'Test', role: 'user' } });
