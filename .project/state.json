@@ -1778,6 +1778,35 @@
       "criteria": {
         "AC-WEB-25-3": "inconclusive"
       }
+    },
+    "TASK-084": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The product detail, cart and saved-listings pages are rebuilt from Ant Design components; the new tests and the App tests pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Fifth slice of the Ant Design goal: product detail, cart and saved listings"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the product detail, cart and saved-listings pages with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the product detail, cart and saved-listings pages with Ant Design components and made the frontend tests about five times faster; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-084/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-084.md",
+      "criteria": {
+        "AC-WEB-25-4": "inconclusive"
+      }
     }
   }
 }

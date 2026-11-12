@@ -7,7 +7,9 @@ import chatService from '../../services/chat.service';
 import PurchaseRequest from '../order/PurchaseRequest';
 import ReportProduct from '../report/ReportProduct';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
+import LinkButton from '../../ui/LinkButton';
 import './ProductDetail.css';
+import { Alert, Button, Card, Col, Descriptions, Divider, Flex, Row, Spin, Typography } from 'antd';
 import { ArrowLeft, Heart } from '@phosphor-icons/react';
 
 const CONDITION_LABELS = {
@@ -162,122 +164,127 @@ export default function ProductDetail() {
   }
 
   if (loading) {
-    return <section className="product-detail-state" role="status">Đang tải thông tin sản phẩm...</section>;
+    return (
+      <Flex vertical align="center" justify="center" gap={12} className="product-detail-state" role="status">
+        <Spin size="large" />
+        <Typography.Text type="secondary">Đang tải thông tin sản phẩm...</Typography.Text>
+      </Flex>
+    );
   }
 
   if (error || !product) {
-    const notFound = error?.status === 404 || !product;
+    const notFound = !error || error.status === 404;
     return (
-      <section className="product-detail-state" role={notFound ? 'status' : 'alert'}>
-        <h1>{notFound ? 'Không tìm thấy sản phẩm' : 'Không thể tải sản phẩm'}</h1>
-        <p>{notFound ? 'Sản phẩm có thể đã bị gỡ hoặc không còn được bán.' : error.message}</p>
-        <Link to="/">Quay lại danh sách sản phẩm</Link>
-      </section>
+      <Flex vertical align="center" justify="center" gap={12} className="product-detail-state" role={notFound ? 'status' : 'alert'}>
+        <Typography.Title level={1}>{notFound ? 'Không tìm thấy sản phẩm' : 'Không thể tải sản phẩm'}</Typography.Title>
+        <Typography.Paragraph type="secondary">
+          {notFound ? 'Sản phẩm có thể đã bị gỡ hoặc không còn được bán.' : error.message}
+        </Typography.Paragraph>
+        <LinkButton type="primary" to="/">Quay lại danh sách sản phẩm</LinkButton>
+      </Flex>
     );
   }
 
   const sellerName = product.seller?.fullName || 'Người bán SecondSafe';
   const sellerId = product.seller?._id;
   const isOwner = Boolean(sellerId) && String(currentUserId()) === String(sellerId);
+  const facts = [
+    product.condition && { key: 'condition', label: 'Tình trạng', children: CONDITION_LABELS[product.condition] || product.condition },
+    (product.location?.district || product.location?.city) && {
+      key: 'area',
+      label: 'Khu vực',
+      children: [product.location.district, product.location.city].filter(Boolean).join(', ')
+    }
+  ].filter(Boolean);
 
   return (
     <article className="product-detail container">
-      <Link className="product-detail__back" to="/"><ArrowLeft /> Quay lại danh sách</Link>
-      <div className="product-detail__layout">
-        <div className="product-detail__image">
-          <img
-            src={getProductImageUrl(product)}
-            alt={product.title}
-            onError={event => handleImageError(event, 'product')}
-          />
-        </div>
-        <section className="product-detail__information">
-          <p className="product-detail__category">{product.category?.name || 'Sản phẩm'}</p>
-          <h1>{product.title}</h1>
-          <p className="product-detail__price">{formatPrice(product.price)}</p>
-          <div className="product-detail__actions">
-            <button
-              type="button"
-              className="product-detail__button product-detail__button--primary"
-              disabled={actionLoading}
-              onClick={() => {
-                if (requireSession()) {
-                  setActionError('');
-                  setNotice('');
-                  setNoticeDestination('');
-                  setPurchaseOpen(true);
-                }
-              }}
-            >
-              Mua ngay
-            </button>
-            <button
-              type="button"
-              className="product-detail__button"
-              disabled={actionLoading}
-              onClick={handleAddToCart}
-            >
-              Thêm vào giỏ hàng
-            </button>
-            <button
-              type="button"
-              className="product-detail__button"
-              aria-pressed={isFavorite}
-              disabled={actionLoading}
-              onClick={handleFavorite}
-            >
-              {isFavorite ? <><Heart weight="fill" /> Đã yêu thích</> : <><Heart /> Thêm yêu thích</>}
-            </button>
-            <button
-              type="button"
-              className="product-detail__button"
-              disabled={actionLoading}
-              onClick={handleChatWithSeller}
-            >
-              Nhắn tin người bán
-            </button>
-          </div>
-          {actionError && <p className="product-detail__feedback product-detail__feedback--error" role="alert">{actionError}</p>}
-          {notice && (
-            <p className="product-detail__feedback" role="status">
-              {notice} {noticeDestination && <Link to={noticeDestination}>Mở danh sách</Link>}
-            </p>
-          )}
-          <dl className="product-detail__facts">
-            {product.condition && (
-              <>
-                <dt>Tình trạng</dt>
-                <dd>{CONDITION_LABELS[product.condition] || product.condition}</dd>
-              </>
-            )}
-            {(product.location?.district || product.location?.city) && (
-              <>
-                <dt>Khu vực</dt>
-                <dd>{[product.location.district, product.location.city].filter(Boolean).join(', ')}</dd>
-              </>
-            )}
-          </dl>
-          <section className="product-detail__description">
-            <h2>Mô tả sản phẩm</h2>
-            <p>{product.description}</p>
-          </section>
-          <section className="product-detail__seller">
-            <h2>Người bán</h2>
-            <p>{sellerId ? <Link to={`/user/${sellerId}`}>{sellerName}</Link> : sellerName}</p>
-            {isOwner ? (
-              <p><Link to={`/product/${product._id}/edit`}>Chỉnh sửa tin đăng</Link> · <Link to="/my-products">Quản lý tin của tôi</Link></p>
-            ) : (
-              <button
-                type="button"
-                className="product-detail__report"
-                onClick={() => { if (requireSession()) setReportOpen(true); }}
+      <LinkButton className="product-detail__back" type="link" to="/" icon={<ArrowLeft />}>Quay lại danh sách</LinkButton>
+      <Row gutter={[{ xs: 0, md: 32 }, 24]}>
+        <Col xs={24} md={13}>
+          <Card className="product-detail__image" styles={{ body: { padding: 0 } }}>
+            <img
+              src={getProductImageUrl(product)}
+              alt={product.title}
+              onError={event => handleImageError(event, 'product')}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} md={11}>
+          <Flex vertical gap={16} className="product-detail__information">
+            <Typography.Text type="secondary">{product.category?.name || 'Sản phẩm'}</Typography.Text>
+            <Typography.Title level={1}>{product.title}</Typography.Title>
+            <Typography.Text className="product-detail__price">{formatPrice(product.price)}</Typography.Text>
+            <Flex wrap gap={10} className="product-detail__actions">
+              <Button
+                type="primary"
+                size="large"
+                disabled={actionLoading}
+                onClick={() => {
+                  if (requireSession()) {
+                    setActionError('');
+                    setNotice('');
+                    setNoticeDestination('');
+                    setPurchaseOpen(true);
+                  }
+                }}
               >
-                Báo cáo tin đăng này
-              </button>
+                Mua ngay
+              </Button>
+              <Button size="large" disabled={actionLoading} onClick={handleAddToCart}>
+                Thêm vào giỏ hàng
+              </Button>
+              <Button
+                size="large"
+                aria-pressed={isFavorite}
+                disabled={actionLoading}
+                icon={<Heart weight={isFavorite ? 'fill' : 'regular'} />}
+                onClick={handleFavorite}
+              >
+                {isFavorite ? 'Đã yêu thích' : 'Thêm yêu thích'}
+              </Button>
+              <Button size="large" disabled={actionLoading} onClick={handleChatWithSeller}>
+                Nhắn tin người bán
+              </Button>
+            </Flex>
+            {actionError && <Alert type="error" showIcon role="alert" title={actionError} />}
+            {notice && (
+              <Alert
+                type="success"
+                showIcon
+                role="status"
+                title={<>{notice} {noticeDestination && <Link to={noticeDestination}>Mở danh sách</Link>}</>}
+              />
             )}
-          </section>
-        </section>
-      </div>
+            {facts.length > 0 && <Descriptions column={1} size="small" items={facts} />}
+            <section className="product-detail__description">
+              <Divider />
+              <Typography.Title level={2}>Mô tả sản phẩm</Typography.Title>
+              <Typography.Paragraph>{product.description}</Typography.Paragraph>
+            </section>
+            <section className="product-detail__seller">
+              <Divider />
+              <Typography.Title level={2}>Người bán</Typography.Title>
+              <Typography.Paragraph>{sellerId ? <Link to={`/user/${sellerId}`}>{sellerName}</Link> : sellerName}</Typography.Paragraph>
+              {isOwner ? (
+                <Flex wrap gap={8}>
+                  <LinkButton type="default" to={`/product/${product._id}/edit`}>Chỉnh sửa tin đăng</LinkButton>
+                  <LinkButton type="default" to="/my-products">Quản lý tin của tôi</LinkButton>
+                </Flex>
+              ) : (
+                <Button
+                  type="link"
+                  danger
+                  className="product-detail__report"
+                  onClick={() => { if (requireSession()) setReportOpen(true); }}
+                >
+                  Báo cáo tin đăng này
+                </Button>
+              )}
+            </section>
+          </Flex>
+        </Col>
+      </Row>
       {purchaseOpen && (
         <PurchaseRequest
           product={product}

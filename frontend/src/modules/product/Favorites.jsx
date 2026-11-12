@@ -2,7 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import favoriteService from '../../services/favorite.service';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
+import LinkButton from '../../ui/LinkButton';
 import './Favorites.css';
+import { Alert, Button, Card, Col, Empty, Flex, Pagination, Popconfirm, Row, Spin, Statistic, Tag, Typography } from 'antd';
 import { Heart } from '@phosphor-icons/react';
 
 function hasSession() {
@@ -60,12 +62,7 @@ const Favorites = () => {
     fetchFavorites();
   }, [fetchFavorites]);
 
-  const handleRemoveFavorite = async (id, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!window.confirm('Xóa khỏi yêu thích?')) return;
-
+  const handleRemoveFavorite = async (id) => {
     try {
       await favoriteService.removeFavorite(id);
 
@@ -86,121 +83,112 @@ const Favorites = () => {
 
   if (loading && favorites.length === 0) {
     return (
-      <div className="favorites-container">
-        <div className="favorites-loading">Đang tải danh sách tin đã lưu...</div>
+      <div className="favorites-container container">
+        <Flex vertical align="center" gap={12} className="favorites-loading" role="status">
+          <Spin size="large" />
+          <Typography.Text type="secondary">Đang tải danh sách tin đã lưu...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
   if (!hasSession()) {
     return (
-      <div className="favorites-container">
-        <h1>Tin đã lưu</h1>
-        <p role="status">Đăng nhập để xem danh sách sản phẩm yêu thích.</p>
-        <Link to="/">Khám phá sản phẩm</Link>
+      <div className="favorites-container container">
+        <Typography.Title level={1}>Tin đã lưu</Typography.Title>
+        <Alert type="info" showIcon role="status" title="Đăng nhập để xem danh sách sản phẩm yêu thích." />
+        <LinkButton type="link" to="/">Khám phá sản phẩm</LinkButton>
       </div>
     );
   }
 
   return (
-    <div className="favorites-container">
-      <div className="favorites-header">
+    <div className="favorites-container container">
+      <Flex justify="space-between" align="center" wrap gap={16} className="favorites-header">
         <div>
-          <h1>Tin đã lưu</h1>
-          <p className="favorites-subtitle">Quản lý nhanh các sản phẩm bạn đang quan tâm</p>
+          <Typography.Title level={1}>Tin đã lưu</Typography.Title>
+          <Typography.Text type="secondary">Quản lý nhanh các sản phẩm bạn đang quan tâm</Typography.Text>
         </div>
-        <div className="favorites-stat">
-          <span className="favorites-stat__value">{pagination.total}</span>
-          <span className="favorites-stat__label">sản phẩm</span>
-        </div>
-      </div>
+        <Statistic className="favorites-stat" title="sản phẩm" value={pagination.total} />
+      </Flex>
 
-      {error && <p className="favorites-error" role="alert">{error}</p>}
+      {error && <Alert className="favorites-error" type="error" showIcon role="alert" title={error} />}
 
       {favorites.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon"><Heart /></div>
-          <h2>Chưa có tin đã lưu</h2>
-          <p>Hãy khám phá sản phẩm và nhấn lưu để xem lại tại đây.</p>
-          <Link to="/" className="favorites-explore-btn">
-            Khám phá sản phẩm
-          </Link>
-        </div>
+        <Empty
+          className="favorites-empty"
+          image={<Heart size={56} />}
+          description={(
+            <Flex vertical gap={4}>
+              <Typography.Title level={2}>Chưa có tin đã lưu</Typography.Title>
+              <Typography.Text type="secondary">Hãy khám phá sản phẩm và nhấn lưu để xem lại tại đây.</Typography.Text>
+            </Flex>
+          )}
+        >
+          <LinkButton type="primary" to="/">Khám phá sản phẩm</LinkButton>
+        </Empty>
       ) : (
         <>
-          <div className="favorites-grid">
+          <Row gutter={[{ xs: 10, md: 20 }, { xs: 10, md: 20 }]} className="favorites-grid">
             {favorites.map(fav => {
               const p = fav.product;
               if (!p) return null;
 
-              const productImage = getProductImageUrl(p);
-
               return (
-                <div key={fav._id} className="favorite-card">
-
-                  <Link to={`/product/${p._id}`}>
-                    <div className="product-image">
-                      <img
-                        src={productImage}
-                        alt={p.title}
-                        loading="lazy"
-                        onError={(e) => handleImageError(e, 'product')}
-                      />
-                      <div className="favorite-badge">Đã lưu</div>
-                    </div>
-
-                    <div className="product-info">
-                      <div className="product-title">{p.title}</div>
-                      <div className="product-price">{formatPrice(Number(p.price || 0))}</div>
-                      <div className="product-meta">
-                        <span>{p.location?.district || 'N/A'}</span>
-                        <span>{p.location?.city || 'N/A'}</span>
-                      </div>
-                      <div className="product-seller">
-                        Người bán: <strong>{p.seller?.fullName || 'N/A'}</strong>
-                      </div>
-                    </div>
-                  </Link>
-
-                  <button
-                    className="remove-favorite-btn"
-                    onClick={(e) => handleRemoveFavorite(p._id, e)}
-                    title="Xóa khỏi yêu thích"
+                <Col key={fav._id} xs={12} md={8} lg={6}>
+                  <Card
+                    className="favorite-card"
+                    hoverable
+                    cover={(
+                      <Link to={`/product/${p._id}`} className="favorite-card__image">
+                        <img
+                          src={getProductImageUrl(p)}
+                          alt={p.title}
+                          loading="lazy"
+                          onError={(e) => handleImageError(e, 'product')}
+                        />
+                        <Tag className="favorite-card__badge" variant="solid">Đã lưu</Tag>
+                      </Link>
+                    )}
+                    actions={[
+                      <Popconfirm
+                        key="remove"
+                        title="Xóa khỏi yêu thích?"
+                        okText="Bỏ lưu"
+                        cancelText="Hủy"
+                        onConfirm={() => handleRemoveFavorite(p._id)}
+                      >
+                        <Button type="text" danger title="Xóa khỏi yêu thích">Bỏ lưu</Button>
+                      </Popconfirm>
+                    ]}
                   >
-                    Bỏ lưu
-                  </button>
-                </div>
+                    <Link to={`/product/${p._id}`} className="favorite-card__info">
+                      <Typography.Text className="favorite-card__title">{p.title}</Typography.Text>
+                      <Typography.Text strong className="favorite-card__price">{formatPrice(Number(p.price || 0))}</Typography.Text>
+                      <Flex gap={8} className="favorite-card__meta">
+                        <Typography.Text type="secondary">{p.location?.district || 'N/A'}</Typography.Text>
+                        <Typography.Text type="secondary">{p.location?.city || 'N/A'}</Typography.Text>
+                      </Flex>
+                      <Typography.Text type="secondary">
+                        Người bán: <strong>{p.seller?.fullName || 'N/A'}</strong>
+                      </Typography.Text>
+                    </Link>
+                  </Card>
+                </Col>
               );
             })}
-          </div>
+          </Row>
 
-          {pagination.totalPages > 1 && (
-            <div className="pagination">
-              <button
-                className="pagination-btn"
-                disabled={pagination.page === 1}
-                onClick={() =>
-                  setPagination(prev => ({ ...prev, page: prev.page - 1 }))
-                }
-              >
-                Trang trước
-              </button>
-
-              <span className="pagination-text">
-                Trang {pagination.page} / {pagination.totalPages}
-              </span>
-
-              <button
-                className="pagination-btn"
-                disabled={pagination.page === pagination.totalPages}
-                onClick={() =>
-                  setPagination(prev => ({ ...prev, page: prev.page + 1 }))
-                }
-              >
-                Trang sau
-              </button>
-            </div>
-          )}
+          <Pagination
+            className="favorites-pagination"
+            align="center"
+            hideOnSinglePage
+            showSizeChanger={false}
+            current={pagination.page}
+            pageSize={pagination.limit}
+            total={pagination.total}
+            onChange={page => setPagination(prev => ({ ...prev, page }))}
+          />
         </>
       )}
     </div>
