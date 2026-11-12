@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-084",
+  "spec_hash": "fa90f99bc74189258716c594986bb79a974112bafdb919577c1b14c4666c2bb8",
+  "source_hash": "2e82e838db6fe3a7a1f28922e36671f19c3275c59c58fa56a82b2c15017bdaa1",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The purchase and report dialogs and the real backend were not exercised",
+    "Role queries in tests no longer see styles that come from stylesheets, only inline styles and Ant Design hidden classes",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-4",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new ProductDetail, Cart and Favorites tests and the App tests pass; the build passes; the pages show the actions, notices, pager and removal confirmation with no overflow or error in light and dark at 390 and 1280 px; the purchase and report dialogs and the real backend were not exercised",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-084/run-01/frontend-test.txt",
+            ".project/evidence/TASK-084/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-084/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

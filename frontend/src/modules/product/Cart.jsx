@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import cartService from '../../services/cart.service';
 import PurchaseRequest from '../order/PurchaseRequest';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
+import LinkButton from '../../ui/LinkButton';
 import './Cart.css';
+import { Alert, Button, Card, Empty, Flex, Pagination, Spin, Typography } from 'antd';
 
 function hasSession() {
   try {
@@ -77,96 +79,99 @@ export default function Cart() {
   if (!hasSession()) {
     return (
       <section className="cart-page container">
-        <h1>Giỏ hàng</h1>
-        <p role="status">Đăng nhập để xem giỏ hàng đã lưu trên tài khoản của bạn.</p>
-        <Link to="/">Tiếp tục xem sản phẩm</Link>
+        <Typography.Title level={1}>Giỏ hàng</Typography.Title>
+        <Alert type="info" showIcon role="status" title="Đăng nhập để xem giỏ hàng đã lưu trên tài khoản của bạn." />
+        <LinkButton type="link" to="/">Tiếp tục xem sản phẩm</LinkButton>
       </section>
     );
   }
 
   if (loading) {
-    return <section className="cart-page container" role="status">Đang tải giỏ hàng...</section>;
+    return (
+      <Flex vertical align="center" gap={12} className="cart-page container" role="status">
+        <Spin size="large" />
+        <Typography.Text type="secondary">Đang tải giỏ hàng...</Typography.Text>
+      </Flex>
+    );
   }
 
   return (
     <section className="cart-page container">
-      <div className="cart-page__heading">
+      <Flex justify="space-between" align="center" wrap gap={16} className="cart-page__heading">
         <div>
-          <h1>Giỏ hàng</h1>
-          <p>{pagination.total} sản phẩm</p>
+          <Typography.Title level={1}>Giỏ hàng</Typography.Title>
+          <Typography.Text type="secondary">{pagination.total} sản phẩm</Typography.Text>
         </div>
-        <Link to="/">Tiếp tục mua sắm</Link>
-      </div>
+        <LinkButton to="/">Tiếp tục mua sắm</LinkButton>
+      </Flex>
 
-      {error && <p className="cart-page__feedback cart-page__feedback--error" role="alert">{error}</p>}
-      {notice && <p className="cart-page__feedback" role="status">{notice}</p>}
+      {error && <Alert className="cart-page__feedback" type="error" showIcon role="alert" title={error} />}
+      {notice && <Alert className="cart-page__feedback" type="success" showIcon role="status" title={notice} />}
 
       {items.length === 0 ? (
-        <div className="cart-page__empty">
-          <h2>Giỏ hàng đang trống</h2>
-          <p>Thêm sản phẩm bạn quan tâm để xem lại tại đây.</p>
-          <Link to="/">Khám phá sản phẩm</Link>
-        </div>
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description={(
+            <Flex vertical gap={4}>
+              <Typography.Title level={2}>Giỏ hàng đang trống</Typography.Title>
+              <Typography.Text type="secondary">Thêm sản phẩm bạn quan tâm để xem lại tại đây.</Typography.Text>
+            </Flex>
+          )}
+        >
+          <LinkButton type="primary" to="/">Khám phá sản phẩm</LinkButton>
+        </Empty>
       ) : (
-        <div className="cart-page__items">
+        <Flex vertical gap={12} className="cart-page__items">
           {items.map(item => {
             const product = item.product;
             if (!product) return null;
             return (
-              <article className="cart-item" key={item._id}>
-                <Link className="cart-item__image" to={`/product/${product._id}`}>
-                  <img
-                    src={getProductImageUrl(product)}
-                    alt={product.title}
-                    onError={event => handleImageError(event, 'product')}
-                  />
-                </Link>
-                <div className="cart-item__details">
-                  <Link to={`/product/${product._id}`}><h2>{product.title}</h2></Link>
-                  <p>{formatPrice(product.price)}</p>
-                  <p className="cart-item__seller">Người bán: {product.seller?.fullName || 'SecondSafe'}</p>
-                </div>
-                <div className="cart-item__actions">
-                  <button
-                    type="button"
-                    className="cart-item__buy"
-                    onClick={() => setPurchaseProduct(product)}
-                    disabled={busyProductId === product._id}
-                  >
-                    Mua ngay
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleRemove(product._id)}
-                    disabled={busyProductId === product._id}
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </article>
+              <Card className="cart-item" key={item._id}>
+                <Flex align="center" gap={16} className="cart-item__body">
+                  <Link className="cart-item__image" to={`/product/${product._id}`}>
+                    <img
+                      src={getProductImageUrl(product)}
+                      alt={product.title}
+                      onError={event => handleImageError(event, 'product')}
+                    />
+                  </Link>
+                  <Flex vertical gap={4} className="cart-item__details">
+                    <Link to={`/product/${product._id}`}><Typography.Title level={2}>{product.title}</Typography.Title></Link>
+                    <Typography.Text className="cart-item__price">{formatPrice(product.price)}</Typography.Text>
+                    <Typography.Text type="secondary">Người bán: {product.seller?.fullName || 'SecondSafe'}</Typography.Text>
+                  </Flex>
+                  <Flex gap={8} className="cart-item__actions">
+                    <Button
+                      type="primary"
+                      onClick={() => setPurchaseProduct(product)}
+                      disabled={busyProductId === product._id}
+                    >
+                      Mua ngay
+                    </Button>
+                    <Button
+                      danger
+                      onClick={() => handleRemove(product._id)}
+                      disabled={busyProductId === product._id}
+                    >
+                      Xóa
+                    </Button>
+                  </Flex>
+                </Flex>
+              </Card>
             );
           })}
-          {pagination.totalPages > 1 && (
-            <div className="cart-page__pagination">
-              <button
-                type="button"
-                disabled={pagination.page <= 1}
-                onClick={() => loadCart(pagination.page - 1)}
-              >
-                Trang trước
-              </button>
-              <span>Trang {pagination.page} / {pagination.totalPages}</span>
-              <button
-                type="button"
-                disabled={pagination.page >= pagination.totalPages}
-                onClick={() => loadCart(pagination.page + 1)}
-              >
-                Trang sau
-              </button>
-            </div>
-          )}
-          <p className="cart-page__note">Mỗi sản phẩm được tạo thành một đơn hàng riêng khi mua.</p>
-        </div>
+          <Pagination
+            className="cart-page__pagination"
+            align="center"
+            hideOnSinglePage
+            showSizeChanger={false}
+            current={pagination.page}
+            pageSize={pagination.limit}
+            total={pagination.total}
+            onChange={loadCart}
+          />
+          <Typography.Text type="secondary" className="cart-page__note">Mỗi sản phẩm được tạo thành một đơn hàng riêng khi mua.</Typography.Text>
+        </Flex>
       )}
 
       {purchaseProduct && (
