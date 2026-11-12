@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-083",
+  "spec_hash": "51fd1b9bdf53a981327adadd47f62a9a12b7c90b79a545b8c08a9f506ef97264",
+  "source_hash": "2fd89cebdc7455c0cdea4f3bbafcc641e10531db67463aef97ace54319428055",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The product query was not exercised against the real backend in this task",
+    "The frontend test suite is slower with Ant Design rendering in jsdom",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-3",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The Home tests (cards as links, loading, empty and error states with retry, draft search, category chips, selects) and the App tests pass; the build passes; the page shows the hero search, chips, selects, grid and states with no overflow or error in light and dark at 390, 1280 and 1920 px; typing sends no request and submitting sends the combined query; the real backend was not exercised",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-083/run-01/frontend-test.txt",
+            ".project/evidence/TASK-083/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-083/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

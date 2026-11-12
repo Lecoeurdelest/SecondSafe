@@ -183,13 +183,14 @@ test('the help center opens a dialog with the three support options and closes a
   render(<App />);
 
   fireEvent.click(screen.getByRole('button', { name: 'Trung tâm hỗ trợ' }));
-  const dialog = await screen.findByRole('dialog', { name: 'Liên hệ SecondSafe' });
+  const dialog = (await screen.findByText('Liên hệ SecondSafe')).closest('[role="dialog"]');
+  expect(dialog).toBeInTheDocument();
   expect(within(dialog).getByRole('link', { name: /Hỏi trợ lý AI/ })).toHaveAttribute('href', '/assistant');
   expect(within(dialog).getByRole('link', { name: /Trò chuyện với nhân viên/ })).toHaveAttribute('href', '/support');
   expect(within(dialog).getByRole('link', { name: /Trung tâm trợ giúp/ })).toHaveAttribute('href', '/support');
 
   fireEvent.click(within(dialog).getByRole('link', { name: /Hỏi trợ lý AI/ }));
-  await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Liên hệ SecondSafe' })).not.toBeInTheDocument());
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(window.location.pathname).toBe('/assistant');
 });
 

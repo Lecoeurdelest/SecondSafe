@@ -3081,6 +3081,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-3
+      statement: The home page and the product list are built from Ant Design components, with search, category, condition and sort
+        controls that stay in step with the product query, product cards that open the listing as a real link, loading, empty and
+        error states, and a load-more button, and work from 360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7123,6 +7130,50 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: One AuthShell (Card, Typography, Alert, Flex) holds the title, intro, notice, error and footer links. Each page uses an Ant Design Form with rules for required fields, email, phone, six-digit code and password length; PasswordField keeps the "Hiện/Ẩn mật khẩu" toggle as a button inside the input. Service calls, step order and texts are unchanged. Test setup gains a timer-based MessageChannel because Ant Design forms use it.
+  - id: TASK-083
+    title: Ant Design home page and product list
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-3
+    objective: Rebuild the home page, the product list and the product card from Ant Design components and remove the unused hand-written footer, mobile menu and search bar components.
+    in_scope:
+    - frontend/src/modules/home
+    - frontend/src/components/ProductCard.jsx
+    - frontend/src/components/ProductList.jsx
+    - frontend/src/components/ProductComponents.css
+    - frontend/src/components/Footer.jsx
+    - frontend/src/components/Footer.css
+    - frontend/src/components/MobileMenu.jsx
+    - frontend/src/components/MobileMenu.css
+    - frontend/src/components/SearchBar.jsx
+    - frontend/src/services/language.service.js
+    - frontend/src/ui/antdTheme.js
+    - frontend/src/setupTests.js
+    - frontend/src/App.test.jsx
+    out_of_scope:
+    - Product detail, creation, editing, favourites and cart pages (later tasks)
+    - Services, routes, the product query and its API parameters
+    - The location selector used by listing forms
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/home/Home.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: The hero search is a form made of Select, Input and Button; the search text and city are drafts that reach the query only when the form is submitted, so typing no longer sends a request per keystroke. Category chips are Buttons with aria-pressed that toggle the filter, and condition and sort are Selects with clearable values. The list is a Row and Col grid of Card components wrapped in a router Link, with Spin, Empty and Alert for the loading, empty and error states. The arrow glyphs in the sort labels become words to satisfy the icon policy, and their English translations are added. The footer, mobile menu and search bar components had no importers and are deleted.
 verification:
   thresholds:
     standard: 0.95
