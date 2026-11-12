@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import chatService, { chatImageUrl, connectChatSocket } from '../../services/chat.service';
 import OfferCard from './OfferCard';
+import LinkButton from '../../ui/LinkButton';
 import './Chat.css';
+import { Alert, Badge, Button, Card, Empty, Flex, Form, Input, Typography } from 'antd';
 import { Camera, CircleNotch } from '@phosphor-icons/react';
 
 const TYPING_IDLE_MS = 1500;
@@ -54,6 +56,7 @@ export default function Chat() {
   const socketRef = useRef(null);
   const typingTimer = useRef(null);
   const listEnd = useRef(null);
+  const fileInput = useRef(null);
 
   const loadConversations = useCallback(async () => {
     try {
@@ -153,8 +156,7 @@ export default function Chat() {
     }
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  function handleSubmit() {
     const content = draft.trim();
     if (!content || !conversationId) return;
     setDraft('');
@@ -185,8 +187,7 @@ export default function Chat() {
     setMessages((await chatService.getMessages(conversationId)).messages);
   }
 
-  async function handleOfferSubmit(event) {
-    event.preventDefault();
+  async function handleOfferSubmit() {
     const agreedPrice = Number(offerPrice);
     if (!Number.isFinite(agreedPrice) || agreedPrice <= 0) return setError('Giá đề nghị phải lớn hơn 0');
     setOfferSending(true);
@@ -218,7 +219,13 @@ export default function Chat() {
   }
 
   if (!token) {
-    return <section className="chat-empty"><h1>Tin nhắn</h1><p>Vui lòng đăng nhập để xem tin nhắn.</p><Link to="/">Về trang chủ</Link></section>;
+    return (
+      <section className="chat-empty container">
+        <Typography.Title level={1}>Tin nhắn</Typography.Title>
+        <Typography.Paragraph>Vui lòng đăng nhập để xem tin nhắn.</Typography.Paragraph>
+        <LinkButton type="primary" to="/">Về trang chủ</LinkButton>
+      </section>
+    );
   }
 
   const active = conversations.find(item => idOf(item) === conversationId);
@@ -227,37 +234,44 @@ export default function Chat() {
 
   return (
     <section className="chat container" aria-label="Tin nhắn">
-      <aside className="chat-sidebar">
-        <h1 className="chat-title">Tin nhắn</h1>
-        {conversations.length === 0 && <p className="chat-muted">Chưa có cuộc trò chuyện nào.</p>}
-        <ul className="chat-list">
+      <Card className="chat-sidebar">
+        <Typography.Title level={1} className="chat-title">Tin nhắn</Typography.Title>
+        {conversations.length === 0 && <Typography.Text type="secondary">Chưa có cuộc trò chuyện nào.</Typography.Text>}
+        <Flex vertical gap={6} className="chat-list">
           {conversations.map(item => {
             const other = counterpart(item, myId);
             const unread = idOf(item.buyerId) === myId ? item.buyerUnreadCount : item.sellerUnreadCount;
+            const selected = idOf(item) === conversationId;
             return (
-              <li key={idOf(item)}>
-                <button type="button" className={`chat-list-item${idOf(item) === conversationId ? ' is-active' : ''}`}
-                  onClick={() => navigate(`/chat/${idOf(item)}`)}>
-                  <span className="chat-name">
-                    {online.has(idOf(other)) && <span className="chat-online" aria-label="Đang hoạt động" />}
-                    {other?.fullName || 'Người dùng'}
-                  </span>
-                  <span className="chat-product">{item.productId?.title}</span>
-                  <span className="chat-preview">{item.lastMessage || 'Bắt đầu trò chuyện'}</span>
-                  {unread > 0 && <span className="chat-badge" aria-label={`${unread} tin chưa đọc`}>{unread}</span>}
-                </button>
-              </li>
+              <Button
+                key={idOf(item)}
+                block
+                type={selected ? 'primary' : 'default'}
+                aria-current={selected ? 'true' : undefined}
+                className="chat-list-item"
+                onClick={() => navigate(`/chat/${idOf(item)}`)}
+              >
+                <span className="chat-name">
+                  {online.has(idOf(other)) && <Badge status="success" aria-label="Đang hoạt động" />}
+                  {other?.fullName || 'Người dùng'}
+                </span>
+                <span className="chat-product">{item.productId?.title}</span>
+                <span className="chat-preview">{item.lastMessage || 'Bắt đầu trò chuyện'}</span>
+                {unread > 0 && <Badge className="chat-badge" count={unread} aria-label={`${unread} tin chưa đọc`} />}
+              </Button>
             );
           })}
-        </ul>
-      </aside>
+        </Flex>
+      </Card>
 
-      <div className="chat-panel">
-        {!conversationId ? <p className="chat-muted chat-placeholder">Chọn một cuộc trò chuyện để bắt đầu.</p> : (
+      <Card className="chat-panel">
+        {!conversationId ? (
+          <Empty className="chat-placeholder" image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chọn một cuộc trò chuyện để bắt đầu." />
+        ) : (
           <>
             <header className="chat-panel-header">
               <strong>{partner?.fullName || 'Cuộc trò chuyện'}</strong>
-              {active?.productId?.title && <span className="chat-muted"> · {active.productId.title}</span>}
+              {active?.productId?.title && <Typography.Text type="secondary"> · {active.productId.title}</Typography.Text>}
             </header>
             <ol className="chat-messages" aria-live="polite">
               {messages.map(message => {
@@ -274,42 +288,45 @@ export default function Chat() {
               })}
               <li ref={listEnd} aria-hidden="true" />
             </ol>
-            {typingUser && <p className="chat-typing">{partner?.fullName || 'Đối phương'} đang nhập...</p>}
+            {typingUser && <Typography.Text type="secondary" className="chat-typing">{partner?.fullName || 'Đối phương'} đang nhập...</Typography.Text>}
             {active && (
               <div className="chat-offer-bar">
-                <button type="button" className="chat-offer-toggle" aria-expanded={offerOpen}
-                  onClick={() => setOfferOpen(open => !open)}>
+                <Button aria-expanded={offerOpen} onClick={() => setOfferOpen(open => !open)}>
                   {iAmSeller ? 'Gửi đề nghị bán' : 'Đề nghị giá'}
-                </button>
+                </Button>
                 {offerOpen && (
-                  <form className="chat-offer-form" onSubmit={handleOfferSubmit}>
-                    <label>Giá đề nghị (đ)
-                      <input type="number" min="1" step="1000" required value={offerPrice}
+                  <Form className="chat-offer-form" layout="inline" onFinish={handleOfferSubmit}>
+                    <Form.Item label="Giá đề nghị (đ)" htmlFor="chat-offer-price">
+                      <Input id="chat-offer-price" type="number" min="1" step="1000" value={offerPrice}
                         onChange={event => setOfferPrice(event.target.value)} />
-                    </label>
-                    <label>Lời nhắn
-                      <input value={offerNote} maxLength={500} onChange={event => setOfferNote(event.target.value)} />
-                    </label>
-                    <button type="submit" disabled={offerSending}>{offerSending ? 'Đang gửi...' : 'Gửi đề nghị'}</button>
-                  </form>
+                    </Form.Item>
+                    <Form.Item label="Lời nhắn" htmlFor="chat-offer-note">
+                      <Input id="chat-offer-note" value={offerNote} maxLength={500} onChange={event => setOfferNote(event.target.value)} />
+                    </Form.Item>
+                    <Button type="primary" htmlType="submit" disabled={offerSending}>{offerSending ? 'Đang gửi...' : 'Gửi đề nghị'}</Button>
+                  </Form>
                 )}
               </div>
             )}
-            <form className="chat-form" onSubmit={handleSubmit}>
-              <label className="chat-attach" aria-disabled={uploading}>
-                <span aria-hidden="true">{uploading ? <CircleNotch className="icon-spin" /> : <Camera />}</span>
-                <input type="file" aria-label="Gửi ảnh" accept="image/jpeg,image/png,image/webp,image/gif"
-                  onChange={handleImageChange} disabled={uploading} className="visually-hidden" />
-              </label>
+            <Form className="chat-form" onFinish={handleSubmit}>
+              <Button
+                className="chat-attach"
+                aria-label="Đính kèm ảnh"
+                disabled={uploading}
+                icon={uploading ? <CircleNotch className="icon-spin" /> : <Camera />}
+                onClick={() => fileInput.current.click()}
+              />
+              <input ref={fileInput} type="file" aria-label="Gửi ảnh" accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleImageChange} disabled={uploading} hidden />
               <label className="visually-hidden" htmlFor="chat-input">Nội dung tin nhắn</label>
-              <input id="chat-input" value={draft} onChange={handleDraftChange} maxLength={1000}
+              <Input id="chat-input" value={draft} onChange={handleDraftChange} maxLength={1000}
                 placeholder="Nhập tin nhắn..." autoComplete="off" />
-              <button type="submit" disabled={!draft.trim()}>Gửi</button>
-            </form>
+              <Button type="primary" htmlType="submit" disabled={!draft.trim()}>Gửi</Button>
+            </Form>
           </>
         )}
-        {error && <p role="alert" className="chat-error">{error}</p>}
-      </div>
+        {error && <Alert className="chat-error" type="error" showIcon closable role="alert" title={error} onClose={() => setError(null)} />}
+      </Card>
     </section>
   );
 }

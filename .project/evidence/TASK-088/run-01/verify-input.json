@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-088",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The assistant, chat and support pages are rebuilt from Ant Design components; the existing and new tests pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`messaging-capture.js`). For light and dark at 1280 and 390 px the script signs in as a buyer and opens the assistant (clicks the first starter and checks the answer with its two product cards), the buyer-seller chat (checks the three bubbles, the pending seller offer with its \"Chấp nhận\" button, then opens the offer form), and a customer support conversation (checks the two messages). Horizontal overflow and page errors are recorded on every page. The live socket was not available, so the pages used their REST fallback.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-assistant-answer.png`, `dark-w1280-assistant-answer.png` | Assistant with a rich answer and listing cards |\n| `dark-w390-assistant-welcome.png` | Assistant welcome with the starters at 390 px |\n| `dark-w1280-chat.png` | Chat with the conversation list and a seller offer |\n| `light-w1280-chat-offer.png`, `dark-w390-chat-offer.png` | Chat with the offer form open |\n| `light-w1280-support.png`, `dark-w390-support.png` | Support page with the new-request form, the inbox and a conversation |\n\nResults: in all four combinations the assistant showed its answer with two listing cards, the chat showed three bubbles and an offer with its accept button, the support thread showed two messages, no page overflowed horizontally and none raised an error. The first capture showed the chat overflowing at 390 px and the offer card stretched to the height of the panel because a stylesheet rule for the panel body also matched the nested card; the rule now targets only the panel's own body. Information alerts were red-tinted like errors and now use a neutral blue.\n\nNot observed: the live socket (typing, presence, real-time messages), the staff inbox in the browser (covered by tests), a real image upload, a real assistant answer from the model, a real phone, Firefox or WebKit.",
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the assistant, chat and support pages with Ant Design components; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses with no live socket",
+    "The staff inbox, image upload and real assistant answers were not exercised in the browser",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-25-8": {
+      "observed": "pass",
+      "note": "The existing Assistant, Chat and Support tests and the new ones (moderation checklist, support validation, staff inbox, status changes) pass; the build passes; the pages show answers, offers, conversations and forms with no overflow or error in light and dark at 390 and 1280 px; the live socket was not exercised",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

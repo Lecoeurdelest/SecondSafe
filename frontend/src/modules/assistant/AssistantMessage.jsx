@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Avatar, Card, Flex, Typography } from 'antd';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
 import { Sparkle } from '@phosphor-icons/react';
 
@@ -41,16 +42,20 @@ export function renderRichText(text) {
 function ProductCard({ product }) {
   return (
     <Link to={`/product/${product.id}`} className="assistant-chat__product">
-      <img
-        src={getProductImageUrl({ images: product.image ? [product.image] : [] })}
-        alt=""
-        onError={event => handleImageError(event, 'product')}
-      />
-      <span>
-        <strong>{product.title}</strong>
-        <small>{product.category} · {CONDITION_LABELS[product.condition] || product.condition}</small>
-        <b>{formatPrice(product.priceVnd)}</b>
-      </span>
+      <Card size="small" hoverable>
+        <Flex gap={12} align="center">
+          <img
+            src={getProductImageUrl({ images: product.image ? [product.image] : [] })}
+            alt=""
+            onError={event => handleImageError(event, 'product')}
+          />
+          <span>
+            <strong>{product.title}</strong>
+            <small>{product.category} · {CONDITION_LABELS[product.condition] || product.condition}</small>
+            <b>{formatPrice(product.priceVnd)}</b>
+          </span>
+        </Flex>
+      </Card>
     </Link>
   );
 }
@@ -60,10 +65,10 @@ export default function AssistantMessage({ message }) {
   const products = message.products || [];
   return (
     <li className={`assistant-chat__message${mine ? ' is-mine' : ''}`}>
-      {!mine && <span className="assistant-chat__avatar" aria-hidden="true"><Sparkle weight="fill" /></span>}
+      {!mine && <Avatar className="assistant-chat__avatar" icon={<Sparkle weight="fill" />} aria-hidden="true" />}
       <div className="assistant-chat__body">
         <div className="assistant-chat__bubble">{mine ? <p>{message.content}</p> : renderRichText(message.content)}</div>
-        {message.degraded && <small className="assistant-chat__hint">Trợ lý AI đang bận nên đây là câu trả lời có sẵn.</small>}
+        {message.degraded && <Typography.Text type="secondary" className="assistant-chat__hint">Trợ lý AI đang bận nên đây là câu trả lời có sẵn.</Typography.Text>}
         {products.length > 0 && (
           <div className="assistant-chat__products">
             {products.map(product => <ProductCard product={product} key={product.id} />)}

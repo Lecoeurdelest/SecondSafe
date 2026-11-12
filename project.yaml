@@ -3116,6 +3116,12 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-8
+      statement: The assistant, chat and support pages are built from Ant Design components, with the same message flows, offer
+        handling, validation and states, and work from 360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7347,6 +7353,40 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: The wallet page keeps its balance logic and the rule that decides the sign, tone and suffix of each amount, moved into one helper, and renders them with Card, Statistic, Select, Input, Tag and Pagination. The top-up and withdrawal forms keep their validation and requests and render through Form.Item, Input, Select and Descriptions, with the quick amounts as buttons that report their pressed state. The two result pages use Result. Browser alerts become toasts, and a signed-out visitor to the top-up page is redirected with Navigate instead of a call during render.
+  - id: TASK-088
+    title: Ant Design assistant, chat and support pages
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-8
+    objective: Rebuild the assistant, buyer-seller chat and support pages from Ant Design components, keeping every message flow and socket event.
+    in_scope:
+    - frontend/src/modules/assistant
+    - frontend/src/modules/chat
+    - frontend/src/modules/support
+    - frontend/src/ui/antdTheme.js
+    out_of_scope:
+    - Services, sockets, routes and the assistant's server-side behaviour
+    - The shell's help-center dialog (already on Ant Design)
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/support/Support.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: Each page keeps its state, effects, socket handlers and request code and renders through Card, Flex, Form, Input, Button, Alert, Tag, Badge, Avatar and Empty. The support request form uses Form rules and an AutoComplete for the subject suggestions; message sending goes through the form's onFinish. The offer card is a Card with a status Tag. Information alerts use a neutral blue instead of the brand red so they no longer look like errors.
 verification:
   thresholds:
     standard: 0.95

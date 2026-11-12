@@ -80,7 +80,7 @@ test('loads history, joins the room and sends over the socket', async () => {
   fireEvent.change(screen.getByLabelText('Nội dung tin nhắn'), { target: { value: 'Giá bao nhiêu?' } });
   fireEvent.click(screen.getByRole('button', { name: 'Gửi' }));
 
-  expect(socket.emit).toHaveBeenCalledWith('send_message', { conversationId: CONVERSATION, content: 'Giá bao nhiêu?' }, expect.any(Function));
+  await waitFor(() => expect(socket.emit).toHaveBeenCalledWith('send_message', { conversationId: CONVERSATION, content: 'Giá bao nhiêu?' }, expect.any(Function)));
 });
 
 test('falls back to REST when the socket is disconnected', async () => {

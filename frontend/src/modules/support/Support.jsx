@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { connectChatSocket } from '../../services/chat.service';
 import supportService from '../../services/support.service';
+import LinkButton from '../../ui/LinkButton';
 import './Support.css';
+import { Alert, AutoComplete, Button, Card, Empty, Flex, Form, Input, Select, Tag, Typography } from 'antd';
 import { Sparkle } from '@phosphor-icons/react';
 
 const SUPPORT_SUBJECT_SUGGESTIONS = [
@@ -52,8 +54,7 @@ export default function Support() {
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState('');
-  const [subject, setSubject] = useState('');
-  const [initialMessage, setInitialMessage] = useState('');
+  const [createForm] = Form.useForm();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState('open');
@@ -136,14 +137,12 @@ export default function Support() {
     endRef.current?.scrollIntoView?.({ block: 'end' });
   }, [messages]);
 
-  async function createConversation(event) {
-    event.preventDefault();
+  async function createConversation({ subject, message }) {
     setLoading(true);
     setError('');
     try {
-      const result = await supportService.createConversation({ subject, message: initialMessage });
-      setSubject('');
-      setInitialMessage('');
+      const result = await supportService.createConversation({ subject, message });
+      createForm.resetFields();
       await loadConversations();
       navigate(`/support/${idOf(result.conversation)}`);
     } catch (failure) {
@@ -153,8 +152,7 @@ export default function Support() {
     }
   }
 
-  async function sendMessage(event) {
-    event.preventDefault();
+  async function sendMessage() {
     const content = draft.trim();
     if (!content || !conversationId || loading) return;
     setLoading(true);
@@ -197,76 +195,92 @@ export default function Support() {
   if (!token) {
     return (
       <section className="support-page container">
-        <h1>Hỗ trợ khách hàng</h1>
-        <p>Vui lòng đăng nhập để trò chuyện với nhân viên hỗ trợ.</p>
-        <Link to="/login">Đăng nhập</Link>
+        <Typography.Title level={1}>Hỗ trợ khách hàng</Typography.Title>
+        <Typography.Paragraph>Vui lòng đăng nhập để trò chuyện với nhân viên hỗ trợ.</Typography.Paragraph>
+        <LinkButton type="primary" to="/login">Đăng nhập</LinkButton>
       </section>
     );
   }
 
   const active = conversations.find(item => idOf(item) === conversationId);
+  const closed = active?.status === 'closed';
   return (
     <section className={`support-page container${isStaff ? ' support-page--staff' : ''}`}>
-      <header className="support-page__heading">
+      <Flex justify="space-between" align="flex-end" wrap gap={16} className="support-page__heading">
         <div>
-          <p>SECOND SAFE · HỖ TRỢ</p>
-          <h1>{isStaff ? 'Hộp thư hỗ trợ' : 'Trò chuyện với chúng tôi'}</h1>
+          <Typography.Text strong className="support-page__eyebrow">SECOND SAFE · HỖ TRỢ</Typography.Text>
+          <Typography.Title level={1}>{isStaff ? 'Hộp thư hỗ trợ' : 'Trò chuyện với chúng tôi'}</Typography.Title>
         </div>
         {isStaff && (
-          <label>
-            Lọc trạng thái
-            <select value={statusFilter} onChange={event => setStatusFilter(event.target.value)}>
-              <option value="open">Đang mở</option>
-              <option value="closed">Đã đóng</option>
-            </select>
-          </label>
+          <Flex vertical gap={4}>
+            <label htmlFor="support-status-filter">Lọc trạng thái</label>
+            <Select
+              id="support-status-filter"
+              value={statusFilter}
+              onChange={setStatusFilter}
+              options={[{ value: 'open', label: 'Đang mở' }, { value: 'closed', label: 'Đã đóng' }]}
+            />
+          </Flex>
         )}
-      </header>
-      {error && <p className="support-page__error" role="alert">{error}</p>}
+      </Flex>
+      {error && <Alert className="support-page__error" type="error" showIcon closable role="alert" title={error} onClose={() => setError('')} />}
       <div className="support-layout">
-        <aside className="support-inbox">
-          <div className="support-inbox__heading"><strong>{isStaff ? 'Yêu cầu hỗ trợ' : 'Cuộc trò chuyện'}</strong><span>{conversations.length}</span></div>
+        <Card
+          className="support-inbox"
+          title={<Flex justify="space-between"><strong>{isStaff ? 'Yêu cầu hỗ trợ' : 'Cuộc trò chuyện'}</strong><Tag>{conversations.length}</Tag></Flex>}
+        >
           {!isStaff && (
-            <form className="support-new" onSubmit={createConversation}>
-              <label htmlFor="support-subject">Chủ đề hỗ trợ</label>
-              <input id="support-subject" list="support-subject-suggestions" value={subject} maxLength={120} required onChange={event => setSubject(event.target.value)} placeholder="Chọn hoặc nhập chủ đề hỗ trợ" />
-              <datalist id="support-subject-suggestions">
-                {SUPPORT_SUBJECT_SUGGESTIONS.map(suggestion => (
-                  <option key={suggestion} value={suggestion} />
-                ))}
-              </datalist>
-              <label htmlFor="support-initial-message">Mô tả vấn đề</label>
-              <textarea id="support-initial-message" value={initialMessage} maxLength={2000} required onChange={event => setInitialMessage(event.target.value)} placeholder="Không nhập mật khẩu, OTP hay thông tin ngân hàng." />
-              <button type="submit" disabled={loading}>{loading ? 'Đang gửi...' : 'Tạo yêu cầu hỗ trợ'}</button>
-            </form>
+            <Form form={createForm} name="support-new" layout="vertical" onFinish={createConversation} className="support-new">
+              <Form.Item name="subject" label="Chủ đề hỗ trợ" rules={[{ required: true, message: 'Vui lòng nhập chủ đề hỗ trợ.' }]}>
+                <AutoComplete virtual={false} options={SUPPORT_SUBJECT_SUGGESTIONS.map(suggestion => ({ value: suggestion }))}>
+                  <Input maxLength={120} placeholder="Chọn hoặc nhập chủ đề hỗ trợ" />
+                </AutoComplete>
+              </Form.Item>
+              <Form.Item name="message" label="Mô tả vấn đề" rules={[{ required: true, message: 'Vui lòng mô tả vấn đề.' }]}>
+                <Input.TextArea rows={4} maxLength={2000} placeholder="Không nhập mật khẩu, OTP hay thông tin ngân hàng." />
+              </Form.Item>
+              <Button type="primary" htmlType="submit" block disabled={loading}>{loading ? 'Đang gửi...' : 'Tạo yêu cầu hỗ trợ'}</Button>
+            </Form>
           )}
-          {isStaff && conversations.length === 0 && <p className="support-muted">Không có yêu cầu trong bộ lọc này.</p>}
-          <ul>
+          {isStaff && conversations.length === 0 && <Typography.Text type="secondary">Không có yêu cầu trong bộ lọc này.</Typography.Text>}
+          <Flex vertical gap={8} className="support-inbox__list">
             {conversations.map(item => (
-              <li key={idOf(item)}>
-                <button
-                  type="button"
-                  className={idOf(item) === conversationId ? 'is-active' : ''}
-                  onClick={() => navigate(`/support/${idOf(item)}`)}
-                >
-                  <strong>{isStaff ? item.customerId?.fullName || 'Khách hàng' : item.subject}</strong>
-                  {isStaff && <span>{item.subject}</span>}
-                  <small>{item.status === 'closed' ? 'Đã đóng' : 'Đang mở'} · {formatTime(item.lastMessageAt)}</small>
-                </button>
-              </li>
+              <Button
+                key={idOf(item)}
+                block
+                type={idOf(item) === conversationId ? 'primary' : 'default'}
+                aria-current={idOf(item) === conversationId ? 'true' : undefined}
+                className="support-inbox__item"
+                onClick={() => navigate(`/support/${idOf(item)}`)}
+              >
+                <strong>{isStaff ? item.customerId?.fullName || 'Khách hàng' : item.subject}</strong>
+                {isStaff && <span>{item.subject}</span>}
+                <small>{item.status === 'closed' ? 'Đã đóng' : 'Đang mở'} · {formatTime(item.lastMessageAt)}</small>
+              </Button>
             ))}
-          </ul>
-        </aside>
-        <div className="support-thread">
+          </Flex>
+        </Card>
+        <Card className="support-thread">
           {!conversationId ? (
-            <div className="support-thread__empty"><span aria-hidden="true"><Sparkle weight="fill" /></span><strong>Trao đổi cùng đội ngũ hỗ trợ</strong><p>Chọn một yêu cầu hoặc mở yêu cầu mới để bắt đầu.</p></div>
+            <Empty
+              image={<Sparkle weight="fill" size={48} />}
+              description={(
+                <Flex vertical gap={4}>
+                  <Typography.Text strong>Trao đổi cùng đội ngũ hỗ trợ</Typography.Text>
+                  <Typography.Text type="secondary">Chọn một yêu cầu hoặc mở yêu cầu mới để bắt đầu.</Typography.Text>
+                </Flex>
+              )}
+            />
           ) : (
             <>
-              <header className="support-thread__header">
-                <div><strong>{active?.subject || 'Yêu cầu hỗ trợ'}</strong><span>{active?.status === 'closed' ? 'Đã đóng' : 'Đang tiếp nhận'}</span></div>
-                {isStaff && active?.status === 'open' && <button type="button" disabled={loading} onClick={() => changeStatus('closed')}>Đóng yêu cầu</button>}
-                {isStaff && active?.status === 'closed' && <button type="button" disabled={loading} onClick={() => changeStatus('open')}>Mở lại</button>}
-              </header>
+              <Flex justify="space-between" align="center" wrap gap={12} className="support-thread__header">
+                <div>
+                  <strong>{active?.subject || 'Yêu cầu hỗ trợ'}</strong>
+                  <Tag color={closed ? 'default' : 'success'}>{closed ? 'Đã đóng' : 'Đang tiếp nhận'}</Tag>
+                </div>
+                {isStaff && active?.status === 'open' && <Button disabled={loading} onClick={() => changeStatus('closed')}>Đóng yêu cầu</Button>}
+                {isStaff && closed && <Button disabled={loading} onClick={() => changeStatus('open')}>Mở lại</Button>}
+              </Flex>
               <ol className="support-messages" aria-live="polite">
                 {messages.map(message => {
                   const mine = idOf(message.senderId) === myId;
@@ -280,18 +294,25 @@ export default function Support() {
                 })}
                 <li ref={endRef} aria-hidden="true" />
               </ol>
-              {active?.status !== 'closed' && (
-                <form className="support-compose" onSubmit={sendMessage}>
+              {!closed && (
+                <Form className="support-compose" onFinish={sendMessage}>
                   <label className="visually-hidden" htmlFor="support-reply">Tin nhắn hỗ trợ</label>
-                  <textarea id="support-reply" value={draft} maxLength={2000} onChange={event => setDraft(event.target.value)} placeholder="Viết tin nhắn..." />
-                  <button type="submit" disabled={loading || !draft.trim()}>{loading ? 'Đang gửi...' : 'Gửi tin nhắn'}</button>
-                </form>
+                  <Input.TextArea
+                    id="support-reply"
+                    value={draft}
+                    maxLength={2000}
+                    autoSize={{ minRows: 2, maxRows: 6 }}
+                    onChange={event => setDraft(event.target.value)}
+                    placeholder="Viết tin nhắn..."
+                  />
+                  <Button type="primary" htmlType="submit" disabled={loading || !draft.trim()}>{loading ? 'Đang gửi...' : 'Gửi tin nhắn'}</Button>
+                </Form>
               )}
             </>
           )}
-        </div>
+        </Card>
       </div>
-      <p className="support-page__privacy">Tin nhắn được mã hóa khi lưu trong cơ sở dữ liệu. Tránh gửi mật khẩu, mã OTP hoặc thông tin thanh toán.</p>
+      <Typography.Paragraph type="secondary" className="support-page__privacy">Tin nhắn được mã hóa khi lưu trong cơ sở dữ liệu. Tránh gửi mật khẩu, mã OTP hoặc thông tin thanh toán.</Typography.Paragraph>
     </section>
   );
 }

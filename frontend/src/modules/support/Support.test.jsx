@@ -4,6 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Support from './Support';
 import supportService from '../../services/support.service';
 import { connectChatSocket } from '../../services/chat.service';
+import AppProviders from '../../ui/AppProviders';
 
 jest.mock('../../services/support.service', () => ({
   __esModule: true,
@@ -58,22 +59,25 @@ beforeEach(() => {
 });
 
 function renderSupport(path) {
-  render(
-    <MemoryRouter
-      initialEntries={[path]}
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
-      <Routes>
-        <Route path="/support" element={<Support />} />
-        <Route path="/support/:conversationId" element={<Support />} />
-      </Routes>
-    </MemoryRouter>
+  return render(
+    <AppProviders language="vi" themeMode="light">
+      <MemoryRouter
+        initialEntries={[path]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <Routes>
+          <Route path="/support" element={<Support />} />
+          <Route path="/support/:conversationId" element={<Support />} />
+        </Routes>
+      </MemoryRouter>
+    </AppProviders>
   );
 }
 
 test('customers can create a support request', async () => {
   renderSupport('/support');
-  expect(document.querySelectorAll('#support-subject-suggestions option')).toHaveLength(7);
+  fireEvent.mouseDown(screen.getByLabelText('Chủ đề hỗ trợ'));
+  expect(await screen.findAllByRole('option')).toHaveLength(7);
   fireEvent.change(screen.getByLabelText('Chủ đề hỗ trợ'), {
     target: { value: conversation.subject }
   });
@@ -120,4 +124,71 @@ test('customers can send a reply in an existing support conversation', async () 
   ));
   expect(await screen.findByText('Tôi cần kiểm tra đơn hàng.')).toBeInTheDocument();
   expect(connectChatSocket).toHaveBeenCalledWith('test-token');
+});
+
+test('signed-out visitors are asked to sign in and nothing is requested', () => {
+  window.localStorage.removeItem('token');
+  renderSupport('/support');
+
+  expect(screen.getByRole('heading', { name: 'Hỗ trợ khách hàng' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Đăng nhập' })).toHaveAttribute('href', '/login');
+  expect(supportService.getConversations).not.toHaveBeenCalled();
+});
+
+test('an empty request form shows inline errors and sends nothing', async () => {
+  renderSupport('/support');
+
+  fireEvent.click(screen.getByRole('button', { name: 'Tạo yêu cầu hỗ trợ' }));
+
+  expect(await screen.findByText('Vui lòng nhập chủ đề hỗ trợ.')).toBeInTheDocument();
+  expect(screen.getByText('Vui lòng mô tả vấn đề.')).toBeInTheDocument();
+  expect(supportService.createConversation).not.toHaveBeenCalled();
+});
+
+test('a failed load and a failed creation show a dismissible alert', async () => {
+  supportService.getConversations.mockRejectedValueOnce(new Error('Không thể tải cuộc trò chuyện hỗ trợ.'));
+  renderSupport('/support');
+  expect(await screen.findByRole('alert')).toHaveTextContent('Không thể tải cuộc trò chuyện hỗ trợ.');
+
+  supportService.createConversation.mockRejectedValueOnce(new Error('Không thể mở yêu cầu hỗ trợ.'));
+  fireEvent.change(screen.getByLabelText('Chủ đề hỗ trợ'), { target: { value: 'Chủ đề' } });
+  fireEvent.change(screen.getByLabelText('Mô tả vấn đề'), { target: { value: 'Nội dung' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Tạo yêu cầu hỗ trợ' }));
+  expect(await screen.findByText('Không thể mở yêu cầu hỗ trợ.')).toBeInTheDocument();
+});
+
+test('the conversation list opens a conversation and marks the open one', async () => {
+  renderSupport('/support');
+
+  const item = await screen.findByRole('button', { name: /Đơn hàng và thanh toán/ });
+  expect(item).not.toHaveAttribute('aria-current');
+  fireEvent.click(item);
+  expect(await screen.findByLabelText('Tin nhắn hỗ trợ')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Đơn hàng và thanh toán/ })).toHaveAttribute('aria-current', 'true');
+  expect(screen.getByText('Đang tiếp nhận')).toBeInTheDocument();
+});
+
+test('staff see the inbox with a status filter and can close and reopen a request', async () => {
+  window.localStorage.setItem('secondsafe:role', 'moderator');
+  const staffConversation = { ...conversation, customerId: { fullName: 'Khách A' } };
+  supportService.getConversations.mockResolvedValue({ conversations: [staffConversation] });
+  supportService.updateStatus.mockResolvedValue({});
+  renderSupport(`/support/${conversation._id}`);
+
+  expect(await screen.findByRole('heading', { name: 'Hộp thư hỗ trợ' })).toBeInTheDocument();
+  expect(await screen.findByText('Khách A')).toBeInTheDocument();
+  expect(supportService.getConversations).toHaveBeenCalledWith('open');
+  expect(screen.queryByLabelText('Chủ đề hỗ trợ')).not.toBeInTheDocument();
+
+  fireEvent.click(await screen.findByRole('button', { name: 'Đóng yêu cầu' }));
+  await waitFor(() => expect(supportService.updateStatus).toHaveBeenCalledWith(conversation._id, 'closed'));
+
+  supportService.getConversations.mockResolvedValue({ conversations: [{ ...staffConversation, status: 'closed' }] });
+  fireEvent.mouseDown(screen.getByRole('combobox', { name: 'Lọc trạng thái' }));
+  fireEvent.click(await screen.findByText('Đã đóng', { selector: '.ant-select-item-option-content' }));
+  await waitFor(() => expect(supportService.getConversations).toHaveBeenLastCalledWith('closed'));
+  const reopen = await screen.findByRole('button', { name: 'Mở lại' });
+  expect(screen.queryByLabelText('Tin nhắn hỗ trợ')).not.toBeInTheDocument();
+  fireEvent.click(reopen);
+  await waitFor(() => expect(supportService.updateStatus).toHaveBeenLastCalledWith(conversation._id, 'open'));
 });

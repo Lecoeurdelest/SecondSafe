@@ -3,7 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import assistantService from '../../services/assistant.service';
 import AssistantMessage from './AssistantMessage';
 import { loadThread, newMessageId, saveThread, toPayload } from './assistantThread';
+import LinkButton from '../../ui/LinkButton';
 import './Assistant.css';
+import { Alert, Avatar, Button, Card, Flex, Form, Input, Spin, Typography } from 'antd';
 import { ArrowLeft, Sparkle } from '@phosphor-icons/react';
 
 const STARTERS = [
@@ -36,14 +38,19 @@ function ModerationGuidance() {
 
   return (
     <section className="assistant-page container">
-      <Link to="/staff"><ArrowLeft /> Quay lại dashboard nhân viên</Link>
-      <p className="assistant-page__eyebrow">CÔNG CỤ HỖ TRỢ KIỂM DUYỆT</p>
-      <h1>Checklist tham khảo</h1>
-      <p>AI chỉ nhận mã loại, lý do và trạng thái báo cáo. Không gửi mô tả, bằng chứng hoặc thông tin cá nhân.</p>
-      <p className="assistant-page__notice">Đây chỉ là gợi ý chung. Nhân viên phải tự xem xét hồ sơ nội bộ và đưa ra quyết định cuối cùng.</p>
-      {loading && <p role="status">Đang tạo checklist...</p>}
-      {error && <p className="assistant-page__error" role="alert">{error}</p>}
-      {guidance && <div className="assistant-page__answer">{guidance}</div>}
+      <LinkButton type="link" to="/staff" icon={<ArrowLeft />} className="assistant-page__back">Quay lại dashboard nhân viên</LinkButton>
+      <Typography.Text strong className="assistant-page__eyebrow">CÔNG CỤ HỖ TRỢ KIỂM DUYỆT</Typography.Text>
+      <Typography.Title level={1}>Checklist tham khảo</Typography.Title>
+      <Typography.Paragraph>AI chỉ nhận mã loại, lý do và trạng thái báo cáo. Không gửi mô tả, bằng chứng hoặc thông tin cá nhân.</Typography.Paragraph>
+      <Alert className="assistant-page__notice" type="info" showIcon role="note" title="Đây chỉ là gợi ý chung. Nhân viên phải tự xem xét hồ sơ nội bộ và đưa ra quyết định cuối cùng." />
+      {loading && (
+        <Flex gap={12} role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tạo checklist...</Typography.Text>
+        </Flex>
+      )}
+      {error && <Alert type="error" showIcon role="alert" title={error} />}
+      {guidance && <Card className="assistant-page__answer">{guidance}</Card>}
     </section>
   );
 }
@@ -92,7 +99,6 @@ function AssistantChat() {
     const history = [...messages, { id: newMessageId(), role: 'user', content }];
     setMessages(history);
     setInput('');
-    if (inputRef.current) inputRef.current.style.height = 'auto';
     ask(history);
   }
 
@@ -105,12 +111,6 @@ function AssistantChat() {
     inputRef.current?.focus();
   }
 
-  function handleChange(event) {
-    setInput(event.target.value);
-    event.target.style.height = 'auto';
-    event.target.style.height = `${Math.min(event.target.scrollHeight, 140)}px`;
-  }
-
   function handleKeyDown(event) {
     if (event.key !== 'Enter' || event.shiftKey || event.nativeEvent?.isComposing) return;
     event.preventDefault();
@@ -119,33 +119,35 @@ function AssistantChat() {
 
   return (
     <section className="assistant-chat container">
-      <header className="assistant-chat__header">
-        <div className="assistant-chat__identity">
-          <span className="assistant-chat__avatar assistant-chat__avatar--large" aria-hidden="true"><Sparkle weight="fill" /></span>
+      <Flex justify="space-between" align="center" gap={12} className="assistant-chat__header">
+        <Flex align="center" gap={12} className="assistant-chat__identity">
+          <Avatar size={44} className="assistant-chat__avatar assistant-chat__avatar--large" icon={<Sparkle weight="fill" />} aria-hidden="true" />
           <div>
-            <h1>Trợ lý SecondSafe</h1>
-            <p>Tư vấn chọn đồ, giải đáp cách mua bán và thanh toán trên SecondSafe.</p>
+            <Typography.Title level={1}>Trợ lý SecondSafe</Typography.Title>
+            <Typography.Text type="secondary">Tư vấn chọn đồ, giải đáp cách mua bán và thanh toán trên SecondSafe.</Typography.Text>
           </div>
-        </div>
-        <button type="button" className="assistant-chat__reset" onClick={reset} disabled={!messages.length && !input}>
-          Cuộc trò chuyện mới
-        </button>
-      </header>
+        </Flex>
+        <Button onClick={reset} disabled={!messages.length && !input}>Cuộc trò chuyện mới</Button>
+      </Flex>
 
-      <div className="assistant-chat__notice" role="note">
-        Tin nhắn của bạn được ẩn email, số điện thoại, dãy số dài và liên kết rồi gửi tới Google Gemini để tạo câu trả lời. Không nhập mật khẩu, OTP, thông tin ngân hàng hay địa chỉ nhà.
-      </div>
+      <Alert
+        className="assistant-chat__notice"
+        type="info"
+        showIcon
+        role="note"
+        title="Tin nhắn của bạn được ẩn email, số điện thoại, dãy số dài và liên kết rồi gửi tới Google Gemini để tạo câu trả lời. Không nhập mật khẩu, OTP, thông tin ngân hàng hay địa chỉ nhà."
+      />
 
       <div className="assistant-chat__thread" ref={threadRef} role="log" aria-live="polite" aria-label="Cuộc trò chuyện với trợ lý">
         {messages.length === 0 && (
-          <div className="assistant-chat__welcome">
-            <p>Xin chào! Bạn đang tìm món đồ nào, hay cần hỏi gì về cách mua bán?</p>
-            <div className="assistant-chat__starters">
+          <Flex vertical align="center" gap={12} className="assistant-chat__welcome">
+            <Typography.Paragraph>Xin chào! Bạn đang tìm món đồ nào, hay cần hỏi gì về cách mua bán?</Typography.Paragraph>
+            <Flex wrap justify="center" gap={8} className="assistant-chat__starters">
               {STARTERS.map(starter => (
-                <button type="button" key={starter} disabled={loading} onClick={() => send(starter)}>{starter}</button>
+                <Button key={starter} shape="round" disabled={loading} onClick={() => send(starter)}>{starter}</Button>
               ))}
-            </div>
-          </div>
+            </Flex>
+          </Flex>
         )}
         {messages.length > 0 && (
           <ul className="assistant-chat__messages">
@@ -153,37 +155,41 @@ function AssistantChat() {
           </ul>
         )}
         {loading && (
-          <p className="assistant-chat__typing" role="status">
-            <span aria-hidden="true"><i /><i /><i /></span>
-            Trợ lý đang soạn câu trả lời...
-          </p>
+          <Flex align="center" gap={10} className="assistant-chat__typing" role="status">
+            <Spin size="small" />
+            <Typography.Text type="secondary">Trợ lý đang soạn câu trả lời...</Typography.Text>
+          </Flex>
         )}
         {error && (
-          <div className="assistant-chat__error" role="alert">
-            <span>{error}</span>
-            <button type="button" onClick={() => ask(messages)} disabled={loading}>Thử lại</button>
-          </div>
+          <Alert
+            className="assistant-chat__error"
+            type="error"
+            showIcon
+            role="alert"
+            title={error}
+            action={<Button size="small" disabled={loading} onClick={() => ask(messages)}>Thử lại</Button>}
+          />
         )}
       </div>
 
-      <form className="assistant-chat__composer" onSubmit={event => { event.preventDefault(); send(input); }}>
+      <Form className="assistant-chat__composer" onFinish={() => send(input)}>
         <label htmlFor="assistant-input" className="assistant-chat__label">Câu hỏi</label>
-        <textarea
+        <Input.TextArea
           id="assistant-input"
           ref={inputRef}
-          rows={1}
           value={input}
           maxLength={600}
-          onChange={handleChange}
+          autoSize={{ minRows: 1, maxRows: 5 }}
+          onChange={event => setInput(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Nhập câu hỏi cho trợ lý..."
         />
-        <button type="submit" disabled={loading || !input.trim()}>Gửi</button>
-      </form>
-      <p className="assistant-chat__footer">
-        <span>{input.length}/600</span>
-        <span>Cần nhân viên hỗ trợ? <Link to="/support">Mở cuộc trò chuyện hỗ trợ</Link></span>
-      </p>
+        <Button type="primary" htmlType="submit" disabled={loading || !input.trim()}>Gửi</Button>
+      </Form>
+      <Flex justify="space-between" wrap gap={8} className="assistant-chat__footer">
+        <Typography.Text type="secondary">{input.length}/600</Typography.Text>
+        <Typography.Text type="secondary">Cần nhân viên hỗ trợ? <Link to="/support">Mở cuộc trò chuyện hỗ trợ</Link></Typography.Text>
+      </Flex>
     </section>
   );
 }
@@ -192,9 +198,9 @@ export default function Assistant({ moderation = false }) {
   if (!isSignedIn()) {
     return (
       <section className="assistant-page container">
-        <h1>Trợ lý SecondSafe</h1>
-        <p>Vui lòng đăng nhập để sử dụng trợ lý AI.</p>
-        <Link to="/login">Đăng nhập</Link>
+        <Typography.Title level={1}>Trợ lý SecondSafe</Typography.Title>
+        <Typography.Paragraph>Vui lòng đăng nhập để sử dụng trợ lý AI.</Typography.Paragraph>
+        <LinkButton type="primary" to="/login">Đăng nhập</LinkButton>
       </section>
     );
   }
