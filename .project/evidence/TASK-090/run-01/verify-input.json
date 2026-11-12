@@ -1,0 +1,35 @@
+{
+  "task_id": "TASK-090",
+  "run": "run-01",
+  "date": "2026-11-12",
+  "kind": "frontend",
+  "execution": "verifying",
+  "detail": "The seller reviews list and the rating, report and dispute dialogs are rebuilt from Ant Design components; the new tests and the existing suites pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally with canned API responses (`trust-capture.js`). For light and dark at 1280 and 390 px the script signs in and opens the seller reviews page (three reviews with photos and reviewed listings and a two-page pager; counts the cards), the public seller profile and its \"Báo cáo người dùng\" dialog (checks the send button is disabled while empty), and a product page and its \"Báo cáo tin đăng này\" dialog, chooses a reason and a description and checks the send button becomes enabled. Horizontal overflow and page errors are recorded.\n\n| File | What it shows |\n|---|---|\n| `light-w1280-reviews.png`, `dark-w390-reviews.png` | Seller reviews with the rating summary, filter, review cards, photos, reviewed listing and pager |\n| `light-w1280-report-product.png`, `light-w390-report-product.png` | Product report dialog with a reason and description filled in |\n| `dark-w1280-report-user.png` | User report dialog in the dark theme |\n\nResults: in all four combinations three review cards were shown, the user report dialog opened with its send button disabled, the product report dialog's send button became enabled once a reason and a description were given, no page overflowed horizontally and none raised an error. The rating and dispute dialogs share the same modal, form and evidence picker and are opened from the order pages, so they were exercised by tests only.\n\nNot observed: the rating and dispute dialogs in the browser, a real evidence upload and report submission, video thumbnails, a real phone, Firefox or WebKit.",
+  "history": [
+    [
+      "verifying",
+      "Rebuilt the seller reviews list and the rating, report and dispute dialogs with Ant Design components and a shared evidence picker; tests and build pass; observed in both themes at 390 and 1280 px"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The rating and dispute dialogs were exercised by tests only; no real evidence upload or report submission",
+    "No real phone, no other browser"
+  ],
+  "criteria": {
+    "AC-WEB-25-10": {
+      "observed": "pass",
+      "note": "The new ReviewList, RateSeller and report dialog tests and the existing suites pass; the build passes; the reviews page and the report dialogs show their fields, validation and states with no overflow or error in light and dark at 390 and 1280 px; the rating and dispute dialogs were not seen in the browser",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

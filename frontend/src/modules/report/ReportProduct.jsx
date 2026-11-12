@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
+import { Alert, Button, Flex, Form, Input, Modal, Select, Typography } from 'antd';
 import { createProductReport, uploadEvidenceImages } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
-import './ReportProduct.css';
-import { X } from '@phosphor-icons/react';
+import EvidencePicker from '../../components/EvidencePicker';
+import '../../components/ReportModal.css';
+
+const REASON_OPTIONS = [
+  { value: 'counterfeit', label: 'Hàng giả, hàng nhái' },
+  { value: 'inappropriate', label: 'Nội dung không phù hợp' },
+  { value: 'scam', label: 'Lừa đảo' },
+  { value: 'spam', label: 'Spam' },
+  { value: 'other', label: 'Khác' }
+];
 
 const ReportProduct = ({ product, onSuccess, onCancel }) => {
   const [reason, setReason] = useState('');
@@ -12,17 +21,7 @@ const ReportProduct = ({ product, onSuccess, onCancel }) => {
   const [uploadingImages, setUploadingImages] = useState(false);
   const [error, setError] = useState('');
 
-  const reasonOptions = [
-    { value: 'counterfeit', label: 'Hàng giả, hàng nhái' },
-    { value: 'inappropriate', label: 'Nội dung không phù hợp' },
-    { value: 'scam', label: 'Lừa đảo' },
-    { value: 'spam', label: 'Spam' },
-    { value: 'other', label: 'Khác' }
-  ];
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (!reason || !description.trim()) {
       setError('Vui lòng điền đầy đủ thông tin');
       return;
@@ -71,117 +70,65 @@ const ReportProduct = ({ product, onSuccess, onCancel }) => {
   };
 
   return (
-    <div className="report-modal">
-      <div className="report-content">
-        <div className="report-header">
-          <h3>Báo cáo sản phẩm</h3>
-          <button className="close-btn" onClick={onCancel}><X /></button>
+    <Modal open centered footer={null} title="Báo cáo sản phẩm" width={560} onCancel={onCancel} maskClosable={false}>
+      <Flex gap={12} align="center" className="report-subject">
+        <img
+          src={getImageUrl(product?.images?.[0]) || '/images/placeholders/product-placeholder.svg'}
+          alt={product.title}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = '/images/placeholders/product-placeholder.svg';
+          }}
+        />
+        <div className="report-subject__body">
+          <Typography.Title level={4}>{product.title}</Typography.Title>
+          <Typography.Text strong>{product.price?.toLocaleString('vi-VN')} VNĐ</Typography.Text>
+          <br />
+          <Typography.Text type="secondary">Người bán: {product.seller?.fullName}</Typography.Text>
         </div>
+      </Flex>
 
-        <div className="product-info">
-          <img 
-            src={getImageUrl(product?.images?.[0]) || '/images/placeholders/product-placeholder.svg'} 
-            alt={product.title}
-            className="product-image"
-            onError={(event) => {
-              event.currentTarget.onerror = null;
-              event.currentTarget.src = '/images/placeholders/product-placeholder.svg';
-            }}
+      <Form layout="vertical" onFinish={handleSubmit} className="report-form">
+        <Form.Item label="Lý do báo cáo" htmlFor="reason" required>
+          <Select id="reason" placeholder="Chọn lý do" value={reason || undefined} options={REASON_OPTIONS} onChange={setReason} />
+        </Form.Item>
+
+        <Form.Item label="Mô tả chi tiết" htmlFor="description" required>
+          <Input.TextArea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải với sản phẩm này..."
+            rows={4}
+            maxLength={1000}
+            showCount
           />
-          <div className="product-details">
-            <h4>{product.title}</h4>
-            <p className="price">{product.price?.toLocaleString('vi-VN')} VNĐ</p>
-            <p className="seller">Người bán: {product.seller?.fullName}</p>
-          </div>
-        </div>
+        </Form.Item>
 
-        <form onSubmit={handleSubmit} className="report-form">
-          <div className="form-group">
-            <label htmlFor="reason">Lý do báo cáo *</label>
-            <select
-              id="reason"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              required
-            >
-              <option value="">Chọn lý do</option>
-              {reasonOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        <Form.Item label="Ảnh bằng chứng (tùy chọn)" htmlFor="evidence">
+          <EvidencePicker
+            id="evidence"
+            files={evidenceImages}
+            accept="image/*"
+            buttonLabel="Chọn ảnh"
+            disabled={loading}
+            uploading={uploadingImages}
+            notes={['Tối đa 5 ảnh. Ảnh bằng chứng sẽ giúp chúng tôi xử lý báo cáo nhanh hơn.']}
+            onSelect={handleImageUpload}
+            onRemove={removeImage}
+          />
+        </Form.Item>
 
-          <div className="form-group">
-            <label htmlFor="description">Mô tả chi tiết *</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải với sản phẩm này..."
-              rows="4"
-              maxLength="1000"
-              required
-            />
-            <div className="char-count">{description.length}/1000</div>
-          </div>
+        {error && <Alert className="report-error" type="error" showIcon role="alert" title={error} />}
 
-          <div className="form-group">
-            <label htmlFor="evidence">Ảnh bằng chứng (tùy chọn)</label>
-            <input
-              type="file"
-              id="evidence"
-              accept="image/*"
-              multiple
-              onChange={handleImageUpload}
-              disabled={evidenceImages.length >= 5 || loading || uploadingImages}
-            />
-            <div className="upload-note">
-              Tối đa 5 ảnh. Ảnh bằng chứng sẽ giúp chúng tôi xử lý báo cáo nhanh hơn.
-            </div>
-            {uploadingImages && <div className="upload-note">Đang upload ảnh...</div>}
-            
-            {evidenceImages.length > 0 && (
-              <div className="evidence-preview">
-                {evidenceImages.map((url, index) => (
-                  <div key={index} className="evidence-item">
-                    <img src={getImageUrl(url)} alt={`Bằng chứng ${index + 1}`} />
-                    <button 
-                      type="button" 
-                      className="remove-image"
-                      onClick={() => removeImage(index)}
-                    >
-                      <X />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {error && <div className="error-message">{error}</div>}
-
-          <div className="form-actions">
-            <button 
-              type="button" 
-              className="cancel-btn"
-              onClick={onCancel}
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={loading || uploadingImages || !reason || !description.trim()}
-            >
-              {loading ? 'Đang gửi...' : 'Gửi báo cáo'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <Flex justify="flex-end" gap={12} className="report-actions">
+          <Button onClick={onCancel} disabled={loading}>Hủy</Button>
+          <Button type="primary" htmlType="submit" disabled={loading || uploadingImages || !reason || !description.trim()}>
+            {loading ? 'Đang gửi...' : 'Gửi báo cáo'}
+          </Button>
+        </Flex>
+      </Form>
+    </Modal>
   );
 };
 

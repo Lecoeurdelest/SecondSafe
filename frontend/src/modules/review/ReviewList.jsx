@@ -2,7 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getReviews, getRatingStats } from '../../services/review.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './ReviewList.css';
-import { Star } from '@phosphor-icons/react';
+import { Alert, Avatar, Card, Empty, Flex, Pagination, Rate, Select, Spin, Statistic, Typography } from 'antd';
+
+const RATING_OPTIONS = [
+  { value: '', label: 'Tất cả đánh giá' },
+  { value: '5', label: '5 sao' },
+  { value: '4', label: '4 sao' },
+  { value: '3', label: '3 sao' },
+  { value: '2', label: '2 sao' },
+  { value: '1', label: '1 sao' }
+];
 
 const ReviewList = ({ userId, showStats = true }) => {
   const [reviews, setReviews] = useState([]);
@@ -43,18 +52,6 @@ const ReviewList = ({ userId, showStats = true }) => {
     if (showStats) fetchStats();
   }, [fetchReviews, fetchStats, showStats]);
 
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <span key={i} className={`star ${i <= rating ? 'filled' : ''}`}>
-          <Star weight="fill" />
-        </span>
-      );
-    }
-    return stars;
-  };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('vi-VN', {
       year: 'numeric',
@@ -87,139 +84,108 @@ const ReviewList = ({ userId, showStats = true }) => {
 
 
   if (loading && currentPage === 1) {
-    return <div className="loading">Đang tải đánh giá...</div>;
+    return (
+      <Flex justify="center" gap={12} className="review-list__loading" role="status">
+        <Spin />
+        <Typography.Text type="secondary">Đang tải đánh giá...</Typography.Text>
+      </Flex>
+    );
   }
 
   return (
     <div className="review-list">
       {showStats && stats && (
-        <div className="rating-summary">
-          <div className="overall-rating">
-            <div className="rating-score">
-              <span className="score">{stats.averageRating.toFixed(1)}</span>
-              <div className="stars">
-                {renderStars(Math.round(stats.averageRating))}
-              </div>
-              <span className="total-reviews">
-                ({stats.totalReviews} đánh giá)
-              </span>
-            </div>
-          </div>
-        </div>
+        <Card className="rating-summary">
+          <Flex vertical align="center" gap={8}>
+            <Statistic className="score" value={stats.averageRating.toFixed(1)} formatter={(value) => value} />
+            <Rate disabled value={Math.round(stats.averageRating)} aria-label={`${stats.averageRating.toFixed(1)} trên 5 sao`} />
+            <Typography.Text type="secondary" className="total-reviews">({stats.totalReviews} đánh giá)</Typography.Text>
+          </Flex>
+        </Card>
       )}
 
-      <div className="review-filters">
-        <select 
-          value={selectedRating} 
-          onChange={(e) => {
-            setSelectedRating(e.target.value);
+      <Flex justify="flex-end" className="review-filters">
+        <Select
+          className="rating-filter"
+          aria-label="Lọc theo số sao"
+          value={selectedRating}
+          options={RATING_OPTIONS}
+          onChange={(value) => {
+            setSelectedRating(value);
             setCurrentPage(1);
           }}
-          className="rating-filter"
-        >
-          <option value="">Tất cả đánh giá</option>
-          <option value="5">5 sao</option>
-          <option value="4">4 sao</option>
-          <option value="3">3 sao</option>
-          <option value="2">2 sao</option>
-          <option value="1">1 sao</option>
-        </select>
-      </div>
+        />
+      </Flex>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && <Alert className="review-list__error" type="error" showIcon role="alert" title={error} />}
 
-      <div className="reviews">
+      <Flex vertical gap={12} className="reviews">
         {reviews.length === 0 ? (
-          <div className="no-reviews">
-            {selectedRating ? 
-              `Không có đánh giá ${selectedRating} sao` : 
-              'Chưa có đánh giá nào'
-            }
-          </div>
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={selectedRating ? `Không có đánh giá ${selectedRating} sao` : 'Chưa có đánh giá nào'}
+          />
         ) : (
-          reviews.map(review => (
-            <div key={review._id} className="review-item">
-              <div className="review-header">
-                <div className="reviewer-info">
-                  <img 
-                    src={review.reviewerId?.avatar || '/default-avatar.png'} 
-                    alt={review.reviewerId?.fullName}
-                    className="reviewer-avatar"
-                  />
-                  <div className="reviewer-details">
-                    <span className="reviewer-name">
-                      {review.reviewerId?.fullName}
-                    </span>
-                    <div className="review-rating">
-                      {renderStars(review.rating)}
+          reviews.map(review => {
+            const media = extractReviewMediaFiles(review);
+            return (
+              <Card key={review._id} className="review-item">
+                <Flex justify="space-between" align="flex-start" wrap gap={8} className="review-header">
+                  <Flex align="center" gap={12} className="reviewer-info">
+                    <Avatar
+                      src={review.reviewerId?.avatar || '/default-avatar.png'}
+                      alt={review.reviewerId?.fullName}
+                    />
+                    <div className="reviewer-details">
+                      <Typography.Text strong className="reviewer-name">{review.reviewerId?.fullName}</Typography.Text>
+                      <div><Rate disabled value={review.rating} className="review-rating" /></div>
                     </div>
-                  </div>
-                </div>
-                <span className="review-date">
-                  {formatDate(review.createdAt)}
-                </span>
-              </div>
+                  </Flex>
+                  <Typography.Text type="secondary" className="review-date">{formatDate(review.createdAt)}</Typography.Text>
+                </Flex>
 
-              {review.comment && (
-                <div className="review-comment">
-                  {review.comment}
-                </div>
-              )}
+                {review.comment && <Typography.Paragraph className="review-comment">{review.comment}</Typography.Paragraph>}
 
-              {extractReviewMediaFiles(review).length > 0 && (
-                <div className="review-evidence-grid">
-                  {extractReviewMediaFiles(review).map((file, index) => (
-                    <div key={`${file}-${index}`} className="review-evidence-item">
-                      {isVideoEvidence(file) ? (
-                        <video src={getImageUrl(file)} controls className="review-evidence-media" />
-                      ) : (
-                        <img src={getImageUrl(file)} alt={`review-evidence-${index}`} className="review-evidence-media" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+                {media.length > 0 && (
+                  <Flex wrap gap={10} className="review-evidence-grid">
+                    {media.map((file, index) => (
+                      <div key={`${file}-${index}`} className="review-evidence-item">
+                        {isVideoEvidence(file) ? (
+                          <video src={getImageUrl(file)} controls className="review-evidence-media" />
+                        ) : (
+                          <img src={getImageUrl(file)} alt={`review-evidence-${index}`} className="review-evidence-media" />
+                        )}
+                      </div>
+                    ))}
+                  </Flex>
+                )}
 
-              {review.productId && (
-                <div className="reviewed-product">
-                  <img 
-                    src={getImageUrl(review.productId.images?.[0]) || '/images/placeholder.png'} 
-                    alt={review.productId.title}
-                    className="product-thumb"
-                  />
-                  <span className="product-title">
-                    {review.productId.title}
-                  </span>
-                </div>
-              )}
-            </div>
-          ))
+                {review.productId && (
+                  <Flex align="center" gap={10} className="reviewed-product">
+                    <img
+                      src={getImageUrl(review.productId.images?.[0]) || '/images/placeholder.png'}
+                      alt={review.productId.title}
+                      className="product-thumb"
+                    />
+                    <Typography.Text className="product-title">{review.productId.title}</Typography.Text>
+                  </Flex>
+                )}
+              </Card>
+            );
+          })
         )}
-      </div>
+      </Flex>
 
-      {totalPages > 1 && (
-        <div className="pagination">
-          <button 
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="page-btn"
-          >
-            Trước
-          </button>
-          
-          <span className="page-info">
-            Trang {currentPage} / {totalPages}
-          </span>
-          
-          <button 
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="page-btn"
-          >
-            Sau
-          </button>
-        </div>
-      )}
+      <Pagination
+        className="review-list__pagination"
+        align="center"
+        hideOnSinglePage
+        showSizeChanger={false}
+        current={currentPage}
+        pageSize={10}
+        total={totalPages * 10}
+        onChange={setCurrentPage}
+      />
     </div>
   );
 };

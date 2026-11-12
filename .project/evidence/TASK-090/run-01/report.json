@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-090",
+  "spec_hash": "b53b0fe2df7a60d71979cc3ab1ebc66c6dd972c36fe9e65dea799aefcee9c473",
+  "source_hash": "9f74d7f40c557ded21e46dc681b84f4bf4196d1e6100db9ae1ebdcbe791d44b3",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The rating and dispute dialogs were exercised by tests only; no real evidence upload or report submission",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-10",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new ReviewList, RateSeller and report dialog tests and the existing suites pass; the build passes; the reviews page and the report dialogs show their fields, validation and states with no overflow or error in light and dark at 390 and 1280 px; the rating and dispute dialogs were not seen in the browser",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-090/run-01/frontend-test.txt",
+            ".project/evidence/TASK-090/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-090/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

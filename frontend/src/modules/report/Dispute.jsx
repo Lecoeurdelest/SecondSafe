@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, Flex, Form, Input, Modal, Select, Typography } from 'antd';
 import { createDispute, uploadEvidenceMedia } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
-import './Dispute.css';
-import { Warning, X } from '@phosphor-icons/react';
+import EvidencePicker from '../../components/EvidencePicker';
+import '../../components/ReportModal.css';
+import { Warning } from '@phosphor-icons/react';
+
+const REASON_OPTIONS = [
+  { value: 'not_as_described', label: 'Sản phẩm không đúng mô tả' },
+  { value: 'damaged', label: 'Sản phẩm bị hỏng/hư hại' },
+  { value: 'not_received', label: 'Không nhận được hàng' },
+  { value: 'counterfeit', label: 'Hàng giả, hàng nhái' },
+  { value: 'return_request', label: 'Yêu cầu hoàn hàng' },
+  { value: 'other', label: 'Khác' }
+];
+
+const isVideoEvidence = (url = '') => /\.(mp4|mov|webm|avi|mkv)$/i.test(url);
 
 const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
   const [reason, setReason] = useState(initialReason);
@@ -12,24 +25,11 @@ const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
   const [uploadingImages, setUploadingImages] = useState(false);
   const [error, setError] = useState('');
 
-  const reasonOptions = [
-    { value: 'not_as_described', label: 'Sản phẩm không đúng mô tả' },
-    { value: 'damaged', label: 'Sản phẩm bị hỏng/hư hại' },
-    { value: 'not_received', label: 'Không nhận được hàng' },
-    { value: 'counterfeit', label: 'Hàng giả, hàng nhái' },
-    { value: 'return_request', label: 'Yêu cầu hoàn hàng' },
-    { value: 'other', label: 'Khác' }
-  ];
-
-  React.useEffect(() => {
+  useEffect(() => {
     setReason(initialReason || '');
   }, [initialReason]);
 
-  const isVideoEvidence = (url = '') => /\.(mp4|mov|webm|avi|mkv)$/i.test(url);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (!reason || !description.trim()) {
       setError('Vui lòng điền đầy đủ thông tin');
       return;
@@ -83,158 +83,92 @@ const Dispute = ({ order, onSuccess, onCancel, initialReason = '' }) => {
   };
 
   return (
-    <div className="dispute-modal">
-      <div className="dispute-content">
-        <div className="dispute-header">
-          <h3>Tạo khiếu nại</h3>
-          <button className="close-btn" onClick={onCancel}><X /></button>
+    <Modal open centered footer={null} title="Tạo khiếu nại" width={640} onCancel={onCancel} maskClosable={false}>
+      <Flex gap={12} align="center" className="report-subject">
+        <img
+          src={getImageUrl(order?.listing?.images?.[0]) || '/images/placeholders/product-placeholder.svg'}
+          alt={order.listing?.title}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = '/images/placeholders/product-placeholder.svg';
+          }}
+        />
+        <div className="report-subject__body">
+          <Typography.Title level={4}>{order.listing?.title}</Typography.Title>
+          <Typography.Text strong>{order.agreedPrice?.toLocaleString('vi-VN')} VNĐ</Typography.Text>
+          <br />
+          <Typography.Text type="secondary">Mã đơn: {order._id}</Typography.Text>
+          <br />
+          <Typography.Text type="secondary">Người bán: {order.seller?.fullName}</Typography.Text>
         </div>
+      </Flex>
 
-        <div className="order-info">
-          <div className="order-details">
-            <h4>Thông tin đơn hàng</h4>
-            <div className="order-item">
-              <img 
-                src={getImageUrl(order?.listing?.images?.[0]) || '/images/placeholders/product-placeholder.svg'} 
-                alt={order.listing?.title}
-                className="product-image"
-                onError={(event) => {
-                  event.currentTarget.onerror = null;
-                  event.currentTarget.src = '/images/placeholders/product-placeholder.svg';
-                }}
-              />
-              <div className="product-details">
-                <h5>{order.listing?.title}</h5>
-                <p className="price">{order.agreedPrice?.toLocaleString('vi-VN')} VNĐ</p>
-                <p className="order-id">Mã đơn: {order._id}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="seller-info">
-            <h4>Người bán</h4>
-            <div className="seller-details">
-              <img 
-                src={getImageUrl(order?.seller?.avatar) || '/images/placeholders/avatar-placeholder.svg'} 
-                alt={order.seller?.fullName}
-                className="seller-avatar"
-                onError={(event) => {
-                  event.currentTarget.onerror = null;
-                  event.currentTarget.src = '/images/placeholders/avatar-placeholder.svg';
-                }}
-              />
-              <span className="seller-name">{order.seller?.fullName}</span>
-            </div>
-          </div>
-        </div>
+      <Form layout="vertical" onFinish={handleSubmit} className="report-form">
+        <Form.Item label="Lý do khiếu nại" htmlFor="reason" required>
+          <Select id="reason" placeholder="Chọn lý do" value={reason || undefined} options={REASON_OPTIONS} onChange={setReason} />
+        </Form.Item>
 
-        <form onSubmit={handleSubmit} className="dispute-form">
-          <div className="form-group">
-            <label htmlFor="reason">Lý do khiếu nại *</label>
-            <select
-              id="reason"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              required
-            >
-              <option value="">Chọn lý do</option>
-              {reasonOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        <Form.Item label="Mô tả chi tiết vấn đề" htmlFor="description" required>
+          <Input.TextArea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải với đơn hàng này. Thông tin càng chi tiết sẽ giúp chúng tôi xử lý khiếu nại nhanh hơn."
+            rows={5}
+            maxLength={1000}
+            showCount
+          />
+        </Form.Item>
 
-          <div className="form-group">
-            <label htmlFor="description">Mô tả chi tiết vấn đề *</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải với đơn hàng này. Thông tin càng chi tiết sẽ giúp chúng tôi xử lý khiếu nại nhanh hơn."
-              rows="5"
-              maxLength="1000"
-              required
-            />
-            <div className="char-count">{description.length}/1000</div>
-          </div>
+        <Form.Item label="Bằng chứng (ảnh/video)" htmlFor="evidence" required>
+          <EvidencePicker
+            id="evidence"
+            files={evidenceImages}
+            accept=".png,.jpg,.jpeg,.mp4,image/png,image/jpeg,video/mp4"
+            buttonLabel="Chọn tệp"
+            disabled={loading}
+            uploading={uploadingImages}
+            isVideo={isVideoEvidence}
+            notes={[
+              'Bắt buộc ít nhất 1 tệp, tối đa 5 tệp. Chỉ nhận ảnh PNG/JPG/JPEG và video MP4 (H.264), ≤ 100MB, ≤ 3 phút, 720p-1080p.',
+              'Video cần là bản quay mở hộp liên tục, không chỉnh sửa.'
+            ]}
+            onSelect={handleImageUpload}
+            onRemove={removeImage}
+          />
+        </Form.Item>
 
-          <div className="form-group">
-            <label htmlFor="evidence">Bằng chứng * (ảnh/video)</label>
-            <input
-              type="file"
-              id="evidence"
-              accept=".png,.jpg,.jpeg,.mp4,image/png,image/jpeg,video/mp4"
-              multiple
-              onChange={handleImageUpload}
-              disabled={evidenceImages.length >= 5 || loading || uploadingImages}
-            />
-            <div className="upload-note">
-              Bắt buộc ít nhất 1 tệp, tối đa 5 tệp. Chỉ nhận ảnh PNG/JPG/JPEG và video MP4 (H.264), ≤ 100MB, ≤ 3 phút, 720p-1080p.
-            </div>
-            <div className="upload-note">
-              Video cần là bản quay mở hộp liên tục, không chỉnh sửa.
-            </div>
-            {uploadingImages && <div className="upload-note">Đang upload bằng chứng...</div>}
-            
-            {evidenceImages.length > 0 && (
-              <div className="evidence-preview">
-                {evidenceImages.map((url, index) => (
-                  <div key={index} className="evidence-item">
-                    {isVideoEvidence(url) ? (
-                      <video src={getImageUrl(url)} controls className="evidence-video" />
-                    ) : (
-                      <img src={getImageUrl(url)} alt={`Bằng chứng ${index + 1}`} />
-                    )}
-                    <button 
-                      type="button" 
-                      className="remove-image"
-                      onClick={() => removeImage(index)}
-                    >
-                      <X />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <Alert
+          className="report-warning"
+          type="warning"
+          showIcon
+          role="note"
+          icon={<Warning />}
+          title="Lưu ý quan trọng"
+          description={(
+            <ul>
+              <li>Khiếu nại chỉ được tạo cho đơn hàng đã được giao</li>
+              <li>Vui lòng cung cấp bằng chứng rõ ràng và chính xác</li>
+              <li>Khiếu nại sai sự thật có thể bị xử phạt</li>
+              <li>Thời gian xử lý khiếu nại: 3-7 ngày làm việc</li>
+            </ul>
+          )}
+        />
 
-          <div className="dispute-warning">
-            <div className="warning-icon"><Warning /></div>
-            <div className="warning-text">
-              <strong>Lưu ý quan trọng:</strong>
-              <ul>
-                <li>Khiếu nại chỉ được tạo cho đơn hàng đã được giao</li>
-                <li>Vui lòng cung cấp bằng chứng rõ ràng và chính xác</li>
-                <li>Khiếu nại sai sự thật có thể bị xử phạt</li>
-                <li>Thời gian xử lý khiếu nại: 3-7 ngày làm việc</li>
-              </ul>
-            </div>
-          </div>
+        {error && <Alert className="report-error" type="error" showIcon role="alert" title={error} />}
 
-          {error && <div className="error-message">{error}</div>}
-
-          <div className="form-actions">
-            <button 
-              type="button" 
-              className="cancel-btn"
-              onClick={onCancel}
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={loading || uploadingImages || !reason || !description.trim() || evidenceImages.length === 0}
-            >
-              {loading ? 'Đang gửi...' : 'Tạo khiếu nại'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <Flex justify="flex-end" gap={12} className="report-actions">
+          <Button onClick={onCancel} disabled={loading}>Hủy</Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={loading || uploadingImages || !reason || !description.trim() || evidenceImages.length === 0}
+          >
+            {loading ? 'Đang gửi...' : 'Tạo khiếu nại'}
+          </Button>
+        </Flex>
+      </Form>
+    </Modal>
   );
 };
 

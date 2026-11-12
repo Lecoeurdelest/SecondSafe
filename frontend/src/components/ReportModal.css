@@ -1,0 +1,40 @@
+.report-subject {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--fill-subtle);
+}
+
+.report-subject img {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
+.report-subject .ant-typography {
+  margin: 0;
+}
+
+.report-subject__body {
+  min-width: 0;
+}
+
+.report-form .report-error {
+  margin-bottom: 12px;
+}
+
+.report-form .report-warning {
+  margin-bottom: 16px;
+}
+
+.report-form .report-warning ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.report-form .report-actions {
+  margin-top: 8px;
+}

@@ -1952,6 +1952,35 @@
       "criteria": {
         "AC-WEB-25-9": "inconclusive"
       }
+    },
+    "TASK-090": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The seller reviews list and the rating, report and dispute dialogs are rebuilt from Ant Design components; the new tests and the existing suites pass and the pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Eleventh slice of the Ant Design goal: reviews and report dialogs"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the reviews list and the rating, report and dispute dialogs with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the seller reviews list and the rating, report and dispute dialogs with Ant Design components and a shared evidence picker; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-090/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-090.md",
+      "criteria": {
+        "AC-WEB-25-10": "inconclusive"
+      }
     }
   }
 }
