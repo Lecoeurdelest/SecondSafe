@@ -3,7 +3,7 @@
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
     "project.yaml": "ad05a8e660d492fde1899819d8be81fdf793c1e0517a9e091e25b978867a0a30",
-    ".project/state.json": "5cdc72f6933b6b17f4e5a8654d13d3e61d730c8ecda911402d070b77586cf5f8",
+    ".project/state.json": "ff0104b753b2cc5fe603a7ca46ca7ecbaedc18e2285589a654d49674f5307738",
     ".project/delivery.json": "d590d56a61e6f0dfe0943412ab9d24b687ea9526d75d2d0bc6784c694dc50633",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
@@ -105,7 +105,7 @@
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "74b126bedbbe22af045d89df514cc05e95df402e35a843144553a2343011effe"
+      "sha256": "5d81db842c697800daacbdeba823b59688c7a548bb1cf0d8a3ae6623f307d23f"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -409,7 +409,7 @@
     },
     "docs/task/TASK-077.md": {
       "ownership": "generated",
-      "sha256": "9f65630b6be3ad07b79e94d69eaede622791da6af30931d906aa6d48b782b04d"
+      "sha256": "65fc2f55344266b73d289d5381c7b5c68197ae8c9ca90243b5fb7ea9817aba37"
     },
     "docs/technical/data-model.md": {
       "ownership": "generated",

@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 251, 255, 0.95) 60%, rgba(255, 248, 238, 0.92) 100%);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid #e7ebf3;
   padding: 0 20px;
@@ -29,7 +29,7 @@
 .moderator-header::after {
   content: "";
   position: absolute;
-  inset: auto -70px -38px auto;
+  inset: auto 0 -38px auto;
   width: 130px;
   height: 64px;
   border-radius: 100px;
@@ -54,9 +54,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #c66a00;
-  background: linear-gradient(145deg, #fff3df, #ffe5bd);
-  border: 1px solid #f3cf96;
+  color: #111827;
+  background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+  border: 1px solid #d1d5db;
 }
 
 .moderator-header-title {
@@ -125,9 +125,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #c66a00;
-  background: linear-gradient(145deg, #fff3df, #ffe3b8);
-  border: 1px solid #f3cf96;
+  color: #111827;
+  background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+  border: 1px solid #d1d5db;
   font-size: 18px;
 }
 

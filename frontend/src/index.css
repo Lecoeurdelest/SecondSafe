@@ -285,7 +285,7 @@
   min-height: 42px;
   padding: 0 16px;
   background-color: transparent;
-  color: #eb3225;
+  color: var(--brand);
   border: 1px solid transparent;
   border-radius: 999px;
   font-size: var(--font-size-sm);
@@ -302,7 +302,7 @@
 .navbar__btn-orders:hover {
   background-color: #ffefee;
   border-color: #fedddb;
-  color: #d8291d;
+  color: var(--brand-hover);
   transform: translateY(-1px);
 }
 
@@ -313,7 +313,7 @@
 .navbar__btn-orders--seller:hover {
   background-color: #ffefee;
   border-color: #fedddb;
-  color: #d8291d;
+  color: var(--brand-hover);
 }
 
 .navbar__btn-manage:hover {
@@ -867,7 +867,8 @@
 body { min-width: 320px; }
 #root { min-height: 100vh; display: flex; flex-direction: column; }
 #main-content { flex: 1 0 auto; }
-body:has(.admin-layout, .moderator-shell) :is(.marketplace-announcement, .site-header, .site-footer, .floating-chat) { display: none; }
+body:not(:has(.admin-layout, .moderator-shell, .dashboard-shell)) #main-content { padding-bottom: 64px; }
+body:has(.admin-layout, .moderator-shell, .dashboard-shell) :is(.marketplace-announcement, .site-header, .site-footer, .floating-chat) { display: none; }
 :focus-visible { outline: 3px solid var(--brand); outline-offset: 4px; }
 .skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; padding: 12px; background: white; transform: translateY(-160%); }
 .skip-link:focus { transform: translateY(0); }

@@ -16,20 +16,22 @@ Buyer pages changed most: a sticky header with pill links and a gradient call-to
 
 The header is split into two tiers: primary actions on the first row and a tab strip with the account and work links below it, so a signed-in user's fourteen links no longer wrap. The admin and moderator consoles use a neutral palette. Both shells are wrapped in one Ant Design theme (`frontend/src/modules/staffTheme.js`) with a near-black primary colour, and the storefront header, footer and chat button are hidden while either shell is mounted. Routes, services, API calls and business rules were not touched.
 
+One shared button set in `global.css` replaces about twelve competing `.btn` definitions, the storefront chrome is hidden in the dashboards as well as the staff shells, and the dashboards and admin pages use the neutral palette.
+
 The two reference projects (`itsnotvii/mercari-clone`, `ReMarket-SE2/webapp`) have no licence file, so they were used as visual references only. No code was copied.
 
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-04/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-05/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-04/frontend-test.txt` — 9 suites, 58 tests pass |
+| Tests | `.project/evidence/TASK-077/run-05/frontend-test.txt` — 9 suites, 58 tests pass |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-04/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-04/manual-review.md` and `screenshots/` (`run-01` to `run-03` are the earlier passes; `run-04` adds pages rendered with realistic data) |
+| Build/typecheck | `.project/evidence/TASK-077/run-05/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-05/manual-review.md` and `screenshots/` (`run-01` to `run-04` are the earlier passes; `run-05` is the re-check after an independent page-by-page review) |
 
 ## Deviations
 
@@ -38,7 +40,9 @@ The task has no dependencies on other tasks because it changes presentation only
 ## Known gaps
 
 - Observed only in Chromium against canned API responses; no real phone, no other browser (`NFR-COMP-01` is not evaluated here).
-- Seller orders, order detail, the dashboards and the other admin and moderator pages were converted by a mechanical colour rule and not each inspected; the order list, wallet, conversation thread and notification panel were checked with realistic canned data, never against a real backend.
+- Every page was checked only with realistic canned data, never against a real backend. Staff detail pages, the moderator profile and some order tabs were not observed.
+- Font Awesome is never loaded by the application, so about 60 icons render as nothing, including the admin hamburger button. This predates the restyle; shipping the font needs a decision.
+- OrderDetail, OrderPayment, Wallet and UserProfile still carry older card radii and shadows.
 - Status chips that were blue "info" colours in buyer modules are now brand-coloured and can read like the error colour; the shared `--info` colour was kept blue.
 - Dark mode is not implemented.
 - The dashboards under `frontend/src/modules/dashboard/` and the legacy `Footer.jsx` were not redesigned.

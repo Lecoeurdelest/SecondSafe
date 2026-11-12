@@ -58,7 +58,7 @@
   color: #333;
 }
 
-.product-info {
+.report-modal .product-info {
   display: flex;
   gap: 16px;
   padding: 24px;
@@ -66,7 +66,7 @@
   background: #f8f9fa;
 }
 
-.product-image {
+.report-modal .product-image {
   width: 80px;
   height: 80px;
   object-fit: cover;

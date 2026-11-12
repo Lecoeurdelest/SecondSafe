@@ -572,13 +572,13 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #eb3225 0%, #d8291d 100%);
+  background: var(--brand-gradient);
   color: white;
-  box-shadow: 0 14px 30px rgba(235, 50, 37, 0.22);
+  box-shadow: 0 14px 30px rgba(255, 59, 59, 0.22);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #d8291d 0%, #af281e 100%);
+  background: linear-gradient(135deg, var(--brand-hover) 0%, #af281e 100%);
 }
 
 .btn-secondary {

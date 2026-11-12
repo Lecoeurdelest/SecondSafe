@@ -88,9 +88,9 @@
 }
 
 .status-paid {
-  background-color: #ffcfcc;
-  color: var(--brand-dark);
-  border: 1px solid #ffa099;
+  background-color: #cce5ff;
+  color: #004085;
+  border: 1px solid #99d6ff;
 }
 
 .status-shipped {
@@ -100,9 +100,9 @@
 }
 
 .status-delivered {
-  background-color: #fee2e0;
-  color: #a10e03;
-  border: 1px solid #fdbeba;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
 }
 
 .status-completed {
@@ -598,9 +598,9 @@
   min-height: 32px;
   padding: 0 12px;
   border-radius: 999px;
-  background: #fedddb;
-  color: #d8291d;
-  border: 1px solid #fec3bf;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
   font-weight: 700;
   font-size: 13px;
 }
@@ -755,8 +755,8 @@
   display: inline-block;
   padding: 4px 10px;
   border-radius: 8px;
-  background: #ffeae8;
-  color: #eb3225;
+  background: #e8f3ff;
+  color: #2563eb;
   font-size: 13px;
   font-weight: 600;
 }

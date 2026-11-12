@@ -1154,9 +1154,9 @@
 }
 
 .admin-report-detail {
-  --report-accent: #5E9848F4;
-  --report-accent-solid: #5E9848;
-  --report-accent-soft: #5e98481a;
+  --report-accent: #111827F4;
+  --report-accent-solid: #111827;
+  --report-accent-soft: #1118271a;
 }
 
 .admin-report-detail .admin-module__header h1 {
@@ -1424,9 +1424,9 @@
 }
 
 .admin-order-detail {
-  --order-accent: #5E9848F4;
-  --order-accent-solid: #5E9848;
-  --order-accent-soft: #5e98481a;
+  --order-accent: #111827F4;
+  --order-accent-solid: #111827;
+  --order-accent-soft: #1118271a;
 }
 
 .admin-order-detail .admin-module__header h1 {
@@ -1664,9 +1664,9 @@
 }
 
 .admin-revenue-report {
-  --revenue-accent: #5E9848F4;
-  --revenue-accent-solid: #5E9848;
-  --revenue-accent-soft: #5e98481a;
+  --revenue-accent: #111827F4;
+  --revenue-accent-solid: #111827;
+  --revenue-accent-soft: #1118271a;
 }
 
 .admin-revenue-report .admin-module__header h1 {
@@ -1745,7 +1745,7 @@
 }
 
 .revenue-overview-card {
-  background: linear-gradient(165deg, #ffffff 0%, #f9fdf8 100%);
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
   border: 1px solid #dfe9de;
   border-top: 3px solid var(--revenue-accent);
   border-radius: 12px;
@@ -1767,12 +1767,12 @@
 }
 
 .revenue-overview-card--orders {
-  border-top-color: #7c3aed;
-  background: linear-gradient(165deg, #ffffff 0%, #f7f3ff 100%);
+  border-top-color: #111827;
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
 }
 
 .revenue-overview-card--orders::after {
-  background: #8b5cf6;
+  background: #6b7280;
 }
 
 .revenue-overview-card--gross {
@@ -1785,21 +1785,21 @@
 }
 
 .revenue-overview-card--system {
-  border-top-color: #ef4444;
-  background: linear-gradient(165deg, #ffffff 0%, #fff3f3 100%);
+  border-top-color: #111827;
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
 }
 
 .revenue-overview-card--system::after {
-  background: #ef4444;
+  background: #111827;
 }
 
 .revenue-overview-card--seller {
-  border-top-color: #16a34a;
-  background: linear-gradient(165deg, #ffffff 0%, #f2fdf5 100%);
+  border-top-color: #111827;
+  background: linear-gradient(165deg, #ffffff 0%, #f9fafb 100%);
 }
 
 .revenue-overview-card--seller::after {
-  background: #22c55e;
+  background: #6b7280;
 }
 
 .revenue-overview-card .label {
@@ -1820,7 +1820,7 @@
 }
 
 .revenue-value--orders {
-  color: #6d28d9;
+  color: #111827;
 }
 
 .revenue-value--gross {
@@ -1828,11 +1828,11 @@
 }
 
 .revenue-value--system {
-  color: #dc2626;
+  color: #111827;
 }
 
 .revenue-value--seller {
-  color: #15803d;
+  color: #111827;
 }
 
 .revenue-overview-card .meta {
@@ -1852,6 +1852,7 @@
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   overflow: hidden;
+  padding-top: 4px;
 }
 
 .revenue-chart-wrap {

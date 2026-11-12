@@ -334,7 +334,7 @@
 }
 
 .withdrawal-notice__link a {
-  color: #d8291d;
+  color: var(--brand-hover);
   font-weight: 600;
   text-decoration: none;
 }

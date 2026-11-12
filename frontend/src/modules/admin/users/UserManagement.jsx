@@ -453,8 +453,8 @@ const UserManagement = () => {
         key: "role",
         width: 130,
         render: (role) => {
-          if (role === "admin") return <Tag className="mod-status-pill" color="magenta">Admin</Tag>;
-          if (role === "moderator") return <Tag className="mod-status-pill" color="blue">Moderator</Tag>;
+          if (role === "admin") return <Tag className="mod-status-pill" color="default">Admin</Tag>;
+          if (role === "moderator") return <Tag className="mod-status-pill" color="default">Moderator</Tag>;
           return <Tag className="mod-status-pill" color="default">Người dùng</Tag>;
         }
       },

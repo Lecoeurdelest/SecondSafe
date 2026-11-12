@@ -107,7 +107,7 @@
   padding: 0 16px;
   border-radius: 10px;
   background: #fff0ef;
-  color: #d8291d;
+  color: var(--brand-hover);
   border: 1px solid #fec3bf;
   font-size: 14px;
   font-weight: 700;

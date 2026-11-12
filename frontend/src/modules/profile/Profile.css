@@ -173,16 +173,16 @@
 }
 
 .profile-review-link.btn.btn-outline.btn-sm {
-  color: #d0180b;
-  border: 1px solid #d0180b;
+  color: var(--brand-dark);
+  border: 1px solid var(--brand-dark);
   background: #ffffff;
   font-weight: 600;
 }
 
 .profile-review-link.btn.btn-outline.btn-sm:hover {
   color: #ffffff;
-  background: #d0180b;
-  border-color: #d0180b;
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
 }
 
 /* Profile Info */
@@ -216,8 +216,8 @@
 }
 
 .role-badge {
-  background: #fde5e3;
-  color: #d22519;
+  background: #e3f2fd;
+  color: #1976d2;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;

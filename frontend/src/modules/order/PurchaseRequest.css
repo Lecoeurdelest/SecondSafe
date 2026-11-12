@@ -167,7 +167,7 @@
   margin: 0 -16px -16px;
   padding: 12px 16px;
   border-radius: 0 0 8px 8px;
-  border-top: 2px solid #f6473b;
+  border-top: 2px solid var(--brand-light);
 }
 
 .price-row.total .price-label {
@@ -176,7 +176,7 @@
 }
 
 .price-row.total .price-value {
-  color: #f6473b;
+  color: var(--brand-light);
   font-size: 1.1rem;
 }
 
@@ -215,7 +215,7 @@
 
 .form-group textarea:focus {
   outline: none;
-  border-color: #f6473b;
+  border-color: var(--brand-light);
   box-shadow: 0 0 0 3px rgba(246, 71, 59, 0.1);
 }
 
@@ -247,7 +247,7 @@
 
 .price-input-wrapper input:focus {
   outline: none;
-  border-color: #f6473b;
+  border-color: var(--brand-light);
   box-shadow: 0 0 0 3px rgba(246, 71, 59, 0.1);
 }
 
@@ -327,12 +327,12 @@
 }
 
 .btn-primary {
-  background-color: #f6473b;
+  background-color: var(--brand-light);
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #eb3225;
+  background-color: var(--brand);
 }
 
 .fa-spinner {

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "ad05a8e660d492fde1899819d8be81fdf793c1e0517a9e091e25b978867a0a30",
+  "source_hash": "4ff0778b89563ac37d7fd9d08549ddd6be779649a6c4386fb93796b9d834ca62",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, never against a real backend or another browser",
+    "Staff detail pages, the moderator profile and some order tabs were not observed",
+    "Font Awesome is not loaded by the application, so its icons are blank; this predates the task and was not changed",
+    "Dark mode is not implemented",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "Seller orders, order detail, payment, wallet, seller profile, my products, both dashboards and the main admin and moderator list pages render in one visual language with the reviewer's defects fixed; the staff list pages no longer overflow the page; build and the 58 existing frontend tests pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-05/manual-review.md",
+            ".project/evidence/TASK-077/run-05/screenshots/admin-orders.png",
+            ".project/evidence/TASK-077/run-05/screenshots/admin-revenue.png",
+            ".project/evidence/TASK-077/run-05/screenshots/admin-reviews.png",
+            ".project/evidence/TASK-077/run-05/screenshots/admin-users.png",
+            ".project/evidence/TASK-077/run-05/screenshots/buyer-my-products.png",
+            ".project/evidence/TASK-077/run-05/screenshots/buyer-order-detail-pending.png",
+            ".project/evidence/TASK-077/run-05/screenshots/buyer-order-payment.png",
+            ".project/evidence/TASK-077/run-05/screenshots/buyer-seller-orders.png",
+            ".project/evidence/TASK-077/run-05/screenshots/buyer-seller-profile.png",
+            ".project/evidence/TASK-077/run-05/screenshots/buyer-wallet.png",
+            ".project/evidence/TASK-077/run-05/screenshots/dash-admin.png",
+            ".project/evidence/TASK-077/run-05/screenshots/dash-staff.png",
+            ".project/evidence/TASK-077/run-05/screenshots/mod-orders.png",
+            ".project/evidence/TASK-077/run-05/screenshots/mod-reports.png",
+            ".project/evidence/TASK-077/run-05/screenshots/mod-reviews.png"
+          ]
+        }
+      ]
+    }
+  ]
+}

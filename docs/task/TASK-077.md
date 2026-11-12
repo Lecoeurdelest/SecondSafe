@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `verifying` — Restyle implemented in four passes with build, 58 passing frontend tests and screenshots of buyer, messaging, notification, wallet and staff pages at 360 to 1920 px, including pages rendered with realistic data; automatic completion remains inconclusive without applicable calibration, and seller orders, order detail and dashboards were not observed
+**Current state:** `verifying` — Restyle implemented in five passes; the last follows an independent page-by-page review and fixes its defects (leaked grid rules, competing button styles, overflow, contrast, staff palettes); build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend
 
 ## Traceability
 

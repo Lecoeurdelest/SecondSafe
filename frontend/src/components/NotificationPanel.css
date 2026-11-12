@@ -112,7 +112,7 @@
   height: 8px;
   margin-right: 8px;
   border-radius: 50%;
-  background: #eb3225;
+  background: var(--brand);
   vertical-align: middle;
 }
 

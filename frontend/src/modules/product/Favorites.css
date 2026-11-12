@@ -40,7 +40,7 @@
 .favorites-container .favorites-stat__value {
   font-size: 26px;
   font-weight: 800;
-  color: #eb3225;
+  color: var(--brand);
   line-height: 1;
 }
 
@@ -90,7 +90,7 @@
   height: 42px;
   padding: 0 18px;
   border-radius: 999px;
-  background: #eb3225;
+  background: var(--brand);
   color: #fff;
   font-weight: 700;
   text-decoration: none;
@@ -145,7 +145,7 @@
   font-size: 12px;
   font-weight: 700;
   color: #fff;
-  background: rgba(235, 50, 37, 0.92);
+  background: rgba(255, 59, 59, 0.92);
 }
 
 .favorites-container .product-info {

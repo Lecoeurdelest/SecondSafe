@@ -534,7 +534,7 @@ const CreateProduct = () => {
               <div className="location-panel">
                 {profileLocation && (
                   <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: '#fff1f0', border: '1px solid #fdbeba', borderRadius: '8px' }}>
-                    <span style={{ flex: 1, fontSize: '14px', color: '#a10e03' }}>
+                    <span style={{ flex: 1, fontSize: '14px', color: 'var(--brand-dark)' }}>
                       📍 Mặc định từ hồ sơ: <strong>{[profileLocation.ward, profileLocation.district, profileLocation.city].filter(Boolean).join(', ')}</strong>
                     </span>
                     <button
@@ -548,7 +548,7 @@ const CreateProduct = () => {
                           setFormData(prev => ({ ...prev, location: { city: '', district: '', ward: '', provinceCode: null, districtCode: null, wardCode: null } }));
                         }
                       }}
-                      style={{ fontSize: '13px', padding: '5px 12px', background: useProfileLocation ? '#fee2e0' : '#fff', border: '1px solid #fc857d', borderRadius: '6px', cursor: 'pointer', color: '#a10e03', whiteSpace: 'nowrap' }}
+                      style={{ fontSize: '13px', padding: '5px 12px', background: useProfileLocation ? '#fee2e0' : '#fff', border: '1px solid #fc857d', borderRadius: '6px', cursor: 'pointer', color: 'var(--brand-dark)', whiteSpace: 'nowrap' }}
                     >
                       {useProfileLocation ? 'Tùy chỉnh' : 'Dùng hồ sơ'}
                     </button>

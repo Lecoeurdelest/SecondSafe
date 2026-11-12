@@ -1505,7 +1505,7 @@
     "TASK-077": {
       "execution": "verifying",
       "relevance": "current",
-      "detail": "Restyle implemented in four passes with build, 58 passing frontend tests and screenshots of buyer, messaging, notification, wallet and staff pages at 360 to 1920 px, including pages rendered with realistic data; automatic completion remains inconclusive without applicable calibration, and seller orders, order detail and dashboards were not observed",
+      "detail": "Restyle implemented in five passes; the last follows an independent page-by-page review and fixes its defects (leaked grid rules, competing button styles, overflow, contrast, staff palettes); build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend",
       "history": [
         {
           "date": "2026-11-12",
@@ -1536,13 +1536,19 @@
           "date": "2026-11-12",
           "execution": "verifying",
           "note": "Own chat bubbles use the brand gradient; order list, wallet, conversation thread and notification panel checked with realistic fixtures"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Fixed the defects found by an independent page-by-page review: shared button set, scoped report styles, overflow, staff palettes and dashboards, status badges"
         }
       ],
       "evidence": [
         ".project/evidence/TASK-077/run-01/report.json",
         ".project/evidence/TASK-077/run-02/report.json",
         ".project/evidence/TASK-077/run-03/report.json",
-        ".project/evidence/TASK-077/run-04/report.json"
+        ".project/evidence/TASK-077/run-04/report.json",
+        ".project/evidence/TASK-077/run-05/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-077.md",
       "criteria": {

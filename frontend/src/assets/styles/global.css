@@ -245,3 +245,91 @@ select:focus {
     font-size: 14px;
   }
 }
+
+/* Shared button set. The doubled class outranks the module stylesheets that each declare their own .btn. */
+.btn.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base), background var(--transition-base), color var(--transition-base);
+}
+
+.btn.btn.btn-sm {
+  min-height: 34px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.btn.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn.btn.btn-primary {
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: var(--brand-glow-sm);
+}
+
+.btn.btn.btn-primary:hover:not(:disabled) {
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: var(--brand-glow);
+  transform: translateY(-1px);
+}
+
+.btn.btn.btn-secondary,
+.btn.btn.btn-outline {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--hairline);
+  box-shadow: none;
+}
+
+.btn.btn.btn-secondary:hover:not(:disabled),
+.btn.btn.btn-outline:hover:not(:disabled) {
+  background: var(--surface);
+  color: var(--brand);
+  border-color: var(--brand);
+}
+
+.btn.btn.btn-danger {
+  background: var(--surface);
+  color: var(--error);
+  border-color: rgba(231, 76, 60, 0.45);
+  box-shadow: none;
+}
+
+.btn.btn.btn-danger:hover:not(:disabled) {
+  background: rgba(231, 76, 60, 0.08);
+  color: var(--error);
+  border-color: var(--error);
+}
+
+:is(.admin-layout, .moderator-shell, .dashboard-shell) .btn.btn.btn-primary {
+  background: #111827;
+  box-shadow: none;
+}
+
+:is(.admin-layout, .moderator-shell, .dashboard-shell) .btn.btn.btn-primary:hover:not(:disabled) {
+  background: #000;
+  box-shadow: none;
+}
+
+:is(.admin-layout, .moderator-shell, .dashboard-shell) .btn.btn.btn-secondary:hover:not(:disabled),
+:is(.admin-layout, .moderator-shell, .dashboard-shell) .btn.btn.btn-outline:hover:not(:disabled) {
+  color: #111827;
+  border-color: #111827;
+}
