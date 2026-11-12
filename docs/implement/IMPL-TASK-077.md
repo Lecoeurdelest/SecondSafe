@@ -22,18 +22,20 @@ The application never loaded Font Awesome, so about 60 icons rendered blank. The
 
 The two reference projects (`itsnotvii/mercari-clone`, `ReMarket-SE2/webapp`) have no licence file, so they were used as visual references only. No code was copied.
 
+A follow-up after the merge of PR 148 fixes what a second review found: the staff order detail table and dispute detail at 390 px, the notification panel that the one-row scrolling header clipped on mobile, off-palette Ant Design tags, the primary button shadow, Ant Design texts in Vietnamese through a shared locale, the moderator header chip, and the seller order tabs.
+
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-06/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-08/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-06/frontend-test.txt` — 9 suites, 58 tests pass |
+| Tests | `.project/evidence/TASK-077/run-08/frontend-test.txt` — 9 suites, 58 tests pass |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-06/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-06/manual-review.md` and `screenshots/` (`run-01` to `run-05` are the earlier passes; `run-06` adds the icon font) |
+| Build/typecheck | `.project/evidence/TASK-077/run-08/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-08/manual-review.md` and `screenshots/` (`run-01` to `run-07` are the earlier passes; `run-08` closes four small items) |
 
 ## Deviations
 
@@ -50,6 +52,8 @@ The task has no dependencies on other tasks because it changes presentation only
 - Status chips that were blue "info" colours in buyer modules are now brand-coloured and can read like the error colour; the shared `--info` colour was kept blue.
 - Dark mode is not implemented.
 - The dashboards under `frontend/src/modules/dashboard/` and the legacy `Footer.jsx` were not redesigned.
+
+- Not changed on purpose: `SellerOrders.jsx` starts with the filter `pending`, which matches none of its tabs (behaviour, not presentation). Also left: the staff notification panel, which was not observed. The admin order section title, the moderator sidebar highlight on `/moderator/profile`, the dispute modal header and file input, and the current timeline step were fixed in `run-08`.
 
 ## Invariant check
 

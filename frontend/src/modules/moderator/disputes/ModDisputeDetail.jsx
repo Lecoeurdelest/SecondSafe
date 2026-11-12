@@ -255,13 +255,13 @@ const ModDisputeDetail = () => {
       <Button icon={<ArrowLeftOutlined />} onClick={() => navigate("/moderator/disputes")}>Quay lại danh sách</Button>
 
       <Card className="mod-panel" title={`Chi tiết Khiếu nại: ${dispute?._id?.slice(-8)?.toUpperCase() || ""}`} loading={loading}>
-        <Descriptions bordered column={1} labelStyle={{ width: 220, fontWeight: 700 }}>
+        <Descriptions bordered column={1} labelStyle={{ width: "clamp(110px, 32%, 220px)", fontWeight: 700 }}>
           <Descriptions.Item label="Người mua">{dispute?.buyerId?.fullName || "Không có"}</Descriptions.Item>
           <Descriptions.Item label="Người bán">{dispute?.sellerId?.fullName || "Không có"}</Descriptions.Item>
           <Descriptions.Item label="Sản phẩm">{dispute?.productId?.title || "Không có"}</Descriptions.Item>
           <Descriptions.Item label="Giá trị đơn hàng">{Number(dispute?.orderId?.agreedAmount || 0).toLocaleString("vi-VN")} đ</Descriptions.Item>
           <Descriptions.Item label="Lý do khiếu nại">
-            <Tag color={dispute?.reason === 'return_request' ? "purple" : "default"}>
+            <Tag color="default">
               {disputeReasonLabels[dispute?.reason] || dispute?.reason || "Không có"}
             </Tag>
           </Descriptions.Item>
@@ -274,7 +274,7 @@ const ModDisputeDetail = () => {
                   <Card key={event.key} size="small" style={{ borderRadius: 8 }}>
                     <Space direction="vertical" size={8} style={{ width: "100%" }}>
                       <Space size={8} wrap>
-                        <Tag color="blue">{event.title}</Tag>
+                        <Tag color="default">{event.title}</Tag>
                         {event.time && (
                           <Text type="secondary">{new Date(event.time).toLocaleString('vi-VN')}</Text>
                         )}
@@ -309,7 +309,7 @@ const ModDisputeDetail = () => {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Nhập phản hồi gửi 2 bên (sẽ hiển thị trong diễn biến theo thời gian)"
-              style={{ minWidth: 320, flex: 1 }}
+              style={{ minWidth: "min(320px, 100%)", flex: 1 }}
             />
 
             {/* Bước trung gian để moderator nhận xử lý trước khi ra quyết định cuối. */}

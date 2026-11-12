@@ -5,7 +5,7 @@ import ModeratorSidebar from "./ModeratorSidebar";
 import ModeratorHeader from "./ModeratorHeader";
 import ModeratorFooter from "./ModeratorFooter";
 import { useAuth } from "../../../hooks/useAuth";
-import staffTheme from "../../staffTheme";
+import staffTheme, { staffLocale } from "../../staffTheme";
 import "./moderator-layout.css";
 import "../moderator-pages.css";
 
@@ -33,7 +33,7 @@ const ModeratorLayout = () => {
   const isMobile = !screens.lg;
 
   return (
-    <ConfigProvider theme={staffTheme}>
+    <ConfigProvider theme={staffTheme} locale={staffLocale}>
     <Layout className="moderator-shell">
       {!isMobile && (
         <Sider width={280} className="moderator-sider" theme="light">

@@ -43,7 +43,7 @@
 .seller-orders-container .filter-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
   padding: 16px 18px;
   border: 1px solid #e5e7eb;
@@ -64,9 +64,10 @@
 }
 
 .seller-orders-container .filter-btn.active {
-  border-color: #fd9a93;
-  background: linear-gradient(135deg, #fff0ef 0%, #fedddb 100%);
-  color: var(--brand-hover);
+  border-color: transparent;
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: var(--brand-glow-sm);
 }
 
 .seller-orders-container .filter-btn i {
@@ -210,8 +211,9 @@
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.01em;
+  line-height: 1.25;
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 

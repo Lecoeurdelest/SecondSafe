@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-077",
+  "spec_hash": "f82e35046cf75d7ce2c4a1225728e82508c63cc8b23adc0475b87790c7212acc",
+  "source_hash": "2b543a1f1137d605e6b84e1734cf371d64c3213b2992c91d055987b69ee9f4c8",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses, never against a real backend or another browser",
+    "Only the dispute modal was re-captured in this run",
+    "Dark mode is not implemented",
+    "The two reference projects have no licence file, so they were used as visual references only and no code was copied"
+  ],
+  "criteria": [
+    {
+      "id": "AC-NFR-USA-02-1",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The dispute modal header and file input use the shared visual language; build and the 58 existing frontend tests pass",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-077/run-08/manual-review.md",
+            ".project/evidence/TASK-077/run-08/screenshots/buyer-order-disputed-followup-modal.png"
+          ]
+        }
+      ]
+    }
+  ]
+}

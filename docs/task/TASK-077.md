@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `verifying` — Restyle implemented in six passes; the last bundles the Font Awesome Free icon font so the blank icons render, after an independent page-by-page review fixed the other defects; build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend
+**Current state:** `verifying` — Restyle merged to main in PR 148; a follow-up fixes the defects of a second page-by-page review (staff detail pages at 390 px, notification panel on mobile, staff tags and buttons, seller order tabs); build and 58 frontend tests pass; automatic completion remains inconclusive without applicable calibration, and no page was observed against a real backend
 
 ## Traceability
 

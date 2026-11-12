@@ -26,17 +26,6 @@
   overflow: visible;
 }
 
-.moderator-header::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 -38px auto;
-  width: 130px;
-  height: 64px;
-  border-radius: 100px;
-  background: radial-gradient(circle, rgba(156, 163, 175, 0.17) 0%, rgba(156, 163, 175, 0) 72%);
-  pointer-events: none;
-}
-
 .moderator-header-left {
   display: flex;
   align-items: center;
@@ -95,6 +84,8 @@
   background: #fff;
   border: 2px solid #d1d5db;
   gap: 6px;
+  line-height: 1.2;
+  height: auto;
   transition: all 0.2s ease;
 }
 

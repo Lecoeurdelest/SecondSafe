@@ -411,12 +411,12 @@
 }
 
 .timeline-step.current .timeline-marker {
-  background-color: #fd1d0d;
+  background-color: var(--ink);
   color: #fff;
 }
 
 .timeline-step.current .timeline-label {
-  color: #91160d;
+  color: var(--ink);
   font-weight: 700;
 }
 
@@ -799,7 +799,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 18px 22px;
-  background: #dc3545;
+  background: var(--brand-gradient);
   color: #fff;
 }
 
@@ -841,6 +841,23 @@
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font: inherit;
+}
+
+.form-group input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 16px;
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+  border-color: var(--brand);
+  color: var(--brand);
 }
 
 .form-group textarea {
