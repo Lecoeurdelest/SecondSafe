@@ -1,18 +1,25 @@
 .abandoned-checkouts {
-  margin: 24px auto 0;
-  padding: 16px;
-  border: 1px solid #f5c26b;
-  border-radius: 12px;
-  background: var(--surface-2);
+  margin-top: 24px;
 }
 
-.abandoned-checkouts h2 {
-  margin: 0 0 12px;
-  font-size: 1.125rem;
+.abandoned-checkouts__card.ant-card {
+  border-color: #f5c26b;
+  border-radius: var(--radius-xl);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-card);
+}
+
+.abandoned-checkouts .ant-typography {
+  margin: 0;
+}
+
+.abandoned-checkouts h2.ant-typography {
+  margin-bottom: 12px;
+  font-size: 18px;
 }
 
 .abandoned-checkouts__error {
-  color: #b42318;
+  margin-bottom: 12px;
 }
 
 .abandoned-checkouts__list {
@@ -24,52 +31,31 @@
 }
 
 .abandoned-checkouts__item {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
 }
 
-.abandoned-checkouts__item img {
+.abandoned-checkouts__image {
+  flex: none;
   width: 64px;
   height: 64px;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 10px);
+  background: var(--fill-subtle);
   object-fit: cover;
 }
 
 .abandoned-checkouts__body {
+  display: flex;
   flex: 1 1 220px;
+  flex-direction: column;
+  gap: 2px;
   min-width: 0;
 }
 
-.abandoned-checkouts__body p {
-  margin: 4px 0 0;
-  color: var(--text-2);
-  font-size: 0.875rem;
-}
-
-.abandoned-checkouts__body strong {
-  display: block;
-}
-
-.abandoned-checkouts__actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.abandoned-checkouts__primary {
-  padding: 8px 14px;
-  border-radius: 8px;
-  background: #eb2d1f;
-  color: #fff;
-  text-decoration: none;
-}
-
-.abandoned-checkouts__actions button {
-  padding: 8px 12px;
-  border: 1px solid #c9c9c9;
-  border-radius: 8px;
-  background: var(--surface);
-  cursor: pointer;
+.abandoned-checkouts__body > a {
+  color: var(--ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }

@@ -1,0 +1,11 @@
+Command: python3 tools/plan-driven-development/scripts/check_project.py validate project.yaml
+{
+  "status": "valid",
+  "errors": [],
+  "warnings": [
+    "TASK-001: decision D-002 is not accepted.",
+    "FR-SYS-05: no task mapping; confirm explicit deferral or ownership."
+  ]
+}
+
+exit_code=0

@@ -3134,6 +3134,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-11
+      statement: The buyer and seller order lists, the seller orders page and the abandoned checkout recovery section are built from
+        Ant Design components, with the same tabs, filters, paging, actions and messages, a dialog instead of browser prompts for
+        cancelling and confirming an order, and work from 360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7468,6 +7475,45 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: The four dialogs become Ant Design Modals holding a Form with Select, Input.TextArea, Rate and Alert, and share one EvidencePicker for the photo and video upload, thumbnails and removal. Each dialog keeps its own upload function, limits and validation messages. The reviews list uses Statistic, Rate, Card, Avatar, Select and Pagination. The delivery module's shipping form had no importer and is deleted.
+  - id: TASK-091
+    title: Ant Design order lists
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-11
+    objective: Rebuild the buyer and seller order lists, the seller orders page and the abandoned checkout recovery section from Ant Design components.
+    in_scope:
+    - frontend/src/modules/order/Orders.jsx
+    - frontend/src/modules/order/Orders.css
+    - frontend/src/modules/order/SellerOrders.jsx
+    - frontend/src/modules/order/SellerOrders.css
+    - frontend/src/modules/order/AbandonedCheckouts.jsx
+    - frontend/src/modules/order/AbandonedCheckouts.css
+    - frontend/src/modules/order/orderStatus.js
+    out_of_scope:
+    - Order detail, payment, purchase request, shipping and receipt pages and the shipping dialog (later order tasks)
+    - Services, routes and order rules
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/order/orderStatus.js
+    - frontend/src/modules/order/Orders.test.jsx
+    - frontend/src/modules/order/AbandonedCheckouts.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: Each page keeps its state, requests and actions and renders through Tabs, Select, Card, Tag, Descriptions, Badge, Avatar, Empty, Spin, Alert and Pagination. Cancelling an order asks for the reason in a Modal and confirming an order as seller asks in a confirmation dialog, replacing the browser prompt and confirm; results appear as toasts instead of alerts. The order status labels, tag colours and formats are shared in one small module. Buttons inside a clickable order card no longer open the order, and the dialogs are rendered outside the cards. The shipping and dispute dialogs opened from the list are unchanged.
 verification:
   thresholds:
     standard: 0.95

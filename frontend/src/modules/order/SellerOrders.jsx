@@ -2,40 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOrdersAsSeller } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
+import { formatOrderDate, formatOrderPrice } from './orderStatus';
 import './SellerOrders.css';
-import { ArrowRight, HourglassMedium, Package, Tray, Truck, WarningCircle } from '@phosphor-icons/react';
+import { Alert, Avatar, Badge, Button, Card, Col, Empty, Flex, Row, Spin, Tabs, Tag, Typography } from 'antd';
+import { ArrowRight, HourglassMedium, Package, Truck } from '@phosphor-icons/react';
+
+const FILTERS = {
+  pending_shipment: {
+    statuses: ['awaiting_seller_confirmation', 'awaiting_payment', 'paid'],
+    empty: 'Bạn không có đơn hàng nào chờ giao'
+  },
+  shipping: {
+    statuses: ['shipped'],
+    empty: 'Bạn không có đơn hàng nào đang giao'
+  },
+  completed: {
+    statuses: ['delivered', 'completed', 'cancelled', 'disputed'],
+    empty: 'Bạn không có đơn hàng nào ở trạng thái hoàn thành'
+  }
+};
+
+const STATUS_TAGS = {
+  awaiting_seller_confirmation: { text: 'Chưa thanh toán (Chờ mua)', color: 'orange' },
+  awaiting_payment: { text: 'Chưa thanh toán (Chờ mua)', color: 'orange' },
+  paid: { text: 'Đã thanh toán (Chờ giao)', color: 'blue' },
+  shipped: { text: 'Đang giao hàng', color: 'geekblue' },
+  delivered: { text: 'Đã giao (Chờ nhận)', color: 'geekblue' },
+  completed: { text: 'Hoàn thành', color: 'success' },
+  cancelled: { text: 'Đã hủy', color: 'default' },
+  disputed: { text: 'Tranh chấp', color: 'error' }
+};
 
 const SellerOrders = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('pending_shipment'); // pending_shipment, shipping, completed
-
-  const getOrderStatus = (order) => {
-    return order.status;
-  };
+  const [filter, setFilter] = useState('pending_shipment');
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    filterOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orders, filter]);
-
   const fetchOrders = async () => {
     try {
       setLoading(true);
       const response = await getOrdersAsSeller();
-      
+
       const ordersList = response?.orders || response?.data?.orders || [];
-      const resultOrders = Array.isArray(ordersList) ? ordersList : [];
-      
-      setOrders(resultOrders);
+      setOrders(Array.isArray(ordersList) ? ordersList : []);
       setError(null);
     } catch (err) {
       setError(err.message || 'Không thể tải danh sách đơn hàng');
@@ -45,152 +60,72 @@ const SellerOrders = () => {
     }
   };
 
-  const filterOrders = () => {
-    let filtered = orders;
-
-    if (filter === 'pending_shipment') {
-      // Chờ giao: includes paid orders waiting for shipping.
-      // Also displaying awaiting_payment or awaiting_seller_confirmation if we want the seller to know the order exists but isn't paid yet.
-      // But the requirement says "thay vào đó là chờ giao", so we focus on 'paid'. We can include 'awaiting_payment', 'awaiting_seller_confirmation' as well, but state them as 'Chờ lấy hàng' or 'Chờ thanh toán'.
-      filtered = orders.filter(order => ['awaiting_seller_confirmation', 'awaiting_payment', 'paid'].includes(getOrderStatus(order)));
-    } else if (filter === 'shipping') {
-      filtered = orders.filter(order => getOrderStatus(order) === 'shipped');
-    } else if (filter === 'completed') {
-      filtered = orders.filter(order =>
-        ['delivered', 'completed', 'cancelled', 'disputed'].includes(getOrderStatus(order))
-      );
-    }
-
-    setFilteredOrders(filtered);
-  };
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getStatusBadge = (status) => {
-    let statusText = '';
-    let statusClass = '';
-
-    if (status === 'awaiting_seller_confirmation' || status === 'awaiting_payment') {
-      statusText = 'Chưa thanh toán (Chờ mua)';
-      statusClass = 'status-awaiting-payment';
-    } else if (status === 'paid') {
-      statusText = 'Đã thanh toán (Chờ giao)';
-      statusClass = 'status-paid';
-    } else if (status === 'shipped') {
-      statusText = 'Đang giao hàng';
-      statusClass = 'status-shipping';
-    } else if (status === 'delivered') {
-      statusText = 'Đã giao (Chờ nhận)';
-      statusClass = 'status-shipping';
-    } else if (status === 'completed') {
-      statusText = 'Hoàn thành';
-      statusClass = 'status-completed';
-    } else if (status === 'cancelled') {
-      statusText = 'Đã hủy';
-      statusClass = 'status-cancelled';
-    } else if (status === 'disputed') {
-      statusText = 'Tranh chấp';
-      statusClass = 'status-disputed';
-    }
-
-    return { text: statusText, class: statusClass };
-  };
-
-  // confirmOrder is removed since approval is automatic or completely bypassed
-
-  const handleViewDetails = (orderId) => {
-    navigate(`/order-detail/${orderId}`);
-  };
+  const countOf = (key) => orders.filter(order => FILTERS[key].statuses.includes(order.status)).length;
+  const filteredOrders = orders.filter(order => FILTERS[filter].statuses.includes(order.status));
 
   if (loading) {
     return (
-      <div className="seller-orders-container loading-container">
-        <div className="spinner"></div>
-        <p>Đang tải danh sách đơn hàng...</p>
+      <div className="seller-orders-container container">
+        <Flex justify="center" gap={12} className="seller-orders-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải danh sách đơn hàng...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
+  const tabLabel = (icon, text, key) => (
+    <span className="seller-orders-tab">
+      {icon}
+      {text}
+      <Badge count={countOf(key)} showZero overflowCount={999} />
+    </span>
+  );
+
   return (
-    <div className="seller-orders-container">
+    <div className="seller-orders-container container">
       <div className="seller-orders-header">
-        <h1>Đơn Hàng Của Tôi</h1>
-        <p className="seller-orders-subtitle">Quản lý các đơn hàng từ khách hàng</p>
+        <Typography.Title level={1}>Đơn Hàng Của Tôi</Typography.Title>
+        <Typography.Paragraph type="secondary">Quản lý các đơn hàng từ khách hàng</Typography.Paragraph>
       </div>
 
-      <div className="seller-orders-filters">
-        <button
-          className={`filter-btn ${filter === 'pending_shipment' ? 'active' : ''}`}
-          onClick={() => setFilter('pending_shipment')}
-        >
-          <HourglassMedium />
-          Chờ giao
-          <span className="filter-count">
-            {orders.filter(o => ['awaiting_seller_confirmation', 'awaiting_payment', 'paid'].includes(getOrderStatus(o))).length}
-          </span>
-        </button>
-
-        <button
-          className={`filter-btn ${filter === 'shipping' ? 'active' : ''}`}
-          onClick={() => setFilter('shipping')}
-        >
-          <Truck />
-          Đang giao
-          <span className="filter-count">
-            {orders.filter(o => getOrderStatus(o) === 'shipped').length}
-          </span>
-        </button>
-
-        <button
-          className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
-          onClick={() => setFilter('completed')}
-        >
-          <Package />
-          Hoàn thành
-          <span className="filter-count">
-            {orders.filter(o => ['delivered', 'completed', 'cancelled', 'disputed'].includes(getOrderStatus(o))).length}
-          </span>
-        </button>
-      </div>
+      <Tabs
+        className="seller-orders-tabs"
+        activeKey={filter}
+        onChange={setFilter}
+        tabBarGutter={18}
+        items={[
+          { key: 'pending_shipment', label: tabLabel(<HourglassMedium />, 'Chờ giao', 'pending_shipment') },
+          { key: 'shipping', label: tabLabel(<Truck />, 'Đang giao', 'shipping') },
+          { key: 'completed', label: tabLabel(<Package />, 'Hoàn thành', 'completed') }
+        ]}
+      />
 
       {error && (
-        <div className="error-message">
-          <WarningCircle />
-          {error}
-          <button onClick={fetchOrders} className="retry-btn">Thử lại</button>
-        </div>
+        <Alert
+          className="seller-orders-alert"
+          type="error"
+          showIcon
+          title={error}
+          action={<Button size="small" type="primary" onClick={fetchOrders}>Thử lại</Button>}
+        />
       )}
 
       {filteredOrders.length === 0 ? (
-        <div className="empty-state">
-          <Tray />
-          <h3>Không có đơn hàng</h3>
-          <p>
-            {filter === 'pending_shipment' && 'Bạn không có đơn hàng nào chờ giao'}
-            {filter === 'shipping' && 'Bạn không có đơn hàng nào đang giao'}
-            {filter === 'completed' && 'Bạn không có đơn hàng nào ở trạng thái hoàn thành'}
-          </p>
-        </div>
+        <Empty
+          className="seller-orders-empty"
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description={(
+            <>
+              <Typography.Title level={3}>Không có đơn hàng</Typography.Title>
+              <Typography.Paragraph type="secondary">{FILTERS[filter].empty}</Typography.Paragraph>
+            </>
+          )}
+        />
       ) : (
-        <div className="seller-orders-list">
+        <Flex vertical gap={14} className="seller-orders-list">
           {filteredOrders.map(order => {
-            const normalizedStatus = getOrderStatus(order);
-            const statusBadge = getStatusBadge(normalizedStatus, order.confirmedBySeller);
+            const statusTag = STATUS_TAGS[order.status] || { text: '', color: 'default' };
             const productImage = order.productId?.images?.[0]
               ? getImageUrl(order.productId.images[0])
               : '/images/placeholders/product-placeholder.png';
@@ -199,59 +134,60 @@ const SellerOrders = () => {
               : '/images/placeholders/avatar-placeholder.svg';
 
             return (
-              <div key={order._id} className="order-card">
-                <div className="order-card-left">
-                  <img 
-                    src={productImage} 
-                    alt={order.productId?.name || 'Sản phẩm'} 
-                    className="order-product-image"
-                    onError={(e) => e.target.src = '/images/placeholders/product-placeholder.png'}
-                  />
-                </div>
+              <Card key={order._id} className="seller-order-item">
+                <Row gutter={[{ xs: 10, md: 20 }, 12]} align="middle">
+                  <Col xs={24} md={10}>
+                    <Flex gap={14} align="center" className="seller-order-item__product">
+                      <img
+                        className="seller-order-item__image"
+                        src={productImage}
+                        alt={order.productId?.name || 'Sản phẩm'}
+                        onError={(e) => { e.target.src = '/images/placeholders/product-placeholder.png'; }}
+                      />
+                      <div className="seller-order-item__text">
+                        <Typography.Title level={3}>
+                          {order.productId?.title || order.productId?.name || 'N/A'}
+                        </Typography.Title>
+                        <Typography.Text strong className="seller-order-item__price">
+                          {formatOrderPrice(order.agreedPrice)}
+                        </Typography.Text>
+                      </div>
+                    </Flex>
+                  </Col>
 
-                <div className="order-product-info">
-                  <h3 className="order-product-name">
-                    {order.productId?.title || order.productId?.name || 'N/A'}
-                  </h3>
-                  <p className="order-product-price">
-                    {formatPrice(order.agreedPrice)}
-                  </p>
-                </div>
+                  <Col xs={24} md={8}>
+                    <Flex gap={10} align="center">
+                      <Avatar
+                        src={buyerAvatar}
+                        alt={order.buyerId?.username || 'Khách hàng'}
+                      />
+                      <div className="seller-order-item__text">
+                        <Typography.Text strong>
+                          {order.buyerId?.fullName || order.buyerId?.username || 'N/A'}
+                        </Typography.Text>
+                        <Typography.Text type="secondary">{formatOrderDate(order.createdAt)}</Typography.Text>
+                      </div>
+                    </Flex>
+                  </Col>
 
-                <div className="order-buyer-info">
-                  <img
-                    src={buyerAvatar}
-                    alt={order.buyerId?.username || 'Khách hàng'}
-                    className="order-buyer-avatar"
-                    onError={(e) => e.target.src = '/images/placeholders/avatar-placeholder.svg'}
-                  />
-                  <div className="order-buyer-details">
-                    <p className="order-buyer-name">
-                      {order.buyerId?.fullName || order.buyerId?.username || 'N/A'}
-                    </p>
-                    <p className="order-date">
-                      {formatDate(order.createdAt)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="order-card-right">
-                  <div className={`order-status-badge ${statusBadge.class}`}>
-                    {statusBadge.text}
-                  </div>
-                  <button
-                    className="btn-view-details"
-                    onClick={() => handleViewDetails(order._id)}
-                    title="Xem chi tiết đơn hàng"
-                  >
-                    <ArrowRight />
-                    Chi tiết
-                  </button>
-                </div>
-              </div>
+                  <Col xs={24} md={6}>
+                    <Flex vertical align="flex-start" gap={8} className="seller-order-item__side">
+                      <Tag color={statusTag.color}>{statusTag.text}</Tag>
+                      <Button
+                        size="small"
+                        icon={<ArrowRight />}
+                        title="Xem chi tiết đơn hàng"
+                        onClick={() => navigate(`/order-detail/${order._id}`)}
+                      >
+                        Chi tiết
+                      </Button>
+                    </Flex>
+                  </Col>
+                </Row>
+              </Card>
             );
           })}
-        </div>
+        </Flex>
       )}
     </div>
   );

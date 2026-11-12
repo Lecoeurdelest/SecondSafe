@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import abandonedCheckoutService from '../../services/abandonedCheckout.service';
 import { getProductImageUrl, handleImageError } from '../../utils/imageHelper';
+import LinkButton from '../../ui/LinkButton';
 import './AbandonedCheckouts.css';
+import { Alert, Button, Card, Flex, Typography } from 'antd';
 
 function hasSession() {
   try {
@@ -54,26 +56,30 @@ export default function AbandonedCheckouts() {
 
   return (
     <section className="abandoned-checkouts container" aria-labelledby="abandoned-checkouts-title">
-      <h2 id="abandoned-checkouts-title">Thanh toán dang dở</h2>
-      {error && <p className="abandoned-checkouts__error" role="alert">{error}</p>}
-      <ul className="abandoned-checkouts__list">
-        {checkouts.map(checkout => (
-          <li className="abandoned-checkouts__item" key={checkout._id}>
-            <img src={getProductImageUrl(checkout.product)} alt="" onError={event => handleImageError(event, 'product')} />
-            <div className="abandoned-checkouts__body">
-              <Link to={`/product/${checkout.product._id}`}>{checkout.product.title}</Link>
-              <strong>{formatPrice(checkout.amount)}</strong>
-              <p>{describe(checkout)}</p>
-            </div>
-            <div className="abandoned-checkouts__actions">
-              {checkout.action === 'resume_payment'
-                ? <Link className="abandoned-checkouts__primary" to={`/orders/${checkout.orderId}/pay`}>Tiếp tục thanh toán</Link>
-                : <Link className="abandoned-checkouts__primary" to={`/product/${checkout.product._id}`}>Mua lại</Link>}
-              <button type="button" onClick={() => handleDismiss(checkout._id)}>Bỏ qua</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <Card className="abandoned-checkouts__card">
+        <Typography.Title level={2} id="abandoned-checkouts-title">Thanh toán dang dở</Typography.Title>
+        {error && <Alert className="abandoned-checkouts__error" type="error" showIcon role="alert" title={error} />}
+        <ul className="abandoned-checkouts__list">
+          {checkouts.map(checkout => (
+            <li className="abandoned-checkouts__item" key={checkout._id}>
+              <Flex gap={14} align="center" wrap>
+                <img className="abandoned-checkouts__image" src={getProductImageUrl(checkout.product)} alt="" onError={event => handleImageError(event, 'product')} />
+                <div className="abandoned-checkouts__body">
+                  <Link to={`/product/${checkout.product._id}`}>{checkout.product.title}</Link>
+                  <Typography.Text strong>{formatPrice(checkout.amount)}</Typography.Text>
+                  <Typography.Text type="secondary">{describe(checkout)}</Typography.Text>
+                </div>
+                <Flex gap={8} wrap className="abandoned-checkouts__actions">
+                  {checkout.action === 'resume_payment'
+                    ? <LinkButton type="primary" to={`/orders/${checkout.orderId}/pay`}>Tiếp tục thanh toán</LinkButton>
+                    : <LinkButton type="primary" to={`/product/${checkout.product._id}`}>Mua lại</LinkButton>}
+                  <Button onClick={() => handleDismiss(checkout._id)}>Bỏ qua</Button>
+                </Flex>
+              </Flex>
+            </li>
+          ))}
+        </ul>
+      </Card>
     </section>
   );
 }

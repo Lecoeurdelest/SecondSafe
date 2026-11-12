@@ -5,12 +5,39 @@ import chatService from '../../services/chat.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import Dispute from '../report/Dispute';
 import ShipOrder from './ShipOrder';
+import { ORDER_STATUSES, describeOrderStatus, formatOrderDate, formatOrderPrice } from './orderStatus';
 import './Orders.css';
-import { CaretLeft, CaretRight, ChatCircle, CircleNotch, CreditCard, Package, ShoppingCart, Storefront, X } from '@phosphor-icons/react';
+import { App as AntApp, Alert, Button, Card, Col, Descriptions, Empty, Flex, Form, Input, Modal, Pagination, Row, Select, Spin, Tabs, Tag, Typography } from 'antd';
+import { ChatCircle, CreditCard, Package, ShoppingCart, Storefront, X } from '@phosphor-icons/react';
+
+const STATUS_OPTIONS = [
+  { value: '', label: 'Tất cả' },
+  ...Object.entries(ORDER_STATUSES).map(([value, { label }]) => ({ value, label }))
+];
+
+const getEntityId = (value) => {
+  if (!value) return null;
+  if (typeof value === 'string' || typeof value === 'number') {
+    return value.toString();
+  }
+  if (value._id?.toString) return value._id.toString();
+  if (value.id?.toString) return value.id.toString();
+  if (value.userId?.toString) return value.userId.toString();
+
+  if (typeof value?.toString === 'function') {
+    const asString = value.toString();
+    if (asString && asString !== '[object Object]') {
+      return asString;
+    }
+  }
+
+  return null;
+};
 
 const Orders = () => {
   const navigate = useNavigate();
-  
+  const { message, modal } = AntApp.useApp();
+
   const [activeTab, setActiveTab] = useState('buying');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,6 +46,9 @@ const Orders = () => {
   const [showDisputeModal, setShowDisputeModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [disputeMode, setDisputeMode] = useState('normal');
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [cancelReason, setCancelReason] = useState('');
+  const [cancelling, setCancelling] = useState(false);
   const [filters, setFilters] = useState({
     status: '',
     page: 1,
@@ -30,30 +60,6 @@ const Orders = () => {
     totalOrders: 0
   });
 
-  const orderStatuses = {
-    'awaiting_seller_confirmation': 'Chờ xác nhận',
-    'awaiting_payment': 'Chờ thanh toán',
-    'pending': 'Chờ thanh toán',
-    'paid': 'Đã thanh toán',
-    'shipped': 'Đang giao hàng',
-    'delivered': 'Đã giao đến nơi',
-    'completed': 'Hoàn thành',
-    'cancelled': 'Đã hủy',
-    'disputed': 'Tranh chấp'
-  };
-
-  const statusColors = {
-    'awaiting_seller_confirmation': 'status-waiting',
-    'awaiting_payment': 'status-pending',
-    'pending': 'status-pending',
-    'paid': 'status-paid',
-    'shipped': 'status-shipped',
-    'delivered': 'status-delivered', // matching OrderDetail.jsx
-    'completed': 'status-completed',
-    'cancelled': 'status-cancelled',
-    'disputed': 'status-disputed'
-  };
-
   useEffect(() => {
     fetchOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,17 +69,17 @@ const Orders = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const params = {
         page: filters.page,
         limit: filters.limit,
         ...(filters.status && { status: filters.status })
       };
 
-      const response = activeTab === 'buying' 
+      const response = activeTab === 'buying'
         ? await getOrdersAsBuyer(params)
         : await getOrdersAsSeller(params);
-      
+
       setOrders(response.data.orders || []);
       setPagination({
         currentPage: response.data.currentPage || 1,
@@ -104,26 +110,6 @@ const Orders = () => {
     navigate(`/orders/${orderId}`);
   };
 
-  const getEntityId = (value) => {
-    if (!value) return null;
-    if (typeof value === 'string' || typeof value === 'number') {
-      return value.toString();
-    }
-    if (value._id?.toString) return value._id.toString();
-    if (value.id?.toString) return value.id.toString();
-    if (value.userId?.toString) return value.userId.toString();
-
-    // Ho tro truong hop value la ObjectId thuan (khong co _id/id).
-    if (typeof value?.toString === 'function') {
-      const asString = value.toString();
-      if (asString && asString !== '[object Object]') {
-        return asString;
-      }
-    }
-
-    return null;
-  };
-
   const openOrderChat = async (order) => {
     try {
       const orderId = getEntityId(order?._id);
@@ -139,42 +125,60 @@ const Orders = () => {
       }
 
       navigate('/chat');
-    } catch (error) {
-      console.error('Error opening order chat:', error);
+    } catch (err) {
+      console.error('Error opening order chat:', err);
       navigate('/chat');
     }
   };
 
-  const handleConfirmOrderBySeller = async (order) => {
-    const accepted = window.confirm('Bạn xác nhận đơn hàng này và chuyển cho người mua thanh toán?');
-    if (!accepted) return;
-
-    try {
-      setConfirmingOrderId(order._id);
-      await confirmOrderBySeller(order._id);
-      await fetchOrders();
-      alert('Đã xác nhận đơn hàng. Người mua sẽ tiến hành thanh toán.');
-    } catch (err) {
-      alert(err.message || 'Không thể xác nhận đơn hàng');
-    } finally {
-      setConfirmingOrderId(null);
-    }
+  const handleConfirmOrderBySeller = (order) => {
+    modal.confirm({
+      title: 'Xác nhận đơn hàng',
+      content: 'Bạn xác nhận đơn hàng này và chuyển cho người mua thanh toán?',
+      okText: 'Xác nhận đơn',
+      cancelText: 'Hủy',
+      centered: true,
+      onOk: async () => {
+        try {
+          setConfirmingOrderId(order._id);
+          await confirmOrderBySeller(order._id);
+          await fetchOrders();
+          message.success('Đã xác nhận đơn hàng. Người mua sẽ tiến hành thanh toán.');
+        } catch (err) {
+          message.error(err.message || 'Không thể xác nhận đơn hàng');
+        } finally {
+          setConfirmingOrderId(null);
+        }
+      }
+    });
   };
 
-  const handleCancelOrder = async (order, e) => {
-    e.stopPropagation();
-    const reason = window.prompt('Nhập lý do hủy đơn hàng của bạn:', '');
-    if (reason === null) return; // User clicked Cancel in prompt
-    
+  const openCancelDialog = (order) => {
+    setCancelReason('');
+    setCancelTarget(order);
+  };
+
+  const closeCancelDialog = () => {
+    if (cancelling) return;
+    setCancelTarget(null);
+    setCancelReason('');
+  };
+
+  const handleCancelOrder = async () => {
+    const order = cancelTarget;
+    if (!order) return;
+
     try {
-      setLoading(true);
-      await cancelOrder(order._id, reason || 'Người mua hủy đơn');
+      setCancelling(true);
+      await cancelOrder(order._id, cancelReason.trim() || 'Người mua hủy đơn');
+      setCancelTarget(null);
+      setCancelReason('');
       await fetchOrders();
-      alert('Hủy đơn hàng thành công và tiền đã được tự động hoàn lại (nếu có).');
+      message.success('Hủy đơn hàng thành công và tiền đã được tự động hoàn lại (nếu có).');
     } catch (err) {
-      alert(err.message || 'Không thể hủy đơn hàng');
+      message.error(err.message || 'Không thể hủy đơn hàng');
     } finally {
-      setLoading(false);
+      setCancelling(false);
     }
   };
 
@@ -184,402 +188,293 @@ const Orders = () => {
     setShowDisputeModal(true);
   };
 
-  const handleDisputeSuccess = async () => {
+  const closeDialogs = () => {
     setShowDisputeModal(false);
     setSelectedOrder(null);
+  };
+
+  const handleDisputeSuccess = async () => {
+    const wasReturn = disputeMode === 'return';
+    closeDialogs();
     await fetchOrders();
 
-    if (disputeMode === 'return') {
-      alert('Yêu cầu hoàn hàng đã được tạo thành công. Bạn có thể theo dõi xử lý trong chi tiết đơn hàng.');
-      return;
-    }
-
-    alert('Khiếu nại đã được tạo thành công. Bạn có thể theo dõi xử lý trong chi tiết đơn hàng.');
+    message.success(wasReturn
+      ? 'Yêu cầu hoàn hàng đã được tạo thành công. Bạn có thể theo dõi xử lý trong chi tiết đơn hàng.'
+      : 'Khiếu nại đã được tạo thành công. Bạn có thể theo dõi xử lý trong chi tiết đơn hàng.');
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getActionButton = (order) => {
-    const isBuyer = activeTab === 'buying';
-    
-    if (isBuyer) {
+  const getActionButtons = (order) => {
+    if (activeTab === 'buying') {
       switch (order.status) {
         case 'awaiting_payment':
         case 'pending':
           return (
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button 
-                className="btn btn-primary btn-sm btn-pay"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/orders/${order._id}/pay`);
-                }}
-              >
-                <CreditCard />
+            <>
+              <Button type="primary" size="small" icon={<CreditCard />} onClick={() => navigate(`/orders/${order._id}/pay`)}>
                 Thanh toán
-              </button>
-              <button 
-                className="btn btn-danger btn-sm"
-                onClick={(e) => handleCancelOrder(order, e)}
-              >
-                <X />
+              </Button>
+              <Button danger size="small" icon={<X />} onClick={() => openCancelDialog(order)}>
                 Hủy đơn
-              </button>
-            </div>
+              </Button>
+            </>
           );
         case 'paid':
           return (
-            <button 
-              className="btn btn-danger btn-sm"
-              onClick={(e) => handleCancelOrder(order, e)}
-            >
-              <X />
+            <Button danger size="small" icon={<X />} onClick={() => openCancelDialog(order)}>
               Hủy đơn (Hoàn tiền)
-            </button>
+            </Button>
           );
         case 'delivered':
           return (
             <>
-              <button 
-                className="btn btn-success btn-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/orders/${order._id}?action=confirm-receipt`);
-                }}
-              >
+              <Button type="primary" size="small" onClick={() => navigate(`/orders/${order._id}?action=confirm-receipt`)}>
                 Xác nhận nhận hàng
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openDisputeModal(order, 'normal');
-                }}
-              >
+              </Button>
+              <Button danger size="small" onClick={() => openDisputeModal(order, 'normal')}>
                 Khiếu nại và hoàn tiền
-              </button>
+              </Button>
             </>
           );
         case 'completed':
           return (
-            <button
-              className="btn btn-warning btn-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/orders/${order._id}?action=rate`);
-              }}
-            >
+            <Button size="small" onClick={() => navigate(`/orders/${order._id}?action=rate`)}>
               Đánh giá người bán
-            </button>
+            </Button>
           );
         case 'disputed':
           return (
-            <button
-              className="btn btn-warning btn-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/orders/${order._id}?action=followup`);
-              }}
-            >
+            <Button size="small" onClick={() => navigate(`/orders/${order._id}?action=followup`)}>
               Bổ sung bằng chứng
-            </button>
+            </Button>
           );
         default:
           return null;
       }
-    } else {
-      switch (order.status) {
-        case 'awaiting_seller_confirmation':
-          return (
-            <button
-              className="btn btn-success btn-sm"
-              disabled={confirmingOrderId === order._id}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleConfirmOrderBySeller(order);
-              }}
-            >
-              {confirmingOrderId === order._id ? 'Đang xử lý...' : 'Xác nhận đơn'}
-            </button>
-          );
-        case 'paid':
-              return (
-                <button 
-                  className="btn btn-primary btn-sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedOrder(order);
-                    setDisputeMode('shipment');
-                    setShowDisputeModal(true);
-                  }}
-                >
-                  Xác nhận giao hàng
-                </button>
-              );
-        case 'shipped':
-              return (
-                <button 
-                  className="btn btn-info btn-sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/orders/${order._id}`);
-                  }}
-                >
-                  Xác nhận giao đến nơi
-                </button>
-              );
-        case 'disputed':
-          return (
-            <button
-              className="btn btn-warning btn-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/orders/${order._id}?action=seller-evidence`);
-              }}
-            >
-              Xử lý tranh chấp
-            </button>
-          );
-        default:
-          return null;
-      }
+    }
+
+    switch (order.status) {
+      case 'awaiting_seller_confirmation':
+        return (
+          <Button
+            type="primary"
+            size="small"
+            disabled={confirmingOrderId === order._id}
+            onClick={() => handleConfirmOrderBySeller(order)}
+          >
+            {confirmingOrderId === order._id ? 'Đang xử lý...' : 'Xác nhận đơn'}
+          </Button>
+        );
+      case 'paid':
+        return (
+          <Button type="primary" size="small" onClick={() => openDisputeModal(order, 'shipment')}>
+            Xác nhận giao hàng
+          </Button>
+        );
+      case 'shipped':
+        return (
+          <Button size="small" onClick={() => navigate(`/orders/${order._id}`)}>
+            Xác nhận giao đến nơi
+          </Button>
+        );
+      case 'disputed':
+        return (
+          <Button size="small" onClick={() => navigate(`/orders/${order._id}?action=seller-evidence`)}>
+            Xử lý tranh chấp
+          </Button>
+        );
+      default:
+        return null;
     }
   };
 
   if (loading && orders.length === 0) {
     return (
-      <div className="orders-container">
-        <div className="loading">Đang tải...</div>
+      <div className="orders-container container">
+        <Flex justify="center" gap={12} className="orders-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
+  const isBuying = activeTab === 'buying';
+
   return (
-    <div className="orders-container">
-      <div className="page-header">
-        <h1>Đơn hàng của tôi</h1>
-        <p>Quản lý và theo dõi các đơn hàng</p>
+    <div className="orders-container container">
+      <div className="orders-header">
+        <Typography.Title level={1}>Đơn hàng của tôi</Typography.Title>
+        <Typography.Paragraph type="secondary">Quản lý và theo dõi các đơn hàng</Typography.Paragraph>
       </div>
 
-      {/* Tabs */}
-      <div className="order-tabs">
-        <button
-          className={`tab-button ${activeTab === 'buying' ? 'active' : ''}`}
-          onClick={() => handleTabChange('buying')}
-        >
-          <ShoppingCart />
-          Đơn mua ({activeTab === 'buying' ? pagination.totalOrders : '...'})
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'selling' ? 'active' : ''}`}
-          onClick={() => handleTabChange('selling')}
-        >
-          <Storefront />
-          Đơn bán ({activeTab === 'selling' ? pagination.totalOrders : '...'})
-        </button>
-      </div>
+      <Tabs
+        className="orders-tabs"
+        activeKey={activeTab}
+        onChange={handleTabChange}
+        items={[
+          {
+            key: 'buying',
+            label: <span className="orders-tab"><ShoppingCart />Đơn mua ({isBuying ? pagination.totalOrders : '...'})</span>
+          },
+          {
+            key: 'selling',
+            label: <span className="orders-tab"><Storefront />Đơn bán ({!isBuying ? pagination.totalOrders : '...'})</span>
+          }
+        ]}
+      />
 
-      {/* Filters */}
-      <div className="order-filters">
-        <div className="filter-group">
-          <label>Trạng thái:</label>
-          <select
-            value={filters.status}
-            onChange={(e) => handleStatusFilter(e.target.value)}
-          >
-            <option value="">Tất cả</option>
-            {Object.entries(orderStatuses).map(([key, label]) => (
-              <option key={key} value={key}>{label}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <Flex align="center" gap={10} className="orders-filter">
+        <Typography.Text type="secondary">Trạng thái:</Typography.Text>
+        <Select
+          className="orders-filter__select"
+          aria-label="Lọc theo trạng thái"
+          value={filters.status}
+          options={STATUS_OPTIONS}
+          onChange={handleStatusFilter}
+          virtual={false}
+        />
+      </Flex>
 
       {error && (
-        <div className="error-message">
-          {error}
-          <button onClick={fetchOrders} className="btn btn-primary btn-sm">
-            Thử lại
-          </button>
-        </div>
+        <Alert
+          className="orders-alert"
+          type="error"
+          showIcon
+          title={error}
+          action={<Button size="small" type="primary" onClick={fetchOrders}>Thử lại</Button>}
+        />
       )}
 
-      {/* Orders List */}
       {orders.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">
-            <Package />
-          </div>
-          <h3>Chưa có đơn hàng nào</h3>
-          <p>
-            {activeTab === 'buying' 
-              ? 'Bạn chưa có đơn hàng mua nào. Hãy khám phá các sản phẩm và đặt hàng ngay!'
-              : 'Bạn chưa có đơn hàng bán nào. Hãy đăng sản phẩm để bắt đầu bán hàng!'
-            }
-          </p>
-          <button 
-            className="btn btn-primary"
-            onClick={() => navigate(activeTab === 'buying' ? '/' : '/product/create')}
-          >
-            {activeTab === 'buying' ? 'Khám phá sản phẩm' : 'Đăng sản phẩm'}
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="orders-list">
-            {orders.map((order) => (
-              <div
-                key={order._id}
-                className="order-card"
-                onClick={() => handleOrderClick(order._id)}
-              >
-                <div className="order-header">
-                  <div className="order-id">
-                    <span className="label">Mã đơn hàng:</span>
-                    <span className="value">#{order.orderCode || order._id.slice(-8).toUpperCase()}</span>
-                  </div>
-                  <div className={`order-status ${statusColors[order.status] || ''}`}>
-                    {orderStatuses[order.status] || order.status}
-                  </div>
-                </div>
-
-                <div className="order-content">
-                  <div className="product-info">
-                    <div className="product-image">
-                      <img
-                        src={getImageUrl(order.listing?.images?.[0]) || '/placeholder-image.jpg'}
-                        alt={order.listing?.title}
-                        onError={(e) => { e.target.src = '/images/placeholders/product-placeholder.png'; }}
-                      />
-                    </div>
-                    <div className="product-details">
-                      <h4>{order.listing?.title}</h4>
-                      <p className="product-price">
-                        Giá: {formatPrice(order.agreedPrice)}
-                      </p>
-                      <p className="order-total">
-                        Tổng tiền: {formatPrice(order.totalAmount)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="order-info">
-                    <div className="user-info">
-                      <span className="label">
-                        {activeTab === 'buying' ? 'Người bán:' : 'Người mua:'}
-                      </span>
-                      <span className="value">
-                        {activeTab === 'buying'
-                          ? order.seller?.fullName
-                          : order.buyer?.fullName
-                        }
-                      </span>
-                    </div>
-                    <div className="order-date">
-                      <span className="label">Ngày tạo:</span>
-                      <span className="value">{formatDate(order.createdAt)}</span>
-                    </div>
-                    {order.shippedAt && (
-                      <div className="ship-date">
-                        <span className="label">Ngày giao:</span>
-                        <span className="value">{formatDate(order.shippedAt)}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="order-actions">
-                  <button
-                    className="btn btn-outline btn-sm"
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      await openOrderChat(order);
-                    }}
-                  >
-                    <ChatCircle />
-                    Chat
-                  </button>
-                  {getActionButton(order)}
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleOrderClick(order._id);
-                    }}
-                  >
-                    Xem chi tiết
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {pagination.totalPages > 1 && (
-            <div className="pagination">
-              <button
-                className="pagination-btn"
-                onClick={() => handlePageChange(pagination.currentPage - 1)}
-                disabled={pagination.currentPage === 1}
-              >
-                <CaretLeft />
-                Trước
-              </button>
-              
-              <div className="pagination-info">
-                Trang {pagination.currentPage} / {pagination.totalPages}
-                <span className="total-count">
-                  ({pagination.totalOrders} đơn hàng)
-                </span>
-              </div>
-              
-              <button
-                className="pagination-btn"
-                onClick={() => handlePageChange(pagination.currentPage + 1)}
-                disabled={pagination.currentPage === pagination.totalPages}
-              >
-                Sau
-                <CaretRight />
-              </button>
-            </div>
+        <Empty
+          className="orders-empty"
+          image={<Package size={56} />}
+          description={(
+            <>
+              <Typography.Title level={3}>Chưa có đơn hàng nào</Typography.Title>
+              <Typography.Paragraph type="secondary">
+                {isBuying
+                  ? 'Bạn chưa có đơn hàng mua nào. Hãy khám phá các sản phẩm và đặt hàng ngay!'
+                  : 'Bạn chưa có đơn hàng bán nào. Hãy đăng sản phẩm để bắt đầu bán hàng!'}
+              </Typography.Paragraph>
+            </>
           )}
-        </>
+        >
+          <Button type="primary" onClick={() => navigate(isBuying ? '/' : '/product/create')}>
+            {isBuying ? 'Khám phá sản phẩm' : 'Đăng sản phẩm'}
+          </Button>
+        </Empty>
+      ) : (
+        <Spin spinning={loading} description="Đang tải...">
+          <Flex vertical gap={16} className="orders-list">
+            {orders.map((order) => {
+              const status = describeOrderStatus(order.status);
+              const counterpart = isBuying ? order.seller?.fullName : order.buyer?.fullName;
+              const details = [
+                { key: 'user', label: isBuying ? 'Người bán' : 'Người mua', children: counterpart },
+                { key: 'created', label: 'Ngày tạo', children: formatOrderDate(order.createdAt) }
+              ];
+              if (order.shippedAt) {
+                details.push({ key: 'shipped', label: 'Ngày giao', children: formatOrderDate(order.shippedAt) });
+              }
+
+              return (
+                <Card
+                  key={order._id}
+                  hoverable
+                  className="order-item"
+                  onClick={() => handleOrderClick(order._id)}
+                >
+                  <Flex justify="space-between" align="center" wrap gap={8} className="order-item__head">
+                    <Typography.Text>
+                      Mã đơn hàng: <strong>#{order.orderCode || order._id.slice(-8).toUpperCase()}</strong>
+                    </Typography.Text>
+                    <Tag color={status.color}>{status.label}</Tag>
+                  </Flex>
+
+                  <Row gutter={[{ xs: 10, md: 20 }, 12]} className="order-item__body">
+                    <Col xs={24} md={13}>
+                      <Flex gap={14} className="order-item__product">
+                        <img
+                          className="order-item__image"
+                          src={getImageUrl(order.listing?.images?.[0]) || '/placeholder-image.jpg'}
+                          alt={order.listing?.title}
+                          onError={(e) => { e.target.src = '/images/placeholders/product-placeholder.png'; }}
+                        />
+                        <div className="order-item__text">
+                          <Typography.Title level={4}>{order.listing?.title}</Typography.Title>
+                          <Typography.Text type="secondary">Giá: {formatOrderPrice(order.agreedPrice)}</Typography.Text>
+                          <Typography.Text strong className="order-item__total">
+                            Tổng tiền: {formatOrderPrice(order.totalAmount)}
+                          </Typography.Text>
+                        </div>
+                      </Flex>
+                    </Col>
+                    <Col xs={24} md={11}>
+                      <Descriptions size="small" column={1} items={details} />
+                    </Col>
+                  </Row>
+
+                  <Flex wrap gap={8} justify="flex-end" className="order-item__actions" onClick={(e) => e.stopPropagation()}>
+                    <Button size="small" icon={<ChatCircle />} onClick={() => openOrderChat(order)}>
+                      Chat
+                    </Button>
+                    {getActionButtons(order)}
+                    <Button size="small" type="link" onClick={() => handleOrderClick(order._id)}>
+                      Xem chi tiết
+                    </Button>
+                  </Flex>
+                </Card>
+              );
+            })}
+          </Flex>
+
+          <Pagination
+            className="orders-pagination"
+            align="center"
+            hideOnSinglePage
+            showSizeChanger={false}
+            current={pagination.currentPage}
+            pageSize={filters.limit}
+            total={pagination.totalOrders || pagination.totalPages * filters.limit}
+            showTotal={(total) => `${total} đơn hàng`}
+            onChange={handlePageChange}
+          />
+        </Spin>
       )}
 
-      {loading && orders.length > 0 && (
-        <div className="loading-overlay">
-          <div className="loading-spinner">
-            <CircleNotch className="icon-spin" />
-            Đang tải...
-          </div>
-        </div>
-      )}
+      <Modal
+        open={Boolean(cancelTarget)}
+        title="Hủy đơn hàng"
+        okText="Hủy đơn hàng"
+        cancelText="Giữ đơn hàng"
+        okButtonProps={{ danger: true, loading: cancelling }}
+        cancelButtonProps={{ disabled: cancelling }}
+        onOk={handleCancelOrder}
+        onCancel={closeCancelDialog}
+        centered
+        mask={{ closable: false }}
+      >
+        <Form layout="vertical">
+          <Form.Item label="Nhập lý do hủy đơn hàng của bạn:" htmlFor="cancel-order-reason">
+            <Input.TextArea
+              id="cancel-order-reason"
+              rows={3}
+              maxLength={300}
+              showCount
+              value={cancelReason}
+              onChange={(e) => setCancelReason(e.target.value)}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
 
       {showDisputeModal && selectedOrder && disputeMode === 'shipment' && (
         <ShipOrder
           order={selectedOrder}
-          onClose={() => {
-            setShowDisputeModal(false);
-            setSelectedOrder(null);
-          }}
+          onClose={closeDialogs}
           onSuccess={async () => {
-            setShowDisputeModal(false);
-            setSelectedOrder(null);
+            closeDialogs();
             await fetchOrders();
           }}
         />
@@ -589,10 +484,7 @@ const Orders = () => {
           order={selectedOrder}
           initialReason={disputeMode === 'return' ? 'return_request' : ''}
           onSuccess={handleDisputeSuccess}
-          onCancel={() => {
-            setShowDisputeModal(false);
-            setSelectedOrder(null);
-          }}
+          onCancel={closeDialogs}
         />
       )}
     </div>

@@ -1,0 +1,4 @@
+{"theme":"light","label":"w1280","buyingCards":4,"abandonedItems":2,"ordersOverflow":false,"sellingCards":4,"cancelDialog":1,"sellerCards":2,"sellerOverflow":false,"cartOverflow":false,"errors":0}
+{"theme":"light","label":"w390","buyingCards":4,"abandonedItems":2,"ordersOverflow":false,"sellingCards":4,"cancelDialog":1,"sellerCards":2,"sellerOverflow":false,"cartOverflow":false,"errors":0}
+{"theme":"dark","label":"w1280","buyingCards":4,"abandonedItems":2,"ordersOverflow":false,"sellingCards":4,"cancelDialog":1,"sellerCards":2,"sellerOverflow":false,"cartOverflow":false,"errors":0}
+{"theme":"dark","label":"w390","buyingCards":4,"abandonedItems":2,"ordersOverflow":false,"sellingCards":4,"cancelDialog":1,"sellerCards":2,"sellerOverflow":false,"cartOverflow":false,"errors":0}
