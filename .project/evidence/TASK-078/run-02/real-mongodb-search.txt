@@ -1,0 +1,27 @@
+# searchProducts against a disposable MongoDB 7.0.14 replica set seeded with 80 listings by backend/seed-all.js (4 eligible sellers); the Category model is registered first because the script runs outside the server
+indexes: _id_, seller_1, title_text_description_text, status_1_createdAt_-1, category_1, categories_1, price_1
+{"query":"sách"} -> 5 results [
+  'Bộ Sách Giáo Khoa Lớp 12 200000 good',
+  'Tiếng Anh Giao Tiếp Cơ Bản 95000 good',
+  'Nghệ Thuật Bán Hàng 120000 like-new'
+]
+{"query":"balo thú cưng","maxPriceVnd":400000} -> 5 results [
+  'Balo Vận Chuyển Thú Cưng 380000 like-new',
+  'Cà Phê Cùng Tony 75000 like-new',
+  'Nghệ Thuật Bán Hàng 120000 like-new'
+]
+{"query":"Harry Potter"} -> 0 results []
+{"query":"điện thoại","condition":"like-new"} -> 1 results [ 'Nồi Cơm Điện Tử Sharp 1.8L 1200000 like-new' ]
+{"query":"ba lô (xanh)"} -> 5 results [
+  'Balo Vận Chuyển Thú Cưng 380000 like-new',
+  'Xe Đạp Thể Thao Giant ATX 720 4500000 good',
+  'Áo Khoác Denim Nam 380000 good'
+]
+{"query":"zzzzqqq"} -> 0 results []
+{"query":"sách","maxPriceVnd":100000,"minPriceVnd":60000} -> 4 results [
+  'Tiếng Anh Giao Tiếp Cơ Bản 95000 good',
+  'Cà Phê Cùng Tony 75000 like-new',
+  'Tuổi Trẻ Đáng Giá Bao Nhiêu 65000 good'
+]
+
+# Note: 'Harry Potter' returns nothing because the seeded listing was bought during seeding (order created and paid), and reserved listings are not active; the 'ba lô (xanh)' results beyond the first are weak text-index matches (score about 0.54) that the text index returns when nothing matches well.

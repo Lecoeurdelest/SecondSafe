@@ -169,3 +169,11 @@ Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 13. Checkout re
 | Criterion | Statement | Verification | Task |
 |---|---|---|---|
 | `AC-WEB-21-1` | Buyers see their unfinished checkouts above the order list and the cart with resume-payment, buy-again and dismiss actions; admin and staff dashboards show the recovery summary; a failed summary or list request never hides the page it sits on. | behavioral test, manual review | [TASK-076](../task/TASK-076.md) `[!]` |
+
+### FR-WEB-22 — Web conversational assistant
+
+Risk: `standard` · Component: `CMP-WEB` · Source: `plan.md` § 15. Conversational assistant amendment (2026-11-12)
+
+| Criterion | Statement | Verification | Task |
+|---|---|---|---|
+| `AC-WEB-22-1` | The assistant page shows the conversation as chat bubbles with starter questions, a typing indicator, inline listing cards, a new-conversation action and a privacy notice, keeps the thread across a page reload in the same tab, and works from 360 px to 1920 px wide. | behavioral test, manual review | [TASK-078](../task/TASK-078.md) `[!]` |

@@ -44,6 +44,9 @@ export function clearSession() {
   } catch (error) {
     storageError = error;
   }
+  try {
+    window.sessionStorage.removeItem('secondsafe:assistant:thread');
+  } catch { /* Session storage can be unavailable in private browsing. */ }
   window.dispatchEvent(new Event('secondsafe:session-changed'));
   if (storageError) throw new Error('Không thể xóa phiên đăng nhập khỏi trình duyệt này.');
 }
