@@ -2,8 +2,8 @@
   "generator": "tools/pdd/render.py",
   "template_version": "plan-driven-development@41c1bd8ec495524656369a95c126bc09bf465896",
   "inputs": {
-    "project.yaml": "1171d16d1f4abe8b5430e03947705eb9c899a06fc429d275c0a5f8767a77c075",
-    ".project/state.json": "c88d94aaf9a104c89cc4d347b63318e19b24f55a8a257c51e40dfeb90aaba09b",
+    "project.yaml": "d10d0cbeaa1e684043e70df686f8163c064ddb04610cccc1e9bf880a5d867d14",
+    ".project/state.json": "b4eca39a19ca771442ed0d2335d8b5809902df5f59597995d27a4223602ead1c",
     ".project/delivery.json": "d590d56a61e6f0dfe0943412ab9d24b687ea9526d75d2d0bc6784c694dc50633",
     "backend/src/modules/chat/conversation.model.js": "bf246baa08861c46c30685cdcf047a592ae93122529b64cdfc3cc57d03beb802",
     "backend/src/modules/chat/message.model.js": "b9a7981948cfe8b7ac63f18dd46c528f6005c45c7ecb7227cb8eb6075cb71bac",
@@ -93,7 +93,7 @@
     },
     "docs/requirements/FR-WEB.md": {
       "ownership": "generated",
-      "sha256": "3617450350b003dd940344cd4d11f4974a97419dea57996f97f35a7ce53f6638"
+      "sha256": "e9d3a78c423621f6d9445c03e5eac1058f9e011487d760f4c613e64a4d60df6e"
     },
     "docs/requirements/NFR.md": {
       "ownership": "generated",
@@ -101,11 +101,11 @@
     },
     "docs/requirements/README.md": {
       "ownership": "generated",
-      "sha256": "ea00db00776fcbe53b907baf6a45f06994b99a9dc3a7045cd875457417ec3c71"
+      "sha256": "ce7d8ad0c5cb2cec8b83602a8e6276e27b1a763beed9da7269738563f98270d4"
     },
     "docs/task/README.md": {
       "ownership": "generated",
-      "sha256": "6e0502b3aafa7a06bc9725f826f760bf5d86457eefb3ec41ee25dd441e494d4b"
+      "sha256": "aa51c8cdf9514d78884d9428b90b20451a2c9bab5ddee11006cb0a8b19db5e5e"
     },
     "docs/task/TASK-001.md": {
       "ownership": "generated",
@@ -475,19 +475,23 @@
       "ownership": "generated",
       "sha256": "70f96c5135adf966b9d43af51e1b44f136dc21eac5a99455607ccba9580aaad4"
     },
+    "docs/task/TASK-094.md": {
+      "ownership": "generated",
+      "sha256": "9018fd892d1d297bf08a005f0d3e23da4f1e91055c85320c2aa4c8ce369a9c8c"
+    },
     "docs/technical/data-model.md": {
       "ownership": "generated",
       "sha256": "1cd4ec5c017a669bcf11ada63f2aa8034213f1bcef4be3d641e31e226505aadf"
     },
     ".agent/index.json": {
       "ownership": "generated",
-      "sha256": "dfdb3266f461ffade57a45e1fec7c4501506c333766844ef0b6eabe203803871"
+      "sha256": "8497d285ed461d26f7c716949809af05d3df52cd960435241a4ae29528db8887"
     }
   },
   "managed_regions": {
     "plan.md": {
       "region": "progress",
-      "sha256": "0b8b795cb8f994744878d2baae89c8768d889aeb1f08aa9295486b7e5500956d"
+      "sha256": "dee96cfd889ae166aee91192f91bab7fde198545c26fcb1c3c83f4dc4a9951e2"
     }
   }
 }

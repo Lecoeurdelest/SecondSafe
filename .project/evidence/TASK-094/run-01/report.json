@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-094",
+  "spec_hash": "d10d0cbeaa1e684043e70df686f8163c064ddb04610cccc1e9bf880a5d867d14",
+  "source_hash": "386cb418b35950f4f40c428f99ed737864c0eab2a0b993ceb843355023e0037b",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The follow-up, return confirmation, receipt and rating flows and evidence videos were exercised by tests only",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-14",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new OrderDetail tests and the existing suites pass; the build passes; the page and its cancel and seller reply dialogs show their content with no overflow or error in light and dark at 390 and 1280 px; the follow-up, return confirmation, receipt and rating flows were exercised by tests only",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-094/run-01/frontend-test.txt",
+            ".project/evidence/TASK-094/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-094/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
