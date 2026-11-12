@@ -3141,6 +3141,13 @@ requirements:
       verification:
       - behavioral_test
       - manual_review
+    - id: AC-WEB-25-12
+      statement: The purchase request dialog and inbox, the order payment page and the bank transfer result page are built from Ant
+        Design components, with the same fields, validation, payment hand-off, polling and messages, dialogs and toasts instead
+        of browser confirms and alerts, and work from 360 px to 1920 px wide in both themes.
+      verification:
+      - behavioral_test
+      - manual_review
 
 tasks:
   - id: TASK-001
@@ -7514,6 +7521,47 @@ tasks:
     - A required decision is not accepted
     - Verification cannot run or produces no original output
     technical_approach: Each page keeps its state, requests and actions and renders through Tabs, Select, Card, Tag, Descriptions, Badge, Avatar, Empty, Spin, Alert and Pagination. Cancelling an order asks for the reason in a Modal and confirming an order as seller asks in a confirmation dialog, replacing the browser prompt and confirm; results appear as toasts instead of alerts. The order status labels, tag colours and formats are shared in one small module. Buttons inside a clickable order card no longer open the order, and the dialogs are rendered outside the cards. The shipping and dispute dialogs opened from the list are unchanged.
+  - id: TASK-092
+    title: Ant Design purchase requests and payment
+    requirement_ids:
+    - FR-WEB-25
+    component_ids:
+    - CMP-WEB
+    decision_ids:
+    - D-009
+    - D-011
+    depends_on: []
+    acceptance_ids:
+    - AC-WEB-25-12
+    objective: Rebuild the purchase request dialog and inbox, the order payment page and the bank transfer result page from Ant Design components.
+    in_scope:
+    - frontend/src/modules/order/PurchaseRequest.jsx
+    - frontend/src/modules/order/PurchaseRequest.css
+    - frontend/src/modules/order/PurchaseRequests.jsx
+    - frontend/src/modules/order/PurchaseRequests.css
+    - frontend/src/modules/order/OrderPayment.jsx
+    - frontend/src/modules/order/OrderPayment.css
+    - frontend/src/modules/order/SEPayOrderSuccess.jsx
+    - frontend/src/modules/order/SEPayOrderSuccess.css
+    out_of_scope:
+    - Order detail, shipping and receipt pages (next order task)
+    - Services, routes, payment rules and the SePay hand-off
+    inputs:
+    - plan.md#17. Icon set and component library amendment (2026-11-12)
+    - docs/technical/gitflow.md
+    outputs:
+    - frontend/src/modules/order/PurchaseRequest.test.jsx
+    - frontend/src/modules/order/PurchaseRequests.test.jsx
+    - frontend/src/modules/order/OrderPayment.test.jsx
+    - frontend/src/modules/order/SEPayOrderSuccess.test.jsx
+    invariants: []
+    verification_commands:
+    - cd frontend && npm test -- --watchAll=false --runInBand
+    - cd frontend && npm run build
+    stop_conditions:
+    - A required decision is not accepted
+    - Verification cannot run or produces no original output
+    technical_approach: The purchase request becomes an Ant Design Modal holding a Form with a counting text area and a price input, keeping its validation messages, quick-buy variant and result callback. The inbox uses Card, Tag, Avatar, Empty and a confirmation Modal. The payment page uses Card, Descriptions, Alert and Row and Col, hands the buyer to the same SePay checkout, and replaces the browser confirm and alert with dialogs and toasts. The result page uses Result, Descriptions and Spin and keeps its polling. Dark overrides in index.css for the removed payment method markup are deleted.
 verification:
   thresholds:
     standard: 0.95

@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { getReceivedPurchaseRequests, acceptPurchaseRequest, rejectPurchaseRequest } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
+import { formatOrderDate, formatOrderPrice } from './orderStatus';
 import './PurchaseRequests.css';
+import { App as AntApp, Alert, Avatar, Button, Card, Empty, Flex, Modal, Spin, Tag, Typography } from 'antd';
 import { ClipboardText } from '@phosphor-icons/react';
 
+const STATUS_TAGS = {
+  pending: { text: 'Chờ xử lý', color: 'warning' },
+  accepted: { text: 'Đã chấp nhận', color: 'success' },
+  rejected: { text: 'Đã từ chối', color: 'error' }
+};
+
 const PurchaseRequests = () => {
+  const { message } = AntApp.useApp();
+
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState({});
   const [showConfirmModal, setShowConfirmModal] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     fetchRequests();
@@ -40,219 +51,167 @@ const PurchaseRequests = () => {
     }
   };
 
+  const openConfirm = (id, action) => {
+    setShowConfirmModal({ id, action });
+    setConfirmOpen(true);
+  };
+
   const handleAction = async (requestId, action) => {
     setActionLoading(prev => ({ ...prev, [requestId]: true }));
-    
+
     try {
       if (action === 'accept') {
         await acceptPurchaseRequest(requestId);
       } else {
         await rejectPurchaseRequest(requestId);
       }
-      
-      // Refresh the list
+
       await fetchRequests();
-      
-      setShowConfirmModal(null);
-      
-      const message = action === 'accept' 
+
+      setConfirmOpen(false);
+
+      message.success(action === 'accept'
         ? 'Đã chấp nhận yêu cầu mua hàng thành công!'
-        : 'Đã từ chối yêu cầu mua hàng!';
-      alert(message);
-      
+        : 'Đã từ chối yêu cầu mua hàng!');
     } catch (err) {
-      alert(err.message || `Không thể ${action === 'accept' ? 'chấp nhận' : 'từ chối'} yêu cầu`);
+      message.error(err.message || `Không thể ${action === 'accept' ? 'chấp nhận' : 'từ chối'} yêu cầu`);
     } finally {
       setActionLoading(prev => ({ ...prev, [requestId]: false }));
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getStatusText = (status) => {
-    const statusMap = {
-      'pending': 'Chờ xử lý',
-      'accepted': 'Đã chấp nhận',
-      'rejected': 'Đã từ chối'
-    };
-    return statusMap[status] || status;
-  };
-
-  const getStatusClass = (status) => {
-    const classMap = {
-      'pending': 'status-pending',
-      'accepted': 'status-accepted',
-      'rejected': 'status-rejected'
-    };
-    return classMap[status] || '';
-  };
-
   if (loading) {
     return (
-      <div className="purchase-requests-container">
-        <div className="loading">Đang tải...</div>
+      <div className="purchase-requests-container container">
+        <Flex justify="center" gap={12} className="purchase-requests-loading" role="status">
+          <Spin />
+          <Typography.Text type="secondary">Đang tải...</Typography.Text>
+        </Flex>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="purchase-requests-container">
-        <div className="error-message">{error}</div>
-        <button onClick={fetchRequests} className="btn btn-primary">
-          Thử lại
-        </button>
+      <div className="purchase-requests-container container">
+        <Alert
+          type="error"
+          showIcon
+          role="alert"
+          title={error}
+          action={<Button size="small" type="primary" onClick={fetchRequests}>Thử lại</Button>}
+        />
       </div>
     );
   }
 
+  const confirming = showConfirmModal?.action === 'accept';
+  const confirmBusy = Boolean(showConfirmModal && actionLoading[showConfirmModal.id]);
+
   return (
-    <div className="purchase-requests-container">
-      <div className="page-header">
-        <h1>Yêu cầu mua hàng</h1>
-        <p>Quản lý các yêu cầu mua hàng từ khách hàng</p>
+    <div className="purchase-requests-container container">
+      <div className="purchase-requests-header">
+        <Typography.Title level={1}>Yêu cầu mua hàng</Typography.Title>
+        <Typography.Paragraph type="secondary">Quản lý các yêu cầu mua hàng từ khách hàng</Typography.Paragraph>
       </div>
 
       {requests.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon"><ClipboardText /></div>
-          <h3>Chưa có yêu cầu mua hàng nào</h3>
-          <p>Khi có khách hàng quan tâm đến sản phẩm của bạn, yêu cầu sẽ hiển thị ở đây.</p>
-        </div>
+        <Empty
+          className="purchase-requests-empty"
+          image={<ClipboardText size={56} />}
+          description={(
+            <>
+              <Typography.Title level={3}>Chưa có yêu cầu mua hàng nào</Typography.Title>
+              <Typography.Paragraph type="secondary">
+                Khi có khách hàng quan tâm đến sản phẩm của bạn, yêu cầu sẽ hiển thị ở đây.
+              </Typography.Paragraph>
+            </>
+          )}
+        />
       ) : (
-        <div className="requests-list">
-          {requests.map((request) => (
-            <div key={request._id} className="request-card">
-              <div className="request-header">
-                <div className="product-info">
-                  <div className="product-image">
-                    <img 
-                      src={getImageUrl(request.listing?.images?.[0]) || '/placeholder-image.jpg'} 
+        <Flex vertical gap={16} className="requests-list">
+          {requests.map((request) => {
+            const status = STATUS_TAGS[request.status] || { text: request.status, color: 'default' };
+            const listedPrice = request.listing?.price;
+            const difference = request.agreedPrice - listedPrice;
+            const busy = Boolean(actionLoading[request._id]);
+
+            return (
+              <Card key={request._id} className="request-item">
+                <Flex justify="space-between" align="flex-start" gap={12} wrap>
+                  <Flex gap={14} className="request-item__product">
+                    <img
+                      className="request-item__image"
+                      src={getImageUrl(request.listing?.images?.[0]) || '/placeholder-image.jpg'}
                       alt={request.listing?.title}
                     />
-                  </div>
-                  <div className="product-details">
-                    <h3>{request.listing?.title}</h3>
-                    <p className="product-price">
-                      Giá niêm yết: {formatPrice(request.listing?.price)}
-                    </p>
-                  </div>
-                </div>
-                <div className={`request-status ${getStatusClass(request.status)}`}>
-                  {getStatusText(request.status)}
-                </div>
-              </div>
-
-              <div className="buyer-info">
-                <div className="buyer-avatar">
-                  {request.buyer?.avatar ? (
-                    <img src={getImageUrl(request.buyer.avatar)} alt={request.buyer.fullName} />
-                  ) : (
-                    <div className="avatar-placeholder">
-                      {request.buyer?.fullName?.charAt(0).toUpperCase()}
+                    <div className="request-item__text">
+                      <Typography.Title level={3}>{request.listing?.title}</Typography.Title>
+                      <Typography.Text type="secondary">Giá niêm yết: {formatOrderPrice(listedPrice)}</Typography.Text>
                     </div>
-                  )}
-                </div>
-                <div className="buyer-details">
-                  <div className="buyer-name">
-                    {request.buyer?.fullName}
-                  </div>
-                  <div className="request-date">
-                    Gửi yêu cầu: {formatDate(request.createdAt)}
-                  </div>
-                </div>
-              </div>
+                  </Flex>
+                  <Tag color={status.color}>{status.text}</Tag>
+                </Flex>
 
-              <div className="request-content">
-                <div className="price-offer">
-                  <span className="label">Giá đề nghị:</span>
-                  <span className="price">{formatPrice(request.agreedPrice)}</span>
-                  {request.agreedPrice !== request.listing?.price && (
-                    <span className="price-diff">
-                      ({request.agreedPrice < request.listing?.price ? '-' : '+'}
-                      {formatPrice(Math.abs(request.agreedPrice - request.listing?.price))})
-                    </span>
-                  )}
-                </div>
-                
-                <div className="request-message">
-                  <span className="label">Tin nhắn:</span>
-                  <p>{request.message}</p>
-                </div>
-              </div>
+                <Flex gap={10} align="center" className="request-item__buyer">
+                  <Avatar src={request.buyer?.avatar ? getImageUrl(request.buyer.avatar) : undefined} alt={request.buyer?.fullName}>
+                    {request.buyer?.fullName?.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <div className="request-item__text">
+                    <Typography.Text strong>{request.buyer?.fullName}</Typography.Text>
+                    <Typography.Text type="secondary">Gửi yêu cầu: {formatOrderDate(request.createdAt)}</Typography.Text>
+                  </div>
+                </Flex>
 
-              {request.status === 'pending' && (
-                <div className="request-actions">
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => setShowConfirmModal({ id: request._id, action: 'reject' })}
-                    disabled={actionLoading[request._id]}
-                  >
-                    {actionLoading[request._id] ? 'Đang xử lý...' : 'Từ chối'}
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => setShowConfirmModal({ id: request._id, action: 'accept' })}
-                    disabled={actionLoading[request._id]}
-                  >
-                    {actionLoading[request._id] ? 'Đang xử lý...' : 'Chấp nhận'}
-                  </button>
+                <div className="request-item__offer">
+                  <Typography.Text type="secondary">Giá đề nghị:</Typography.Text>{' '}
+                  <Typography.Text strong className="request-item__price">{formatOrderPrice(request.agreedPrice)}</Typography.Text>
+                  {request.agreedPrice !== listedPrice && (
+                    <Typography.Text type="secondary" className="request-item__diff">
+                      {' '}({difference < 0 ? '-' : '+'}{formatOrderPrice(Math.abs(difference))})
+                    </Typography.Text>
+                  )}
+                  <Typography.Paragraph className="request-item__message">
+                    <Typography.Text type="secondary">Tin nhắn:</Typography.Text>
+                    <br />
+                    {request.message}
+                  </Typography.Paragraph>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
+
+                {request.status === 'pending' && (
+                  <Flex justify="flex-end" gap={10} className="request-item__actions">
+                    <Button danger disabled={busy} onClick={() => openConfirm(request._id, 'reject')}>
+                      {busy ? 'Đang xử lý...' : 'Từ chối'}
+                    </Button>
+                    <Button type="primary" disabled={busy} onClick={() => openConfirm(request._id, 'accept')}>
+                      {busy ? 'Đang xử lý...' : 'Chấp nhận'}
+                    </Button>
+                  </Flex>
+                )}
+              </Card>
+            );
+          })}
+        </Flex>
       )}
 
-      {/* Confirmation Modal */}
-      {showConfirmModal && (
-        <div className="modal-overlay" onClick={() => setShowConfirmModal(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>
-              {showConfirmModal.action === 'accept' ? 'Chấp nhận yêu cầu' : 'Từ chối yêu cầu'}
-            </h3>
-            <p>
-              {showConfirmModal.action === 'accept' 
-                ? 'Bạn có chắc chắn muốn chấp nhận yêu cầu mua hàng này? Một đơn hàng sẽ được tạo và khách hàng có thể thanh toán.'
-                : 'Bạn có chắc chắn muốn từ chối yêu cầu mua hàng này?'
-              }
-            </p>
-            <div className="modal-actions">
-              <button 
-                onClick={() => setShowConfirmModal(null)} 
-                className="btn btn-secondary"
-                disabled={actionLoading[showConfirmModal.id]}
-              >
-                Hủy
-              </button>
-              <button 
-                onClick={() => handleAction(showConfirmModal.id, showConfirmModal.action)}
-                className={`btn ${showConfirmModal.action === 'accept' ? 'btn-primary' : 'btn-danger'}`}
-                disabled={actionLoading[showConfirmModal.id]}
-              >
-                {actionLoading[showConfirmModal.id] ? 'Đang xử lý...' : 
-                  (showConfirmModal.action === 'accept' ? 'Chấp nhận' : 'Từ chối')
-                }
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={confirmOpen}
+        title={confirming ? 'Chấp nhận yêu cầu' : 'Từ chối yêu cầu'}
+        okText={confirmBusy ? 'Đang xử lý...' : (confirming ? 'Chấp nhận' : 'Từ chối')}
+        cancelText="Hủy"
+        okButtonProps={{ danger: !confirming, loading: confirmBusy }}
+        cancelButtonProps={{ disabled: confirmBusy }}
+        onOk={() => handleAction(showConfirmModal.id, showConfirmModal.action)}
+        onCancel={() => setConfirmOpen(false)}
+        centered
+        mask={{ closable: false }}
+      >
+        <Typography.Paragraph>
+          {confirming
+            ? 'Bạn có chắc chắn muốn chấp nhận yêu cầu mua hàng này? Một đơn hàng sẽ được tạo và khách hàng có thể thanh toán.'
+            : 'Bạn có chắc chắn muốn từ chối yêu cầu mua hàng này?'}
+        </Typography.Paragraph>
+      </Modal>
     </div>
   );
 };

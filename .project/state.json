@@ -2010,6 +2010,35 @@
       "criteria": {
         "AC-WEB-25-11": "inconclusive"
       }
+    },
+    "TASK-092": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The purchase request dialog and inbox, the order payment page and the bank transfer result page are rebuilt from Ant Design components; the new tests and the existing suites pass and the reachable pages were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Thirteenth slice of the Ant Design goal: purchase requests and payment"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the purchase request dialog and inbox, the order payment page and the bank transfer result page with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the purchase request dialog and inbox, the order payment page and the bank transfer result page with Ant Design components, replacing the browser confirm and alerts; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-092/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-092.md",
+      "criteria": {
+        "AC-WEB-25-12": "inconclusive"
+      }
     }
   }
 }

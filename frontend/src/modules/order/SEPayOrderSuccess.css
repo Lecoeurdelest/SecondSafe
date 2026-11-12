@@ -1,0 +1,30 @@
+.payment-result {
+  max-width: 640px;
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+.payment-result .ant-typography {
+  margin: 0;
+}
+
+.payment-result h1.ant-typography {
+  font-size: 24px;
+}
+
+.payment-result__processing {
+  padding: 56px 0;
+  text-align: center;
+}
+
+.payment-result__details {
+  text-align: left;
+}
+
+.payment-result__amount {
+  color: var(--brand-text);
+}
+
+.payment-result__code {
+  font-family: Consolas, Monaco, monospace;
+}

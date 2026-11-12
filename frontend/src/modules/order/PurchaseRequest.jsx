@@ -2,13 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { createPurchaseRequest } from '../../services/order.service';
 import { getImageUrl } from '../../utils/imageHelper';
 import './PurchaseRequest.css';
-import { Check, CircleNotch, PaperPlaneTilt, X } from '@phosphor-icons/react';
+import { Alert, Button, Flex, Form, Input, InputNumber, Modal, Typography } from 'antd';
+import { Check, PaperPlaneTilt } from '@phosphor-icons/react';
+
+const formatPrice = (price) => new Intl.NumberFormat('vi-VN').format(price);
 
 const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) => {
   const [formData, setFormData] = useState({
     message: isQuickBuy ? 'Mua ngay' : '',
     agreedPrice: product?.price || 0
   });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (isQuickBuy && product) {
@@ -19,29 +24,17 @@ const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) =>
     }
   }, [isQuickBuy, product]);
 
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const handleInputChange = (name, value) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'agreedPrice' ? Number(value) : value
-    }));
-    
-    // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Skip message validation for quick buy
     if (!isQuickBuy) {
       if (!formData.message.trim()) {
         newErrors.message = 'Vui lòng nhập tin nhắn';
@@ -50,10 +43,7 @@ const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) =>
       } else if (formData.message.trim().length > 500) {
         newErrors.message = 'Tin nhắn không được quá 500 ký tự';
       }
-    }
 
-    // For quick buy, agreedPrice is fixed
-    if (!isQuickBuy) {
       if (!formData.agreedPrice || formData.agreedPrice <= 0) {
         newErrors.agreedPrice = 'Vui lòng nhập giá đề nghị hợp lệ';
       } else if (formData.agreedPrice < product.price) {
@@ -65,15 +55,13 @@ const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) =>
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const requestData = {
         listingId: product._id,
@@ -82,7 +70,7 @@ const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) =>
       };
 
       const response = await createPurchaseRequest(requestData);
-      
+
       if (onSuccess) {
         onSuccess(response, { isQuickBuy });
       }
@@ -96,131 +84,80 @@ const PurchaseRequest = ({ product, onClose, onSuccess, isQuickBuy = false }) =>
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN').format(price);
-  };
+  const submitLabel = loading
+    ? (isQuickBuy ? 'Đang xác nhận...' : 'Đang gửi...')
+    : (isQuickBuy ? 'Xác nhận mua ngay' : 'Gửi yêu cầu');
 
   return (
-    <div className="purchase-request-modal">
-      <div className="purchase-request-overlay" onClick={onClose}></div>
-      <div className="purchase-request-content">
-        <div className="purchase-request-header">
-          <h3>Gửi yêu cầu mua hàng</h3>
-          <button className="close-button" onClick={onClose}>
-            <X />
-          </button>
+    <Modal open centered footer={null} title="Gửi yêu cầu mua hàng" width={560} onCancel={onClose} mask={{ closable: false }}>
+      <Flex gap={14} align="center" className="purchase-request-product">
+        <img
+          src={getImageUrl(product?.images?.[0]) || '/placeholder-image.jpg'}
+          alt={product?.title}
+        />
+        <div className="purchase-request-product__text">
+          <Typography.Title level={4}>{product?.title}</Typography.Title>
+          <Typography.Text type="secondary">Giá niêm yết: <strong>{formatPrice(product?.price)} VND</strong></Typography.Text>
+          <Typography.Text type="secondary">Người bán: <strong>{product?.seller?.fullName}</strong></Typography.Text>
         </div>
+      </Flex>
 
-        <div className="product-info">
-          <div className="product-image">
-            <img 
-              src={getImageUrl(product?.images?.[0]) || '/placeholder-image.jpg'} 
-              alt={product?.title}
-            />
-          </div>
-          <div className="product-details">
-            <h4>{product?.title}</h4>
-            <p className="product-price">
-              Giá niêm yết: <span>{formatPrice(product?.price)} VND</span>
-            </p>
-            <p className="seller-info">
-              Người bán: <span>{product?.seller?.fullName}</span>
-            </p>
-          </div>
-        </div>
+      <Flex justify="space-between" align="center" gap={12} className="purchase-request-total">
+        <Typography.Text strong>Tổng tiền thanh toán:</Typography.Text>
+        <Typography.Text strong className="purchase-request-total__value">{formatPrice(product?.price)} VND</Typography.Text>
+      </Flex>
 
-        <div className="price-summary">
-          <div className="price-row total">
-            <span className="price-label">Tổng tiền thanh toán:</span>
-            <span className="price-value">{formatPrice(product?.price)} VND</span>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="purchase-request-form">
-          {!isQuickBuy && (
-            <>
-              <div className="form-group">
-                <label htmlFor="message">
-                  Tin nhắn cho người bán <span className="required">*</span>
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  disabled={isQuickBuy}
-                  placeholder="Xin chào, tôi muốn mua sản phẩm này. Có thể thương lượng giá được không?"
-                  rows="4"
-                  className={errors.message ? 'error' : ''}
-                />
-                {errors.message && <span className="error-message">{errors.message}</span>}
-                <div className="character-count">
-                  {formData.message.length}/500 ký tự
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="agreedPrice">
-                  Giá đề nghị <span className="required">*</span>
-                </label>
-                <div className="price-input-wrapper">
-                  <input
-                    type="number"
-                    id="agreedPrice"
-                    name="agreedPrice"
-                    value={formData.agreedPrice}
-                    onChange={handleInputChange}
-                    disabled={isQuickBuy}
-                    min="0"
-                    step="1000"
-                    className={errors.agreedPrice ? 'error' : ''}
-                  />
-                  <span className="currency">VND</span>
-                </div>
-                {errors.agreedPrice && <span className="error-message">{errors.agreedPrice}</span>}
-                <div className="price-suggestion">
-                  Giá tối thiểu: {formatPrice(product?.price)} VND
-                </div>
-              </div>
-            </>
-          )}
-
-          {errors.submit && (
-            <div className="error-message submit-error">
-              {errors.submit}
-            </div>
-          )}
-
-          <div className="form-actions">
-            <button 
-              type="button" 
-              className="btn btn-secondary" 
-              onClick={onClose}
-              disabled={loading}
+      <Form layout="vertical" onFinish={handleSubmit} className="purchase-request-form">
+        {!isQuickBuy && (
+          <>
+            <Form.Item
+              label="Tin nhắn cho người bán"
+              htmlFor="message"
+              required
+              validateStatus={errors.message ? 'error' : undefined}
+              help={errors.message}
             >
-              Hủy
-            </button>
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
-              disabled={loading}
+              <Input.TextArea
+                id="message"
+                value={formData.message}
+                onChange={(e) => handleInputChange('message', e.target.value)}
+                placeholder="Xin chào, tôi muốn mua sản phẩm này. Có thể thương lượng giá được không?"
+                rows={4}
+                showCount={{ formatter: ({ count }) => `${count}/500 ký tự` }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Giá đề nghị"
+              htmlFor="agreedPrice"
+              required
+              validateStatus={errors.agreedPrice ? 'error' : undefined}
+              help={errors.agreedPrice}
+              extra={`Giá tối thiểu: ${formatPrice(product?.price)} VND`}
             >
-              {loading ? (
-                <>
-                  <CircleNotch className="icon-spin" />
-                  {isQuickBuy ? 'Đang xác nhận...' : 'Đang gửi...'}
-                </>
-              ) : (
-                <>
-                  {isQuickBuy ? <Check /> : <PaperPlaneTilt />}
-                  {isQuickBuy ? 'Xác nhận mua ngay' : 'Gửi yêu cầu'}
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+              <InputNumber
+                id="agreedPrice"
+                className="purchase-request-price"
+                value={formData.agreedPrice}
+                onChange={(value) => handleInputChange('agreedPrice', Number(value) || 0)}
+                min={0}
+                step={1000}
+                suffix="VND"
+              />
+            </Form.Item>
+          </>
+        )}
+
+        {errors.submit && <Alert className="purchase-request-error" type="error" showIcon role="alert" title={errors.submit} />}
+
+        <Flex justify="flex-end" gap={12}>
+          <Button onClick={onClose} disabled={loading}>Hủy</Button>
+          <Button type="primary" htmlType="submit" loading={loading} icon={isQuickBuy ? <Check /> : <PaperPlaneTilt />}>
+            {submitLabel}
+          </Button>
+        </Flex>
+      </Form>
+    </Modal>
   );
 };
 

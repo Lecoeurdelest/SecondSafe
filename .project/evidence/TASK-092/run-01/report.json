@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-092",
+  "spec_hash": "e5dc47c97c9a05223f211a9a8000f0c02e1048d51b87f03028c50a1866919875",
+  "source_hash": "cd9fb56b70be8b446b0ac5c7d0daac212aeba3fbc3eafd5c14894b1b48a700cd",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The request inbox and the full purchase form are not reachable from any route, and the wallet payment branch from any control; tests only",
+    "No real SePay checkout or bank confirmation; no real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-12",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new PurchaseRequest, PurchaseRequests, OrderPayment and SEPayOrderSuccess tests and the existing suites pass; the build passes; the payment page, the quick-buy dialog and the result states show their content with no overflow or error in light and dark at 390 and 1280 px; the inbox, the full form and the wallet branch were exercised by tests only",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-092/run-01/frontend-test.txt",
+            ".project/evidence/TASK-092/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-092/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
