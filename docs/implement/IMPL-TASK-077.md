@@ -20,16 +20,16 @@ The two reference projects (`itsnotvii/mercari-clone`, `ReMarket-SE2/webapp`) ha
 
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: home, login and product detail were observed at 360 and 1440 or 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-01/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: home, login, product detail and five logged-in buyer pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-02/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-01/frontend-test.txt` — 9 suites, 58 tests pass |
+| Tests | `.project/evidence/TASK-077/run-02/frontend-test.txt` — 9 suites, 58 tests pass |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-01/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-01/manual-review.md` and `screenshots/` |
+| Build/typecheck | `.project/evidence/TASK-077/run-02/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-02/manual-review.md` and `screenshots/` (`run-01` is the earlier pass) |
 
 ## Deviations
 
@@ -38,7 +38,8 @@ The task has no dependencies on other tasks because it changes presentation only
 ## Known gaps
 
 - Observed only in Chromium against canned API responses; no real phone, no other browser (`NFR-COMP-01` is not evaluated here).
-- Pages other than home, login, product detail, admin users and moderator reports were converted by a mechanical colour rule and not each inspected.
+- The chat and support pages fell back to the error boundary under the canned API responses and were not evaluated; other pages not listed in `manual-review.md` were converted by a mechanical colour rule and not each inspected.
+- The buyer navigation has about fourteen links for a signed-in user and wraps onto two rows at 1280 px, as before; rebuilding it needs a markup change that is outside this task.
 - Status chips that were blue "info" colours in buyer modules are now brand-coloured and can read like the error colour; the shared `--info` colour was kept blue.
 - Dark mode is not implemented.
 - The dashboards under `frontend/src/modules/dashboard/` and the legacy `Footer.jsx` were not redesigned.

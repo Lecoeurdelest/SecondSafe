@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `verifying` — Restyle implemented with build, 58 passing frontend tests and screenshots at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and only some pages were observed
+**Current state:** `verifying` — Restyle implemented in two colour passes with build, 58 passing frontend tests and screenshots at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and chat, support and most staff pages were not observed
 
 ## Traceability
 

@@ -65,7 +65,7 @@
 
 .seller-orders-container .filter-btn.active {
   border-color: #fd9a93;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #fff0ef 0%, #fedddb 100%);
   color: #d8291d;
 }
 
@@ -222,19 +222,19 @@
 }
 
 .seller-orders-container .status-awaiting-payment {
-  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+  background: linear-gradient(135deg, #ecfeff 0%, #fed2cf 100%);
   color: #90170e;
   border: 1.5px solid #fcaba5;
 }
 
 .seller-orders-container .status-paid {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #fff0ef 0%, #fedddb 100%);
   color: #d8291d;
   border: 1.5px solid #fd9a93;
 }
 
 .seller-orders-container .status-shipping {
-  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  background: linear-gradient(135deg, #ffefee 0%, #ffe2e0 100%);
   color: #4338ca;
   border: 1.5px solid #fcaba5;
 }
@@ -299,7 +299,7 @@
 }
 
 .seller-orders-container .btn-confirm {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #eb3225 0%, #d8291d 100%);
   color: #ffffff;
   box-shadow: 0 10px 20px rgba(235, 50, 37, 0.18);
 }

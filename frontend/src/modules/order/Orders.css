@@ -86,7 +86,7 @@
 }
 
 .orders-container .tab-button.active {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #eb3225 0%, #d8291d 100%);
   color: #ffffff;
   box-shadow: 0 12px 24px rgba(235, 50, 37, 0.24);
 }
@@ -417,7 +417,7 @@
 }
 
 .orders-container .btn-primary {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #eb3225 0%, #d8291d 100%);
   color: #ffffff;
   box-shadow: 0 10px 20px rgba(235, 50, 37, 0.18);
 }
@@ -429,7 +429,7 @@
 
 .orders-container .btn-pay {
   min-width: 210px;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #eb3225 0%, #d8291d 100%);
   box-shadow: 0 10px 20px rgba(235, 50, 37, 0.2);
 }
 

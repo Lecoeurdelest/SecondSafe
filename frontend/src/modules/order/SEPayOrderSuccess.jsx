@@ -94,10 +94,10 @@ const SEPayOrderSuccess = () => {
         <div className="result-processing">
           <div className="spinner" style={{
             width: '60px', height: '60px', border: '5px solid #f3f3f3',
-            borderTop: '5px solid #3498db', borderRadius: '50%',
+            borderTop: '5px solid var(--brand)', borderRadius: '50%',
             animation: 'spin 1s linear infinite', margin: '0 auto 20px'
           }}></div>
-          <h2 style={{color: '#3498db', marginBottom: '15px'}}>Đang kiểm tra...</h2>
+          <h2 style={{color: 'var(--brand)', marginBottom: '15px'}}>Đang kiểm tra...</h2>
           <p style={{color: '#666', lineHeight: '1.6'}}>{message}</p>
         </div>
       )}

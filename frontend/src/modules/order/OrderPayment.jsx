@@ -280,8 +280,8 @@ const OrderPayment = () => {
           </div>
 
           <div className="wallet-info" style={{ marginTop: '20px' }}>
-            <div className="sepay-info" style={{ padding: '12px', backgroundColor: '#e6f7ff', border: '1px solid #91d5ff', borderRadius: '6px', color: '#0050b3' }}>
-              <i className="fas fa-shield-alt" style={{ marginRight: '8px', color: '#1890ff' }}></i>
+            <div className="sepay-info" style={{ padding: '12px', backgroundColor: '#ffe8e6', border: '1px solid #ff9891', borderRadius: '6px', color: '#b30c00' }}>
+              <i className="fas fa-shield-alt" style={{ marginRight: '8px', color: '#ff2718' }}></i>
               <strong>Thanh toán An toàn:</strong> Hệ thống sẽ chuyển bạn đến Cổng giao dịch tự động. Đơn hàng sẽ được xác nhận 24/7 ngay sau khi bạn quét mã QR chuyển khoản thành công.
             </div>
           </div>

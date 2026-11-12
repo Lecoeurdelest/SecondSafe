@@ -1505,7 +1505,7 @@
     "TASK-077": {
       "execution": "verifying",
       "relevance": "current",
-      "detail": "Restyle implemented with build, 58 passing frontend tests and screenshots at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and only some pages were observed",
+      "detail": "Restyle implemented in two colour passes with build, 58 passing frontend tests and screenshots at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and chat, support and most staff pages were not observed",
       "history": [
         {
           "date": "2026-11-12",
@@ -1521,10 +1521,16 @@
           "date": "2026-11-12",
           "execution": "verifying",
           "note": "Build and tests pass; home, login, product detail and two staff pages observed in Chromium"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Second colour pass converted gradient stops, a purple wallet gradient and inline colours; re-verified with build, tests and a wider set of pages"
         }
       ],
       "evidence": [
-        ".project/evidence/TASK-077/run-01/report.json"
+        ".project/evidence/TASK-077/run-01/report.json",
+        ".project/evidence/TASK-077/run-02/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-077.md",
       "criteria": {

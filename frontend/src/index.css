@@ -325,7 +325,7 @@
 .navbar__btn-post {
   min-height: 44px;
   padding: 0 20px;
-  background: linear-gradient(135deg, #0f69ff 0%, #0057d9 100%);
+  background: linear-gradient(135deg, #ff1f0f 0%, #d90e00 100%);
   color: var(--white);
   border: none;
   border-radius: 999px;
@@ -342,7 +342,7 @@
 }
 
 .navbar__btn-post:hover {
-  background: linear-gradient(135deg, #0c5fe7 0%, #004bb8 100%);
+  background: linear-gradient(135deg, #e71b0c 0%, #b80c00 100%);
   transform: translateY(-1px);
   box-shadow: 0 18px 30px rgba(217, 14, 0, 0.3);
 }

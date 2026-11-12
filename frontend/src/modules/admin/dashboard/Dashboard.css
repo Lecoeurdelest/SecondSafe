@@ -40,7 +40,7 @@
   align-items: center;
   gap: 8px;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
   color: var(--text-main);
   font-weight: 600;
   border-radius: 10px;
@@ -105,7 +105,7 @@
 }
 
 .dashboard-kpi-card--ocean {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #111827 0%, #111827 100%);
 }
 
 .dashboard-kpi-card--amber {
@@ -362,7 +362,7 @@
   padding: 12px;
   text-decoration: none;
   color: inherit;
-  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
   transition: all 0.2s ease;
 }
 

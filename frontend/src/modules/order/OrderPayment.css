@@ -387,7 +387,7 @@
 }
 
 .method-card.active {
-  border-color: #3498db;
+  border-color: var(--brand);
   background-color: #ffedec;
 }
 
@@ -422,7 +422,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: #3498db;
+  background-color: var(--brand);
   color: white;
   display: flex;
   align-items: center;
