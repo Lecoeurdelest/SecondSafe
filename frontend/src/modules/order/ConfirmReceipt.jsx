@@ -3,12 +3,16 @@ import { confirmReceipt } from '../../services/order.service';
 import { createReview } from '../../services/review.service';
 import { uploadEvidenceMedia } from '../../services/report.service';
 import { getImageUrl } from '../../utils/imageHelper';
+import EvidencePicker from '../../components/EvidencePicker';
+import { formatOrderPrice } from './orderStatus';
 import './ConfirmReceipt.css';
-import { CheckCircle, CircleNotch, Star, ThumbsDown, ThumbsUp, X } from '@phosphor-icons/react';
+import { App as AntApp, Alert, Avatar, Button, Descriptions, Flex, Form, Input, Modal, Rate, Tag, Typography } from 'antd';
+import { CheckCircle, ThumbsDown, ThumbsUp } from '@phosphor-icons/react';
 
 const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
+  const { modal } = AntApp.useApp();
   const productImageSrc = getImageUrl(order.listing?.images?.[0]) || '/images/placeholder.png';
-  const sellerAvatarSrc = getImageUrl(order.seller?.avatar) || '/images/placeholders/avatar-placeholder.svg';
+  const sellerAvatarSrc = getImageUrl(order.seller?.avatar, 'avatar');
 
   const highlightOptions = {
     positive: ['Đúng mô tả', 'Đóng gói cẩn thận', 'Giao tiếp tốt', 'Giao hàng nhanh', 'Sản phẩm chất lượng'],
@@ -41,11 +45,10 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
     return highlightText || trimmedReview;
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type } = e.target;
+  const handleInputChange = (name, value) => {
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'radio' ? value === 'true' : value
+      [name]: value
     }));
     
     // Clear error when user starts typing
@@ -142,21 +145,9 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
     setReviewEvidenceFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-
-    const confirmAction = window.confirm(
-      'Bạn có chắc chắn đã nhận được hàng và muốn xác nhận? Sau khi xác nhận, tiền sẽ được chuyển cho người bán và không thể hoàn tác.'
-    );
-    
-    if (!confirmAction) return;
-
+  const submitReceipt = async () => {
     setLoading(true);
-    
+
     try {
       await confirmReceipt(order._id);
 
@@ -169,7 +160,7 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
       } catch (reviewSubmitError) {
         reviewError = reviewSubmitError.response?.data?.message || reviewSubmitError.message || 'Không thể gửi đánh giá';
       }
-      
+
       if (onSuccess) {
         onSuccess({ reviewCreated, reviewError });
       }
@@ -183,11 +174,19 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
+  const handleSubmit = () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    modal.confirm({
+      title: 'Xác nhận nhận hàng',
+      content: 'Bạn có chắc chắn đã nhận được hàng và muốn xác nhận? Sau khi xác nhận, tiền sẽ được chuyển cho người bán và không thể hoàn tác.',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
+      centered: true,
+      onOk: submitReceipt
+    });
   };
 
   const formatDate = (date) => {
@@ -196,22 +195,6 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
       month: 'short',
       day: 'numeric'
     });
-  };
-
-  const renderStars = () => {
-    return [1, 2, 3, 4, 5].map(star => (
-      <button
-        key={star}
-        type="button"
-        className={`star-button ${star <= formData.rating ? 'active' : ''}`}
-        onClick={() => handleRatingChange(star)}
-      >
-        <span className="star-button__icon">
-          <Star weight="fill" />
-        </span>
-        <span className="star-button__value">{star}</span>
-      </button>
-    ));
   };
 
   const getRatingText = (rating) => {
@@ -225,275 +208,186 @@ const ConfirmReceipt = ({ order, onClose, onSuccess }) => {
     return ratingTexts[rating] || '';
   };
 
+  const orderCode = order.orderCode || order._id.slice(-8).toUpperCase();
+
+  const satisfactionOptions = [
+    { value: true, icon: <ThumbsUp />, title: 'Hài lòng', desc: 'Sản phẩm và trải nghiệm đúng kỳ vọng' },
+    { value: false, icon: <ThumbsDown />, title: 'Chưa hài lòng', desc: 'Có điểm chưa ổn trong giao dịch hoặc sản phẩm' }
+  ];
+
+  const summary = [
+    { key: 'code', label: 'Mã đơn hàng', children: `#${orderCode}` },
+    { key: 'product', label: 'Sản phẩm', children: order.listing?.title },
+    { key: 'seller', label: 'Người bán', children: order.seller?.fullName },
+    { key: 'shipped', label: 'Ngày giao hàng', children: order.shippedAt ? formatDate(order.shippedAt) : 'Chưa xác định' }
+  ];
+  if (order.shipping) {
+    summary.push(
+      { key: 'provider', label: 'Đơn vị vận chuyển', children: order.shipping.provider },
+      { key: 'tracking', label: 'Mã vận đơn', children: order.shipping.trackingNumber }
+    );
+  }
+
   return (
-    <div className="confirm-receipt-modal">
-      <div className="confirm-receipt-overlay" onClick={onClose}></div>
-      <div className="confirm-receipt-content">
-        <div className="confirm-receipt-header">
-          <h3>Xác nhận nhận hàng</h3>
-          <button className="close-button" onClick={onClose}>
-            <X />
-          </button>
-        </div>
+    <Modal open centered footer={null} title="Xác nhận nhận hàng" width={760} onCancel={onClose} mask={{ closable: false }}>
+      <Typography.Title level={4} className="receipt-heading">Thông tin đơn hàng</Typography.Title>
+      <Descriptions size="small" column={{ xs: 1, sm: 2 }} className="receipt-summary" items={summary} />
 
-        <div className="order-summary">
-          <div className="order-info">
-            <h4>Thông tin đơn hàng</h4>
-            <div className="order-details">
-              <div className="detail-item">
-                <span className="label">Mã đơn hàng:</span>
-                <span className="value">#{order.orderCode || order._id.slice(-8).toUpperCase()}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Sản phẩm:</span>
-                <span className="value">{order.listing?.title}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Người bán:</span>
-                <span className="value">{order.seller?.fullName}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Ngày giao hàng:</span>
-                <span className="value">
-                  {order.shippedAt ? formatDate(order.shippedAt) : 'Chưa xác định'}
-                </span>
-              </div>
+      <Form layout="vertical" onFinish={handleSubmit} className="confirm-receipt-form">
+        <section className="review-stage" aria-labelledby="review-stage-title">
+          <Flex justify="space-between" align="flex-start" wrap gap={8}>
+            <div>
+              <Typography.Title level={4} id="review-stage-title">Đánh giá trải nghiệm mua hàng</Typography.Title>
+              <Typography.Text type="secondary">Hãy chia sẻ cảm nhận thực tế để người mua khác tham khảo dễ hơn.</Typography.Text>
             </div>
-          </div>
+            <Tag>#{orderCode}</Tag>
+          </Flex>
 
-          {order.shipping && (
-            <div className="shipping-info">
-              <h4>Thông tin vận chuyển</h4>
-              <div className="shipping-details">
-                <div className="detail-item">
-                  <span className="label">Đơn vị vận chuyển:</span>
-                  <span className="value">{order.shipping.provider}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="label">Mã vận đơn:</span>
-                  <span className="value">{order.shipping.trackingNumber}</span>
-                </div>
-              </div>
+          <Flex gap={14} align="center" wrap className="review-product">
+            <img
+              src={productImageSrc}
+              alt={order.listing?.title}
+              className="review-product__image"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/images/placeholder.png';
+              }}
+            />
+            <div className="review-product__text">
+              <Typography.Text strong>{order.listing?.title}</Typography.Text>
+              <Flex gap={6} wrap>
+                <Tag color="blue">Giá đơn: {formatOrderPrice(order.agreedPrice || order.totalAmount || 0)}</Tag>
+                <Tag>Mã vận đơn: {order.shipping?.trackingNumber || 'Chưa có'}</Tag>
+              </Flex>
             </div>
-          )}
-        </div>
-
-        <form onSubmit={handleSubmit} className="confirm-receipt-form">
-          <div className="review-stage-card">
-            <div className="review-stage-card__header">
-              <div>
-                <h4>Đánh giá trải nghiệm mua hàng</h4>
-                <p>Hãy chia sẻ cảm nhận thực tế để người mua khác tham khảo dễ hơn.</p>
+            <Flex gap={8} align="center" className="review-seller">
+              <Avatar src={sellerAvatarSrc} alt={order.seller?.fullName} />
+              <div className="review-product__text">
+                <Typography.Text type="secondary">Người bán</Typography.Text>
+                <Typography.Text strong>{order.seller?.fullName}</Typography.Text>
               </div>
-              <div className="review-order-chip">#{order.orderCode || order._id.slice(-8).toUpperCase()}</div>
-            </div>
+            </Flex>
+          </Flex>
 
-            <div className="review-product-card">
-              <img
-                src={productImageSrc}
-                alt={order.listing?.title}
-                className="review-product-card__image"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = '/images/placeholder.png';
-                }}
-              />
-              <div className="review-product-card__content">
-                <div className="review-product-card__title">{order.listing?.title}</div>
-                <div className="review-product-card__meta">
-                  <span className="price-pill">Giá đơn: {formatPrice(order.agreedPrice || order.totalAmount || 0)}</span>
-                  <span className="tracking-pill">Mã vận đơn: {order.shipping?.trackingNumber || 'Chưa có'}</span>
-                </div>
-              </div>
-
-              <div className="review-seller-card">
-                <img
-                  src={sellerAvatarSrc}
-                  alt={order.seller?.fullName}
-                  className="review-seller-card__avatar"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = '/images/placeholders/avatar-placeholder.svg';
-                  }}
-                />
-                <div>
-                  <div className="review-seller-card__label">Người bán</div>
-                  <div className="review-seller-card__name">{order.seller?.fullName}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>
-                Mức độ hài lòng <span className="required">*</span>
-              </label>
-              <div className="satisfaction-grid">
-                <button
-                  type="button"
-                  className={`satisfaction-card ${formData.satisfied ? 'active' : ''}`}
-                  onClick={() => handleSatisfiedChange(true)}
+          <Form.Item label="Mức độ hài lòng" required>
+            <Flex gap={10} wrap className="satisfaction-grid" role="group" aria-label="Mức độ hài lòng">
+              {satisfactionOptions.map(({ value, icon, title, desc }) => (
+                <Button
+                  key={title}
+                  className="satisfaction-option"
+                  type={formData.satisfied === value ? 'primary' : 'default'}
+                  aria-pressed={formData.satisfied === value}
+                  onClick={() => handleSatisfiedChange(value)}
                 >
-                  <span className="satisfaction-card__icon"><ThumbsUp /></span>
-                  <span className="satisfaction-card__title">Hài lòng</span>
-                  <span className="satisfaction-card__desc">Sản phẩm và trải nghiệm đúng kỳ vọng</span>
-                </button>
-                <button
-                  type="button"
-                  className={`satisfaction-card ${!formData.satisfied ? 'active' : ''}`}
-                  onClick={() => handleSatisfiedChange(false)}
+                  <span className="satisfaction-option__icon">{icon}</span>
+                  <span className="satisfaction-option__text">
+                    <strong>{title}</strong>
+                    <span>{desc}</span>
+                  </span>
+                </Button>
+              ))}
+            </Flex>
+          </Form.Item>
+
+          <Form.Item
+            label="Đánh giá người bán"
+            required
+            validateStatus={errors.rating ? 'error' : undefined}
+            help={errors.rating}
+          >
+            <Flex align="center" gap={12} wrap>
+              <Rate value={formData.rating} allowClear={false} onChange={handleRatingChange} />
+              <Typography.Text strong className="rating-text">{getRatingText(formData.rating)}</Typography.Text>
+            </Flex>
+          </Form.Item>
+
+          <Form.Item label="Điểm nổi bật" extra="Chọn tối đa 3 điểm nổi bật để review ngắn gọn và dễ đọc hơn.">
+            <Flex gap={8} wrap role="group" aria-label="Điểm nổi bật">
+              {currentHighlightOptions.map((highlight) => (
+                <Button
+                  key={highlight}
+                  size="small"
+                  shape="round"
+                  type={selectedHighlights.includes(highlight) ? 'primary' : 'default'}
+                  aria-pressed={selectedHighlights.includes(highlight)}
+                  onClick={() => handleHighlightToggle(highlight)}
                 >
-                  <span className="satisfaction-card__icon"><ThumbsDown /></span>
-                  <span className="satisfaction-card__title">Chưa hài lòng</span>
-                  <span className="satisfaction-card__desc">Có điểm chưa ổn trong giao dịch hoặc sản phẩm</span>
-                </button>
-              </div>
-            </div>
+                  {highlight}
+                </Button>
+              ))}
+            </Flex>
+          </Form.Item>
 
-            <div className="form-group">
-              <label>
-                Đánh giá người bán <span className="required">*</span>
-              </label>
-              <div className="rating-section">
-                <div className="stars-container">{renderStars()}</div>
-                <div className="rating-text rating-text--highlight">{getRatingText(formData.rating)}</div>
-              </div>
-              {errors.rating && (
-                <span className="error-message">{errors.rating}</span>
-              )}
-            </div>
+          <Form.Item
+            label="Nhận xét chi tiết (tùy chọn)"
+            htmlFor="review"
+            validateStatus={errors.review ? 'error' : undefined}
+            help={errors.review}
+          >
+            <Input.TextArea
+              id="review"
+              value={formData.review}
+              onChange={(e) => handleInputChange('review', e.target.value)}
+              placeholder={formData.satisfied
+                ? 'Ví dụ: Người bán phản hồi nhanh, sản phẩm đúng như mô tả và đóng gói rất cẩn thận.'
+                : 'Ví dụ: Sản phẩm chưa đúng kỳ vọng ở điểm nào, người bán xử lý ra sao, bạn mong muốn cải thiện điều gì.'}
+              rows={4}
+              showCount={{ formatter: () => `${buildReviewComment().length}/500 ký tự` }}
+            />
+          </Form.Item>
 
-            <div className="form-group">
-              <label>Điểm nổi bật</label>
-              <div className="highlight-chips">
-                {currentHighlightOptions.map((highlight) => (
-                  <button
-                    key={highlight}
-                    type="button"
-                    className={`highlight-chip ${selectedHighlights.includes(highlight) ? 'active' : ''}`}
-                    onClick={() => handleHighlightToggle(highlight)}
-                  >
-                    {highlight}
-                  </button>
-                ))}
-              </div>
-              <div className="form-helper-text">Chọn tối đa 3 điểm nổi bật để review ngắn gọn và dễ đọc hơn.</div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="review">
-                Nhận xét chi tiết (tùy chọn)
-              </label>
-              <textarea
-                id="review"
-                name="review"
-                value={formData.review}
-                onChange={handleInputChange}
-                placeholder={formData.satisfied
-                  ? 'Ví dụ: Người bán phản hồi nhanh, sản phẩm đúng như mô tả và đóng gói rất cẩn thận.'
-                  : 'Ví dụ: Sản phẩm chưa đúng kỳ vọng ở điểm nào, người bán xử lý ra sao, bạn mong muốn cải thiện điều gì.'}
-                rows="4"
-                className={errors.review ? 'error' : ''}
-              />
-              {errors.review && <span className="error-message">{errors.review}</span>}
-              <div className="character-count">
-                {buildReviewComment().length}/500 ký tự
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="review-evidence">Ảnh/Video minh chứng (tùy chọn)</label>
-              <input
-                id="review-evidence"
-                type="file"
-                accept=".png,.jpg,.jpeg,.mp4,image/png,image/jpeg,video/mp4"
-                multiple
-                onChange={handleReviewEvidenceUpload}
-                disabled={loading || uploadingEvidence || reviewEvidenceFiles.length >= 5}
-                className="review-evidence-input"
-              />
-              <div className="form-helper-text">
-                Chuẩn tốt nhất: MP4 (H.264). Ảnh bắt buộc PNG/JPEG/JPG. Tối đa 5 tệp.
-              </div>
-              <div className="form-helper-text">
-                Giới hạn mỗi tệp: ≤ 100MB, video ≤ 3 phút, 720p-1080p.
-              </div>
-              <div className="form-helper-text">
-                Video bắt buộc là quay mở hộp liên tục, không chỉnh sửa.
-              </div>
-              {uploadingEvidence && <div className="form-helper-text">Đang upload tệp...</div>}
-              {errors.evidence && <span className="error-message">{errors.evidence}</span>}
-
-              {reviewEvidenceFiles.length > 0 && (
-                <div className="review-evidence-grid">
-                  {reviewEvidenceFiles.map((file, index) => (
-                    <div key={`${file}-${index}`} className="review-evidence-item">
-                      {isVideoEvidence(file) ? (
-                        <video src={getImageUrl(file)} controls className="review-evidence-media" />
-                      ) : (
-                        <img src={getImageUrl(file)} alt={`review-evidence-${index}`} className="review-evidence-media" />
-                      )}
-                      <button
-                        type="button"
-                        className="review-evidence-remove"
-                        onClick={() => removeReviewEvidence(index)}
-                        disabled={loading}
-                        aria-label="Xóa tệp bằng chứng"
-                      >
-                        <X />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {errors.submit && (
-            <div className="error-message submit-error">
-              {errors.submit}
-            </div>
-          )}
-
-          <div className="form-actions">
-            <button 
-              type="button" 
-              className="btn btn-secondary" 
-              onClick={onClose}
+          <Form.Item
+            label="Ảnh/Video minh chứng (tùy chọn)"
+            htmlFor="review-evidence"
+            validateStatus={errors.evidence ? 'error' : undefined}
+            help={errors.evidence}
+          >
+            <EvidencePicker
+              id="review-evidence"
+              files={reviewEvidenceFiles}
+              accept=".png,.jpg,.jpeg,.mp4,image/png,image/jpeg,video/mp4"
+              buttonLabel="Chọn tệp"
               disabled={loading}
-            >
-              Hủy
-            </button>
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <CircleNotch className="icon-spin" />
-                  Đang xử lý...
-                </>
-              ) : (
-                <>
-                  <CheckCircle weight="fill" />
-                  Xác nhận nhận hàng
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+              uploading={uploadingEvidence}
+              isVideo={isVideoEvidence}
+              imageAlt={(index) => `review-evidence-${index}`}
+              notes={[
+                'Chuẩn tốt nhất: MP4 (H.264). Ảnh bắt buộc PNG/JPEG/JPG. Tối đa 5 tệp.',
+                'Giới hạn mỗi tệp: ≤ 100MB, video ≤ 3 phút, 720p-1080p.',
+                'Video bắt buộc là quay mở hộp liên tục, không chỉnh sửa.'
+              ]}
+              onSelect={handleReviewEvidenceUpload}
+              onRemove={removeReviewEvidence}
+            />
+          </Form.Item>
+        </section>
 
-        <div className="receipt-notice">
-          <h5>Lưu ý quan trọng:</h5>
+        {errors.submit && <Alert className="receipt-error" type="error" showIcon role="alert" title={errors.submit} />}
+
+        <Flex justify="flex-end" gap={12}>
+          <Button onClick={onClose} disabled={loading}>Hủy</Button>
+          <Button type="primary" htmlType="submit" loading={loading} icon={<CheckCircle weight="fill" />}>
+            {loading ? 'Đang xử lý...' : 'Xác nhận nhận hàng'}
+          </Button>
+        </Flex>
+      </Form>
+
+      <Alert
+        className="receipt-notice"
+        type="info"
+        showIcon
+        role="note"
+        title="Lưu ý quan trọng:"
+        description={(
           <ul>
             <li>Sau khi xác nhận, tiền sẽ được chuyển ngay cho người bán</li>
             <li>Bạn không thể hoàn tác sau khi đã xác nhận nhận hàng</li>
             <li>Đánh giá của bạn sẽ giúp cộng đồng đưa ra quyết định mua hàng</li>
             <li>Nếu có vấn đề với sản phẩm, vui lòng liên hệ người bán trước khi xác nhận</li>
           </ul>
-        </div>
-      </div>
-    </div>
+        )}
+      />
+    </Modal>
   );
 };
 

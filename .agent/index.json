@@ -126,6 +126,7 @@
     "docs/task/TASK-090.md",
     "docs/task/TASK-091.md",
     "docs/task/TASK-092.md",
+    "docs/task/TASK-093.md",
     "docs/technical/data-model.md",
     "plan.md#progress"
   ],
@@ -220,6 +221,7 @@
     "TASK-089": "docs/task/TASK-089.md",
     "TASK-090": "docs/task/TASK-090.md",
     "TASK-091": "docs/task/TASK-091.md",
-    "TASK-092": "docs/task/TASK-092.md"
+    "TASK-092": "docs/task/TASK-092.md",
+    "TASK-093": "docs/task/TASK-093.md"
   }
 }

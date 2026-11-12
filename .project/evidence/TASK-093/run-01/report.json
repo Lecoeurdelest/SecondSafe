@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-093",
+  "spec_hash": "1171d16d1f4abe8b5430e03947705eb9c899a06fc429d275c0a5f8767a77c075",
+  "source_hash": "88929dde72ef38bb500d92f5c4a9e6db6107d0002014f6d7757f188a2a186342",
+  "outcome": "inconclusive",
+  "completion_policy": "Automatic code gate evaluated; applicable calibration or an explicitly accepted manual policy amendment is required for completion",
+  "calibration": {
+    "status": "unavailable",
+    "id": null,
+    "artifact": null,
+    "evaluator_version": null,
+    "applicable": false
+  },
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "Observed only in headless Chromium against canned API responses",
+    "The custom pickup location lists, uploads and real shipment or receipt confirmations were not exercised in the browser",
+    "No real phone, no other browser"
+  ],
+  "criteria": [
+    {
+      "id": "AC-WEB-25-13",
+      "status": "inconclusive",
+      "observed_behavioral_status": "pass",
+      "observation": "The new ShipOrder and ConfirmReceipt tests and the existing suites pass; the build passes; both dialogs show their fields, choices, confirmation and states with no overflow or error in light and dark at 390 and 1280 px; the custom pickup location lists and real submissions were not exercised in the browser",
+      "confidence": null,
+      "confidence_reason": "Applicable calibrated alignment evaluator is unavailable",
+      "analysis_complete": true,
+      "checks": [
+        {
+          "method": "behavioral_test",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-093/run-01/frontend-test.txt",
+            ".project/evidence/TASK-093/run-01/frontend-build.txt"
+          ]
+        },
+        {
+          "method": "manual_review",
+          "status": "pass",
+          "artifacts": [
+            ".project/evidence/TASK-093/run-01/manual-review.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

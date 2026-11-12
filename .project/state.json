@@ -2039,6 +2039,35 @@
       "criteria": {
         "AC-WEB-25-12": "inconclusive"
       }
+    },
+    "TASK-093": {
+      "execution": "verifying",
+      "relevance": "current",
+      "detail": "The shipment and receipt dialogs are rebuilt from Ant Design components; the new tests and the existing suites pass and both dialogs were observed in both themes at 390 and 1280 px; automatic completion remains inconclusive without applicable calibration",
+      "history": [
+        {
+          "date": "2026-11-12",
+          "execution": "todo",
+          "note": "Fourteenth slice of the Ant Design goal: shipment and receipt dialogs"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "in_progress",
+          "note": "Rebuild the shipment confirmation and receipt confirmation dialogs with Ant Design components"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Rebuilt the shipment and receipt dialogs with Ant Design components, replacing the browser confirm and showing the missing-address error; tests and build pass; observed in both themes at 390 and 1280 px"
+        }
+      ],
+      "evidence": [
+        ".project/evidence/TASK-093/run-01/report.json"
+      ],
+      "implementation": "docs/implement/IMPL-TASK-093.md",
+      "criteria": {
+        "AC-WEB-25-13": "inconclusive"
+      }
     }
   }
 }

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { confirmShipment } from '../../services/order.service';
 import LocationSelector from '../../components/LocationSelector';
 import { useAuth } from '../../hooks/useAuth';
+import { formatOrderPrice } from './orderStatus';
 import './ShipOrder.css';
-import { CircleNotch, Truck, X } from '@phosphor-icons/react';
+import { Alert, Button, Checkbox, Descriptions, Flex, Form, Input, Modal, Select, Typography } from 'antd';
+import { Truck } from '@phosphor-icons/react';
 
 const ShipOrder = ({ order, onClose, onSuccess }) => {
   const { user } = useAuth();
@@ -72,8 +74,7 @@ const ShipOrder = ({ order, onClose, onSuccess }) => {
     { value: 'other', label: 'Khác' }
   ];
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (name, value) => {
     setFormData(prev => ({
       ...prev,
       [name]: value,
@@ -148,9 +149,7 @@ const ShipOrder = ({ order, onClose, onSuccess }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
@@ -190,13 +189,6 @@ const ShipOrder = ({ order, onClose, onSuccess }) => {
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
   const formatDateTime = (date) => {
     if (!date) return 'N/A';
     return new Date(date).toLocaleString('vi-VN', {
@@ -221,303 +213,176 @@ const ShipOrder = ({ order, onClose, onSuccess }) => {
     return labels[status] || status || 'N/A';
   };
 
-  // Lay ngay nho nhat (hom nay)
   const today = new Date();
   const minDate = today.toISOString().split('T')[0];
 
+  const fieldState = (name) => ({
+    validateStatus: errors[name] ? 'error' : undefined,
+    help: errors[name]
+  });
+
+  const toggleCustomAddress = (useCustomShippingAddress) => {
+    setFormData((prev) => ({
+      ...prev,
+      useCustomShippingAddress,
+      shippingRecipientName: useCustomShippingAddress ? prev.shippingRecipientName : defaultRecipientName,
+      shippingPhone: useCustomShippingAddress ? prev.shippingPhone : defaultShippingPhone,
+      shippingAddress: useCustomShippingAddress ? prev.shippingAddress : defaultShippingAddress
+    }));
+  };
+
   return (
-    <div className="ship-order-modal">
-      <div className="ship-order-overlay" onClick={onClose}></div>
-      <div className="ship-order-content">
-        <div className="ship-order-header">
-          <h3>Xác nhận giao hàng</h3>
-          <button className="close-button" onClick={onClose}>
-            <X />
-          </button>
-        </div>
+    <Modal open centered footer={null} title="Xác nhận giao hàng" width={720} onCancel={onClose} mask={{ closable: false }}>
+      <Typography.Title level={4} className="ship-order-heading">Thông tin đơn hàng</Typography.Title>
+      <Descriptions
+        size="small"
+        column={{ xs: 1, sm: 2 }}
+        className="ship-order-summary"
+        items={[
+          { key: 'code', label: 'Mã đơn hàng', children: `#${getDisplayOrderCode()}` },
+          { key: 'product', label: 'Sản phẩm', children: order.listing?.title },
+          { key: 'status', label: 'Trạng thái', children: getStatusLabel(order.status) },
+          { key: 'value', label: 'Giá trị', children: formatOrderPrice(order.totalAmount) },
+          { key: 'buyer', label: 'Người mua', children: order.buyer?.fullName },
+          { key: 'phone', label: 'SĐT người mua', children: order.buyer?.phone || 'Chưa cập nhật' },
+          { key: 'address', label: 'Địa chỉ giao đến', span: 'filled', children: order.shippingAddress || order.buyer?.address || 'Chưa cập nhật' },
+          { key: 'created', label: 'Ngày tạo đơn', children: formatDateTime(order.createdAt) }
+        ]}
+      />
 
-        <div className="order-summary">
-          <div className="order-info">
-            <h4>Thông tin đơn hàng</h4>
-            <div className="order-details">
-              <div className="detail-item">
-                <span className="label">Mã đơn hàng:</span>
-                <span className="value">#{getDisplayOrderCode()}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Sản phẩm:</span>
-                <span className="value">{order.listing?.title}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Trạng thái:</span>
-                <span className="value">{getStatusLabel(order.status)}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Giá trị:</span>
-                <span className="value">{formatPrice(order.totalAmount)}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Người mua:</span>
-                <span className="value">{order.buyer?.fullName}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">SĐT người mua:</span>
-                <span className="value">{order.buyer?.phone || 'Chưa cập nhật'}</span>
-              </div>
-              <div className="detail-item detail-item--full">
-                <span className="label">Địa chỉ giao đến:</span>
-                <span className="value">{order.shippingAddress || order.buyer?.address || 'Chưa cập nhật'}</span>
-              </div>
-              <div className="detail-item">
-                <span className="label">Ngày tạo đơn:</span>
-                <span className="value">{formatDateTime(order.createdAt)}</span>
-              </div>
+      <Form layout="vertical" onFinish={handleSubmit} className="ship-order-form">
+        <Form.Item label="Đơn vị vận chuyển" htmlFor="shippingProvider" required {...fieldState('shippingProvider')}>
+          <Select
+            id="shippingProvider"
+            placeholder="Chọn đơn vị vận chuyển"
+            value={formData.shippingProvider || undefined}
+            options={shippingProviders}
+            onChange={(value) => handleInputChange('shippingProvider', value)}
+            virtual={false}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Mã vận đơn"
+          htmlFor="trackingNumber"
+          required
+          extra="Mã vận đơn được tạo ngẫu nhiên theo đơn hàng và sẽ gửi cho người mua để theo dõi"
+          {...fieldState('trackingNumber')}
+        >
+          <Input id="trackingNumber" value={formData.trackingNumber} readOnly placeholder="Mã vận đơn sẽ được hệ thống tự tạo" />
+        </Form.Item>
+
+        <Form.Item label="Ngày dự kiến giao hàng" htmlFor="estimatedDelivery" required {...fieldState('estimatedDelivery')}>
+          <Input
+            id="estimatedDelivery"
+            type="date"
+            min={minDate}
+            value={formData.estimatedDelivery}
+            onChange={(e) => handleInputChange('estimatedDelivery', e.target.value)}
+          />
+        </Form.Item>
+
+        <section className="shipping-address-panel" aria-labelledby="shipping-address-title">
+          <Flex justify="space-between" align="flex-start" wrap gap={12}>
+            <div>
+              <Typography.Title level={5} id="shipping-address-title">Thông tin điểm lấy hàng (Pickup)</Typography.Title>
+              <Typography.Text type="secondary">Mặc định lấy từ địa chỉ bài đăng. Bạn có thể tùy chỉnh nếu giao từ nơi khác.</Typography.Text>
             </div>
-          </div>
-        </div>
+            <Checkbox checked={formData.useCustomShippingAddress} onChange={(e) => toggleCustomAddress(e.target.checked)}>
+              Tùy chỉnh điểm lấy hàng
+            </Checkbox>
+          </Flex>
 
-        <form onSubmit={handleSubmit} className="ship-order-form">
-          <div className="form-group">
-            <label htmlFor="shippingProvider">
-              Đơn vị vận chuyển <span className="required">*</span>
-            </label>
-            <select
-              id="shippingProvider"
-              name="shippingProvider"
-              value={formData.shippingProvider}
-              onChange={handleInputChange}
-              className={errors.shippingProvider ? 'error' : ''}
-            >
-              <option value="">Chọn đơn vị vận chuyển</option>
-              {shippingProviders.map(provider => (
-                <option key={provider.value} value={provider.value}>
-                  {provider.label}
-                </option>
-              ))}
-            </select>
-            {errors.shippingProvider && (
-              <span className="error-message">{errors.shippingProvider}</span>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="trackingNumber">
-              Mã vận đơn <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="trackingNumber"
-              name="trackingNumber"
-              value={formData.trackingNumber}
-              readOnly
-              placeholder="Mã vận đơn sẽ được hệ thống tự tạo"
-              className={errors.trackingNumber ? 'error' : ''}
-            />
-            {errors.trackingNumber && (
-              <span className="error-message">{errors.trackingNumber}</span>
-            )}
-            <div className="form-hint">
-              Mã vận đơn được tạo ngẫu nhiên theo đơn hàng và sẽ gửi cho người mua để theo dõi
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="estimatedDelivery">
-              Ngày dự kiến giao hàng <span className="required">*</span>
-            </label>
-            <input
-              type="date"
-              id="estimatedDelivery"
-              name="estimatedDelivery"
-              value={formData.estimatedDelivery}
-              onChange={handleInputChange}
-              min={minDate}
-              className={errors.estimatedDelivery ? 'error' : ''}
-            />
-            {errors.estimatedDelivery && (
-              <span className="error-message">{errors.estimatedDelivery}</span>
-            )}
-          </div>
-
-          <div className="shipping-address-panel">
-            <div className="shipping-address-panel__header">
-              <div>
-                <h4>Thông tin điểm lấy hàng (Pickup)</h4>
-                <p>Mặc định lấy từ địa chỉ bài đăng. Bạn có thể tùy chỉnh nếu giao từ nơi khác.</p>
-              </div>
-              <label className="shipping-toggle">
-                <input
-                  type="checkbox"
-                  name="useCustomShippingAddress"
-                  checked={formData.useCustomShippingAddress}
-                  onChange={(e) => {
-                    const useCustomShippingAddress = e.target.checked;
-                    setFormData((prev) => ({
-                      ...prev,
-                      useCustomShippingAddress,
-                      shippingRecipientName: useCustomShippingAddress ? prev.shippingRecipientName : defaultRecipientName,
-                      shippingPhone: useCustomShippingAddress ? prev.shippingPhone : defaultShippingPhone,
-                      shippingAddress: useCustomShippingAddress ? prev.shippingAddress : defaultShippingAddress
-                    }));
-                  }}
-                />
-                <span>Tùy chỉnh điểm lấy hàng</span>
-              </label>
-            </div>
-
-            {!formData.useCustomShippingAddress && (
-              <div className="shipping-default-preview">
-                <div className="detail-item">
-                  <span className="label">Người gửi hàng</span>
-                  <span className="value">{formData.shippingRecipientName || 'Chưa cập nhật'}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="label">Số điện thoại</span>
-                  <span className="value">{formData.shippingPhone || 'Chưa cập nhật'}</span>
-                </div>
-                <div className="detail-item detail-item--full">
-                  <span className="label">Địa chỉ lấy hàng</span>
-                  <span className="value">{formData.shippingAddress || 'Chưa cập nhật'}</span>
-                </div>
-              </div>
-            )}
-
-            {formData.useCustomShippingAddress && (
-              <div className="shipping-custom-grid">
-                <div className="form-group">
-                  <label htmlFor="shippingRecipientName">
-                    Họ tên người gửi <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="shippingRecipientName"
-                    name="shippingRecipientName"
-                    value={formData.shippingRecipientName}
-                    onChange={handleInputChange}
-                    placeholder="Nhập tên người gửi"
-                    className={errors.shippingRecipientName ? 'error' : ''}
-                  />
-                  {errors.shippingRecipientName && (
-                    <span className="error-message">{errors.shippingRecipientName}</span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="shippingPhone">
-                    Số điện thoại gửi hàng <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="shippingPhone"
-                    name="shippingPhone"
-                    value={formData.shippingPhone}
-                    onChange={handleInputChange}
-                    placeholder="Nhập số điện thoại gửi hàng"
-                    className={errors.shippingPhone ? 'error' : ''}
-                  />
-                  {errors.shippingPhone && (
-                    <span className="error-message">{errors.shippingPhone}</span>
-                  )}
-                </div>
-
-                <div className="form-group shipping-custom-grid__full">
-                  <label>Khu vực lấy hàng <span className="required">*</span></label>
-                  <LocationSelector
-                    value={formData.shippingLocation}
-                    onChange={handleLocationChange}
-                    errors={{}}
-                  />
-                  {errors.shippingLocation && (
-                    <span className="error-message">{errors.shippingLocation}</span>
-                  )}
-                </div>
-
-                <div className="form-group shipping-custom-grid__full">
-                  <label htmlFor="shippingSpecificAddress">
-                    Địa chỉ cụ thể (Số nhà, tên đường...) <span className="required">*</span>
-                  </label>
-                  <textarea
-                    id="shippingSpecificAddress"
-                    name="shippingSpecificAddress"
-                    value={formData.shippingSpecificAddress}
-                    onChange={handleInputChange}
-                    placeholder="Ví dụ: Số 10 Ngõ 20, đường X..."
-                    rows="2"
-                    className={errors.shippingSpecificAddress ? 'error' : ''}
-                  />
-                  {errors.shippingSpecificAddress && (
-                    <span className="error-message">{errors.shippingSpecificAddress}</span>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="notes">
-              Ghi chú thêm
-            </label>
-            <textarea
-              id="notes"
-              name="notes"
-              value={formData.notes}
-              onChange={handleInputChange}
-              placeholder="Ghi chú về việc giao hàng (tùy chọn)"
-              rows="3"
-              className={errors.notes ? 'error' : ''}
-            />
-            {errors.notes && <span className="error-message">{errors.notes}</span>}
-            <div className="character-count">
-              {formData.notes.length}/500 ký tự
-            </div>
-          </div>
-
-          {errors.submit && (
-            <div className="error-message submit-error">
-              {errors.submit}
-            </div>
+          {!formData.useCustomShippingAddress && (
+            <>
+              <Descriptions
+                size="small"
+                column={{ xs: 1, sm: 2 }}
+                className="shipping-default-preview"
+                items={[
+                  { key: 'name', label: 'Người gửi hàng', children: formData.shippingRecipientName || 'Chưa cập nhật' },
+                  { key: 'phone', label: 'Số điện thoại', children: formData.shippingPhone || 'Chưa cập nhật' },
+                  { key: 'address', label: 'Địa chỉ lấy hàng', span: 'filled', children: formData.shippingAddress || 'Chưa cập nhật' }
+                ]}
+              />
+              {errors.shippingAddress && <Alert className="ship-order-error" type="error" showIcon role="alert" title={errors.shippingAddress} />}
+            </>
           )}
 
-          <div className="form-actions">
-            <button 
-              type="button" 
-              className="btn btn-secondary" 
-              onClick={onClose}
-              disabled={loading}
-            >
-              Hủy
-            </button>
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <CircleNotch className="icon-spin" />
-                  Đang xử lý...
-                </>
-              ) : (
-                <>
-                  <Truck />
-                  Xác nhận giao hàng
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+          {formData.useCustomShippingAddress && (
+            <div className="shipping-custom">
+              <Form.Item label="Họ tên người gửi" htmlFor="shippingRecipientName" required {...fieldState('shippingRecipientName')}>
+                <Input
+                  id="shippingRecipientName"
+                  value={formData.shippingRecipientName}
+                  onChange={(e) => handleInputChange('shippingRecipientName', e.target.value)}
+                  placeholder="Nhập tên người gửi"
+                />
+              </Form.Item>
 
-        <div className="shipping-notice">
-          <h5>Lưu ý quan trọng:</h5>
+              <Form.Item label="Số điện thoại gửi hàng" htmlFor="shippingPhone" required {...fieldState('shippingPhone')}>
+                <Input
+                  id="shippingPhone"
+                  value={formData.shippingPhone}
+                  onChange={(e) => handleInputChange('shippingPhone', e.target.value)}
+                  placeholder="Nhập số điện thoại gửi hàng"
+                />
+              </Form.Item>
+
+              <Form.Item label="Khu vực lấy hàng" required {...fieldState('shippingLocation')}>
+                <LocationSelector value={formData.shippingLocation} onChange={handleLocationChange} errors={{}} />
+              </Form.Item>
+
+              <Form.Item label="Địa chỉ cụ thể (Số nhà, tên đường...)" htmlFor="shippingSpecificAddress" required {...fieldState('shippingSpecificAddress')}>
+                <Input.TextArea
+                  id="shippingSpecificAddress"
+                  value={formData.shippingSpecificAddress}
+                  onChange={(e) => handleInputChange('shippingSpecificAddress', e.target.value)}
+                  placeholder="Ví dụ: Số 10 Ngõ 20, đường X..."
+                  rows={2}
+                />
+              </Form.Item>
+            </div>
+          )}
+        </section>
+
+        <Form.Item label="Ghi chú thêm" htmlFor="notes" {...fieldState('notes')}>
+          <Input.TextArea
+            id="notes"
+            value={formData.notes}
+            onChange={(e) => handleInputChange('notes', e.target.value)}
+            placeholder="Ghi chú về việc giao hàng (tùy chọn)"
+            rows={3}
+            showCount={{ formatter: ({ count }) => `${count}/500 ký tự` }}
+          />
+        </Form.Item>
+
+        {errors.submit && <Alert className="ship-order-error" type="error" showIcon role="alert" title={errors.submit} />}
+
+        <Flex justify="flex-end" gap={12}>
+          <Button onClick={onClose} disabled={loading}>Hủy</Button>
+          <Button type="primary" htmlType="submit" loading={loading} icon={<Truck />}>
+            {loading ? 'Đang xử lý...' : 'Xác nhận giao hàng'}
+          </Button>
+        </Flex>
+      </Form>
+
+      <Alert
+        className="shipping-notice"
+        type="info"
+        showIcon
+        role="note"
+        title="Lưu ý quan trọng:"
+        description={(
           <ul>
             <li>Sau khi xác nhận giao hàng, người mua sẽ nhận được thông báo</li>
             <li>Tiền sẽ được giữ trong ký quỹ cho đến khi người mua xác nhận nhận hàng</li>
             <li>Nếu người mua không xác nhận trong 5 ngày, tiền sẽ tự động được chuyển cho bạn</li>
             <li>Vui lòng đảm bảo thông tin vận đơn chính xác để người mua có thể theo dõi</li>
           </ul>
-        </div>
-      </div>
-    </div>
+        )}
+      />
+    </Modal>
   );
 };
 
