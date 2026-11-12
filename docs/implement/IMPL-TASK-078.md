@@ -22,16 +22,16 @@ D-013 records the data-flow change: free-form text, after redaction, now reaches
 
 - [ ] `AC-CHAT-06-1` — inconclusive without a calibrated evaluator; backend tests drive the tool loop with a mocked provider and mocked data access and pass (multi-turn contents, listing filters, cards)
 - [ ] `AC-CHAT-06-2` — inconclusive without a calibrated evaluator; backend tests show contact details and links never appear in what the provider receives, tool results carry no seller identity or location, and local answers and the switch work
-- [ ] `AC-WEB-22-1` — inconclusive without a calibrated evaluator; 11 component tests pass and the page was observed at 360, 1280 and 1920 px against canned responses, see `.project/evidence/TASK-078/run-01/manual-review.md`
+- [ ] `AC-WEB-22-1` — inconclusive without a calibrated evaluator; 11 component tests pass and the page was observed at 360, 1280 and 1920 px against canned responses, see `.project/evidence/TASK-078/run-01/manual-review.md`; the listing search also ran against a real MongoDB in `run-02`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-078/run-01/jest.txt` (backend, 44 suites) and `frontend-test.txt` (frontend, 9 suites) |
+| Tests | `.project/evidence/TASK-078/run-02/jest.txt` (backend, 44 suites) and `frontend-test.txt` (frontend, 9 suites) |
 | Static analysis | N/A — the production build runs the CRA lint step with `CI=true` |
-| Build/typecheck | `.project/evidence/TASK-078/run-01/frontend-build.txt` |
-| Behavioral/manual | `.project/evidence/TASK-078/run-01/manual-review.md` and `screenshots/` |
+| Build/typecheck | `.project/evidence/TASK-078/run-02/frontend-build.txt` |
+| Behavioral/manual | `.project/evidence/TASK-078/run-02/manual-review.md`, `real-mongodb-search.txt`, and `run-01/screenshots/` |
 
 ## Deviations
 
@@ -40,10 +40,11 @@ None. The `PRODUCT_INTENT` pattern was narrowed during implementation so that a 
 ## Known gaps
 
 - No request has been sent to the real Gemini API from this environment: the key exists only in the Vercel backend environment. The function-calling request shape follows the public REST format and is verified against mocks only. If Gemini rejects it, users get the built-in answer with the "đang bận" hint, not an error.
-- The search tool was tested with a mocked `Product` model, never against MongoDB, so the text index and the regex fallback have not run against real data.
+- The search tool ran against a disposable MongoDB 7.0.14 replica set seeded with 80 listings (`run-02/real-mongodb-search.txt`): price and condition filters, the text index and reserved-listing exclusion behave as intended. The text index matches Vietnamese loosely, so after the best matches it returns weakly related listings (score about 0.54) when nothing matches well; they are ranked last and the model sees them, but they also become cards. A relevance cut-off was not added because scores do not separate related from unrelated reliably.
 - The browser observation used canned API responses in headless Chromium; no real phone and no other browser.
 - On a 360 × 740 screen the site header takes about 240 px, so the message box sits at the fold and needs one scroll.
 - Gemini quality (tone, Vietnamese accuracy, how well it follows the "never invent listings" rule) has not been judged.
+- Found during the real-database run: the keyword fallback split queries into single words and matched any of them, so it was widened too eagerly. It now tries every word first and widens to the distinctive words (three letters or more) only if that finds nothing.
 - Dark mode is not implemented in this application.
 
 ## Invariant check

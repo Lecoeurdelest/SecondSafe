@@ -1,0 +1,51 @@
+{
+  "task_id": "TASK-078",
+  "run": "run-02",
+  "date": "2026-11-12",
+  "kind": "fullstack",
+  "execution": "verifying",
+  "detail": "Conversational assistant implemented and verified with a mocked provider, a canned-API browser observation and the listing search run against a real MongoDB replica set; no live Gemini call; automatic completion remains inconclusive without applicable calibration",
+  "sections": null,
+  "complexity": null,
+  "clean_install": null,
+  "flow": null,
+  "manual": "Observed on 2026-11-12 in headless Chromium (Playwright) against the production build served locally (`fixture-capture.js` holds the script and the canned data). The API was replaced by canned responses: one answer with a list and three listing cards, one plain answer, and one 503 failure. The listing images are the placeholder because the canned listings carry none. No real backend, database or Gemini request was involved, so this shows the screen, not the quality of the answers.\n\n| File | Viewport | What it shows |\n|---|---|---|\n| `w1280-empty.png` | 1280 px | Welcome text, four starter questions, privacy notice, disabled send and \"new conversation\" buttons |\n| `w1280-typing.png` | 1280 px | The user bubble and the typing indicator while the (delayed) reply is pending |\n| `w1280-conversation.png` | 1280 px | Reply with a bullet list, bold text and three inline listing cards that link to the product page |\n| `w1280-followup.png` | 1280 px | Second turn, answered in plain text |\n| `w1280-error.png` | 1280 px | Failed request: error banner with a retry button, the question stays in the thread |\n| `w360-empty.png` | 360 px | Empty state on a phone-width screen |\n| `w360-typing.png` | 360 px | Typing indicator on a phone-width screen |\n| `w360-conversation.png` | 360 px | Listing cards stacked in one column, composer at the fold |\n| `w360-followup.png` | 360 px | Second turn on a phone-width screen |\n| `w360-error.png` | 360 px | Error banner with retry on a phone-width screen |\n| `w1920-empty.png` | 1920 px | Empty state on a wide screen |\n| `w1920-typing.png` | 1920 px | Typing indicator on a wide screen |\n| `w1920-conversation.png` | 1920 px | Conversation with cards on a wide screen |\n| `w1920-followup.png` | 1920 px | Two turns on a wide screen |\n| `w1920-error.png` | 1920 px | Error banner with retry on a wide screen |\n\nAlso checked by the script at 360, 1280 and 1920 px: after a reload in the same tab the thread was still on the page, and the document had no horizontal overflow; no page errors were raised.\n\nA first capture showed the message box and the composer pushed below the fold at 360 px and then a sticky composer that covered the last messages; both were replaced by a fixed-height message box (38% of the viewport, at least 240 px) with the composer below it and room above the floating chat button. At 360 x 740 the site header still takes about 240 px, so the composer is at the fold and needs one scroll.\n\nNot observed: a real Gemini answer, listings from a real database, a phone or any browser other than Chromium, keyboard use of the starters and the retry button (covered by the component tests only), dark mode (not implemented).\n\nRun-02 addition: `real-mongodb-search.txt` is the output of `searchProducts` against a disposable MongoDB 7.0.14 replica set (80 listings from `backend/seed-all.js`, four eligible sellers, one listing already reserved by an order created through the real backend API). Filters on price and condition held, the text index was used, a query with no match returned nothing, and the reserved listing was not offered. The run exposed an over-wide keyword fallback, now fixed and covered by a test. Weakly related listings still follow the best matches because the text index scores Vietnamese loosely.",
+  "history": [
+    [
+      "verifying",
+      "Ran the listing search against a disposable MongoDB replica set with seeded listings and tightened the keyword fallback it showed to be too wide; backend and frontend suites and the build pass"
+    ]
+  ],
+  "limitations": [
+    "No applicable calibrated evaluator exists",
+    "The Gemini request and function-calling exchange were never sent to the real API; they are verified against mocks only",
+    "Browser observation used canned API responses in headless Chromium at 360, 1280 and 1920 px; no real phone or other browser",
+    "Answer quality and tone from the real model were not judged",
+    "The listing search ran against a real MongoDB with seed data only; the Gemini request and function-calling exchange still never reached the real API",
+    "The text index returns weakly related listings after the best matches"
+  ],
+  "criteria": {
+    "AC-CHAT-06-1": {
+      "observed": "pass",
+      "note": "Backend tests pass: the conversation is sent as alternating roles with the system instruction and tool, the tool query filters on active status, eligible sellers, price and condition, a text-index miss falls back to a keyword match, and the listings come back as cards; the real provider and database were not involved; the search also ran against a real MongoDB replica set (run-02)",
+      "checks": {
+        "behavioral_test": "pass"
+      }
+    },
+    "AC-CHAT-06-2": {
+      "observed": "pass",
+      "note": "Backend tests pass: emails, phone numbers and links are absent from what the provider receives, tool results contain only category, condition, description, price and title with the redaction placeholders, unknown tools are refused, the provider failing returns a local answer with degraded true, and the switch restores topic-only requests",
+      "checks": {
+        "behavioral_test": "pass"
+      }
+    },
+    "AC-WEB-22-1": {
+      "observed": "pass",
+      "note": "11 component tests pass (starters, Enter and Shift+Enter, IME, cards, retry, persistence across a remount, new conversation, sign-out); the screen was observed with canned responses at 360, 1280 and 1920 px without horizontal overflow",
+      "checks": {
+        "behavioral_test": "pass",
+        "manual_review": "pass"
+      }
+    }
+  }
+}

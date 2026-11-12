@@ -155,7 +155,7 @@ describe('chat with the language model', () => {
     expect(sent).toContain('[đã ẩn email]');
   });
 
-  test('falls back to a keyword search when the text index finds nothing', async () => {
+  test('falls back to a title match on every word when the text index finds nothing', async () => {
     Product.find
       .mockReturnValueOnce(productQuery([]))
       .mockReturnValueOnce(productQuery([backpack]));
@@ -166,7 +166,23 @@ describe('chat with the language model', () => {
     const result = await chat({ messages: [{ role: 'user', content: 'Tìm ba lô xanh' }] });
 
     expect(Product.find).toHaveBeenCalledTimes(2);
-    expect(Product.find.mock.calls[1][0].title).toEqual({ $regex: 'ba|lô|\\(xanh\\)', $options: 'i' });
+    expect(Product.find.mock.calls[1][0].title).toEqual({ $regex: '^(?=.*ba)(?=.*lô)(?=.*xanh)', $options: 'i' });
+    expect(result.products).toHaveLength(1);
+  });
+
+  test('widens to any distinctive word only after the all-words match finds nothing', async () => {
+    Product.find
+      .mockReturnValueOnce(productQuery([]))
+      .mockReturnValueOnce(productQuery([]))
+      .mockReturnValueOnce(productQuery([backpack]));
+    gemini.generateChat
+      .mockResolvedValueOnce(toolCall({ query: 'ba lô xanh dương' }))
+      .mockResolvedValueOnce(textReply('Có kết quả.'));
+
+    const result = await chat({ messages: [{ role: 'user', content: 'Tìm ba lô xanh dương' }] });
+
+    expect(Product.find).toHaveBeenCalledTimes(3);
+    expect(Product.find.mock.calls[2][0].title).toEqual({ $regex: 'xanh|dương', $options: 'i' });
     expect(result.products).toHaveLength(1);
   });
 

@@ -12,7 +12,7 @@ superseded_by: null
 
 > Generated from `project.yaml` and `.project/state.json` by `tools/pdd/render.py`. Edit the model, not this file.
 
-**Current state:** `verifying` — Conversational assistant implemented and verified with mocked provider and data access plus a canned-API browser observation; no live Gemini call; automatic completion remains inconclusive without applicable calibration
+**Current state:** `verifying` — Conversational assistant implemented and verified with a mocked provider, a canned-API browser observation and the listing search run against a real MongoDB replica set; no live Gemini call; automatic completion remains inconclusive without applicable calibration
 
 ## Traceability
 

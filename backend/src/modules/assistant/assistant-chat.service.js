@@ -123,13 +123,12 @@ async function findProducts(filter, ranked) {
   }
 }
 
-function keywordPattern(query) {
+function keywordWords(query) {
   return query
     .split(/\s+/)
+    .map(word => word.replace(/[^\p{L}\p{N}]/gu, ''))
     .filter(word => word.length > 1)
-    .slice(0, 6)
-    .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-    .join('|');
+    .slice(0, 6);
 }
 
 function toPublicProduct(product) {
@@ -162,9 +161,14 @@ async function searchProducts(args = {}) {
   const query = String(args.query || '').trim().slice(0, 120);
 
   let products = query ? await findProducts({ ...filter, $text: { $search: query } }, true) : await findProducts(filter, false);
-  const pattern = query ? keywordPattern(query) : '';
-  if (!products.length && pattern) {
-    products = await findProducts({ ...filter, title: { $regex: pattern, $options: 'i' } }, false);
+  const words = query ? keywordWords(query) : [];
+  if (!products.length && words.length) {
+    const every = `^${words.map(word => `(?=.*${word})`).join('')}`;
+    products = await findProducts({ ...filter, title: { $regex: every, $options: 'i' } }, false);
+  }
+  const distinctive = words.filter(word => word.length > 2);
+  if (!products.length && words.length > 1 && distinctive.length) {
+    products = await findProducts({ ...filter, title: { $regex: distinctive.join('|'), $options: 'i' } }, false);
   }
   return products.map(toPublicProduct);
 }
