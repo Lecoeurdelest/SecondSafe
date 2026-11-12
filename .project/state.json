@@ -1505,7 +1505,7 @@
     "TASK-077": {
       "execution": "verifying",
       "relevance": "current",
-      "detail": "Restyle implemented in three passes (tokens and chrome, colour sweep, two-tier header) with build, 58 passing frontend tests and screenshots of buyer, messaging and staff pages at 360 to 1920 px; automatic completion remains inconclusive without applicable calibration, and pages with real data were not observed",
+      "detail": "Restyle implemented in four passes with build, 58 passing frontend tests and screenshots of buyer, messaging, notification, wallet and staff pages at 360 to 1920 px, including pages rendered with realistic data; automatic completion remains inconclusive without applicable calibration, and seller orders, order detail and dashboards were not observed",
       "history": [
         {
           "date": "2026-11-12",
@@ -1531,12 +1531,18 @@
           "date": "2026-11-12",
           "execution": "verifying",
           "note": "Header split into primary actions and an account tab strip; chat, support, assistant and more staff pages observed; moderator logo neutralised"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Own chat bubbles use the brand gradient; order list, wallet, conversation thread and notification panel checked with realistic fixtures"
         }
       ],
       "evidence": [
         ".project/evidence/TASK-077/run-01/report.json",
         ".project/evidence/TASK-077/run-02/report.json",
-        ".project/evidence/TASK-077/run-03/report.json"
+        ".project/evidence/TASK-077/run-03/report.json",
+        ".project/evidence/TASK-077/run-04/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-077.md",
       "criteria": {

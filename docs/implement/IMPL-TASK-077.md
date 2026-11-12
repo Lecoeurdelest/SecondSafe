@@ -20,16 +20,16 @@ The two reference projects (`itsnotvii/mercari-clone`, `ReMarket-SE2/webapp`) ha
 
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-03/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-04/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-03/frontend-test.txt` — 9 suites, 58 tests pass |
+| Tests | `.project/evidence/TASK-077/run-04/frontend-test.txt` — 9 suites, 58 tests pass |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-03/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-03/manual-review.md` and `screenshots/` (`run-01` and `run-02` are the earlier passes) |
+| Build/typecheck | `.project/evidence/TASK-077/run-04/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-04/manual-review.md` and `screenshots/` (`run-01` to `run-03` are the earlier passes; `run-04` adds pages rendered with realistic data) |
 
 ## Deviations
 
@@ -38,7 +38,7 @@ The task has no dependencies on other tasks because it changes presentation only
 ## Known gaps
 
 - Observed only in Chromium against canned API responses; no real phone, no other browser (`NFR-COMP-01` is not evaluated here).
-- Pages not listed in `manual-review.md`, and every page with real data, were converted by a mechanical colour rule and not each inspected.
+- Seller orders, order detail, the dashboards and the other admin and moderator pages were converted by a mechanical colour rule and not each inspected; the order list, wallet, conversation thread and notification panel were checked with realistic canned data, never against a real backend.
 - Status chips that were blue "info" colours in buyer modules are now brand-coloured and can read like the error colour; the shared `--info` colour was kept blue.
 - Dark mode is not implemented.
 - The dashboards under `frontend/src/modules/dashboard/` and the legacy `Footer.jsx` were not redesigned.
