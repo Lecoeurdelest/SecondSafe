@@ -1551,6 +1551,11 @@
           "date": "2026-11-12",
           "execution": "verifying",
           "note": "Follow-up after merge: fixed mobile and theme defects found by a second review and recorded the findings that were left alone"
+        },
+        {
+          "date": "2026-11-12",
+          "execution": "verifying",
+          "note": "Closed four small presentation items left from the second review: dispute modal, timeline current step, moderator sidebar highlight, admin section title"
         }
       ],
       "evidence": [
@@ -1560,7 +1565,8 @@
         ".project/evidence/TASK-077/run-04/report.json",
         ".project/evidence/TASK-077/run-05/report.json",
         ".project/evidence/TASK-077/run-06/report.json",
-        ".project/evidence/TASK-077/run-07/report.json"
+        ".project/evidence/TASK-077/run-07/report.json",
+        ".project/evidence/TASK-077/run-08/report.json"
       ],
       "implementation": "docs/implement/IMPL-TASK-077.md",
       "criteria": {

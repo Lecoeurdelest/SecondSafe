@@ -26,16 +26,16 @@ A follow-up after the merge of PR 148 fixes what a second review found: the staf
 
 ## Acceptance criteria
 
-- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-07/manual-review.md`
+- [ ] `AC-NFR-USA-02-1` — inconclusive: buyer, messaging, support and staff pages were observed at widths from 360 to 1920 px without horizontal overflow; see `.project/evidence/TASK-077/run-08/manual-review.md`
 
 ## Evidence
 
 | Kind | Location or result |
 |---|---|
-| Tests | `.project/evidence/TASK-077/run-07/frontend-test.txt` — 9 suites, 58 tests pass |
+| Tests | `.project/evidence/TASK-077/run-08/frontend-test.txt` — 9 suites, 58 tests pass |
 | Static analysis | N/A — no logic changed; the production build runs the CRA lint step |
-| Build/typecheck | `.project/evidence/TASK-077/run-07/frontend-build.txt` — compiled successfully |
-| Behavioral/manual | `.project/evidence/TASK-077/run-07/manual-review.md` and `screenshots/` (`run-01` to `run-06` are the earlier passes; `run-07` re-checks the follow-up fixes after the merge) |
+| Build/typecheck | `.project/evidence/TASK-077/run-08/frontend-build.txt` — compiled successfully |
+| Behavioral/manual | `.project/evidence/TASK-077/run-08/manual-review.md` and `screenshots/` (`run-01` to `run-07` are the earlier passes; `run-08` closes four small items) |
 
 ## Deviations
 
@@ -53,7 +53,7 @@ The task has no dependencies on other tasks because it changes presentation only
 - Dark mode is not implemented.
 - The dashboards under `frontend/src/modules/dashboard/` and the legacy `Footer.jsx` were not redesigned.
 
-- Not changed on purpose: `SellerOrders.jsx` starts with the filter `pending`, which matches none of its tabs (behaviour, not presentation). Also left: the admin order section title "Thao tác của Moderator", the moderator sidebar highlight on `/moderator/profile`, the flat red dispute modal header and native file input, the red `.timeline-step.current`, and the staff notification panel, which was not observed.
+- Not changed on purpose: `SellerOrders.jsx` starts with the filter `pending`, which matches none of its tabs (behaviour, not presentation). Also left: the staff notification panel, which was not observed. The admin order section title, the moderator sidebar highlight on `/moderator/profile`, the dispute modal header and file input, and the current timeline step were fixed in `run-08`.
 
 ## Invariant check
 

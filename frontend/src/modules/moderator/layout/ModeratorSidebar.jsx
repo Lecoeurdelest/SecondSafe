@@ -25,6 +25,7 @@ const ModeratorSidebar = ({ onNavigate }) => {
     if (location.pathname.startsWith("/moderator/reviews")) return "/moderator/reviews";
     if (location.pathname.startsWith("/moderator/disputes")) return "/moderator/disputes";
     if (location.pathname.startsWith("/moderator/withdrawals")) return "/moderator/withdrawals";
+    if (location.pathname.startsWith("/moderator/profile")) return "";
     return "/moderator/dashboard";
   };
 

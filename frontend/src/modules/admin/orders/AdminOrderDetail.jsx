@@ -150,7 +150,7 @@ const AdminOrderDetail = () => {
           </Descriptions.Item>
         </Descriptions>
 
-        <Card type="inner" title="Thao tác của Moderator" className="mod-panel">
+        <Card type="inner" title="Thao tác quản trị" className="mod-panel">
           <Space direction="vertical" style={{ width: "100%" }}>
             {statusOptions.length > 0 && (
               <Space direction="vertical" style={{ width: "100%" }}>
