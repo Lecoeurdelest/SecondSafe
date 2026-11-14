@@ -17,5 +17,6 @@ CI = `.github/workflows/ci.yml`. CD = `.github/workflows/deploy.yml` (runs after
 
 ## Vercel limits for this backend
 - Socket.IO (realtime chat) and cron jobs live in `src/server.js`, which Vercel does not run; they are inactive there.
+- Exception: the `payment-timeout` job (cancels unpaid orders) is triggered by `.github/workflows/scheduled-jobs.yml` every 5 minutes through `/api/internal/cron/payment-timeout`. Set the same random `CRON_SECRET` in the backend Vercel project and in GitHub -> Settings -> Secrets and variables -> Actions. GitHub schedules only run from `main` and can start late, so an order is cancelled a few minutes after its deadline. The Vercel Hobby plan cannot run minute-level crons, so `vercel.json` has no `crons`. The other jobs (reminders, auto-completion, late-shipping refunds, listing expiry) are still inactive on Vercel.
 - Disk is read-only/ephemeral, so `uploads/` (multer) does not persist.
 - Payment callbacks (SePay/VNPay) need `FRONTEND_URL` and the return URLs set to the deployed domains.

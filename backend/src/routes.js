@@ -28,6 +28,7 @@ const abandonedCheckoutRoutes = require('./modules/orders/abandoned-checkout.rou
 const moderatorRoutes = require("./modules/moderator/moderator.route");
 const notificationRoutes = require('./modules/notifications/notification.route');
 const sepayRoutes = require('./modules/payments/sepay.route');
+const cronRoutes = require('./modules/system/cron.route');
 
 // Register routes
 router.use('/auth', authRoutes);
@@ -35,6 +36,7 @@ router.use('/products', productRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/upload', uploadRoutes);
 router.use('/wallets', walletRoutes);
+router.use('/internal/cron', cronRoutes);
 router.use('/payments/sepay', sepayRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/orders', orderRoutes);
