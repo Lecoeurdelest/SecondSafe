@@ -1,0 +1,23 @@
+name: Scheduled jobs
+# Vercel does not run src/server.js, so the backend's timers never fire there. This calls the protected cron endpoint instead.
+# GitHub schedules run only from the default branch and at most every 5 minutes; runs can start late.
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: scheduled-jobs
+  cancel-in-progress: false
+jobs:
+  payment-timeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Cancel orders past the payment deadline
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          BACKEND_URL: ${{ vars.BACKEND_URL || 'https://second-safe-backend.vercel.app' }}
+        run: |
+          if [ -z "$CRON_SECRET" ]; then echo "CRON_SECRET is not set in the repository secrets"; exit 1; fi
+          curl -fsS --retry 2 --max-time 60 -X POST -H "Authorization: Bearer $CRON_SECRET" "$BACKEND_URL/api/internal/cron/payment-timeout"

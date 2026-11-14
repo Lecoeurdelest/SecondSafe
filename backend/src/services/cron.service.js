@@ -17,6 +17,9 @@ const JOBS = Object.freeze([
   { name: 'listing-expiry', dailyAtHour: 3, run: now => orderJobs.expireOldListings(now) }
 ]);
 
+// Jobs an external scheduler may trigger where the long-lived server (and its timers) is not running.
+const ON_DEMAND_JOBS = Object.freeze(['payment-timeout']);
+
 const running = new Set();
 const timers = new Map();
 
@@ -34,6 +37,13 @@ async function runJob(job, now = new Date()) {
   } finally {
     running.delete(job.name);
   }
+}
+
+// Unlike runJob, a failure propagates so the scheduler's call fails visibly.
+async function runJobOnDemand(name, now = new Date()) {
+  const job = ON_DEMAND_JOBS.includes(name) ? JOBS.find(candidate => candidate.name === name) : undefined;
+  if (!job) return undefined;
+  return { job: name, processed: await job.run(now) };
 }
 
 function msUntilHour(hour, now = new Date()) {
@@ -76,4 +86,4 @@ function stopAllCronJobs() {
   timers.clear();
 }
 
-module.exports = { startAllCronJobs, stopAllCronJobs, runJob, msUntilHour, JOBS };
+module.exports = { startAllCronJobs, stopAllCronJobs, runJob, runJobOnDemand, msUntilHour, JOBS, ON_DEMAND_JOBS };
