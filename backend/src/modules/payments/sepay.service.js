@@ -1,6 +1,8 @@
+const crypto = require('node:crypto');
 const { SePayPgClient } = require('sepay-pg-node');
 const walletService = require('./wallet.service');
 const Transaction = require('./transaction.model');
+const logger = require('../../common/utils/logger.util');
 
 // SePay Payment Gateway Service
 // Uses the official sepay-pg-node SDK for correct signature generation
@@ -69,57 +71,104 @@ async function createSePayOrderPayment(userId, orderId, amount, orderInfo) {
   return { checkoutUrl, fields, transactionId: inv };
 }
 
-async function handleSePayIPN(body, receivedSecretKey) {
-  const expectedSecretKey = process.env.SEPAY_SECRET_KEY;
-  
-  const trimmedReceived = receivedSecretKey ? receivedSecretKey.trim() : '';
-  const trimmedExpected = expectedSecretKey ? expectedSecretKey.trim() : '';
+const IPN_CLAIM_TTL_MS = 2 * 60 * 1000;
 
-  if (!trimmedReceived || trimmedReceived !== trimmedExpected) {
-    console.warn('[SEPay IPN] Unauthorized: Key mismatch.');
-    console.warn('[SEPay IPN] Expected (first 5):', trimmedExpected.substring(0, 5));
-    console.warn('[SEPay IPN] Received (first 5):', trimmedReceived.substring(0, 5));
-    return { success: false, message: 'Unauthorized' };
-  }
+function secretsMatch(received, expected) {
+  const given = Buffer.from(String(received || '').trim());
+  const wanted = Buffer.from(String(expected || '').trim());
+  return wanted.length > 0 && given.length === wanted.length && crypto.timingSafeEqual(given, wanted);
+}
 
-  const notification_type = body && body.notification_type;
-  const order = body && body.order;
-  const txInfo = body && body.transaction;
-  
-  console.log('[SEPay IPN] Payload:', JSON.stringify(body));
-  if (notification_type !== 'ORDER_PAID') return { success: true, message: 'Event ignored' };
-  const inv = order && order.order_invoice_number;
-  if (!inv) return { success: false, message: 'Missing order_invoice_number' };
-  const pendingTx = await Transaction.findById(inv);
-  if (!pendingTx) return { success: false, message: 'Transaction not found' };
-  if (pendingTx.status === 'completed') return { success: true, message: 'Already processed' };
-  const paidAmount = Number(order && order.order_amount);
-  if (!Number.isFinite(paidAmount) || paidAmount <= 0) return { success: false, message: 'Invalid amount' };
-  if (paidAmount !== Number(pendingTx.amount)) {
-    pendingTx.status = 'failed'; pendingTx.failedAt = new Date();
-    pendingTx.failureReason = 'Amount mismatch'; await pendingTx.save();
-    return { success: false, message: 'Amount mismatch' };
+// The claim is atomic, so a repeated or parallel notification can never credit the same payment twice.
+// A claim older than the TTL belongs to a run that died mid-way and may be taken over.
+function claimPendingTransaction(id, now = new Date()) {
+  return Transaction.findOneAndUpdate(
+    {
+      _id: id,
+      status: 'pending',
+      $or: [
+        { 'metadata.ipnClaimedAt': { $exists: false } },
+        { 'metadata.ipnClaimedAt': { $lt: new Date(now.getTime() - IPN_CLAIM_TTL_MS) } }
+      ]
+    },
+    { $set: { 'metadata.ipnClaimedAt': now } },
+    { new: true }
+  );
+}
+
+async function describeUnclaimedTransaction(id) {
+  const current = await Transaction.findById(id);
+  if (current && current.status === 'completed') return { success: true, message: 'Already processed' };
+  if (current && current.status === 'pending') return { success: true, message: 'Already being processed' };
+  return { success: false, message: 'Transaction is not payable' };
+}
+
+async function creditPaidTransaction(tx, paidAmount, providerTransactionId) {
+  const reference = providerTransactionId || String(tx._id);
+  if (tx.type === 'deposit') {
+    await walletService.incrementBalance(tx.userId, paidAmount, 'deposit',
+      'Nap tien qua SePay - ' + reference, { transactionId: tx._id });
+  } else if (tx.type === 'payment' && tx.orderId) {
+    await walletService.incrementBalance(tx.userId, paidAmount, 'deposit',
+      'Nap tu dong cho don hang - ' + reference);
+    const orderService = require('../orders/order.service');
+    await orderService.payOrder(tx.orderId, tx.userId);
   }
+}
+
+async function settleClaimedTransaction(tx, paidAmount, providerTransactionId) {
   try {
-    if (pendingTx.type === 'deposit') {
-      await walletService.incrementBalance(pendingTx.userId, paidAmount, 'deposit',
-        'Nap tien qua SePay - ' + ((txInfo && txInfo.transaction_id) || inv),
-        { transactionId: pendingTx._id });
-    } else if (pendingTx.type === 'payment' && pendingTx.orderId) {
-      await walletService.incrementBalance(pendingTx.userId, paidAmount, 'deposit',
-        'Nap tu dong cho don hang - ' + ((txInfo && txInfo.transaction_id) || inv));
-      const orderService = require('../orders/order.service');
-      await orderService.payOrder(pendingTx.orderId, pendingTx.userId);
-    }
-    pendingTx.status = 'completed'; pendingTx.completedAt = new Date(); await pendingTx.save();
-    console.log('[SEPay IPN] Processed', pendingTx.type, paidAmount);
+    await creditPaidTransaction(tx, paidAmount, providerTransactionId);
+    tx.status = 'completed';
+    tx.completedAt = new Date();
+    await tx.save();
+    logger.info('SePay IPN processed', { transactionId: String(tx._id), type: tx.type, amount: paidAmount });
     return { success: true, message: 'Payment processed' };
   } catch (err) {
-    console.error('[SEPay IPN] Error:', err.message);
-    pendingTx.status = 'failed'; pendingTx.failedAt = new Date(); pendingTx.failureReason = err.message;
-    await pendingTx.save();
+    logger.error('SePay IPN processing failed', { transactionId: String(tx._id), error: err.message });
+    tx.status = 'failed';
+    tx.failedAt = new Date();
+    tx.failureReason = err.message;
+    await tx.save();
     return { success: false, message: 'Error processing payment' };
   }
+}
+
+function parsePaidNotification(body) {
+  if (!body || body.notification_type !== 'ORDER_PAID') return { result: { success: true, message: 'Event ignored' } };
+  const order = body.order || {};
+  if (!order.order_invoice_number) return { result: { success: false, message: 'Missing order_invoice_number' } };
+  const amount = Number(order.order_amount);
+  if (!Number.isFinite(amount) || amount <= 0) return { result: { success: false, message: 'Invalid amount' } };
+  return {
+    invoice: order.order_invoice_number,
+    amount,
+    providerTransactionId: body.transaction && body.transaction.transaction_id
+  };
+}
+
+async function failAmountMismatch(tx) {
+  tx.status = 'failed';
+  tx.failedAt = new Date();
+  tx.failureReason = 'Amount mismatch';
+  await tx.save();
+  return { success: false, message: 'Amount mismatch' };
+}
+
+async function handleSePayIPN(body, receivedSecretKey) {
+  if (!secretsMatch(receivedSecretKey, process.env.SEPAY_SECRET_KEY)) {
+    logger.warn('SePay IPN rejected: secret key mismatch');
+    return { success: false, message: 'Unauthorized', statusCode: 401 };
+  }
+  const paid = parsePaidNotification(body);
+  if (paid.result) return paid.result;
+  const pendingTx = await Transaction.findById(paid.invoice);
+  if (!pendingTx) return { success: false, message: 'Transaction not found' };
+  if (pendingTx.status === 'completed') return { success: true, message: 'Already processed' };
+  if (paid.amount !== Number(pendingTx.amount)) return failAmountMismatch(pendingTx);
+  const claimed = await claimPendingTransaction(pendingTx._id);
+  if (!claimed) return describeUnclaimedTransaction(pendingTx._id);
+  return settleClaimedTransaction(claimed, paid.amount, paid.providerTransactionId);
 }
 
 async function handleSePayOrderReturn(transactionId) {
